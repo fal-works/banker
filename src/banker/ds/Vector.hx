@@ -15,15 +15,15 @@ abstract Vector<T>(VectorData<T>) {
 	// ---- instance core -------------------------------------------------------
 
 	/** Internal accessor to `this` as the underlying type. */
-	var data(get, never):VectorData<T>;
+	var data(get, never): VectorData<T>;
 
 	inline function get_data()
 		return this;
 
-	public inline function new(length:Int)
+	public inline function new(length: Int)
 		this = new VectorData<T>(length);
 
-	@:op([]) public inline function get(index:Int):T {
+	@:op([]) public inline function get(index: Int): T {
 		assert(index >= 0 && index < this.length, null, "Out of bound.");
 		return this[index];
 	}
@@ -33,13 +33,13 @@ abstract Vector<T>(VectorData<T>) {
 	/**
 	 * Creates a new Vector by applying function `callback` to all elements of `this`.
 	 */
-	public inline function map<S>(callback:T->S):Vector<S>
+	public inline function map<S>(callback: T->S): Vector<S>
 		return fromData(this.map(callback));
 
 	/**
 	 * Runs `callback` for each element in `this` vector.
 	 */
-	public inline function forEach(callback:T->Void):Void {
+	public inline function forEach(callback: T->Void): Void {
 		final len = this.length;
 		var i = 0;
 		while (i < len) {
@@ -51,7 +51,11 @@ abstract Vector<T>(VectorData<T>) {
 	/**
 	 * Runs `callback` for each element in `this` vector from `startIndex` until (but not including) `endIndex`.
 	 */
-	public inline function forEachIn(startIndex:Int, endIndex:Int, callback:T->Void):Void {
+	public inline function forEachIn(
+		startIndex: Int,
+		endIndex: Int,
+		callback: T->Void
+	): Void {
 		var i = startIndex;
 		while (i < endIndex) {
 			callback(this[i]);
@@ -62,7 +66,13 @@ abstract Vector<T>(VectorData<T>) {
 	/**
 	 * Runs `callback` for each element in `this` vector.
 	 */
-	public inline function forEachIndex(callback:(element:T, index:Int, vector:Vector<T>) -> Void):Void {
+	public inline function forEachIndex(
+		callback: (
+			element: T,
+			index: Int,
+			vector: Vector<T>
+		) -> Void
+	): Void {
 		final len = this.length;
 		var i = 0;
 		while (i < len) {
@@ -75,7 +85,7 @@ abstract Vector<T>(VectorData<T>) {
 	 * Creates a new vector by filtering elements of `this` with `predicate`.
 	 * @param predicate Function that returns true if the element should be remain.
 	 */
-	public function filter<T>(predicate:T->Bool):Vector<T> {
+	public function filter<T>(predicate: T->Bool): Vector<T> {
 		// ? use Lambda.filter?
 
 		final len = this.length;
@@ -97,7 +107,7 @@ abstract Vector<T>(VectorData<T>) {
 	/**
 	 * @return Shallow copy of `this`.
 	 */
-	public inline function copy():Vector<T>
+	public inline function copy(): Vector<T>
 		return fromData(this.copy());
 
 	/**
@@ -105,7 +115,7 @@ abstract Vector<T>(VectorData<T>) {
 	 * @param startPosition The position in `this` to begin.
 	 * @param length The length of the range to be copied.
 	 */
-	public inline function subVector(startPosition:Int, length:Int):Vector<T>
+	public inline function subVector(startPosition: Int, length: Int): Vector<T>
 		return fromData(this.sub(startPosition, length));
 
 	/**
@@ -113,15 +123,15 @@ abstract Vector<T>(VectorData<T>) {
 	 * @param startPosition The position in `this` to begin (included).
 	 * @param endPosition The position in `this` to end (not included).
 	 */
-	public inline function slice<T>(startPosition:Int, endPosition:Int):Vector<T>
-		return fromData(this).subVector(startPosition, endPosition - startPosition);
+	public inline function slice<T>(startPosition: Int, endPosition: Int): Vector<T>
+		return fromData(this.sub(startPosition, endPosition - startPosition));
 
 	/**
 	 * Creates a new array by slicing `this`.
 	 * @param startPosition The position in `this` to begin (included).
 	 * @param endPosition The position in `this` to end (not included).
 	 */
-	public function sliceToArray<T>(startPosition:Int, endPosition:Int):Array<T>
+	public function sliceToArray<T>(startPosition: Int, endPosition: Int): Array<T>
 		return [for (i in startPosition...endPosition) this[i]];
 
 	// ---- search methods ------------------------------------------------------
@@ -132,7 +142,7 @@ abstract Vector<T>(VectorData<T>) {
 	 * @param fromIndex The index to start the search.
 	 * @return The found index. `-1` if not found.
 	 */
-	public function indexOf<T>(element:T, fromIndex:Int):Int {
+	public function indexOf<T>(element: T, fromIndex: Int): Int {
 		final len = this.length;
 		var i = fromIndex;
 		while (i < len) {
@@ -148,7 +158,7 @@ abstract Vector<T>(VectorData<T>) {
 	 * @param element Element to search.
 	 * @return `true` if this list contains `element`.
 	 */
-	public inline function contains(element:T):Bool
+	public inline function contains(element: T): Bool
 		return indexOf(element, 0) >= 0;
 
 	/**
@@ -156,8 +166,8 @@ abstract Vector<T>(VectorData<T>) {
 	 * @param predicate Function that returns true if the given element meets the condition.
 	 * @return First element that matches to the given filter. Null if not found.
 	 */
-	public function findFirstOccurrence<T>(predicate:T->Bool):Null<T> {
-		var element:T;
+	public function findFirstOccurrence<T>(predicate: T->Bool): Null<T> {
+		var element: T;
 
 		final len = this.length;
 		var i = 0;
@@ -178,7 +188,9 @@ abstract Vector<T>(VectorData<T>) {
 	 * Checks that the vector contains no null values (only in safe mode).
 	 * @return `this` vector.
 	 */
-	public inline function validateNoNull<T>(errorMessage:String = "Found null."):Vector<T> {
+	public inline function validateNoNull<T>(
+		errorMessage: String = "Found null."
+	): Vector<T> {
 		assert(indexOf(null, 0) >= 0, null, errorMessage);
 		return fromData(this);
 	}
@@ -188,7 +200,7 @@ abstract Vector<T>(VectorData<T>) {
 	 * Each element will be compared with the `!=` operator.
 	 * @return `true` if equal.
 	 */
-	public function equals<T>(otherVector:Vector<T>):Bool {
+	public function equals<T>(otherVector: Vector<T>): Bool {
 		final len = this.length;
 
 		if (len != otherVector.length)

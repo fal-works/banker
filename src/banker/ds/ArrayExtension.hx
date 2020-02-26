@@ -1,7 +1,7 @@
 package banker.ds;
 
 class ArrayExtension {
-	public static function nullify<T:{}>(array:Array<T>):Void {
+	public static function nullify<T: {}>(array: Array<T>): Void {
 		#if safe
 		if (array == null) throw "ArrayUtility.nullify(): Passed null.";
 		#end
@@ -14,22 +14,25 @@ class ArrayExtension {
 	}
 
 	@:generic
-	public static inline function get<T>(array:Array<T>, index:Int):T {
+	public static inline function get<T>(array: Array<T>, index: Int): T {
 		#if safe
 		if (array == null) throw "ArrayUtility.get(): Passed null.";
 		if (index < 0 || index >= array.length) throw "ArrayUtility.get(): index " + index + " is out of bound.";
 		#end
 
-		return
 		#if cpp
-		cpp.NativeArray.unsafeGet(array, index);
+		return cpp.NativeArray.unsafeGet(array, index);
 		#else
-		array[index];
+		return array[index];
 		#end
 	}
 
 	@:generic
-	public static inline function set<T>(array:Array<T>, index:Int, obj:T):Void {
+	public static inline function set<T>(
+		array: Array<T>,
+		index: Int,
+		obj: T
+	): Void {
 		#if safe
 		if (array == null) throw "ArrayUtility.set(): Passed null.";
 		if (index < 0 || index >= array.length) throw "ArrayUtility.set(): index " + index + " is out of bound.";
@@ -43,24 +46,28 @@ class ArrayExtension {
 	}
 
 	@:generic
-	public static inline function getLast<T>(array:Array<T>):T {
+	public static inline function getLast<T>(array: Array<T>): T {
 		#if safe
 		if (array == null) throw "ArrayUtility.getLast(): Passed null.";
 		#end
 
-		return
 		#if cpp
-		cpp.NativeArray.unsafeGet(array, array.length - 1);
+		return cpp.NativeArray.unsafeGet(array, array.length - 1);
 		#else
-		array[array.length - 1];
+		return array[array.length - 1];
 		#end
 	}
 
-	public static inline function fill<T>(array:Array<T>, value:T):Array<T> {
+	public static inline function fill<T>(array: Array<T>, value: T): Array<T> {
 		return fillRange(array, value, 0, array.length);
 	}
 
-	public static inline function fillRange<T>(array:Array<T>, value:T, startIndex:Int, endIndex:Int):Array<T> {
+	public static inline function fillRange<T>(
+		array: Array<T>,
+		value: T,
+		startIndex: Int,
+		endIndex: Int
+	): Array<T> {
 		#if safe
 		if (array == null)
 			throw "ArrayUtility.fillRange(): Passed null.";
@@ -81,7 +88,7 @@ class ArrayExtension {
 		return array;
 	}
 
-	public static function populate<T>(array:Array<T>, factory:Void->T):Array<T> {
+	public static function populate<T>(array: Array<T>, factory: Void->T): Array<T> {
 		#if safe
 		if (array == null || factory == null) throw "ArrayUtility.populate(): Passed null.";
 		#end
@@ -109,24 +116,34 @@ class ArrayExtension {
 	inline
 	#end
 	public static function blitInternal<T>(
-		array:Array<T>,
-		sourcePosition:Int,
-		destinationPosition:Int,
-		rangeLength:Int
-	):Array<T> {
+		array: Array<T>,
+		sourcePosition: Int,
+		destinationPosition: Int,
+		rangeLength: Int
+	): Array<T> {
 		#if safe
 		if (array == null) throw "ArrayUtility.blitInternal(): Passed null.";
-		if (
-			rangeLength <= 0 ||
-			sourcePosition + rangeLength > array.length ||
-			destinationPosition + rangeLength > array.length
-		) throw "ArrayUtility.blitInternal(): rangeLength " + rangeLength + " is invalid.";
+		if (rangeLength <= 0
+			|| sourcePosition + rangeLength > array.length
+			|| destinationPosition + rangeLength > array.length) throw "ArrayUtility.blitInternal(): rangeLength " + rangeLength + " is invalid.";
 		#end
 
 		#if cpp
-		cpp.NativeArray.blit(array, destinationPosition, array, sourcePosition, rangeLength);
+		cpp.NativeArray.blit(
+			array,
+			destinationPosition,
+			array,
+			sourcePosition,
+			rangeLength
+		);
 		#elseif java
-		java.lang.System.arraycopy(array, sourcePosition, array, destinationPosition, rangeLength);
+		java.lang.System.arraycopy(
+			array,
+			sourcePosition,
+			array,
+			destinationPosition,
+			rangeLength
+		);
 		#else
 		if (sourcePosition < destinationPosition) {
 			var i = sourcePosition + rangeLength;
@@ -159,8 +176,11 @@ class ArrayExtension {
 	 * @return  First element that matches to the given filter. Null if not found.
 	 */
 	@:generic
-	public static function findFirstOccurrence<T>(array:Array<T>, filterCallback:T->Bool):Null<T> {
-		var element:T;
+	public static function findFirstOccurrence<T>(
+		array: Array<T>,
+		filterCallback: T->Bool
+	): Null<T> {
+		var element: T;
 
 		/* fin */ var len = array.length;
 		var i = 0;
@@ -182,8 +202,12 @@ class ArrayExtension {
 	 * @return  True if found.
 	 */
 	@:generic
-	public static function forFirstOccurrence<T>(array:Array<T>, filterCallback:T->Bool, processCallback:T->Void):Bool {
-		var element:T;
+	public static function forFirstOccurrence<T>(
+		array: Array<T>,
+		filterCallback: T->Bool,
+		processCallback: T->Void
+	): Bool {
+		var element: T;
 
 		/* fin */ var len = array.length;
 		var i = 0;
@@ -207,7 +231,11 @@ class ArrayExtension {
 	 * @param   processCallback Function to run for the found element.
 	 */
 	@:generic
-	public static inline function forEachOccurrence<T>(array:Array<T>, filterCallback:T->Bool, processCallback:T->Void):Void {
+	public static inline function forEachOccurrence<T>(
+		array: Array<T>,
+		filterCallback: T->Bool,
+		processCallback: T->Void
+	): Void {
 		/* fin */ var len = array.length;
 		var i = 0;
 		while (i < len) {
@@ -224,7 +252,7 @@ class ArrayExtension {
 	 * @param   callback
 	 */
 	@:generic
-	public static function forEach<T>(array:Array<T>, callback:T->Void):Void {
+	public static function forEach<T>(array: Array<T>, callback: T->Void): Void {
 		/* fin */ var len = array.length;
 		var i = 0;
 		while (i < len) {
@@ -240,7 +268,7 @@ class ArrayExtension {
 	 * @return  True if the element is contained.
 	 */
 	@:generic
-	public static function contains<T>(array:Array<T>, value:T):Bool {
+	public static function contains<T>(array: Array<T>, value: T): Bool {
 		/* fin */ var len = array.length;
 		var i = 0;
 		while (i < len) {
@@ -258,7 +286,10 @@ class ArrayExtension {
 	 * @return  True if found.
 	 */
 	@:generic
-	public static function containsMatching<T>(array:Array<T>, filterCallback:T->Bool):Bool {
+	public static function containsMatching<T>(
+		array: Array<T>,
+		filterCallback: T->Bool
+	): Bool {
 		/* fin */ var len = array.length;
 		var i = 0;
 		while (i < len) {
@@ -270,7 +301,11 @@ class ArrayExtension {
 	}
 
 	@:generic
-	public static inline function swap<T>(array:Array<T>, indexA:Int, indexB:Int):Void {
+	public static inline function swap<T>(
+		array: Array<T>,
+		indexA: Int,
+		indexB: Int
+	): Void {
 		#if safe
 		if (array == null)
 			throw "ArrayUtility::swap  Passed null.";
