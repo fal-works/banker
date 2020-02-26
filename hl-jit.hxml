@@ -1,0 +1,4 @@
+# Build with HL/JIT
+
+common.hxml
+-hl out/main.hl

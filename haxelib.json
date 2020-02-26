@@ -1,0 +1,16 @@
+{
+	"name": "banker",
+	"url": "https://github.com/fal-works/banker/",
+	"license": "MIT",
+	"tags": [],
+	"description": "Data containers.",
+	"version": "0.0.1",
+	"classPath": "src/",
+	"releasenote": "Initial release, everything may change in future.",
+	"contributors": [
+		"fal-works"
+	],
+	"dependencies": {
+		"sneaker": "0.0.1"
+	}
+}

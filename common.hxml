@@ -1,0 +1,6 @@
+# Common Build arguments
+
+-cp src
+-cp test
+-lib sneaker
+-main Main
