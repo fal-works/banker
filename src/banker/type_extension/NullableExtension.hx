@@ -26,10 +26,7 @@ class NullableExtension {
 	/**
 	 * @return `_this` if it is not null. Otherwise the result of `getDefaultValue()`.
 	 */
-	public static inline function orElse<T>(
-		_this: Null<T>,
-		getDefaultValue: () -> T
-	): T {
+	public static inline function orElse<T>(_this: Null<T>, getDefaultValue: () -> T): T {
 		return exists(_this) ? _this : getDefaultValue();
 	}
 

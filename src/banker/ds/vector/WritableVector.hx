@@ -53,7 +53,6 @@ abstract WritableVector<T>(WritableVectorData<T>) {
 	}
 
 	// ---- instance core -------------------------------------------------------
-
 	var data(get, never): WritableVectorData<T>;
 
 	inline function get_data()

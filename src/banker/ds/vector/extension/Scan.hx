@@ -21,10 +21,7 @@ class Scan {
 	 * @return `true` if equal.
 	 */
 	@:generic
-	public static function equals<T>(
-		_this: Vector<T>,
-		otherVector: Vector<T>
-	): Bool {
+	public static function equals<T>(_this: Vector<T>, otherVector: Vector<T>): Bool {
 		final len = _this.length;
 
 		if (len != otherVector.length)
@@ -46,7 +43,7 @@ class ReadOnlyScan {
 	 * @return `this` vector.
 	 */
 	@:generic
-	 public static inline function assertNoNull<T>(
+	public static inline function assertNoNull<T>(
 		_this: Vector<T>,
 		?errorMessage: String
 	): Vector<T> {

@@ -1,4 +1,9 @@
 {
+	"indentation": {
+		"character": "tab",
+		"tabWidth": 2,
+		"conditionalPolicy": "alignedNestedIncrease"
+	},
 	"sameLine": {
 		"caseBody": "keep",
 		"elseBody": "keep",
@@ -46,6 +51,15 @@
 		"callParameter": {
 			"defaultWrap": "noWrap",
 			"rules": [
+				{
+					"conditions": [
+						{
+							"cond": "itemCount <= n",
+							"value": 1
+						}
+					],
+					"type": "noWrap"
+				},
 				{
 					"conditions": [
 						{
@@ -124,6 +138,39 @@
 					"type": "onePerLine"
 				}
 			]
-		}
+		},
+		"metadataCallParameter": {
+			"defaultWrap": "noWrap",
+			"rules": [
+				{
+					"conditions": [
+						{
+							"cond": "itemCount <= n",
+							"value": 2
+						}
+					],
+					"type": "noWrap"
+				},
+				{
+					"conditions": [
+						{
+							"cond": "totalItemLength >= n",
+							"value": 70
+						}
+					],
+					"type": "onePerLine"
+				},
+				{
+					"conditions": [
+						{
+							"cond": "lineLength >= n",
+							"value": 80
+						}
+					],
+					"type": "onePerLine"
+				}
+			]
+		},
+		"maxLineLength": 90
 	}
 }
