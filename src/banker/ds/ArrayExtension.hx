@@ -17,7 +17,8 @@ class ArrayExtension {
 	public static inline function get<T>(array: Array<T>, index: Int): T {
 		#if safe
 		if (array == null) throw "ArrayUtility.get(): Passed null.";
-		if (index < 0 || index >= array.length) throw "ArrayUtility.get(): index " + index + " is out of bound.";
+		if (index < 0 || index >= array.length) throw "ArrayUtility.get(): index " + index +
+			" is out of bound.";
 		#end
 
 		#if cpp
@@ -35,7 +36,8 @@ class ArrayExtension {
 	): Void {
 		#if safe
 		if (array == null) throw "ArrayUtility.set(): Passed null.";
-		if (index < 0 || index >= array.length) throw "ArrayUtility.set(): index " + index + " is out of bound.";
+		if (index < 0 || index >= array.length) throw "ArrayUtility.set(): index " + index +
+			" is out of bound.";
 		#end
 
 		#if cpp
@@ -74,9 +76,11 @@ class ArrayExtension {
 		if (startIndex < 0)
 			throw "ArrayUtility.fillRange(): startIndex " + startIndex + " is invalid.";
 		if (startIndex >= endIndex)
-			throw "ArrayUtility.fillRange(): startIndex " + startIndex + " is greater than endIndex " + endIndex + ".";
+			throw "ArrayUtility.fillRange(): startIndex " + startIndex +
+				" is greater than endIndex " + endIndex + ".";
 		if (endIndex > array.length)
-			throw "ArrayUtility.fillRange(): endIndex " + endIndex + " is greater than the array length " + array.length + ".";
+			throw "ArrayUtility.fillRange(): endIndex " + endIndex +
+				" is greater than the array length " + array.length + ".";
 		#end
 
 		var i = startIndex;
@@ -93,7 +97,7 @@ class ArrayExtension {
 		if (array == null || factory == null) throw "ArrayUtility.populate(): Passed null.";
 		#end
 
-		/* fin */ var len = array.length;
+		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			set(array, i, factory());
@@ -104,13 +108,13 @@ class ArrayExtension {
 	}
 
 	/**
-	 * Copies elements from source to destination position within a same array.
-	 * @param   array
-	 * @param   sourcePosition
-	 * @param   destinationPosition
-	 * @param   rangeLength - Number of elements to copy.
-	 * @return  Array<T> - The given array.
-	 */
+		Copies elements from source to destination position within a same array.
+		@param   array
+		@param   sourcePosition
+		@param   destinationPosition
+		@param   rangeLength - Number of elements to copy.
+		@return  Array<T> - The given array.
+	**/
 	@:generic
 	#if (cs || java || neko || cpp)
 	inline
@@ -123,9 +127,8 @@ class ArrayExtension {
 	): Array<T> {
 		#if safe
 		if (array == null) throw "ArrayUtility.blitInternal(): Passed null.";
-		if (rangeLength <= 0
-			|| sourcePosition + rangeLength > array.length
-			|| destinationPosition + rangeLength > array.length) throw "ArrayUtility.blitInternal(): rangeLength " + rangeLength + " is invalid.";
+		if (rangeLength <= 0 || sourcePosition + rangeLength > array.length || destinationPosition + rangeLength > array.length)
+			throw "ArrayUtility.blitInternal(): rangeLength " + rangeLength + " is invalid.";
 		#end
 
 		#if cpp
@@ -170,11 +173,11 @@ class ArrayExtension {
 	}
 
 	/**
-	 * Finds the first occurrence of the element.
-	 * @param   array
-	 * @param   filterCallback Function that returns true if the given element meets the condition.
-	 * @return  First element that matches to the given filter. Null if not found.
-	 */
+		Finds the first occurrence of the element.
+		@param   array
+		@param   filterCallback Function that returns true if the given element meets the condition.
+		@return  First element that matches to the given filter. Null if not found.
+	**/
 	@:generic
 	public static function findFirstOccurrence<T>(
 		array: Array<T>,
@@ -182,7 +185,7 @@ class ArrayExtension {
 	): Null<T> {
 		var element: T;
 
-		/* fin */ var len = array.length;
+		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			element = get(array, i);
@@ -195,12 +198,12 @@ class ArrayExtension {
 	}
 
 	/**
-	 * Runs a given function for the first occurrence of the element.
-	 * @param   array
-	 * @param   filterCallback Function that returns true if the given element meets the condition.
-	 * @param   processCallback Function to run for the found element.
-	 * @return  True if found.
-	 */
+		Runs a given function for the first occurrence of the element.
+		@param   array
+		@param   filterCallback Function that returns true if the given element meets the condition.
+		@param   processCallback Function to run for the found element.
+		@return  True if found.
+	**/
 	@:generic
 	public static function forFirstOccurrence<T>(
 		array: Array<T>,
@@ -209,7 +212,7 @@ class ArrayExtension {
 	): Bool {
 		var element: T;
 
-		/* fin */ var len = array.length;
+		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			element = get(array, i);
@@ -225,18 +228,18 @@ class ArrayExtension {
 	}
 
 	/**
-	 * Runs a given function for each occurrence of the matching element.
-	 * @param   array
-	 * @param   filterCallback Function that returns true if the given element meets the condition.
-	 * @param   processCallback Function to run for the found element.
-	 */
+		Runs a given function for each occurrence of the matching element.
+		@param   array
+		@param   filterCallback Function that returns true if the given element meets the condition.
+		@param   processCallback Function to run for the found element.
+	**/
 	@:generic
 	public static inline function forEachOccurrence<T>(
 		array: Array<T>,
 		filterCallback: T->Bool,
 		processCallback: T->Void
 	): Void {
-		/* fin */ var len = array.length;
+		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			if (filterCallback(get(array, i))) {
@@ -247,13 +250,13 @@ class ArrayExtension {
 	}
 
 	/**
-	 * Runs a given function for each element.
-	 * @param   array
-	 * @param   callback
-	 */
+		Runs a given function for each element.
+		@param   array
+		@param   callback
+	**/
 	@:generic
 	public static function forEach<T>(array: Array<T>, callback: T->Void): Void {
-		/* fin */ var len = array.length;
+		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			callback(get(array, i));
@@ -262,14 +265,14 @@ class ArrayExtension {
 	}
 
 	/**
-	 * Checks if the array contains the element.
-	 * @param   array
-	 * @param   value
-	 * @return  True if the element is contained.
-	 */
+		Checks if the array contains the element.
+		@param   array
+		@param   value
+		@return  True if the element is contained.
+	**/
 	@:generic
 	public static function contains<T>(array: Array<T>, value: T): Bool {
-		/* fin */ var len = array.length;
+		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			if (value == get(array, i)) return true;
@@ -280,17 +283,17 @@ class ArrayExtension {
 	}
 
 	/**
-	 * Checks if the array contains one or more elements that match to the given filter.
-	 * @param   array
-	 * @param   filterCallback Function that returns true if the given element meets the condition.
-	 * @return  True if found.
-	 */
+		Checks if the array contains one or more elements that match to the given filter.
+		@param   array
+		@param   filterCallback Function that returns true if the given element meets the condition.
+		@return  True if found.
+	**/
 	@:generic
 	public static function containsMatching<T>(
 		array: Array<T>,
 		filterCallback: T->Bool
 	): Bool {
-		/* fin */ var len = array.length;
+		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			if (filterCallback(get(array, i))) return true;

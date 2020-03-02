@@ -2,9 +2,9 @@ package banker.ds.vector.extension;
 
 class Functional {
 	/**
-	 * Runs `callback` for each element in `this` vector
-	 * from `startIndex` until (but not including) `endIndex`.
-	 */
+		Runs `callback` for each element in `this` vector
+		from `startIndex` until (but not including) `endIndex`.
+	**/
 	@:generic
 	public static inline function forEachIn<T>(
 		_this: Vector<T>,
@@ -20,17 +20,17 @@ class Functional {
 	}
 
 	/**
-	 * Runs `callback` for each element in `this` vector.
-	 */
+		Runs `callback` for each element in `this` vector.
+	**/
 	@:generic
 	public static inline function forEach<T>(_this: Vector<T>, callback: T->Void): Void {
 		forEachIn(_this, callback, 0, _this.length);
 	}
 
 	/**
-	 * Runs `callback` for each element in `this` vector
-	 * from `startIndex` until (but not including) `endIndex`.
-	 */
+		Runs `callback` for each element in `this` vector
+		from `startIndex` until (but not including) `endIndex`.
+	**/
 	@:generic
 	public static inline function forEachIndexIn<T>(
 		_this: WritableVector<T>,
@@ -50,8 +50,8 @@ class Functional {
 	}
 
 	/**
-	 * Runs `callback` for each element in `this` vector.
-	 */
+		Runs `callback` for each element in `this` vector.
+	**/
 	@:generic
 	public static inline function forEachIndex<T>(
 		_this: WritableVector<T>,
@@ -65,10 +65,10 @@ class Functional {
 	}
 
 	/**
-	 * Creates a new vector by filtering elements of `this` with `predicate`
-	 * whithin the range from `startIndex` until (but not including) `endIndex`.
-	 * @param predicate Function that returns true if the element should be remain.
-	 */
+		Creates a new vector by filtering elements of `this` with `predicate`
+		whithin the range from `startIndex` until (but not including) `endIndex`.
+		@param predicate Function that returns true if the element should be remain.
+	**/
 	@:generic
 	public static function filterIn<T>(
 		_this: Vector<T>,
@@ -88,9 +88,9 @@ class Functional {
 	}
 
 	/**
-	 * Creates a new vector by filtering elements of `this` with `predicate`.
-	 * @param predicate Function that returns true if the element should be remain.
-	 */
+		Creates a new vector by filtering elements of `this` with `predicate`.
+		@param predicate Function that returns true if the element should be remain.
+	**/
 	@:generic
 	public static function filter<T>(
 		_this: Vector<T>,
@@ -102,8 +102,8 @@ class Functional {
 
 class ReadOnlyFunctional {
 	/**
-	 * @see `Functional.forEachIndexIn()`
-	 */
+		@see `Functional.forEachIndexIn()`
+	**/
 	@:generic
 	public static inline function forEachIndexIn<T>(
 		_this: Vector<T>,
@@ -123,8 +123,8 @@ class ReadOnlyFunctional {
 	}
 
 	/**
-	 * @see `Functional.forEachIndex()`
-	 */
+		@see `Functional.forEachIndex()`
+	**/
 	@:generic
 	public static inline function forEachIndex<T>(
 		_this: Vector<T>,
@@ -138,8 +138,8 @@ class ReadOnlyFunctional {
 	}
 
 	/**
-	 * @see `Functional.filterIn()`
-	 */
+		@see `Functional.filterIn()`
+	**/
 	@:generic
 	public static inline function filterIn<T>(
 		_this: Vector<T>,
@@ -151,8 +151,8 @@ class ReadOnlyFunctional {
 	}
 
 	/**
-	 * @see `Functional.filter()`
-	 */
+		@see `Functional.filter()`
+	**/
 	@:generic
 	public static inline function filter<T>(
 		_this: Vector<T>,

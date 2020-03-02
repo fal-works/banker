@@ -1,8 +1,8 @@
 package banker.ds;
 
 /**
- * Static utility functions for `Array<T>`.
- */
+	Static utility functions for `Array<T>`.
+**/
 class ArrayTools {
 	public static function allocate<T>(size: Int): Array<T> {
 		#if safe
@@ -22,10 +22,10 @@ class ArrayTools {
 	}
 
 	/**
-	 * Copies elements from source to destination.
-	 * In some targets, source and destination cannot be the same.
-	 * @return The destination array.
-	 */
+		Copies elements from source to destination.
+		In some targets, source and destination cannot be the same.
+		@return The destination array.
+	**/
 	@:generic
 	public inline static function blit<T>(
 		sourceArray: Array<T>,
@@ -64,9 +64,9 @@ class ArrayTools {
 	}
 
 	/**
-	 * Copies elements from source to destination beginning at index zero.
-	 * @return The destination array.
-	 */
+		Copies elements from source to destination beginning at index zero.
+		@return The destination array.
+	**/
 	@:generic
 	public static inline function copyTo<T>(
 		sourceArray: Array<T>,

@@ -1,10 +1,10 @@
 package banker.integration;
 
 /**
- * The body of `banker.integration.RawVector`.
- *
- * If HashLink `hl.NativeArray<T>`, otherwise `haxe.ds.Vector<T>`.
- */
+	The body of `banker.integration.RawVector`.
+
+	If HashLink `hl.NativeArray<T>`, otherwise `haxe.ds.Vector<T>`.
+**/
 #if hl
 typedef RawVectorData<T> = hl.NativeArray<T>;
 #else
@@ -12,8 +12,8 @@ typedef RawVectorData<T> = haxe.ds.Vector<T>;
 #end
 
 /**
- * Integration of `hl.NativeArray` and `haxe.ds.Vector`.
- */
+	Integration of `hl.NativeArray` and `haxe.ds.Vector`.
+**/
 #if hl
 @:forward(length)
 #else
@@ -21,14 +21,14 @@ typedef RawVectorData<T> = haxe.ds.Vector<T>;
 #end
 abstract RawVector<T>(RawVectorData<T>) {
 	/**
-	 * Casts `data` from `VectorData<T>` to `RawVector<T>`.
-	 */
+		Casts `data` from `VectorData<T>` to `RawVector<T>`.
+	**/
 	public static inline function fromData<T>(data: RawVectorData<T>): RawVector<T>
 		return cast data;
 
 	/**
-	 * @return Shallow copy of `array` as `RawVector<T>`.
-	 */
+		@return Shallow copy of `array` as `RawVector<T>`.
+	**/
 	public static inline function fromArrayCopy<T>(array: Array<T>): RawVector<T> {
 		#if hl
 		final len = array.length;
@@ -59,12 +59,12 @@ abstract RawVector<T>(RawVectorData<T>) {
 		return this[index] = value;
 
 	/**
-	 * Copies elements from `src` (beginning at `srcPos`) to `this` (beginning at `pos`).
-	 * @param pos The destination position.
-	 * @param src The source vector.
-	 * @param srcPos The source position.
-	 * @param srcLen The length of the range to be copied.
-	 */
+		Copies elements from `src` (beginning at `srcPos`) to `this` (beginning at `pos`).
+		@param pos The destination position.
+		@param src The source vector.
+		@param srcPos The source position.
+		@param srcLen The length of the range to be copied.
+	**/
 	public inline function blit<T>(
 		pos: Int,
 		src: RawVector<T>,
@@ -79,8 +79,8 @@ abstract RawVector<T>(RawVectorData<T>) {
 	}
 
 	/**
-	 * @return Shallow copy of `this`.
-	 */
+		@return Shallow copy of `this`.
+	**/
 	public inline function copy(): RawVector<T> {
 		#if hl
 		final len = this.length;
@@ -94,10 +94,10 @@ abstract RawVector<T>(RawVectorData<T>) {
 	}
 
 	/**
-	 * Creates a new vector by applying function `f` to all elements of `this`.
-	 * @param callback
-	 * @return New vector.
-	 */
+		Creates a new vector by applying function `f` to all elements of `this`.
+		@param callback
+		@return New vector.
+	**/
 	public inline function map<S>(f: T->S): RawVector<S> {
 		#if hl
 		final len = this.length;
@@ -115,11 +115,11 @@ abstract RawVector<T>(RawVectorData<T>) {
 	}
 
 	/**
-	 * Creates a sub-vector of `this` by shallow-copying the given range.
-	 * @param pos The position in `this` to begin.
-	 * @param len The length of the range to be copied.
-	 * @return New vector.
-	 */
+		Creates a sub-vector of `this` by shallow-copying the given range.
+		@param pos The position in `this` to begin.
+		@param len The length of the range to be copied.
+		@return New vector.
+	**/
 	public inline function sub<T>(pos: Int, len: Int): RawVector<T> {
 		#if hl
 		return fromData(this.sub(pos, len));
@@ -133,8 +133,8 @@ abstract RawVector<T>(RawVectorData<T>) {
 
 	#if hl
 	/**
-	 * @return Shallow copy of `this` as `Array<T>`.
-	 */
+		@return Shallow copy of `this` as `Array<T>`.
+	**/
 	public inline function toArray(): Array<T>
 		return [for (i in 0...this.length) this[i]];
 	#end

@@ -2,9 +2,9 @@ package banker.ds.vector.extension;
 
 class Fill {
 	/**
-	 * Fills the vector with `value` beginning at `startIndex` until (but not including) `endIndex`.
-	 * @return Filled `this`.
-	 */
+		Fills the vector with `value` beginning at `startIndex` until (but not including) `endIndex`.
+		@return Filled `this`.
+	**/
 	@:generic
 	public static inline function fillIn<T>(
 		_this: WritableVector<T>,
@@ -21,9 +21,9 @@ class Fill {
 	}
 
 	/**
-	 * Fills the entire vector with `value`.
-	 * @return Filled `this`.
-	 */
+		Fills the entire vector with `value`.
+		@return Filled `this`.
+	**/
 	@:generic
 	public static inline function fill<T>(
 		_this: WritableVector<T>,
@@ -35,9 +35,9 @@ class Fill {
 	}
 
 	/**
-	 * Fills the entire vector with instances created from `factory`.
-	 * @return Filled `this`.
-	 */
+		Fills the entire vector with instances created from `factory`.
+		@return Filled `this`.
+	**/
 	@:generic
 	public static inline function populate<T>(
 		_this: WritableVector<T>,

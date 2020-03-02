@@ -3,8 +3,8 @@ package banker.ds.vector.extension;
 @:access(banker.ds.vector.Vector)
 class Copy {
 	/**
-	 * Returns a new concatenated vector.
-	 */
+		Returns a new concatenated vector.
+	**/
 	@:generic
 	public static inline function concat<T>(
 		_this: Vector<T>,
@@ -21,10 +21,10 @@ class Copy {
 	}
 
 	/**
-	 * Creates a new vector by slicing `this`.
-	 * @param startPosition The position in `this` to begin (included).
-	 * @param endPosition The position in `this` to end (not included).
-	 */
+		Creates a new vector by slicing `this`.
+		@param startPosition The position in `this` to begin (included).
+		@param endPosition The position in `this` to end (not included).
+	**/
 	@:generic
 	public static inline function slice<T>(
 		_this: Vector<T>,
@@ -35,10 +35,10 @@ class Copy {
 	}
 
 	/**
-	 * Creates a new array by slicing `this`.
-	 * @param startPosition The position in `this` to begin (included).
-	 * @param endPosition The position in `this` to end (not included).
-	 */
+		Creates a new array by slicing `this`.
+		@param startPosition The position in `this` to begin (included).
+		@param endPosition The position in `this` to end (not included).
+	**/
 	@:generic
 	public static function sliceToArray<T>(
 		_this: Vector<T>,
@@ -50,7 +50,7 @@ class Copy {
 }
 
 class ReadOnlyCopy {
-	/** @see `Copy.concat()` */
+	/** @see `Copy.concat()` **/
 	@:generic
 	public static inline function concat<T>(
 		_this: Vector<T>,
@@ -59,7 +59,7 @@ class ReadOnlyCopy {
 		return Copy.concat(_this, otherVector);
 	}
 
-	/** @see `Copy.slice()` */
+	/** @see `Copy.slice()` **/
 	@:generic
 	public static inline function slice<T>(
 		_this: Vector<T>,

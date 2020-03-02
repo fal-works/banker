@@ -3,8 +3,8 @@ package banker.ds.vector;
 typedef WritableVectorData<T> = banker.integration.RawVector<T>;
 
 /**
- * Fixed-length writable array with extended functions.
- */
+	Fixed-length writable array with extended functions.
+**/
 @:forward(length, toArray)
 // @formatter:off
 @:using(
@@ -19,22 +19,22 @@ abstract WritableVector<T>(WritableVectorData<T>) {
 	// ---- create functions ----------------------------------------------------
 
 	/**
-	 * Casts `data` from `WritableVectorData<T>` to `WritableVector<T>`.
-	 */
+		Casts `data` from `WritableVectorData<T>` to `WritableVector<T>`.
+	**/
 	public static inline function fromData<T>(
 		data: WritableVectorData<T>
 	): WritableVector<T>
 		return cast data;
 
 	/**
-	 * @return Shallow copy of `array` as `WritableVector<T>`.
-	 */
+		@return Shallow copy of `array` as `WritableVector<T>`.
+	**/
 	public static inline function fromArrayCopy<T>(array: Array<T>): WritableVector<T>
 		return fromData(WritableVectorData.fromArrayCopy(array));
 
 	/**
-	 * Creates a vector filled with the given value.
-	 */
+		Creates a vector filled with the given value.
+	**/
 	public static inline function createFilled<T>(
 		length: Int,
 		fillValue: T
@@ -43,8 +43,8 @@ abstract WritableVector<T>(WritableVectorData<T>) {
 	}
 
 	/**
-	 * Creates a vector populated using the given factory function.
-	 */
+		Creates a vector populated using the given factory function.
+	**/
 	public static inline function createPopulated<T>(
 		length: Int,
 		factory: Void->T

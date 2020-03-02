@@ -2,10 +2,10 @@ package banker.ds.vector;
 
 class VectorTools {
 	/**
-	 * Static version of `blit()`.
-	 * Copies `rangeLength` of elements from `source` (beginning at `sourcePosition`)
-	 * to `destination` (beginning at `destinationPosition`).
-	 */
+		Static version of `blit()`.
+		Copies `rangeLength` of elements from `source` (beginning at `sourcePosition`)
+		to `destination` (beginning at `destinationPosition`).
+	**/
 	public static inline function blit<T>(
 		source: Vector<T>,
 		sourcePosition: Int,
@@ -25,8 +25,8 @@ class VectorTools {
 	}
 
 	/**
-	 * Blits data from vector to array.
-	 */
+		Blits data from vector to array.
+	**/
 	public static inline function blitToArray<T>(
 		sourceVector: Vector<T>,
 		sourcePosition: Int,

@@ -1,8 +1,8 @@
 package banker.ds.vector;
 
 /**
- * Fixed-length read-only array with extended functions.
- */
+	Fixed-length read-only array with extended functions.
+**/
 @:forward(
 	length,
 	data,
@@ -24,21 +24,21 @@ abstract Vector<T>(WritableVector<T>) from WritableVector<T> {
 	// ---- create functions ----------------------------------------------------
 
 	/**
-	 * @return Shallow copy of `array` as `Vector<T>`.
-	 */
+		@return Shallow copy of `array` as `Vector<T>`.
+	**/
 	public static inline function fromArrayCopy<T>(array: Array<T>): Vector<T>
 		return WritableVector.fromArrayCopy(array);
 
 	/**
-	 * Creates a vector filled with the given value.
-	 */
+		Creates a vector filled with the given value.
+	**/
 	public static inline function createFilled<T>(length: Int, fillValue: T): Vector<T> {
 		return WritableVector.createFilled(length, fillValue);
 	}
 
 	/**
-	 * Creates a vector populated using the given factory function.
-	 */
+		Creates a vector populated using the given factory function.
+	**/
 	public static inline function createPopulated<T>(
 		length: Int,
 		factory: Void->T
