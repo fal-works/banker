@@ -6,7 +6,9 @@ class Search {
 		@param element The element to search.
 		@return The found index. `-1` if not found.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function findIn<T>(
 		_this: Vector<T>,
 		element: T,
@@ -33,7 +35,9 @@ class Search {
 		@param fromIndex The index to start the search.
 		@return The found index. `-1` if not found.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function find<T>(_this: Vector<T>, element: T): Int {
 		return findIn(_this, element, 0, _this.length);
 	}
@@ -42,7 +46,9 @@ class Search {
 		@param element Element to search.
 		@return `true` if this list contains `element`.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function containsIn<T>(
 		_this: Vector<T>,
 		element: T,
@@ -57,7 +63,9 @@ class Search {
 		@param element Element to search.
 		@return `true` if this list contains `element`.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function contains<T>(_this: Vector<T>, element: T): Bool {
 		return containsIn(_this, element, 0, _this.length);
 	}
@@ -67,7 +75,9 @@ class Search {
 		@param predicate Function that returns true if the given element meets the condition.
 		@return First element that matches to the given filter. Null if not found.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function findFirstIn<T>(
 		_this: Vector<T>,
 		predicate: T->Bool,
@@ -96,7 +106,9 @@ class Search {
 		@param predicate Function that returns true if the given element meets the condition.
 		@return First element that matches to the given filter. Null if not found.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static function findFirst<T>(_this: Vector<T>, predicate: T->Bool): Null<T> {
 		return findFirstIn(_this, predicate, 0, _this.length);
 	}

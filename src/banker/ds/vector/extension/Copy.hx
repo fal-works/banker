@@ -5,7 +5,9 @@ class Copy {
 	/**
 		Returns a new concatenated vector.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function concat<T>(
 		_this: Vector<T>,
 		otherVector: Vector<T>
@@ -25,7 +27,9 @@ class Copy {
 		@param startPosition The position in `this` to begin (included).
 		@param endPosition The position in `this` to end (not included).
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function slice<T>(
 		_this: Vector<T>,
 		startPosition: Int,
@@ -39,7 +43,9 @@ class Copy {
 		@param startPosition The position in `this` to begin (included).
 		@param endPosition The position in `this` to end (not included).
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static function sliceToArray<T>(
 		_this: Vector<T>,
 		startPosition: Int,
@@ -51,7 +57,9 @@ class Copy {
 
 class ReadOnlyCopy {
 	/** @see `Copy.concat()` **/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function concat<T>(
 		_this: Vector<T>,
 		otherVector: Vector<T>
@@ -60,7 +68,9 @@ class ReadOnlyCopy {
 	}
 
 	/** @see `Copy.slice()` **/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function slice<T>(
 		_this: Vector<T>,
 		startPosition: Int,

@@ -6,7 +6,9 @@ class Scan {
 		Checks that the vector contains no null values (only in safe mode).
 		@return `this` vector.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function assertNoNull<T>(
 		_this: Vector<T>,
 		?errorMessage: String
@@ -20,7 +22,9 @@ class Scan {
 		Each element will be compared with the `!=` operator.
 		@return `true` if equal.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static function equals<T>(_this: Vector<T>, otherVector: Vector<T>): Bool {
 		final len = _this.length;
 
@@ -42,13 +46,14 @@ class ReadOnlyScan {
 		Checks that the vector contains no null values (only in safe mode).
 		@return `this` vector.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function assertNoNull<T>(
 		_this: Vector<T>,
 		?errorMessage: String
 	): Vector<T> {
 		return Scan.assertNoNull(_this, errorMessage);
 	}
-
 	// forward: equals
 }

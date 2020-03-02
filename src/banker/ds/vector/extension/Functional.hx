@@ -5,7 +5,9 @@ class Functional {
 		Runs `callback` for each element in `this` vector
 		from `startIndex` until (but not including) `endIndex`.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function forEachIn<T>(
 		_this: Vector<T>,
 		callback: T->Void,
@@ -22,7 +24,9 @@ class Functional {
 	/**
 		Runs `callback` for each element in `this` vector.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function forEach<T>(_this: Vector<T>, callback: T->Void): Void {
 		forEachIn(_this, callback, 0, _this.length);
 	}
@@ -31,7 +35,9 @@ class Functional {
 		Runs `callback` for each element in `this` vector
 		from `startIndex` until (but not including) `endIndex`.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function forEachIndexIn<T>(
 		_this: WritableVector<T>,
 		callback: (
@@ -52,7 +58,9 @@ class Functional {
 	/**
 		Runs `callback` for each element in `this` vector.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function forEachIndex<T>(
 		_this: WritableVector<T>,
 		callback: (
@@ -69,7 +77,9 @@ class Functional {
 		whithin the range from `startIndex` until (but not including) `endIndex`.
 		@param predicate Function that returns true if the element should be remain.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static function filterIn<T>(
 		_this: Vector<T>,
 		predicate: T->Bool,
@@ -91,7 +101,9 @@ class Functional {
 		Creates a new vector by filtering elements of `this` with `predicate`.
 		@param predicate Function that returns true if the element should be remain.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static function filter<T>(
 		_this: Vector<T>,
 		predicate: T->Bool
@@ -104,7 +116,9 @@ class ReadOnlyFunctional {
 	/**
 		@see `Functional.forEachIndexIn()`
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function forEachIndexIn<T>(
 		_this: Vector<T>,
 		callback: (
@@ -125,7 +139,9 @@ class ReadOnlyFunctional {
 	/**
 		@see `Functional.forEachIndex()`
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function forEachIndex<T>(
 		_this: Vector<T>,
 		callback: (
@@ -140,7 +156,9 @@ class ReadOnlyFunctional {
 	/**
 		@see `Functional.filterIn()`
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function filterIn<T>(
 		_this: Vector<T>,
 		predicate: T->Bool,
@@ -153,7 +171,9 @@ class ReadOnlyFunctional {
 	/**
 		@see `Functional.filter()`
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function filter<T>(
 		_this: Vector<T>,
 		predicate: T->Bool

@@ -14,6 +14,6 @@ Data containers.
 
 ## Compilation flags
 
-|flag|category|description|
-|---|---|---|
-|||
+|flag|description|
+|---|---|
+|banker_generic_disable||

@@ -26,7 +26,9 @@ class ArrayTools {
 		In some targets, source and destination cannot be the same.
 		@return The destination array.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public inline static function blit<T>(
 		sourceArray: Array<T>,
 		sourcePosition: Int,
@@ -67,7 +69,9 @@ class ArrayTools {
 		Copies elements from source to destination beginning at index zero.
 		@return The destination array.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function copyTo<T>(
 		sourceArray: Array<T>,
 		destinationArray: Array<T>,

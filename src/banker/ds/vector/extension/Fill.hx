@@ -5,7 +5,9 @@ class Fill {
 		Fills the vector with `value` beginning at `startIndex` until (but not including) `endIndex`.
 		@return Filled `this`.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function fillIn<T>(
 		_this: WritableVector<T>,
 		value: T,
@@ -24,7 +26,9 @@ class Fill {
 		Fills the entire vector with `value`.
 		@return Filled `this`.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function fill<T>(
 		_this: WritableVector<T>,
 		value: T
@@ -38,7 +42,9 @@ class Fill {
 		Fills the entire vector with instances created from `factory`.
 		@return Filled `this`.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function populate<T>(
 		_this: WritableVector<T>,
 		factory: Void->T

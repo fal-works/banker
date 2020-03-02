@@ -13,7 +13,9 @@ class ArrayExtension {
 		#end
 	}
 
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function get<T>(array: Array<T>, index: Int): T {
 		#if safe
 		if (array == null) throw "ArrayUtility.get(): Passed null.";
@@ -28,7 +30,9 @@ class ArrayExtension {
 		#end
 	}
 
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function set<T>(
 		array: Array<T>,
 		index: Int,
@@ -47,7 +51,9 @@ class ArrayExtension {
 		#end
 	}
 
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function getLast<T>(array: Array<T>): T {
 		#if safe
 		if (array == null) throw "ArrayUtility.getLast(): Passed null.";
@@ -115,7 +121,9 @@ class ArrayExtension {
 		@param   rangeLength - Number of elements to copy.
 		@return  Array<T> - The given array.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	#if (cs || java || neko || cpp)
 	inline
 	#end
@@ -178,7 +186,9 @@ class ArrayExtension {
 		@param   filterCallback Function that returns true if the given element meets the condition.
 		@return  First element that matches to the given filter. Null if not found.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static function findFirstOccurrence<T>(
 		array: Array<T>,
 		filterCallback: T->Bool
@@ -204,7 +214,9 @@ class ArrayExtension {
 		@param   processCallback Function to run for the found element.
 		@return  True if found.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static function forFirstOccurrence<T>(
 		array: Array<T>,
 		filterCallback: T->Bool,
@@ -233,7 +245,9 @@ class ArrayExtension {
 		@param   filterCallback Function that returns true if the given element meets the condition.
 		@param   processCallback Function to run for the found element.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function forEachOccurrence<T>(
 		array: Array<T>,
 		filterCallback: T->Bool,
@@ -254,7 +268,9 @@ class ArrayExtension {
 		@param   array
 		@param   callback
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static function forEach<T>(array: Array<T>, callback: T->Void): Void {
 		final len = array.length;
 		var i = 0;
@@ -270,7 +286,9 @@ class ArrayExtension {
 		@param   value
 		@return  True if the element is contained.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static function contains<T>(array: Array<T>, value: T): Bool {
 		final len = array.length;
 		var i = 0;
@@ -288,7 +306,9 @@ class ArrayExtension {
 		@param   filterCallback Function that returns true if the given element meets the condition.
 		@return  True if found.
 	**/
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static function containsMatching<T>(
 		array: Array<T>,
 		filterCallback: T->Bool
@@ -303,7 +323,9 @@ class ArrayExtension {
 		return false;
 	}
 
+	#if !banker_generic_disable
 	@:generic
+	#end
 	public static inline function swap<T>(
 		array: Array<T>,
 		indexA: Int,
