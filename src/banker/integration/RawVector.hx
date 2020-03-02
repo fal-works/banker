@@ -1,14 +1,14 @@
 package banker.integration;
 
 /**
- * The body of `banker.integration.Vector`.
+ * The body of `banker.integration.RawVector`.
  *
  * If HashLink `hl.NativeArray<T>`, otherwise `haxe.ds.Vector<T>`.
  */
 #if hl
-typedef VectorData<T> = hl.NativeArray<T>;
+typedef RawVectorData<T> = hl.NativeArray<T>;
 #else
-typedef VectorData<T> = haxe.ds.Vector<T>;
+typedef RawVectorData<T> = haxe.ds.Vector<T>;
 #end
 
 /**
@@ -19,20 +19,20 @@ typedef VectorData<T> = haxe.ds.Vector<T>;
 #else
 @:forward(length, toArray)
 #end
-abstract Vector<T>(VectorData<T>) {
+abstract RawVector<T>(RawVectorData<T>) {
 	/**
-	 * Casts `data` from `VectorData<T>` to `Vector<T>`.
+	 * Casts `data` from `VectorData<T>` to `RawVector<T>`.
 	 */
-	public static inline function fromData<T>(data: VectorData<T>): Vector<T>
+	public static inline function fromData<T>(data: RawVectorData<T>): RawVector<T>
 		return cast data;
 
 	/**
-	 * @return Shallow copy of `array` as `Vector<T>`.
+	 * @return Shallow copy of `array` as `RawVector<T>`.
 	 */
-	public static inline function fromArrayCopy<T>(array: Array<T>): Vector<T> {
+	public static inline function fromArrayCopy<T>(array: Array<T>): RawVector<T> {
 		#if hl
 		final len = array.length;
-		final newVector = new Vector<T>(len);
+		final newVector = new RawVector<T>(len);
 		var i = 0;
 		while (i < len) {
 			newVector[i] = array[i];
@@ -40,17 +40,17 @@ abstract Vector<T>(VectorData<T>) {
 		}
 		return newVector;
 		#else
-		return fromData(VectorData.fromArrayCopy(array));
+		return fromData(RawVectorData.fromArrayCopy(array));
 		#end
 	}
 
-	var data(get, never): VectorData<T>;
+	var data(get, never): RawVectorData<T>;
 
 	inline function get_data()
 		return this;
 
 	public inline function new(length: Int)
-		this = new VectorData<T>(length);
+		this = new RawVectorData<T>(length);
 
 	@:op([]) public inline function get(index: Int): T
 		return this[index];
@@ -67,24 +67,24 @@ abstract Vector<T>(VectorData<T>) {
 	 */
 	public inline function blit<T>(
 		pos: Int,
-		src: Vector<T>,
+		src: RawVector<T>,
 		srcPos: Int,
 		srcLen: Int
 	): Void {
 		#if hl
 		this.blit(pos, src.data, srcPos, srcLen);
 		#else
-		VectorData.blit(src.data, srcPos, this, pos, srcLen);
+		RawVectorData.blit(src.data, srcPos, this, pos, srcLen);
 		#end
 	}
 
 	/**
 	 * @return Shallow copy of `this`.
 	 */
-	public inline function copy(): Vector<T> {
+	public inline function copy(): RawVector<T> {
 		#if hl
 		final len = this.length;
-		final newVector = new Vector<T>(len);
+		final newVector = new RawVector<T>(len);
 		newVector.data.blit(0, this, 0, len);
 
 		return newVector;
@@ -98,10 +98,10 @@ abstract Vector<T>(VectorData<T>) {
 	 * @param callback
 	 * @return New vector.
 	 */
-	public inline function map<S>(f: T->S): Vector<S> {
+	public inline function map<S>(f: T->S): RawVector<S> {
 		#if hl
 		final len = this.length;
-		final newVector = new Vector<S>(len);
+		final newVector = new RawVector<S>(len);
 		var i = 0;
 		while (i < len) {
 			newVector[i] = f(this[i]);
@@ -120,11 +120,11 @@ abstract Vector<T>(VectorData<T>) {
 	 * @param len The length of the range to be copied.
 	 * @return New vector.
 	 */
-	public inline function sub<T>(pos: Int, len: Int): Vector<T> {
+	public inline function sub<T>(pos: Int, len: Int): RawVector<T> {
 		#if hl
 		return fromData(this.sub(pos, len));
 		#else
-		final subVector = new Vector<T>(len);
+		final subVector = new RawVector<T>(len);
 		subVector.blit(0, fromData(this), pos, len);
 
 		return subVector;
