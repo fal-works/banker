@@ -32,7 +32,7 @@ abstract Vector<T>(VectorData<T>) {
 	public static inline function fromArrayCopy<T>(array: Array<T>): Vector<T> {
 		#if hl
 		final len = array.length;
-		final newVector = new Vector(len);
+		final newVector = new Vector<T>(len);
 		var i = 0;
 		while (i < len) {
 			newVector[i] = array[i];
