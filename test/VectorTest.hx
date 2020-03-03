@@ -49,14 +49,14 @@ class VectorTest {
 		println(newVector);
 	}, Visual);
 
-	static final find = testCase(() -> {
+	static final findIndex = testCase(() -> {
 		describe("This prints 1.");
 		final vector = Vector.fromArrayCopy([
 			1,
 			2,
 			3
 		]);
-		println(vector.ref.find(2));
+		println(vector.ref.findIndex(2));
 	}, Visual);
 
 	static final forEach = testCase(() -> {
@@ -87,7 +87,7 @@ class VectorTest {
 		createFilled,
 		sub,
 		slice,
-		find,
+		findIndex,
 		forEach,
 		fill
 	]);

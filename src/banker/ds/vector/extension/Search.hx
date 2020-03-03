@@ -9,7 +9,7 @@ class Search {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function findIn<T>(
+	public static inline function findIndexIn<T>(
 		_this: VectorReference<T>,
 		element: T,
 		startIndex: Int,
@@ -38,8 +38,8 @@ class Search {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function find<T>(_this: VectorReference<T>, element: T): Int {
-		return findIn(_this, element, 0, _this.length);
+	public static inline function findIndex<T>(_this: VectorReference<T>, element: T): Int {
+		return findIndexIn(_this, element, 0, _this.length);
 	}
 
 	/**
@@ -56,7 +56,7 @@ class Search {
 		endIndex: Int
 	): Bool {
 		assert(startIndex >= 0 && endIndex <= _this.length);
-		return findIn(_this, element, startIndex, endIndex) >= 0;
+		return findIndexIn(_this, element, startIndex, endIndex) >= 0;
 	}
 
 	/**
