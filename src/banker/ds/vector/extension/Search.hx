@@ -49,7 +49,7 @@ class Search {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function containsIn<T>(
+	public static inline function hasIn<T>(
 		_this: VectorReference<T>,
 		element: T,
 		startIndex: Int,
@@ -66,11 +66,11 @@ class Search {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function contains<T>(
+	public static inline function has<T>(
 		_this: VectorReference<T>,
 		element: T
 	): Bool {
-		return containsIn(_this, element, 0, _this.length);
+		return hasIn(_this, element, 0, _this.length);
 	}
 
 	/**
