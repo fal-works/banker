@@ -1,5 +1,7 @@
 package banker.ds;
 
+using banker.ds.ArrayExtension;
+
 /**
 	Static utility functions for `Array<T>`.
 **/
@@ -17,34 +19,36 @@ class ArrayTools {
 	}
 
 	/**
-		Copies elements from source to destination.
-		In some targets, source and destination cannot be the same.
+		Copies elements from `source` to `destination`.
+
+		If `source` and `destination` are the same, use `blitInternal()` instead.
 	**/
 	#if !banker_generic_disable
 	@:generic
 	#end
 	public inline static function blit<T>(
-		sourceArray: Array<T>,
+		source: Array<T>,
 		sourcePosition: Int,
-		destinationArray: Array<T>,
+		destination: Array<T>,
 		destinationPosition: Int,
 		rangeLength: Int
 	): Void {
+		assert(source != destination);
 		assert(rangeLength >= 0);
-		assert(sourcePosition + rangeLength <= sourceArray.length);
-		assert(destinationPosition + rangeLength <= destinationArray.length);
+		assert(sourcePosition + rangeLength <= source.length);
+		assert(destinationPosition + rangeLength <= destination.length);
 
 		#if cpp
 		cpp.NativeArray.blit(
-			destinationArray,
+			destination,
 			destinationPosition,
-			sourceArray,
+			source,
 			sourcePosition,
 			rangeLength
 		);
 		#else
 		for (i in 0...rangeLength)
-			destinationArray[destinationPosition + i] = sourceArray[sourcePosition + i];
+			destination.set(destinationPosition + i, source.get(sourcePosition + i));
 		#end
 	}
 
@@ -55,19 +59,20 @@ class ArrayTools {
 	@:generic
 	#end
 	public static inline function copyTo<T>(
-		sourceArray: Array<T>,
-		destinationArray: Array<T>,
+		source: Array<T>,
+		destination: Array<T>,
 		rangeLength: Int
 	): Void {
+		assert(source != destination);
 		assert(rangeLength >= 0);
-		assert(rangeLength <= sourceArray.length);
-		assert(rangeLength <= destinationArray.length);
+		assert(rangeLength <= source.length);
+		assert(rangeLength <= destination.length);
 
 		#if cpp
-		cpp.NativeArray.blit(destinationArray, 0, sourceArray, 0, rangeLength);
+		cpp.NativeArray.blit(destination, 0, source, 0, rangeLength);
 		#else
 		for (i in 0...rangeLength)
-			destinationArray[i] = sourceArray[i];
+			destination.set(i, source.get(i));
 		#end
 	}
 }
