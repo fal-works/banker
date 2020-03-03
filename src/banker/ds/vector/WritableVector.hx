@@ -8,8 +8,8 @@ import banker.integration.RawVector;
 @:forward(length, toArray)
 // @formatter:off
 @:using(
-	banker.ds.vector.extension.Fill,
-	banker.ds.vector.extension.Functional.WritableFunctional
+	banker.ds.vector.extension.writable.Fill,
+	banker.ds.vector.extension.writable.Functional
 ) // @formatter:on
 @:allow(banker.ds.vector.VectorTools)
 abstract WritableVector<T>(RawVector<T>) from RawVector<T> {
