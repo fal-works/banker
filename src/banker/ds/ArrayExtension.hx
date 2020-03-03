@@ -1,27 +1,11 @@
 package banker.ds;
 
 class ArrayExtension {
-	public static function nullify<T: {}>(array: Array<T>): Void {
-		#if safe
-		if (array == null) throw "ArrayUtility.nullify(): Passed null.";
-		#end
-
-		#if cpp
-		cpp.NativeArray.zero(array, 0, array.length);
-		#else
-		for (i in 0...array.length) set(array, i, cast null);
-		#end
-	}
-
 	#if !banker_generic_disable
 	@:generic
 	#end
 	public static inline function get<T>(array: Array<T>, index: Int): T {
-		#if safe
-		if (array == null) throw "ArrayUtility.get(): Passed null.";
-		if (index < 0 || index >= array.length) throw "ArrayUtility.get(): index " + index +
-			" is out of bound.";
-		#end
+		assert(index >= 0 && index < array.length, null, "Out of bound.");
 
 		#if cpp
 		return cpp.NativeArray.unsafeGet(array, index);
@@ -36,18 +20,14 @@ class ArrayExtension {
 	public static inline function set<T>(
 		array: Array<T>,
 		index: Int,
-		obj: T
+		value: T
 	): Void {
-		#if safe
-		if (array == null) throw "ArrayUtility.set(): Passed null.";
-		if (index < 0 || index >= array.length) throw "ArrayUtility.set(): index " + index +
-			" is out of bound.";
-		#end
+		assert(index >= 0 && index < array.length, null, "Out of bound.");
 
 		#if cpp
-		cpp.NativeArray.unsafeSet(array, index, obj);
+		cpp.NativeArray.unsafeSet(array, index, value);
 		#else
-		array[index] = obj;
+		array[index] = value;
 		#end
 	}
 
@@ -55,10 +35,6 @@ class ArrayExtension {
 	@:generic
 	#end
 	public static inline function getLast<T>(array: Array<T>): T {
-		#if safe
-		if (array == null) throw "ArrayUtility.getLast(): Passed null.";
-		#end
-
 		#if cpp
 		return cpp.NativeArray.unsafeGet(array, array.length - 1);
 		#else
@@ -66,48 +42,33 @@ class ArrayExtension {
 		#end
 	}
 
-	public static inline function fill<T>(array: Array<T>, value: T): Array<T> {
-		return fillRange(array, value, 0, array.length);
-	}
-
-	public static inline function fillRange<T>(
+	public static function fillIn<T>(
 		array: Array<T>,
 		value: T,
 		startIndex: Int,
 		endIndex: Int
 	): Array<T> {
-		#if safe
-		if (array == null)
-			throw "ArrayUtility.fillRange(): Passed null.";
-		if (startIndex < 0)
-			throw "ArrayUtility.fillRange(): startIndex " + startIndex + " is invalid.";
-		if (startIndex >= endIndex)
-			throw "ArrayUtility.fillRange(): startIndex " + startIndex +
-				" is greater than endIndex " + endIndex + ".";
-		if (endIndex > array.length)
-			throw "ArrayUtility.fillRange(): endIndex " + endIndex +
-				" is greater than the array length " + array.length + ".";
-		#end
+		assert(startIndex >= 0 && endIndex < array.length);
 
 		var i = startIndex;
 		while (i < endIndex) {
 			set(array, i, value);
-			i++;
+			++i;
 		}
 
 		return array;
 	}
 
-	public static function populate<T>(array: Array<T>, factory: Void->T): Array<T> {
-		#if safe
-		if (array == null || factory == null) throw "ArrayUtility.populate(): Passed null.";
-		#end
+	public static inline function fill<T>(array: Array<T>, value: T): Array<T> {
+		return fillIn(array, value, 0, array.length);
+	}
 
+	public static function populate<T>(array: Array<T>, factory: Void->T): Array<T> {
 		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			set(array, i, factory());
-			i++;
+			++i;
 		}
 
 		return array;
@@ -124,20 +85,14 @@ class ArrayExtension {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	#if (cs || java || neko || cpp)
-	inline
-	#end
-	public static function blitInternal<T>(
+	public static #if cpp inline #end function blitInternal<T>(
 		array: Array<T>,
 		sourcePosition: Int,
 		destinationPosition: Int,
 		rangeLength: Int
 	): Array<T> {
-		#if safe
-		if (array == null) throw "ArrayUtility.blitInternal(): Passed null.";
-		if (rangeLength <= 0 || sourcePosition + rangeLength > array.length || destinationPosition + rangeLength > array.length)
-			throw "ArrayUtility.blitInternal(): rangeLength " + rangeLength + " is invalid.";
-		#end
+		assert(sourcePosition + rangeLength <= array.length);
+		assert(destinationPosition + rangeLength <= array.length);
 
 		#if cpp
 		cpp.NativeArray.blit(
@@ -147,32 +102,25 @@ class ArrayExtension {
 			sourcePosition,
 			rangeLength
 		);
-		#elseif java
-		java.lang.System.arraycopy(
-			array,
-			sourcePosition,
-			array,
-			destinationPosition,
-			rangeLength
-		);
 		#else
 		if (sourcePosition < destinationPosition) {
 			var i = sourcePosition + rangeLength;
-			var j = destinationPosition + rangeLength;
+			var k = destinationPosition + rangeLength;
 
-			for (k in 0...rangeLength) {
-				i--;
-				j--;
-				array[j] = array[i];
+			while (i > sourcePosition) {
+				--i;
+				--k;
+				array[k] = array[i];
 			}
 		} else if (sourcePosition > destinationPosition) {
 			var i = sourcePosition;
-			var j = destinationPosition;
+			var k = destinationPosition;
+			final endI = sourcePosition + rangeLength;
 
-			for (k in 0...rangeLength) {
-				array[j] = array[i];
-				i++;
-				j++;
+			while (i < endI) {
+				array[k] = array[i];
+				++i;
+				++k;
 			}
 		}
 		#end
@@ -183,83 +131,82 @@ class ArrayExtension {
 	/**
 		Finds the first occurrence of the element.
 		@param   array
-		@param   filterCallback Function that returns true if the given element meets the condition.
+		@param   predicate Function that returns true if the given element meets the condition.
 		@return  First element that matches to the given filter. Null if not found.
 	**/
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function findFirstOccurrence<T>(
-		array: Array<T>,
-		filterCallback: T->Bool
-	): Null<T> {
-		var element: T;
+	public static function findFirst<T>(array: Array<T>, predicate: T->Bool): Null<T> {
+		var element: Null<T> = null;
 
 		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			element = get(array, i);
-			if (filterCallback(element)) return element;
-
-			i++;
+			if (predicate(element)) break;
+			++i;
 		}
 
-		return null;
+		return element;
 	}
 
 	/**
 		Runs a given function for the first occurrence of the element.
 		@param   array
-		@param   filterCallback Function that returns true if the given element meets the condition.
+		@param   predicate Function that returns true if the given element meets the condition.
 		@param   processCallback Function to run for the found element.
 		@return  True if found.
 	**/
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function forFirstOccurrence<T>(
+	public static function forFirst<T>(
 		array: Array<T>,
-		filterCallback: T->Bool,
+		predicate: T->Bool,
 		processCallback: T->Void
 	): Bool {
+		var element: T;
+		var found = false;
+
+		final len = array.length;
+		var i = 0;
+		while (i < len) {
+			element = get(array, i);
+			if (predicate(element)) {
+				processCallback(element);
+				found = true;
+				break;
+			}
+
+			++i;
+		}
+
+		return found;
+	}
+
+	/**
+		Runs a given function for each occurrence of the matching element.
+		@param   array
+		@param   predicate Function that returns true if the given element meets the condition.
+		@param   processCallback Function to run for the found element.
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static function filterForEach<T>(
+		array: Array<T>,
+		predicate: T->Bool,
+		processCallback: T->Void
+	): Void {
 		var element: T;
 
 		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			element = get(array, i);
-			if (filterCallback(element)) {
-				processCallback(element);
-				return true;
-			}
-
-			i++;
-		}
-
-		return false;
-	}
-
-	/**
-		Runs a given function for each occurrence of the matching element.
-		@param   array
-		@param   filterCallback Function that returns true if the given element meets the condition.
-		@param   processCallback Function to run for the found element.
-	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function forEachOccurrence<T>(
-		array: Array<T>,
-		filterCallback: T->Bool,
-		processCallback: T->Void
-	): Void {
-		final len = array.length;
-		var i = 0;
-		while (i < len) {
-			if (filterCallback(get(array, i))) {
-				processCallback(get(array, i));
-			}
-			i++;
+			if (predicate(element)) processCallback(element);
+			++i;
 		}
 	}
 
@@ -271,12 +218,12 @@ class ArrayExtension {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function forEach<T>(array: Array<T>, callback: T->Void): Void {
+	public static inline function forEach<T>(array: Array<T>, callback: T->Void): Void {
 		final len = array.length;
 		var i = 0;
 		while (i < len) {
 			callback(get(array, i));
-			i++;
+			++i;
 		}
 	}
 
@@ -291,36 +238,41 @@ class ArrayExtension {
 	#end
 	public static function contains<T>(array: Array<T>, value: T): Bool {
 		final len = array.length;
+		var found = false;
 		var i = 0;
 		while (i < len) {
-			if (value == get(array, i)) return true;
-			i++;
+			if (value == get(array, i)) {
+				found = true;
+				break;
+			}
+			++i;
 		}
 
-		return false;
+		return found;
 	}
 
 	/**
 		Checks if the array contains one or more elements that match to the given filter.
 		@param   array
-		@param   filterCallback Function that returns true if the given element meets the condition.
+		@param   predicate Function that returns true if the given element meets the condition.
 		@return  True if found.
 	**/
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function containsMatching<T>(
-		array: Array<T>,
-		filterCallback: T->Bool
-	): Bool {
+	public static function containsMatching<T>(array: Array<T>, predicate: T->Bool): Bool {
 		final len = array.length;
+		var found = false;
 		var i = 0;
 		while (i < len) {
-			if (filterCallback(get(array, i))) return true;
-			i++;
+			if (predicate(get(array, i))) {
+				found = true;
+				break;
+			}
+			++i;
 		}
 
-		return false;
+		return found;
 	}
 
 	#if !banker_generic_disable
@@ -331,12 +283,8 @@ class ArrayExtension {
 		indexA: Int,
 		indexB: Int
 	): Void {
-		#if safe
-		if (array == null)
-			throw "ArrayUtility::swap  Passed null.";
-		if (indexA < 0 || indexA >= array.length || indexB < 0 || indexB >= array.length)
-			throw "ArrayUtility::swap  Invalid index.";
-		#end
+		assert(indexA >= 0 && indexA < array.length);
+		assert(indexB >= 0 && indexB < array.length);
 
 		var tmp = get(array, indexA);
 		set(array, indexA, get(array, indexB));
