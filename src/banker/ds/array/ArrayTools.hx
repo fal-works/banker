@@ -23,9 +23,6 @@ class ArrayTools {
 
 		If `source` and `destination` are the same, use `blitInternal()` instead.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public inline static function blit<T>(
 		source: Array<T>,
 		sourcePosition: Int,
@@ -55,9 +52,6 @@ class ArrayTools {
 	/**
 		Copies elements from source to destination beginning at index zero.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function copyTo<T>(
 		source: Array<T>,
 		destination: Array<T>,

@@ -8,9 +8,6 @@ class ArrayFunctionalExtension {
 		@param   array
 		@param   callback
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function forEach<T>(array: Array<T>, callback: T->Void): Void {
 		final len = array.length;
 		var i = 0;
@@ -26,7 +23,7 @@ class ArrayFunctionalExtension {
 		@param predicate
 		@return Null<T>
 	**/
-	public static function populate<T>(array: Array<T>, factory: Void->T): Array<T> {
+	public static inline function populate<T>(array: Array<T>, factory: Void->T): Array<T> {
 		final len = array.length;
 		var i = 0;
 		while (i < len) {
@@ -43,10 +40,7 @@ class ArrayFunctionalExtension {
 		@param   predicate Function that returns true if the given element meets the condition.
 		@return  True if found.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function hasMatching<T>(array: Array<T>, predicate: T->Bool): Bool {
+	public static inline function hasMatching<T>(array: Array<T>, predicate: T->Bool): Bool {
 		final len = array.length;
 		var found = false;
 		var i = 0;
@@ -67,10 +61,7 @@ class ArrayFunctionalExtension {
 		@param   predicate Function that returns true if the given element meets the condition.
 		@return  First element that matches to the given filter. Null if not found.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function findFirst<T>(array: Array<T>, predicate: T->Bool): Null<T> {
+	public static inline function findFirst<T>(array: Array<T>, predicate: T->Bool): Null<T> {
 		var element: Null<T> = null;
 
 		final len = array.length;
@@ -91,10 +82,7 @@ class ArrayFunctionalExtension {
 		@param   processCallback Function to run for the found element.
 		@return  True if found.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function forFirst<T>(
+	public static inline function forFirst<T>(
 		array: Array<T>,
 		predicate: T->Bool,
 		processCallback: T->Void
@@ -124,10 +112,7 @@ class ArrayFunctionalExtension {
 		@param   predicate Function that returns true if the given element meets the condition.
 		@param   processCallback Function to run for the found element.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function filterForEach<T>(
+	public static inline function filterForEach<T>(
 		array: Array<T>,
 		predicate: T->Bool,
 		processCallback: T->Void

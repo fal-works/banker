@@ -114,10 +114,7 @@ class ArrayExtension {
 		@param   value
 		@return  True if the element is contained.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function has<T>(array: Array<T>, value: T): Bool {
+	public static inline function has<T>(array: Array<T>, value: T): Bool {
 		final len = array.length;
 		var found = false;
 		var i = 0;
@@ -132,9 +129,6 @@ class ArrayExtension {
 		return found;
 	}
 
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function swap<T>(
 		array: Array<T>,
 		indexA: Int,
