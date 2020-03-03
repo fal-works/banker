@@ -95,9 +95,7 @@ class Functional {
 	): WritableVector<T> {
 		return filter(_this, predicate).writable();
 	}
-}
 
-class WritableFunctional {
 	/**
 		Runs `callback` for each element in `this` vector
 		from `startIndex` until (but not including) `endIndex`.
@@ -106,11 +104,11 @@ class WritableFunctional {
 	@:generic
 	#end
 	public static inline function forEachIndexIn<T>(
-		_this: WritableVector<T>,
+		_this: VectorReference<T>,
 		callback: (
 			element: T,
 			index: Int,
-			vector: WritableVector<T>
+			vector: VectorReference<T>
 		) -> Void,
 		startIndex: Int,
 		endIndex: Int
@@ -129,18 +127,18 @@ class WritableFunctional {
 	@:generic
 	#end
 	public static inline function forEachIndex<T>(
-		_this: WritableVector<T>,
+		_this: VectorReference<T>,
 		callback: (
 			element: T,
 			index: Int,
-			vector: WritableVector<T>
+			vector: VectorReference<T>
 		) -> Void
 	): Void {
 		forEachIndexIn(_this, callback, 0, _this.length);
 	}
 }
 
-class ReadOnlyFunctional {
+class WritableFunctional {
 	/**
 		@see `Functional.forEachIndexIn()`
 	**/
@@ -148,11 +146,11 @@ class ReadOnlyFunctional {
 	@:generic
 	#end
 	public static inline function forEachIndexIn<T>(
-		_this: VectorReference<T>,
+		_this: WritableVector<T>,
 		callback: (
 			element: T,
 			index: Int,
-			vector: VectorReference<T>
+			vector: WritableVector<T>
 		) -> Void,
 		startIndex: Int,
 		endIndex: Int
@@ -171,11 +169,11 @@ class ReadOnlyFunctional {
 	@:generic
 	#end
 	public static inline function forEachIndex<T>(
-		_this: VectorReference<T>,
+		_this: WritableVector<T>,
 		callback: (
 			element: T,
 			index: Int,
-			vector: VectorReference<T>
+			vector: WritableVector<T>
 		) -> Void
 	): Void {
 		forEachIndexIn(_this, callback, 0, _this.length);

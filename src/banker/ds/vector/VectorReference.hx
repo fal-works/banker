@@ -10,7 +10,6 @@ import banker.integration.RawVector;
 @:using(
 	banker.ds.vector.extension.Copy,
 	banker.ds.vector.extension.Functional,
-	banker.ds.vector.extension.Functional.ReadOnlyFunctional,
 	banker.ds.vector.extension.Scan,
 	banker.ds.vector.extension.Search
 ) // @formatter:on
