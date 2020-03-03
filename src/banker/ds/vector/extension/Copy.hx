@@ -8,7 +8,7 @@ class Copy {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function concat<T>(
+	public static inline function concatWritable<T>(
 		_this: Vector<T>,
 		otherVector: Vector<T>
 	): WritableVector<T> {
@@ -22,6 +22,17 @@ class Copy {
 		return newVector;
 	}
 
+	/** @see `Copy.concat()` **/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function concat<T>(
+		_this: Vector<T>,
+		otherVector: Vector<T>
+	): Vector<T> {
+		return Copy.concatWritable(_this, otherVector);
+	}
+
 	/**
 		Creates a new vector by slicing `this`.
 		@param startPosition The position in `this` to begin (included).
@@ -30,12 +41,24 @@ class Copy {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function slice<T>(
+	public static inline function sliceWritable<T>(
 		_this: Vector<T>,
 		startPosition: Int,
 		endPosition: Int
 	): WritableVector<T> {
 		return _this.sub(startPosition, endPosition - startPosition).writable();
+	}
+
+	/** @see `Copy.slice()` **/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function slice<T>(
+		_this: Vector<T>,
+		startPosition: Int,
+		endPosition: Int
+	): Vector<T> {
+		return Copy.sliceWritable(_this, startPosition, endPosition);
 	}
 
 	/**
@@ -53,31 +76,4 @@ class Copy {
 	): Array<T> {
 		return [for (i in startPosition...endPosition) _this[i]];
 	}
-}
-
-class ReadOnlyCopy {
-	/** @see `Copy.concat()` **/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function concat<T>(
-		_this: Vector<T>,
-		otherVector: Vector<T>
-	): Vector<T> {
-		return Copy.concat(_this, otherVector);
-	}
-
-	/** @see `Copy.slice()` **/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function slice<T>(
-		_this: Vector<T>,
-		startPosition: Int,
-		endPosition: Int
-	): Vector<T> {
-		return Copy.slice(_this, startPosition, endPosition);
-	}
-
-	// forward: sliceToArray
 }

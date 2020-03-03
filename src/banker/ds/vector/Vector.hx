@@ -8,18 +8,14 @@ import banker.integration.RawVector;
 @:forward(
 	length,
 	data,
-	toArray,
-	sliceToArray,
-	forEachIn,
-	forEach,
-	equals,
-	toString
+	toArray
 )
 // @formatter:off
 @:using(
-	banker.ds.vector.extension.Copy.ReadOnlyCopy,
+	banker.ds.vector.extension.Copy,
+	banker.ds.vector.extension.Functional,
 	banker.ds.vector.extension.Functional.ReadOnlyFunctional,
-	banker.ds.vector.extension.Scan.ReadOnlyScan,
+	banker.ds.vector.extension.Scan,
 	banker.ds.vector.extension.Search
 ) // @formatter:on
 abstract Vector<T>(WritableVector<T>) from WritableVector<T> {

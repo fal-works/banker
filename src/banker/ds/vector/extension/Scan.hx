@@ -1,22 +1,6 @@
 package banker.ds.vector.extension;
 
-@:access(banker.ds.vector.Vector)
 class Scan {
-	/**
-		Checks that the vector contains no null values (only in safe mode).
-		@return `this` vector.
-	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function assertNoNull<T>(
-		_this: Vector<T>,
-		?errorMessage: String
-	): WritableVector<T> {
-		assert(_this.contains(null), null, errorMessage);
-		return _this.writable();
-	}
-
 	/**
 		Checks that two vectors have same contents.
 		Each element will be compared with the `!=` operator.
@@ -39,21 +23,4 @@ class Scan {
 
 		return true;
 	}
-}
-
-class ReadOnlyScan {
-	/**
-		Checks that the vector contains no null values (only in safe mode).
-		@return `this` vector.
-	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function assertNoNull<T>(
-		_this: Vector<T>,
-		?errorMessage: String
-	): Vector<T> {
-		return Scan.assertNoNull(_this, errorMessage);
-	}
-	// forward: equals
 }

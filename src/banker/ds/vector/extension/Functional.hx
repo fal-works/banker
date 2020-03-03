@@ -32,6 +32,75 @@ class Functional {
 	}
 
 	/**
+		@see `Functional.filterIn()`
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function filterIn<T>(
+		_this: Vector<T>,
+		predicate: T->Bool,
+		startIndex: Int,
+		endIndex: Int
+	): Vector<T> {
+		return Functional.filterInWritable(_this, predicate, startIndex, endIndex);
+	}
+
+	/**
+		@see `Functional.filter()`
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function filter<T>(
+		_this: Vector<T>,
+		predicate: T->Bool
+	): Vector<T> {
+		return Functional.filterWritable(_this, predicate);
+	}
+
+	/**
+		Creates a new vector by filtering elements of `this` with `predicate`
+		whithin the range from `startIndex` until (but not including) `endIndex`.
+		@param predicate Function that returns true if the element should be remain.
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static function filterInWritable<T>(
+		_this: Vector<T>,
+		predicate: T->Bool,
+		startIndex: Int,
+		endIndex: Int
+	): WritableVector<T> {
+		final buffer = new Array<T>();
+		var i = startIndex;
+		while (i < endIndex) {
+			final item = _this[i];
+			if (predicate(item)) buffer.push(item);
+			++i;
+		}
+
+		return WritableVector.fromArrayCopy(buffer);
+	}
+
+	/**
+		Creates a new vector by filtering elements of `this` with `predicate`.
+		@param predicate Function that returns true if the element should be remain.
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static function filterWritable<T>(
+		_this: Vector<T>,
+		predicate: T->Bool
+	): WritableVector<T> {
+		return filterInWritable(_this, predicate, 0, _this.length);
+	}
+}
+
+class WritableFunctional {
+	/**
 		Runs `callback` for each element in `this` vector
 		from `startIndex` until (but not including) `endIndex`.
 	**/
@@ -70,45 +139,6 @@ class Functional {
 		) -> Void
 	): Void {
 		forEachIndexIn(_this, callback, 0, _this.length);
-	}
-
-	/**
-		Creates a new vector by filtering elements of `this` with `predicate`
-		whithin the range from `startIndex` until (but not including) `endIndex`.
-		@param predicate Function that returns true if the element should be remain.
-	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function filterIn<T>(
-		_this: Vector<T>,
-		predicate: T->Bool,
-		startIndex: Int,
-		endIndex: Int
-	): WritableVector<T> {
-		final buffer = new Array<T>();
-		var i = startIndex;
-		while (i < endIndex) {
-			final item = _this[i];
-			if (predicate(item)) buffer.push(item);
-			++i;
-		}
-
-		return WritableVector.fromArrayCopy(buffer);
-	}
-
-	/**
-		Creates a new vector by filtering elements of `this` with `predicate`.
-		@param predicate Function that returns true if the element should be remain.
-	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function filter<T>(
-		_this: Vector<T>,
-		predicate: T->Bool
-	): WritableVector<T> {
-		return filterIn(_this, predicate, 0, _this.length);
 	}
 }
 
@@ -151,34 +181,6 @@ class ReadOnlyFunctional {
 		) -> Void
 	): Void {
 		forEachIndexIn(_this, callback, 0, _this.length);
-	}
-
-	/**
-		@see `Functional.filterIn()`
-	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function filterIn<T>(
-		_this: Vector<T>,
-		predicate: T->Bool,
-		startIndex: Int,
-		endIndex: Int
-	): Vector<T> {
-		return Functional.filterIn(_this, predicate, startIndex, endIndex);
-	}
-
-	/**
-		@see `Functional.filter()`
-	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function filter<T>(
-		_this: Vector<T>,
-		predicate: T->Bool
-	): Vector<T> {
-		return Functional.filter(_this, predicate);
 	}
 
 	// forward: forEachIn, forEach

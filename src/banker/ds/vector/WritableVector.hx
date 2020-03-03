@@ -8,11 +8,12 @@ import banker.integration.RawVector;
 @:forward(length, toArray)
 // @formatter:off
 @:using(
+	banker.ds.vector.extension.Copy,
 	banker.ds.vector.extension.Fill,
 	banker.ds.vector.extension.Functional,
-	banker.ds.vector.extension.Search,
+	banker.ds.vector.extension.Functional.WritableFunctional,
 	banker.ds.vector.extension.Scan,
-	banker.ds.vector.extension.Copy
+	banker.ds.vector.extension.Search
 ) // @formatter:on
 @:allow(banker.ds.vector.VectorTools)
 abstract WritableVector<T>(RawVector<T>) {
@@ -54,7 +55,6 @@ abstract WritableVector<T>(RawVector<T>) {
 	public inline function new(length: Int)
 		this = new RawVector<T>(length);
 
-	// TODO: assert
 	@:op([]) public inline function get(index: Int): T {
 		assert(index >= 0 && index < this.length, null, "Out of bound.");
 		return this[index];
@@ -73,7 +73,4 @@ abstract WritableVector<T>(RawVector<T>) {
 
 	public inline function sub(pos: Int, len: Int): WritableVector<T>
 		return fromData(this.sub(pos, len));
-
-	public inline function toString(): String
-		return this.toArray().toString();
 }

@@ -78,7 +78,7 @@ class Search {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function findFirstIn<T>(
+	public static function findFirstIn<T>(
 		_this: Vector<T>,
 		predicate: T->Bool,
 		startIndex: Int,
@@ -109,7 +109,7 @@ class Search {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function findFirst<T>(_this: Vector<T>, predicate: T->Bool): Null<T> {
+	public static inline function findFirst<T>(_this: Vector<T>, predicate: T->Bool): Null<T> {
 		return findFirstIn(_this, predicate, 0, _this.length);
 	}
 }
