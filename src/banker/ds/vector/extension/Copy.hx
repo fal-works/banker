@@ -1,6 +1,6 @@
 package banker.ds.vector.extension;
 
-@:access(banker.ds.vector.Vector)
+@:access(banker.ds.vector.VectorReference)
 class Copy {
 	/**
 		Returns a new concatenated vector.
@@ -8,10 +8,10 @@ class Copy {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function concatWritable<T>(
-		_this: Vector<T>,
-		otherVector: Vector<T>
-	): WritableVector<T> {
+	public static inline function concat<T>(
+		_this: VectorReference<T>,
+		otherVector: VectorReference<T>
+	): VectorReference<T> {
 		final thisLength = _this.length;
 		final otherLength = otherVector.length;
 		final newVector = new WritableVector(thisLength + otherLength);
@@ -26,11 +26,23 @@ class Copy {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function concat<T>(
-		_this: Vector<T>,
-		otherVector: Vector<T>
-	): Vector<T> {
-		return Copy.concatWritable(_this, otherVector);
+	public static inline function concatWritable<T>(
+		_this: VectorReference<T>,
+		otherVector: VectorReference<T>
+	): WritableVector<T> {
+		return concat(_this, otherVector).writable();
+	}
+
+	/** @see `Copy.slice()` **/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function slice<T>(
+		_this: VectorReference<T>,
+		startPosition: Int,
+		endPosition: Int
+	): VectorReference<T> {
+		return _this.sub(startPosition, endPosition - startPosition);
 	}
 
 	/**
@@ -42,23 +54,11 @@ class Copy {
 	@:generic
 	#end
 	public static inline function sliceWritable<T>(
-		_this: Vector<T>,
+		_this: VectorReference<T>,
 		startPosition: Int,
 		endPosition: Int
 	): WritableVector<T> {
-		return _this.sub(startPosition, endPosition - startPosition).writable();
-	}
-
-	/** @see `Copy.slice()` **/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function slice<T>(
-		_this: Vector<T>,
-		startPosition: Int,
-		endPosition: Int
-	): Vector<T> {
-		return Copy.sliceWritable(_this, startPosition, endPosition);
+		return slice(_this, startPosition, endPosition).writable();
 	}
 
 	/**
@@ -70,7 +70,7 @@ class Copy {
 	@:generic
 	#end
 	public static function sliceToArray<T>(
-		_this: Vector<T>,
+		_this: VectorReference<T>,
 		startPosition: Int,
 		endPosition: Int
 	): Array<T> {

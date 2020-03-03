@@ -7,7 +7,7 @@ class VectorTools {
 		to `destination` (beginning at `destinationPosition`).
 	**/
 	public static inline function blit<T>(
-		source: Vector<T>,
+		source: VectorReference<T>,
 		sourcePosition: Int,
 		destination: WritableVector<T>,
 		destinationPosition: Int,
@@ -18,7 +18,7 @@ class VectorTools {
 		assert(destinationPosition + rangeLength <= destination.length);
 		destination.data.blit(
 			destinationPosition,
-			source.data,
+			source.writable().data,
 			sourcePosition,
 			rangeLength
 		);
@@ -28,7 +28,7 @@ class VectorTools {
 		Blits data from vector to array.
 	**/
 	public static inline function blitToArray<T>(
-		sourceVector: Vector<T>,
+		sourceVector: VectorReference<T>,
 		sourcePosition: Int,
 		destinationArray: Array<T>,
 		destinationPosition: Int,

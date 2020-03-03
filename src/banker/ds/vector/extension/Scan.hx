@@ -9,7 +9,7 @@ class Scan {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function equals<T>(_this: Vector<T>, otherVector: Vector<T>): Bool {
+	public static function equals<T>(_this: VectorReference<T>, otherVector: VectorReference<T>): Bool {
 		final len = _this.length;
 
 		if (len != otherVector.length)

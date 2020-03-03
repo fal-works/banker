@@ -44,7 +44,7 @@ class VectorTest {
 			2,
 			3
 		]);
-		final newVector = vector.slice(0, 2);
+		final newVector = vector.ref.slice(0, 2);
 		println(newVector);
 	}, Visual);
 
@@ -55,7 +55,7 @@ class VectorTest {
 			2,
 			3
 		]);
-		println(vector.find(2));
+		println(vector.ref.find(2));
 	}, Visual);
 
 	static final forEach = testCase(() -> {
@@ -65,7 +65,7 @@ class VectorTest {
 			2,
 			3
 		]);
-		vector.forEach(n -> println(n));
+		vector.ref.forEach(n -> println(n));
 	}, Visual);
 
 	public static final all = testCaseGroup([

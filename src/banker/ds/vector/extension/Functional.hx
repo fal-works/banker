@@ -1,5 +1,6 @@
 package banker.ds.vector.extension;
 
+@:access(banker.ds.vector.VectorReference)
 class Functional {
 	/**
 		Runs `callback` for each element in `this` vector
@@ -9,7 +10,7 @@ class Functional {
 	@:generic
 	#end
 	public static inline function forEachIn<T>(
-		_this: Vector<T>,
+		_this: VectorReference<T>,
 		callback: T->Void,
 		startIndex: Int,
 		endIndex: Int
@@ -27,36 +28,8 @@ class Functional {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function forEach<T>(_this: Vector<T>, callback: T->Void): Void {
+	public static inline function forEach<T>(_this: VectorReference<T>, callback: T->Void): Void {
 		forEachIn(_this, callback, 0, _this.length);
-	}
-
-	/**
-		@see `Functional.filterIn()`
-	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function filterIn<T>(
-		_this: Vector<T>,
-		predicate: T->Bool,
-		startIndex: Int,
-		endIndex: Int
-	): Vector<T> {
-		return Functional.filterInWritable(_this, predicate, startIndex, endIndex);
-	}
-
-	/**
-		@see `Functional.filter()`
-	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function filter<T>(
-		_this: Vector<T>,
-		predicate: T->Bool
-	): Vector<T> {
-		return Functional.filterWritable(_this, predicate);
 	}
 
 	/**
@@ -67,12 +40,12 @@ class Functional {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function filterInWritable<T>(
-		_this: Vector<T>,
+	public static function filterIn<T>(
+		_this: VectorReference<T>,
 		predicate: T->Bool,
 		startIndex: Int,
 		endIndex: Int
-	): WritableVector<T> {
+	): VectorReference<T> {
 		final buffer = new Array<T>();
 		var i = startIndex;
 		while (i < endIndex) {
@@ -81,7 +54,7 @@ class Functional {
 			++i;
 		}
 
-		return WritableVector.fromArrayCopy(buffer);
+		return VectorReference.fromArrayCopy(buffer);
 	}
 
 	/**
@@ -91,11 +64,36 @@ class Functional {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function filterWritable<T>(
-		_this: Vector<T>,
+	public static function filter<T>(_this: VectorReference<T>, predicate: T->Bool): VectorReference<T> {
+		return filterIn(_this, predicate, 0, _this.length);
+	}
+
+	/**
+		@see `Functional.filterIn()`
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function filterInWritable<T>(
+		_this: VectorReference<T>,
+		predicate: T->Bool,
+		startIndex: Int,
+		endIndex: Int
+	): WritableVector<T> {
+		return filterIn(_this, predicate, startIndex, endIndex).writable();
+	}
+
+	/**
+		@see `Functional.filter()`
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function filterWritable<T>(
+		_this: VectorReference<T>,
 		predicate: T->Bool
 	): WritableVector<T> {
-		return filterInWritable(_this, predicate, 0, _this.length);
+		return filter(_this, predicate).writable();
 	}
 }
 
@@ -150,11 +148,11 @@ class ReadOnlyFunctional {
 	@:generic
 	#end
 	public static inline function forEachIndexIn<T>(
-		_this: Vector<T>,
+		_this: VectorReference<T>,
 		callback: (
 			element: T,
 			index: Int,
-			vector: Vector<T>
+			vector: VectorReference<T>
 		) -> Void,
 		startIndex: Int,
 		endIndex: Int
@@ -173,15 +171,13 @@ class ReadOnlyFunctional {
 	@:generic
 	#end
 	public static inline function forEachIndex<T>(
-		_this: Vector<T>,
+		_this: VectorReference<T>,
 		callback: (
 			element: T,
 			index: Int,
-			vector: Vector<T>
+			vector: VectorReference<T>
 		) -> Void
 	): Void {
 		forEachIndexIn(_this, callback, 0, _this.length);
 	}
-
-	// forward: forEachIn, forEach
 }
