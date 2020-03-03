@@ -1,5 +1,7 @@
 package banker.ds.vector;
 
+import banker.integration.RawVector;
+
 /**
 	Fixed-length read-only array with extended functions.
 **/
@@ -21,8 +23,6 @@ package banker.ds.vector;
 	banker.ds.vector.extension.Search
 ) // @formatter:on
 abstract Vector<T>(WritableVector<T>) from WritableVector<T> {
-	// ---- create functions ----------------------------------------------------
-
 	/**
 		@return Shallow copy of `array` as `Vector<T>`.
 	**/
@@ -46,8 +46,6 @@ abstract Vector<T>(WritableVector<T>) from WritableVector<T> {
 		return WritableVector.createPopulated(length, factory);
 	}
 
-	// ---- instance core -------------------------------------------------------
-
 	@:op([]) public inline function get(index: Int): T
 		return this[index];
 
@@ -59,8 +57,6 @@ abstract Vector<T>(WritableVector<T>) from WritableVector<T> {
 
 	public inline function sub(pos: Int, len: Int): Vector<T>
 		return this.sub(pos, len);
-
-	// ---- internal ------------------------------------------------------------
 
 	inline function writable(): WritableVector<T>
 		return this;

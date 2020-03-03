@@ -1,6 +1,6 @@
 package banker.ds.vector;
 
-typedef WritableVectorData<T> = banker.integration.RawVector<T>;
+import banker.integration.RawVector;
 
 /**
 	Fixed-length writable array with extended functions.
@@ -15,22 +15,18 @@ typedef WritableVectorData<T> = banker.integration.RawVector<T>;
 	banker.ds.vector.extension.Copy
 ) // @formatter:on
 @:allow(banker.ds.vector.VectorTools)
-abstract WritableVector<T>(WritableVectorData<T>) {
-	// ---- create functions ----------------------------------------------------
-
+abstract WritableVector<T>(RawVector<T>) {
 	/**
-		Casts `data` from `WritableVectorData<T>` to `WritableVector<T>`.
+		Casts `data` from `RawVector<T>` to `WritableVector<T>`.
 	**/
-	public static inline function fromData<T>(
-		data: WritableVectorData<T>
-	): WritableVector<T>
+	public static inline function fromData<T>(data: RawVector<T>): WritableVector<T>
 		return cast data;
 
 	/**
 		@return Shallow copy of `array` as `WritableVector<T>`.
 	**/
 	public static inline function fromArrayCopy<T>(array: Array<T>): WritableVector<T>
-		return fromData(WritableVectorData.fromArrayCopy(array));
+		return fromData(RawVector.fromArrayCopy(array));
 
 	/**
 		Creates a vector filled with the given value.
@@ -38,9 +34,8 @@ abstract WritableVector<T>(WritableVectorData<T>) {
 	public static inline function createFilled<T>(
 		length: Int,
 		fillValue: T
-	): WritableVector<T> {
+	): WritableVector<T>
 		return new WritableVector<T>(length).fill(fillValue);
-	}
 
 	/**
 		Creates a vector populated using the given factory function.
@@ -48,18 +43,16 @@ abstract WritableVector<T>(WritableVectorData<T>) {
 	public static inline function createPopulated<T>(
 		length: Int,
 		factory: Void->T
-	): WritableVector<T> {
+	): WritableVector<T>
 		return new WritableVector<T>(length).populate(factory);
-	}
 
-	// ---- instance core -------------------------------------------------------
-	var data(get, never): WritableVectorData<T>;
+	var data(get, never): RawVector<T>;
 
 	inline function get_data()
 		return this;
 
 	public inline function new(length: Int)
-		this = new WritableVectorData<T>(length);
+		this = new RawVector<T>(length);
 
 	// TODO: assert
 	@:op([]) public inline function get(index: Int): T {
