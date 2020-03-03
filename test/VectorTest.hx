@@ -33,7 +33,7 @@ class VectorTest {
 			2,
 			3
 		]);
-		final newVector = vector.sub(0, 2);
+		final newVector = vector.ref.subVector(0, 2);
 		println(newVector);
 	}, Visual);
 

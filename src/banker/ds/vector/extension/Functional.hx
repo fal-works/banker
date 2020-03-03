@@ -97,6 +97,72 @@ class Functional {
 	}
 
 	/**
+		@see `mapIn()`
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static function mapInWritable<T, S>(
+		_this: VectorReference<T>,
+		callback: T->S,
+		startIndex: Int,
+		endIndex: Int
+	): WritableVector<S> {
+		final newVector = new WritableVector<S>(endIndex - startIndex);
+		var i = startIndex;
+		var k = 0;
+		while (i < endIndex) {
+			newVector[k] = callback(_this[i]);
+			++i;
+			++k;
+		}
+
+		return newVector;
+	}
+
+	/**
+		@see `map()`
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static function mapWritable<T, S>(
+		_this: VectorReference<T>,
+		callback: T->S
+	): WritableVector<S> {
+		return _this.data.map(callback);
+	}
+
+	/**
+		Creates a new vector by mapping elements of `this` using `callback`
+		whithin the range from `startIndex` until (but not including) `endIndex`.
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static function mapIn<T, S>(
+		_this: VectorReference<T>,
+		callback: T->S,
+		startIndex: Int,
+		endIndex: Int
+	): VectorReference<S> {
+		return mapInWritable(_this, callback, startIndex, endIndex).ref;
+	}
+
+	/**
+		Creates a new vector by mapping elements of `this` using `callback`.
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static function map<T, S>(
+		_this: VectorReference<T>,
+		callback: T->S
+	): VectorReference<S> {
+		return mapWritable(_this, callback).ref;
+	}
+
+	/**
 		Runs `callback` for each element in `this` vector
 		from `startIndex` until (but not including) `endIndex`.
 	**/

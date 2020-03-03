@@ -3,6 +3,54 @@ package banker.ds.vector.extension;
 @:access(banker.ds.vector.VectorReference)
 class Copy {
 	/**
+		@return Shallow copy of `this`.
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function copy<T>(_this: VectorReference<T>): VectorReference<T> {
+		return _this.data.copy();
+	}
+
+	/**
+		@return Shallow copy of `this`.
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function copyWritable<T>(
+		_this: VectorReference<T>
+	): WritableVector<T> {
+		return _this.data.copy();
+	}
+
+	/**
+		Creates a new vector by shallow-copying a range of `this`.
+	**/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function subVector<T>(
+		_this: VectorReference<T>,
+		position: Int,
+		length: Int
+	): VectorReference<T> {
+		return _this.data.sub(position, length);
+	}
+
+	/** @see `subVector()` **/
+	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function subVectorWritable<T>(
+		_this: VectorReference<T>,
+		position: Int,
+		length: Int
+	): WritableVector<T> {
+		return subVector(_this, position, length).writable();
+	}
+
+	/**
 		Returns a new concatenated vector.
 	**/
 	#if !banker_generic_disable
@@ -22,7 +70,7 @@ class Copy {
 		return newVector;
 	}
 
-	/** @see `Copy.concat()` **/
+	/** @see `concat()` **/
 	#if !banker_generic_disable
 	@:generic
 	#end
@@ -33,7 +81,11 @@ class Copy {
 		return concat(_this, otherVector).writable();
 	}
 
-	/** @see `Copy.slice()` **/
+	/**
+		Creates a new vector by slicing `this`.
+		@param startPosition The position in `this` to begin (included).
+		@param endPosition The position in `this` to end (not included).
+	**/
 	#if !banker_generic_disable
 	@:generic
 	#end
@@ -42,14 +94,10 @@ class Copy {
 		startPosition: Int,
 		endPosition: Int
 	): VectorReference<T> {
-		return _this.sub(startPosition, endPosition - startPosition);
+		return _this.data.sub(startPosition, endPosition - startPosition);
 	}
 
-	/**
-		Creates a new vector by slicing `this`.
-		@param startPosition The position in `this` to begin (included).
-		@param endPosition The position in `this` to end (not included).
-	**/
+	/** @see `Copy.slice()` **/
 	#if !banker_generic_disable
 	@:generic
 	#end

@@ -39,17 +39,13 @@ abstract VectorReference<T>(RawVector<T>) from RawVector<T> {
 		return WritableVector.createPopulated(length, factory);
 	}
 
+	var data(get, never): RawVector<T>;
+
+	inline function get_data()
+		return this;
+
 	@:op([]) public inline function get(index: Int): T
 		return this[index];
-
-	public inline function copy(): VectorReference<T>
-		return this.copy();
-
-	public inline function map<S>(f: T->S): VectorReference<S>
-		return this.map(f);
-
-	public inline function sub(pos: Int, len: Int): VectorReference<T>
-		return this.sub(pos, len);
 
 	inline function writable(): WritableVector<T>
 		return this;

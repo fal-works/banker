@@ -68,13 +68,4 @@ abstract WritableVector<T>(RawVector<T>) from RawVector<T> {
 		assert(index >= 0 && index < this.length, null, "Out of bound.");
 		return this[index] = value;
 	}
-
-	public inline function copy(): WritableVector<T>
-		return fromData(this.copy());
-
-	public inline function map<S>(f: T->S): WritableVector<S>
-		return fromData(this.map(f));
-
-	public inline function sub(pos: Int, len: Int): WritableVector<T>
-		return fromData(this.sub(pos, len));
 }
