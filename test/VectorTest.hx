@@ -17,7 +17,7 @@ class VectorTest {
 			2,
 			3
 		];
-		final vector = WritableVector.fromArrayCopy(array);
+		final vector = Vector.fromArrayCopy(array);
 		println(vector);
 	}, Visual);
 
@@ -29,7 +29,7 @@ class VectorTest {
 
 	static final sub = testCase(() -> {
 		describe("This prints [1, 2].");
-		final vector = WritableVector.fromArrayCopy([
+		final vector = Vector.fromArrayCopy([
 			1,
 			2,
 			3
@@ -40,7 +40,7 @@ class VectorTest {
 
 	static final slice = testCase(() -> {
 		describe("This prints [1, 2].");
-		final vector = WritableVector.fromArrayCopy([
+		final vector = Vector.fromArrayCopy([
 			1,
 			2,
 			3
@@ -51,7 +51,7 @@ class VectorTest {
 
 	static final find = testCase(() -> {
 		describe("This prints 1.");
-		final vector = WritableVector.fromArrayCopy([
+		final vector = Vector.fromArrayCopy([
 			1,
 			2,
 			3
@@ -61,12 +61,24 @@ class VectorTest {
 
 	static final forEach = testCase(() -> {
 		describe("This prints 1, 2 and 3.");
-		final vector = WritableVector.fromArrayCopy([
+		final vector = Vector.fromArrayCopy([
 			1,
 			2,
 			3
 		]);
 		vector.ref.forEach(n -> println(n));
+	}, Visual);
+
+
+	static final fill = testCase(() -> {
+		describe("This prints [4, 4, 4].");
+		final vector = WritableVector.fromArrayCopy([
+			1,
+			2,
+			3
+		]);
+		vector.fill(4);
+		println(vector);
 	}, Visual);
 
 	public static final all = testCaseGroup([
@@ -76,6 +88,7 @@ class VectorTest {
 		sub,
 		slice,
 		find,
-		forEach
+		forEach,
+		fill
 	]);
 }
