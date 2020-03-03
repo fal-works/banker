@@ -2,5 +2,7 @@
 
 -cp src
 -cp test
+-dce full
+--macro nullSafety("banker", Strict)
 -lib sneaker
 -main Main

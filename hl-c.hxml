@@ -1,0 +1,5 @@
+# Build with HL/C
+
+common.hxml
+-hl out/c/main.c
+-D sneaker_assertion_disable
