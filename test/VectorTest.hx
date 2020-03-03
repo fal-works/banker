@@ -1,5 +1,6 @@
 package;
 
+import banker.ds.vector.Vector;
 import banker.ds.vector.WritableVector;
 
 class VectorTest {
@@ -22,7 +23,7 @@ class VectorTest {
 
 	static final createFilled = testCase(() -> {
 		describe("This prints an array of 10 ones.");
-		final vector = WritableVector.createFilled(10, 1);
+		final vector = Vector.createFilled(10, 1);
 		println(vector);
 	}, Visual);
 

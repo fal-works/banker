@@ -1,6 +1,6 @@
 package banker.ds.vector.extension;
 
-@:access(banker.ds.vector.VectorReference)
+@:access(banker.ds.vector.VectorReference, banker.ds.vector.WritableVector)
 class Copy {
 	/**
 		@return Shallow copy of `this`.
@@ -21,7 +21,7 @@ class Copy {
 	public static inline function copyWritable<T>(
 		_this: VectorReference<T>
 	): WritableVector<T> {
-		return _this.data.copy();
+		return WritableVector.fromData(_this.data.copy());
 	}
 
 	/**

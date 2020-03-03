@@ -1,6 +1,6 @@
 package banker.ds.vector.extension;
 
-@:access(banker.ds.vector.VectorReference)
+@:access(banker.ds.vector.VectorReference, banker.ds.vector.WritableVector)
 class Functional {
 	/**
 		Runs `callback` for each element in `this` vector
@@ -130,7 +130,7 @@ class Functional {
 		_this: VectorReference<T>,
 		callback: T->S
 	): WritableVector<S> {
-		return _this.data.map(callback);
+		return WritableVector.fromData(_this.data.map(callback));
 	}
 
 	/**
