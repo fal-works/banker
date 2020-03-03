@@ -1,4 +1,4 @@
-package banker.ds;
+package banker.ds.array;
 
 class ArrayExtension {
 	#if !banker_generic_disable

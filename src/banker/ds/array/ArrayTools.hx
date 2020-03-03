@@ -1,6 +1,6 @@
-package banker.ds;
+package banker.ds.array;
 
-using banker.ds.ArrayExtension;
+using banker.ds.array.ArrayExtension;
 
 /**
 	Static utility functions for `Array<T>`.
