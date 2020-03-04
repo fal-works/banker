@@ -33,15 +33,19 @@ class Scan {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function joinUntil<T>(
+	public static function joinIn<T>(
 		_this: VectorReference<T>,
+		startIndex: Int,
 		endIndex: Int,
 		separator: String
 	): String {
-		final buffer = new StringBuf();
-		buffer.add(_this[0]);
+		final length = endIndex - startIndex;
+		if (length <= 0) return "";
 
-		for (i in 1...endIndex) {
+		final buffer = new StringBuf();
+		buffer.add(_this[startIndex]);
+
+		for (i in startIndex + 1...endIndex) {
 			buffer.add(separator);
 			buffer.add(_this[i]);
 		}
@@ -56,6 +60,6 @@ class Scan {
 	@:generic
 	#end
 	public static function join<T>(_this: VectorReference<T>, separator: String): String {
-		return joinUntil(_this, _this.length, separator);
+		return joinIn(_this, 0, _this.length, separator);
 	}
 }
