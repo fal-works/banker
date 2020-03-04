@@ -25,7 +25,7 @@ class ArrayBaseTest {
 
 		assert(stack.toString() == "");
 		final s = stack.vector.ref.join(",");
-		assert(s == "0,0");
+		assert(s == #if hl "0,0" #else "null,null" #end);
 	}
 
 	static final _clearPhysicalInt = testCase(clearPhysicalInt, Ok);
