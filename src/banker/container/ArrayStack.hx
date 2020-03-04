@@ -1,7 +1,7 @@
 package banker.container;
 
 // NOTE: Automatic static extension does not seem to work on generic classes
-import banker.container.extension.array.StackExtension;
+import banker.container.extension.array.*;
 
 /**
 	Array-based stack.
@@ -23,5 +23,5 @@ class ArrayStack<T> extends ArrayBase<T> implements Stack<T> {
 		return StackExtension.peek(this);
 
 	public inline function toString(): String
-		return StackExtension.toString(this);
+		return CommonExtension.toString(this);
 }
