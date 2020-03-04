@@ -40,4 +40,21 @@ class StackExtension {
 
 		return _this.vector[index];
 	}
+
+	/**
+		Adds all elements in `vector` as the last (newest) elements of `this`.
+		Duplicates are allowed.
+	**/
+	public static inline function pushFromVector<T>(_this: ArrayBase<T>, vector: VectorReference<T>): Void {
+		final index = _this.nextFreeSlotIndex;
+		final increment = vector.length;
+		assert(index + increment <= _this.capacity, _this.tag, "Not enough space.");
+
+		VectorTools.blit(vector, 0, _this.vector, index, increment);
+		_this.nextFreeSlotIndex = index + increment;
+
+		#if banker_watermark_enable
+		updateWatermark(getUsageRatio()); // Currently does not work
+		#end
+	}
 }
