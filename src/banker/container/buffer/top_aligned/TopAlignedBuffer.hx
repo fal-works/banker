@@ -29,7 +29,7 @@ class TopAlignedBuffer<T> extends Tagged implements Buffer {
 
 	/**
 		Clears `this` logically, i.e. the `size` is set to `0`
-		but the references remains in the internal vector.
+		but the references remain in the internal vector.
 	**/
 	public inline function clear(): Void {
 		nextFreeSlotIndex = 0;
