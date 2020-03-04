@@ -6,10 +6,7 @@ class Scan {
 		Each element will be compared with the `!=` operator.
 		@return `true` if equal.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function equals<T>(
+	public static inline function equals<T>(
 		_this: VectorReference<T>,
 		otherVector: VectorReference<T>
 	): Bool {
@@ -30,10 +27,7 @@ class Scan {
 	/**
 		Joins elements of `this` and returns a `String` representation.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function joinIn<T>(
+	public static inline function joinIn<T>(
 		_this: VectorReference<T>,
 		startIndex: Int,
 		endIndex: Int,
@@ -56,10 +50,7 @@ class Scan {
 	/**
 		Joins elements of `this` and returns a `String` representation.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function join<T>(_this: VectorReference<T>, separator: String): String {
+	public static inline function join<T>(_this: VectorReference<T>, separator: String): String {
 		return joinIn(_this, 0, _this.length, separator);
 	}
 }

@@ -39,10 +39,7 @@ class Functional {
 		whithin the range from `startIndex` until (but not including) `endIndex`.
 		@param predicate Function that returns true if the element should be remain.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function filterIn<T>(
+	public static inline function filterIn<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool,
 		startIndex: Int,
@@ -63,10 +60,7 @@ class Functional {
 		Creates a new vector by filtering elements of `this` with `predicate`.
 		@param predicate Function that returns true if the element should be remain.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function filter<T>(
+	public static inline function filter<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool
 	): Vector<T> {
@@ -104,10 +98,7 @@ class Functional {
 	/**
 		@see `mapIn()`
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function mapInWritable<T, S>(
+	public static inline function mapInWritable<T, S>(
 		_this: VectorReference<T>,
 		callback: T->S,
 		startIndex: Int,
@@ -128,10 +119,7 @@ class Functional {
 	/**
 		@see `map()`
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function mapWritable<T, S>(
+	public static inline function mapWritable<T, S>(
 		_this: VectorReference<T>,
 		callback: T->S
 	): WritableVector<S> {
@@ -142,10 +130,7 @@ class Functional {
 		Creates a new vector by mapping elements of `this` using `callback`
 		whithin the range from `startIndex` until (but not including) `endIndex`.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function mapIn<T, S>(
+	public static inline function mapIn<T, S>(
 		_this: VectorReference<T>,
 		callback: T->S,
 		startIndex: Int,
@@ -157,10 +142,7 @@ class Functional {
 	/**
 		Creates a new vector by mapping elements of `this` using `callback`.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function map<T, S>(
+	public static inline function map<T, S>(
 		_this: VectorReference<T>,
 		callback: T->S
 	): Vector<S> {

@@ -78,10 +78,7 @@ class Search {
 		@param predicate Function that returns true if the given element meets the condition.
 		@return First element that matches to the given filter. Null if not found.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function findFirstIn<T>(
+	public static inline function findFirstIn<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool,
 		startIndex: Int,

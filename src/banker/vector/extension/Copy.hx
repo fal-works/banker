@@ -113,10 +113,7 @@ class Copy {
 		@param startPosition The position in `this` to begin (included).
 		@param endPosition The position in `this` to end (not included).
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static function sliceToArray<T>(
+	public static inline function sliceToArray<T>(
 		_this: VectorReference<T>,
 		startPosition: Int,
 		endPosition: Int
