@@ -27,7 +27,10 @@ class Functional {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function forEach<T>(_this: VectorReference<T>, callback: T->Void): Void {
+	public static inline function forEach<T>(
+		_this: VectorReference<T>,
+		callback: T->Void
+	): Void {
 		forEachIn(_this, callback, 0, _this.length);
 	}
 
@@ -63,7 +66,10 @@ class Functional {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function filter<T>(_this: VectorReference<T>, predicate: T->Bool): Vector<T> {
+	public static function filter<T>(
+		_this: VectorReference<T>,
+		predicate: T->Bool
+	): Vector<T> {
 		return filterIn(_this, predicate, 0, _this.length);
 	}
 

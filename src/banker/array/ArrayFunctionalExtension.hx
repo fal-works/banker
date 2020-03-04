@@ -23,7 +23,10 @@ class ArrayFunctionalExtension {
 		@param predicate
 		@return Null<T>
 	**/
-	public static inline function populate<T>(array: Array<T>, factory: Void->T): Array<T> {
+	public static inline function populate<T>(
+		array: Array<T>,
+		factory: Void->T
+	): Array<T> {
 		final len = array.length;
 		var i = 0;
 		while (i < len) {
@@ -40,7 +43,10 @@ class ArrayFunctionalExtension {
 		@param   predicate Function that returns true if the given element meets the condition.
 		@return  True if found.
 	**/
-	public static inline function hasMatching<T>(array: Array<T>, predicate: T->Bool): Bool {
+	public static inline function hasMatching<T>(
+		array: Array<T>,
+		predicate: T->Bool
+	): Bool {
 		final len = array.length;
 		var found = false;
 		var i = 0;
@@ -61,7 +67,10 @@ class ArrayFunctionalExtension {
 		@param   predicate Function that returns true if the given element meets the condition.
 		@return  First element that matches to the given filter. Null if not found.
 	**/
-	public static inline function findFirst<T>(array: Array<T>, predicate: T->Bool): Null<T> {
+	public static inline function findFirst<T>(
+		array: Array<T>,
+		predicate: T->Bool
+	): Null<T> {
 		var element: Null<T> = null;
 
 		final len = array.length;

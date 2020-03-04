@@ -38,7 +38,10 @@ class Search {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function findIndex<T>(_this: VectorReference<T>, element: T): Int {
+	public static inline function findIndex<T>(
+		_this: VectorReference<T>,
+		element: T
+	): Int {
 		return findIndexIn(_this, element, 0, _this.length);
 	}
 
@@ -66,10 +69,7 @@ class Search {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function has<T>(
-		_this: VectorReference<T>,
-		element: T
-	): Bool {
+	public static inline function has<T>(_this: VectorReference<T>, element: T): Bool {
 		return hasIn(_this, element, 0, _this.length);
 	}
 
@@ -115,8 +115,7 @@ class Search {
 	public static inline function findFirst<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool
-	): Null<T> {
-		@:nullSafety(Off) // XXX: Don't know why this is necessary
+	): Null<T> {@:nullSafety(Off) // XXX: Don't know why this is necessary
 		return findFirstIn(_this, predicate, 0, _this.length);
 	}
 }

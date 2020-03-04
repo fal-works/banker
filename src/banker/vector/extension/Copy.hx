@@ -69,9 +69,7 @@ class Copy {
 
 	/**
 		Returns a new concatenated vector.
-	**/	#if !banker_generic_disable
-	@:generic
-	#end
+	**/ #if !banker_generic_disable @:generic #end
 	public static inline function concat<T>(
 		_this: VectorReference<T>,
 		otherVector: VectorReference<T>
@@ -92,7 +90,10 @@ class Copy {
 		startPosition: Int,
 		endPosition: Int
 	): Vector<T> {
-		return Vector.fromData(_this.data.sub(startPosition, endPosition - startPosition));
+		return Vector.fromData(_this.data.sub(
+			startPosition,
+			endPosition - startPosition
+		));
 	}
 
 	/** @see `Copy.slice()` **/
