@@ -1,10 +1,10 @@
-package banker.container.buffer.top_aligned;
+package banker.container.buffer.ring;
 
 #if !banker_generic_disable
 @:generic
 #end
 @:allow(banker.container)
-class TopAlignedBuffer<T> extends Tagged implements Buffer {
+class RingBuffer<T> extends Tagged implements Buffer {
 	/** Max number of elements `this` can contain. **/
 	public var capacity(get, never): Int;
 
@@ -14,8 +14,14 @@ class TopAlignedBuffer<T> extends Tagged implements Buffer {
 	/** The internal vector. **/
 	var vector: WritableVector<T>;
 
+	/** The index indicating the slot that holds the top element. **/
+	var headIndex: Int = 0;
+
 	/** The index indicating the free slot for putting next element. **/
-	var nextFreeSlotIndex: Int = 0;
+	var tailIndex: Int = 0;
+
+	/** The physical field for `size`. **/
+	var internalSize: Int = 0;
 
 	/**
 		@param capacity Max number of elements `this` can contain.
@@ -32,7 +38,9 @@ class TopAlignedBuffer<T> extends Tagged implements Buffer {
 		but the references remains in the internal vector.
 	**/
 	public inline function clear(): Void {
-		nextFreeSlotIndex = 0;
+		headIndex = 0;
+		tailIndex = 0;
+		internalSize = 0;
 	}
 
 	/**
@@ -54,5 +62,5 @@ class TopAlignedBuffer<T> extends Tagged implements Buffer {
 		return vector.length;
 
 	inline function get_size(): Int
-		return nextFreeSlotIndex;
+		return internalSize;
 }
