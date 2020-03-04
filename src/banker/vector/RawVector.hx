@@ -1,4 +1,4 @@
-package banker.integration;
+package banker.vector;
 
 /**
 	The body of `banker.integration.RawVector`.

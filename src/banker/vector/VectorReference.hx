@@ -1,7 +1,5 @@
 package banker.vector;
 
-import banker.integration.RawVector;
-
 /**
 	Read-only reference to a vector.
 **/

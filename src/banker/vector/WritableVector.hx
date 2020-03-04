@@ -1,7 +1,5 @@
 package banker.vector;
 
-import banker.integration.RawVector;
-
 /**
 	Fixed-length writable array.
 **/
