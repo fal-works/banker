@@ -1,4 +1,4 @@
-package banker.ds.vector.extension.writable;
+package banker.vector.extension.writable;
 
 class Fill {
 	/**

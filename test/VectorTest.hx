@@ -1,7 +1,7 @@
 package;
 
-import banker.ds.vector.Vector;
-import banker.ds.vector.WritableVector;
+import banker.vector.Vector;
+import banker.vector.WritableVector;
 
 class VectorTest {
 	static final create = testCase(() -> {

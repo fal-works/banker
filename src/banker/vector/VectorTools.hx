@@ -1,4 +1,4 @@
-package banker.ds.vector;
+package banker.vector;
 
 class VectorTools {
 	/**

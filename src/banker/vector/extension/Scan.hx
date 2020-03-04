@@ -1,4 +1,4 @@
-package banker.ds.vector.extension;
+package banker.vector.extension;
 
 class Scan {
 	/**

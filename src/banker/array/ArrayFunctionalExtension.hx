@@ -1,6 +1,6 @@
-package banker.ds.array;
+package banker.array;
 
-import banker.ds.array.ArrayExtension.*;
+import banker.array.ArrayExtension.*;
 
 class ArrayFunctionalExtension {
 	/**

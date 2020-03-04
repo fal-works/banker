@@ -1,4 +1,4 @@
-package banker.ds.vector;
+package banker.vector;
 
 import banker.integration.RawVector;
 
@@ -8,10 +8,10 @@ import banker.integration.RawVector;
 @:forward(length, toArray)
 // @formatter:off
 @:using(
-	banker.ds.vector.extension.writable.Fill,
-	banker.ds.vector.extension.writable.Functional
+	banker.vector.extension.writable.Fill,
+	banker.vector.extension.writable.Functional
 ) // @formatter:on
-@:allow(banker.ds.vector.VectorTools)
+@:allow(banker.vector.VectorTools)
 abstract WritableVector<T>(RawVector<T>) {
 	/**
 		@return Shallow copy of `array` as `WritableVector<T>`.

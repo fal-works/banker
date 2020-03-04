@@ -1,8 +1,8 @@
-package banker.ds.vector.extension.writable;
+package banker.vector.extension.writable;
 
 class Functional {
 	/**
-		@see `banker.ds.vector.extension.Functional.forEachIndexIn()`
+		@see `banker.vector.extension.Functional.forEachIndexIn()`
 	**/
 	#if !banker_generic_disable
 	@:generic
@@ -25,7 +25,7 @@ class Functional {
 	}
 
 	/**
-		@see `banker.ds.vector.extension.Functional.forEachIndex()`
+		@see `banker.vector.extension.Functional.forEachIndex()`
 	**/
 	#if !banker_generic_disable
 	@:generic

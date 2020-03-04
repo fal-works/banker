@@ -1,6 +1,6 @@
-package banker.ds.vector.extension;
+package banker.vector.extension;
 
-@:access(banker.ds.vector.VectorReference, banker.ds.vector.WritableVector)
+@:access(banker.vector.VectorReference, banker.vector.WritableVector)
 class Copy {
 	/**
 		@return Shallow copy of `this`.

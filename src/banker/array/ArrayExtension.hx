@@ -1,4 +1,4 @@
-package banker.ds.array;
+package banker.array;
 
 class ArrayExtension {
 	public static inline function get<T>(array: Array<T>, index: Int): T {

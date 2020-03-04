@@ -1,4 +1,4 @@
-package banker.ds.vector;
+package banker.vector;
 
 import banker.integration.RawVector;
 
@@ -8,13 +8,13 @@ import banker.integration.RawVector;
 @:forward(length, toArray)
 // @formatter:off
 @:using(
-	banker.ds.vector.extension.Copy,
-	banker.ds.vector.extension.Functional,
-	banker.ds.vector.extension.Scan,
-	banker.ds.vector.extension.Search
+	banker.vector.extension.Copy,
+	banker.vector.extension.Functional,
+	banker.vector.extension.Scan,
+	banker.vector.extension.Search
 ) // @formatter:on
-@:access(banker.ds.vector.WritableVector, banker.ds.vector.Vector)
-@:allow(banker.ds.vector.VectorTools, banker.ds.vector.Vector)
+@:access(banker.vector.WritableVector, banker.vector.Vector)
+@:allow(banker.vector.VectorTools, banker.vector.Vector)
 abstract VectorReference<T>(RawVector<T>) from RawVector<T> {
 	/**
 		@return Shallow copy of `array` as `VectorReference<T>`.

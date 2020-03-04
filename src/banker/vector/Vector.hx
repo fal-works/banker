@@ -1,4 +1,4 @@
-package banker.ds.vector;
+package banker.vector;
 
 import banker.integration.RawVector;
 
