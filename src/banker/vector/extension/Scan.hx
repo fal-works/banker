@@ -50,7 +50,10 @@ class Scan {
 	/**
 		Joins elements of `this` and returns a `String` representation.
 	**/
-	public static inline function join<T>(_this: VectorReference<T>, separator: String): String {
+	public static inline function join<T>(
+		_this: VectorReference<T>,
+		separator: String
+	): String {
 		return joinIn(_this, 0, _this.length, separator);
 	}
 }
