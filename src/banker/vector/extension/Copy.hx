@@ -4,9 +4,6 @@ class Copy {
 	/**
 		@return Shallow copy of `this`.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function copy<T>(_this: VectorReference<T>): Vector<T> {
 		return Vector.fromData(_this.data.copy());
 	}
@@ -14,9 +11,6 @@ class Copy {
 	/**
 		@return Shallow copy of `this`.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function copyWritable<T>(
 		_this: VectorReference<T>
 	): WritableVector<T> {
@@ -26,9 +20,6 @@ class Copy {
 	/**
 		Creates a new vector by shallow-copying a range of `this`.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function subVector<T>(
 		_this: VectorReference<T>,
 		position: Int,
@@ -38,9 +29,6 @@ class Copy {
 	}
 
 	/** @see `subVector()` **/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function subVectorWritable<T>(
 		_this: VectorReference<T>,
 		position: Int,
@@ -50,9 +38,6 @@ class Copy {
 	}
 
 	/** @see `concat()` **/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function concatWritable<T>(
 		_this: VectorReference<T>,
 		otherVector: VectorReference<T>
@@ -69,7 +54,7 @@ class Copy {
 
 	/**
 		Returns a new concatenated vector.
-	**/ #if !banker_generic_disable @:generic #end
+	**/
 	public static inline function concat<T>(
 		_this: VectorReference<T>,
 		otherVector: VectorReference<T>
@@ -82,9 +67,6 @@ class Copy {
 		@param startPosition The position in `this` to begin (included).
 		@param endPosition The position in `this` to end (not included).
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function slice<T>(
 		_this: VectorReference<T>,
 		startPosition: Int,
@@ -97,9 +79,6 @@ class Copy {
 	}
 
 	/** @see `Copy.slice()` **/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function sliceWritable<T>(
 		_this: VectorReference<T>,
 		startPosition: Int,

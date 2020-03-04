@@ -5,9 +5,6 @@ class Functional {
 		Runs `callback` for each element in `this` vector
 		from `startIndex` until (but not including) `endIndex`.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function forEachIn<T>(
 		_this: VectorReference<T>,
 		callback: T->Void,
@@ -24,9 +21,6 @@ class Functional {
 	/**
 		Runs `callback` for each element in `this` vector.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function forEach<T>(
 		_this: VectorReference<T>,
 		callback: T->Void
@@ -70,9 +64,6 @@ class Functional {
 	/**
 		@see `Functional.filterIn()`
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function filterInWritable<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool,
@@ -85,9 +76,6 @@ class Functional {
 	/**
 		@see `Functional.filter()`
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function filterWritable<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool
@@ -153,9 +141,6 @@ class Functional {
 		Runs `callback` for each element in `this` vector
 		from `startIndex` until (but not including) `endIndex`.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function forEachIndexIn<T>(
 		_this: VectorReference<T>,
 		callback: (
@@ -176,9 +161,6 @@ class Functional {
 	/**
 		Runs `callback` for each element in `this` vector.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function forEachIndex<T>(
 		_this: VectorReference<T>,
 		callback: (
@@ -195,9 +177,6 @@ class WritableFunctional {
 	/**
 		@see `Functional.forEachIndexIn()`
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function forEachIndexIn<T>(
 		_this: WritableVector<T>,
 		callback: (
@@ -218,9 +197,6 @@ class WritableFunctional {
 	/**
 		@see `Functional.forEachIndex()`
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function forEachIndex<T>(
 		_this: WritableVector<T>,
 		callback: (

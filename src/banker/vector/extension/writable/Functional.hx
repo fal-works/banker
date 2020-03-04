@@ -4,9 +4,6 @@ class Functional {
 	/**
 		@see `banker.vector.extension.Functional.forEachIndexIn()`
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function forEachIndexIn<T>(
 		_this: WritableVector<T>,
 		callback: (
@@ -27,9 +24,6 @@ class Functional {
 	/**
 		@see `banker.vector.extension.Functional.forEachIndex()`
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function forEachIndex<T>(
 		_this: WritableVector<T>,
 		callback: (

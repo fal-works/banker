@@ -6,9 +6,6 @@ class Search {
 		@param element The element to search.
 		@return The found index. `-1` if not found.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function findIndexIn<T>(
 		_this: VectorReference<T>,
 		element: T,
@@ -35,9 +32,6 @@ class Search {
 		@param fromIndex The index to start the search.
 		@return The found index. `-1` if not found.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function findIndex<T>(
 		_this: VectorReference<T>,
 		element: T
@@ -49,9 +43,6 @@ class Search {
 		@param element Element to search.
 		@return `true` if this list contains `element`.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function hasIn<T>(
 		_this: VectorReference<T>,
 		element: T,
@@ -66,9 +57,6 @@ class Search {
 		@param element Element to search.
 		@return `true` if this list contains `element`.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function has<T>(_this: VectorReference<T>, element: T): Bool {
 		return hasIn(_this, element, 0, _this.length);
 	}
@@ -106,9 +94,6 @@ class Search {
 		@param predicate Function that returns true if the given element meets the condition.
 		@return First element that matches to the given filter. Null if not found.
 	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
 	public static inline function findFirst<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool
