@@ -28,8 +28,14 @@ class ArrayList<T> extends ArrayBase<T> implements List<T> {
 	public inline function removeAt(index: Int): T
 		return IndexedExtension.removeAt(this, index);
 
-	public inline function forEach(callback: T -> Void): Void
+	public inline function forEach(callback: T->Void): Void
 		SequenceExtension.forEach(this, callback);
+
+	public inline function filter(predicate: T->Bool): Vector<T>
+		return SequenceExtension.filter(this, predicate);
+
+	public inline function map<S>(callback: T->S): Vector<S>
+		return SequenceExtension.map(this, callback);
 
 	public inline function toString(): String
 		return CommonExtension.toString(this);
