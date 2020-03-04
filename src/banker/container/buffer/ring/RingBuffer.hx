@@ -12,7 +12,7 @@ class RingBuffer<T> extends Tagged implements Buffer {
 	public var size(get, never): Int;
 
 	/** The internal vector. **/
-	var vector: WritableVector<T>;
+	final vector: WritableVector<T>;
 
 	/** The index indicating the slot that holds the top element. **/
 	var headIndex: Int = 0;

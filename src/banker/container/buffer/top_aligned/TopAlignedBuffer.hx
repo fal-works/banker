@@ -12,7 +12,7 @@ class TopAlignedBuffer<T> extends Tagged implements Buffer {
 	public var size(get, never): Int;
 
 	/** The internal vector. **/
-	var vector: WritableVector<T>;
+	final vector: WritableVector<T>;
 
 	/** The index indicating the free slot for putting next element. **/
 	var nextFreeSlotIndex: Int = 0;
