@@ -1,7 +1,6 @@
 package;
 
 import sneaker.unit_test.TesterSettings;
-import banker.*;
 
 // dunno how to do tests!
 class Main {
