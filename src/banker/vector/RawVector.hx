@@ -1,7 +1,7 @@
 package banker.vector;
 
 /**
-	The body of `banker.integration.RawVector`.
+	The body of `RawVector<T>`.
 
 	If HashLink `hl.NativeArray<T>`, otherwise `haxe.ds.Vector<T>`.
 **/
@@ -13,6 +13,7 @@ typedef RawVectorData<T> = haxe.ds.Vector<T>;
 
 /**
 	Integration of `hl.NativeArray` and `haxe.ds.Vector`.
+	Internally used in `banker.vector` package.
 **/
 #if hl
 @:forward(length)
