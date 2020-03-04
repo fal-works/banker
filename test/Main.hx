@@ -10,7 +10,8 @@ class Main {
 
 		test(testCaseGroup([
 			// NullableTest.all,
-			VectorTest.all
+			// VectorTest.all,
+			ArrayStackTest.all
 		]));
 	}
 }
