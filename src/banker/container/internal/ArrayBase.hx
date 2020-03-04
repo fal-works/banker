@@ -30,6 +30,23 @@ class ArrayBase<T> extends Tagged {
 	}
 
 	/**
+		Clears `this` logically, i.e. the `size` is set to `0`
+		but the references remains in the internal vector.
+	**/
+	public inline function clear(): Void {
+		nextFreeSlotIndex = 0;
+	}
+
+	/**
+		Clears `this` physically, i.e. the `size` is set to `0`
+		and all references are explicitly nullified.
+	**/
+	public inline function clearPhysical(): Void {
+		clear();
+		vector.fill(cast null);
+	}
+
+	/**
 		@return Current usage ratio between 0 and 1.
 	**/
 	public inline function getUsageRatio(): Float
