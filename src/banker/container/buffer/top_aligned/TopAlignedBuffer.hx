@@ -50,6 +50,13 @@ class TopAlignedBuffer<T> extends Tagged implements Buffer {
 	public inline function getUsageRatio(): Float
 		return size / capacity;
 
+	/**
+		@return A `String` representation of `this`.
+	**/
+	public inline function toString<T>(): String {
+		return vector.ref.joinIn(0, size, ", ");
+	}
+
 	inline function get_capacity()
 		return vector.length;
 

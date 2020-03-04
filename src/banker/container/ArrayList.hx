@@ -36,7 +36,4 @@ class ArrayList<T> extends TopAlignedBuffer<T> implements List<T> {
 
 	public inline function map<S>(callback: T->S): Vector<S>
 		return SequenceExtension.map(this, callback);
-
-	public inline function toString(): String
-		return CommonExtension.toString(this);
 }

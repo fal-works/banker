@@ -24,7 +24,4 @@ class ArrayStack<T> extends TopAlignedBuffer<T> implements Stack<T> {
 
 	public inline function pushFromVector(vector: VectorReference<T>): Void
 		StackExtension.pushFromVector(this, vector);
-
-	public inline function toString(): String
-		return CommonExtension.toString(this);
 }
