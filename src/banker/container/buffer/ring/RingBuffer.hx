@@ -53,6 +53,25 @@ class RingBuffer<T> extends Tagged implements Buffer {
 	}
 
 	/**
+		@return A `String` representation of `this`.
+	**/
+	public inline function toString<T>(): String {
+		final size = this.size;
+		final headIndex = this.headIndex;
+		final tailIndex = this.tailIndex;
+		final vector = this.vector;
+		final length = vector.length;
+
+		return if (headIndex + size <= length)
+			vector.ref.joinIn(headIndex, headIndex + size, ", ");
+		else {
+			final former = vector.ref.joinIn(headIndex, length, ", ");
+			final latter = vector.ref.joinIn(0, tailIndex, ", ");
+			former + latter;
+		}
+	}
+
+	/**
 		@return Current usage ratio between 0 and 1.
 	**/
 	public inline function getUsageRatio(): Float
