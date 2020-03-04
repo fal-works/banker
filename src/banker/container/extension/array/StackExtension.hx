@@ -1,6 +1,6 @@
-package banker.container.extension;
+package banker.container.extension.array;
 
-class ArrayStackExtension {
+class StackExtension {
 	/**
 		Adds `element` as the last (newest) element of `this`.
 		Duplicates are allowed.

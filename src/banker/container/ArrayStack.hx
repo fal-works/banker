@@ -1,6 +1,7 @@
 package banker.container;
 
 // NOTE: Automatic static extension does not seem to work on generic classes
+import banker.container.extension.array.StackExtension;
 
 /**
 	Array-based stack.
@@ -13,11 +14,11 @@ class ArrayStack<T> extends ArrayBase<T> implements Stack<T> {
 		super(capacity);
 
 	public inline function push(element: T): Void
-		ArrayStackExtension.push(this, element);
+		StackExtension.push(this, element);
 
 	public inline function pop(): T
-		return ArrayStackExtension.pop(this);
+		return StackExtension.pop(this);
 
 	public inline function toString(): String
-		return ArrayStackExtension.toString(this);
+		return StackExtension.toString(this);
 }
