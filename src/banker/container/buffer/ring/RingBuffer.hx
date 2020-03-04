@@ -67,7 +67,7 @@ class RingBuffer<T> extends Tagged implements Buffer {
 		else {
 			final former = vector.ref.joinIn(headIndex, length, ", ");
 			final latter = vector.ref.joinIn(0, tailIndex, ", ");
-			former + latter;
+			former + ", " + latter;
 		}
 	}
 
