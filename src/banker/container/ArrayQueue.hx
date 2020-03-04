@@ -4,12 +4,12 @@ package banker.container;
 import banker.container.buffer.ring.*;
 
 /**
-	Array-based stack.
+	Array-based queue.
 **/
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayQueue<T> extends RingBuffer<T> implements Queue<T> {
+class ArrayQueue<T> extends SequenceRingBuffer<T> implements Queue<T> {
 	public function new(capacity: Int)
 		super(capacity);
 
