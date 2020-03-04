@@ -1,6 +1,5 @@
 package banker.vector.extension;
 
-@:access(banker.vector.VectorReference, banker.vector.WritableVector)
 class Copy {
 	/**
 		@return Shallow copy of `this`.
@@ -8,8 +7,8 @@ class Copy {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static inline function copy<T>(_this: VectorReference<T>): VectorReference<T> {
-		return _this.data.copy();
+	public static inline function copy<T>(_this: VectorReference<T>): Vector<T> {
+		return Vector.fromData(_this.data.copy());
 	}
 
 	/**
@@ -34,8 +33,8 @@ class Copy {
 		_this: VectorReference<T>,
 		position: Int,
 		length: Int
-	): VectorReference<T> {
-		return _this.data.sub(position, length);
+	): Vector<T> {
+		return Vector.fromData(_this.data.sub(position, length));
 	}
 
 	/** @see `subVector()` **/
@@ -47,27 +46,7 @@ class Copy {
 		position: Int,
 		length: Int
 	): WritableVector<T> {
-		return subVector(_this, position, length).writable();
-	}
-
-	/**
-		Returns a new concatenated vector.
-	**/
-	#if !banker_generic_disable
-	@:generic
-	#end
-	public static inline function concat<T>(
-		_this: VectorReference<T>,
-		otherVector: VectorReference<T>
-	): VectorReference<T> {
-		final thisLength = _this.length;
-		final otherLength = otherVector.length;
-		final newVector = new WritableVector(thisLength + otherLength);
-		// @formatter:off
-		VectorTools.blit(_this, 0, newVector, 0, thisLength);
-		VectorTools.blit(otherVector, 0, newVector, thisLength, otherLength);
-		// @formatter:on
-		return newVector;
+		return WritableVector.fromData(_this.data.sub(position, length));
 	}
 
 	/** @see `concat()` **/
@@ -78,7 +57,26 @@ class Copy {
 		_this: VectorReference<T>,
 		otherVector: VectorReference<T>
 	): WritableVector<T> {
-		return concat(_this, otherVector).writable();
+		final thisLength = _this.length;
+		final otherLength = otherVector.length;
+		final newVector = new WritableVector(thisLength + otherLength);
+		// @formatter:off
+		VectorTools.blit(_this, 0, newVector, 0, thisLength);
+		VectorTools.blit(otherVector, 0, newVector, thisLength, otherLength);
+		// @formatter:on
+		return newVector;
+	}
+
+	/**
+		Returns a new concatenated vector.
+	**/	#if !banker_generic_disable
+	@:generic
+	#end
+	public static inline function concat<T>(
+		_this: VectorReference<T>,
+		otherVector: VectorReference<T>
+	): Vector<T> {
+		return concatWritable(_this, otherVector).nonWritable();
 	}
 
 	/**
@@ -93,8 +91,8 @@ class Copy {
 		_this: VectorReference<T>,
 		startPosition: Int,
 		endPosition: Int
-	): VectorReference<T> {
-		return _this.data.sub(startPosition, endPosition - startPosition);
+	): Vector<T> {
+		return Vector.fromData(_this.data.sub(startPosition, endPosition - startPosition));
 	}
 
 	/** @see `Copy.slice()` **/

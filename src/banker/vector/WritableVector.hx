@@ -11,7 +11,7 @@ import banker.integration.RawVector;
 	banker.vector.extension.writable.Fill,
 	banker.vector.extension.writable.Functional
 ) // @formatter:on
-@:allow(banker.vector.VectorTools)
+@:allow(banker.vector)
 abstract WritableVector<T>(RawVector<T>) {
 	/**
 		@return Shallow copy of `array` as `WritableVector<T>`.
@@ -30,11 +30,6 @@ abstract WritableVector<T>(RawVector<T>) {
 	inline function get_ref(): VectorReference<T>
 		return this;
 
-	var data(get, never): RawVector<T>;
-
-	inline function get_data()
-		return this;
-
 	public inline function new(length: Int)
 		this = new RawVector<T>(length);
 
@@ -50,4 +45,7 @@ abstract WritableVector<T>(RawVector<T>) {
 
 	@:to inline function toReference<T>(): VectorReference<T>
 		return this;
+
+	inline function nonWritable(): Vector<T>
+		return Vector.fromData(this);
 }

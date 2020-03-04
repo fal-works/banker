@@ -1,6 +1,5 @@
 package banker.vector.extension;
 
-@:access(banker.vector.VectorReference, banker.vector.WritableVector)
 class Functional {
 	/**
 		Runs `callback` for each element in `this` vector
@@ -45,7 +44,7 @@ class Functional {
 		predicate: T->Bool,
 		startIndex: Int,
 		endIndex: Int
-	): VectorReference<T> {
+	): Vector<T> {
 		final buffer = new Array<T>();
 		var i = startIndex;
 		while (i < endIndex) {
@@ -54,7 +53,7 @@ class Functional {
 			++i;
 		}
 
-		return VectorReference.fromArrayCopy(buffer);
+		return Vector.fromArrayCopy(buffer);
 	}
 
 	/**
@@ -64,7 +63,7 @@ class Functional {
 	#if !banker_generic_disable
 	@:generic
 	#end
-	public static function filter<T>(_this: VectorReference<T>, predicate: T->Bool): VectorReference<T> {
+	public static function filter<T>(_this: VectorReference<T>, predicate: T->Bool): Vector<T> {
 		return filterIn(_this, predicate, 0, _this.length);
 	}
 
@@ -145,8 +144,8 @@ class Functional {
 		callback: T->S,
 		startIndex: Int,
 		endIndex: Int
-	): VectorReference<S> {
-		return mapInWritable(_this, callback, startIndex, endIndex).ref;
+	): Vector<S> {
+		return mapInWritable(_this, callback, startIndex, endIndex).nonWritable();
 	}
 
 	/**
@@ -158,8 +157,8 @@ class Functional {
 	public static function map<T, S>(
 		_this: VectorReference<T>,
 		callback: T->S
-	): VectorReference<S> {
-		return mapWritable(_this, callback).ref;
+	): Vector<S> {
+		return mapWritable(_this, callback).nonWritable();
 	}
 
 	/**

@@ -16,9 +16,9 @@ class VectorTools {
 		assert(sourcePosition >= 0 && destinationPosition >= 0);
 		assert(sourcePosition + rangeLength <= source.length);
 		assert(destinationPosition + rangeLength <= destination.length);
-		destination.data.blit(
+		destination.ref.data.blit(
 			destinationPosition,
-			source.writable().data,
+			source.data,
 			sourcePosition,
 			rangeLength
 		);

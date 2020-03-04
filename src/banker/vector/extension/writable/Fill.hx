@@ -12,7 +12,6 @@ class Fill {
 		endIndex: Int
 	): WritableVector<T> {
 		assert(startIndex >= 0 && endIndex <= _this.length);
-		// warn start >= end?
 
 		for (i in startIndex...endIndex) _this.set(i, value);
 
