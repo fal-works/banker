@@ -2,8 +2,8 @@ package;
 
 import banker.container.ArrayStack;
 
-@:access(banker.container.internal.ArrayBase)
-class ArrayBaseTest {
+@:access(banker.container.buffer.top_aligned.TopAlignedBuffer)
+class TopAlignedBufferTest {
 	static function clear() {
 		describe();
 		final stack = new ArrayStack<String>(2);

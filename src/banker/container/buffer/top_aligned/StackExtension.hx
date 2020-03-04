@@ -1,11 +1,11 @@
-package banker.container.extension.array;
+package banker.container.buffer.top_aligned;
 
 class StackExtension {
 	/**
 		Adds `element` as the last (newest) element of `this`.
 		Duplicates are allowed.
 	**/
-	public static inline function push<T>(_this: ArrayBase<T>, element: T): Void {
+	public static inline function push<T>(_this: TopAlignedBuffer<T>, element: T): Void {
 		final index = _this.nextFreeSlotIndex;
 		assert(index < _this.capacity, _this.tag, "The list is full.");
 
@@ -22,7 +22,7 @@ class StackExtension {
 		Removes the last (newest) element.
 		@return Removed element.
 	**/
-	public static inline function pop<T>(_this: ArrayBase<T>): T {
+	public static inline function pop<T>(_this: TopAlignedBuffer<T>): T {
 		final index = _this.nextFreeSlotIndex - 1;
 		assert(index >= 0, _this.tag, "The list is empty.");
 
@@ -34,7 +34,7 @@ class StackExtension {
 	/**
 		@return The last (newest) element.
 	**/
-	public static inline function peek<T>(_this: ArrayBase<T>): T {
+	public static inline function peek<T>(_this: TopAlignedBuffer<T>): T {
 		final index = _this.nextFreeSlotIndex - 1;
 		assert(index >= 0, _this.tag, "The list is empty.");
 
@@ -45,7 +45,7 @@ class StackExtension {
 		Adds all elements in `vector` as the last (newest) elements of `this`.
 		Duplicates are allowed.
 	**/
-	public static inline function pushFromVector<T>(_this: ArrayBase<T>, vector: VectorReference<T>): Void {
+	public static inline function pushFromVector<T>(_this: TopAlignedBuffer<T>, vector: VectorReference<T>): Void {
 		final index = _this.nextFreeSlotIndex;
 		final increment = vector.length;
 		assert(index + increment <= _this.capacity, _this.tag, "Not enough space.");

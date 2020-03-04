@@ -1,4 +1,4 @@
-package banker.container.extension.array;
+package banker.container.buffer.top_aligned;
 
 import banker.vector.VectorTools;
 
@@ -6,7 +6,7 @@ class IndexedExtension {
 	/**
 		@return The element at `index`.
 	**/
-	public static inline function get<T>(_this: ArrayBase<T>, index: Int): T {
+	public static inline function get<T>(_this: TopAlignedBuffer<T>, index: Int): T {
 		assert(index < _this.size);
 		return _this.vector[index];
 	}
@@ -17,7 +17,7 @@ class IndexedExtension {
 		@return `value`
 	**/
 	public static inline function set<T>(
-		_this: ArrayBase<T>,
+		_this: TopAlignedBuffer<T>,
 		index: Int,
 		value: T
 	): T {
@@ -32,7 +32,7 @@ class IndexedExtension {
 		@return `value`
 	**/
 	public static inline function insertAt<T>(
-		_this: ArrayBase<T>,
+		_this: TopAlignedBuffer<T>,
 		index: Int,
 		value: T
 	): T {
@@ -58,7 +58,7 @@ class IndexedExtension {
 		O(n) complexity.
 		@return The removed element.
 	**/
-	public static inline function removeAt<T>(_this: ArrayBase<T>, index: Int): T {
+	public static inline function removeAt<T>(_this: TopAlignedBuffer<T>, index: Int): T {
 		final size = _this.size;
 		assert(index >= 0 && index < size, _this.tag, "Out of bound.");
 

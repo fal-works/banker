@@ -1,6 +1,6 @@
 package banker.container;
 
-import banker.container.extension.array.StackExtension.pushFromVector;
+import banker.container.buffer.top_aligned.StackExtension as TopAlignedStackExtension;
 
 class ContainerBuilder {
 	public static inline function arrayStackFromVector<T>(vector: VectorReference<T>, capacity: Int = -1) {
@@ -8,7 +8,7 @@ class ContainerBuilder {
 		assert(vector.length <= capacityValue);
 
 		final container = new ArrayStack<T>(capacityValue);
-		pushFromVector(container, vector);
+		TopAlignedStackExtension.pushFromVector(container, vector);
 		return container;
 	}
 
@@ -17,7 +17,7 @@ class ContainerBuilder {
 		assert(vector.length <= capacityValue);
 
 		final container = new ArrayList<T>(capacityValue);
-		pushFromVector(container, vector);
+		TopAlignedStackExtension.pushFromVector(container, vector);
 		return container;
 	}
 }

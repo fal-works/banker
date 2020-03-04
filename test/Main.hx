@@ -11,7 +11,7 @@ class Main {
 		test(testCaseGroup([
 			// NullableTest.all,
 			// VectorTest.all,
-			// ArrayBaseTest.all,
+			TopAlignedBufferTest.all,
 			ArrayStackTest.all
 		]));
 	}

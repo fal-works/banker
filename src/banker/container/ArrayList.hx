@@ -1,7 +1,7 @@
 package banker.container;
 
 // NOTE: Automatic static extension does not seem to work on generic classes
-import banker.container.extension.array.*;
+import banker.container.buffer.top_aligned.*;
 
 /**
 	Array-based stack.
@@ -9,7 +9,7 @@ import banker.container.extension.array.*;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayList<T> extends ArrayBase<T> implements List<T> {
+class ArrayList<T> extends TopAlignedBuffer<T> implements List<T> {
 	public function new(capacity: Int)
 		super(capacity);
 

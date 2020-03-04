@@ -1,10 +1,10 @@
-package banker.container.internal;
+package banker.container.buffer.top_aligned;
 
 #if !banker_generic_disable
 @:generic
 #end
 @:allow(banker.container)
-class ArrayBase<T> extends Tagged {
+class TopAlignedBuffer<T> extends Tagged {
 	/** Max number of elements `this` can contain. **/
 	public var capacity(get, never): Int;
 
