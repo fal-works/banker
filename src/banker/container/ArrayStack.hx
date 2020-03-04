@@ -1,6 +1,6 @@
 package banker.container;
 
-// NOTE: Static extension does not seem to work on generic classes
+// NOTE: Automatic static extension does not seem to work on generic classes
 
 /**
 	Array-based stack.
