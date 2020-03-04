@@ -19,6 +19,9 @@ class ArrayStack<T> extends ArrayBase<T> implements Stack<T> {
 	public inline function pop(): T
 		return StackExtension.pop(this);
 
+	public inline function peek(): T
+		return StackExtension.peek(this);
+
 	public inline function toString(): String
 		return StackExtension.toString(this);
 }

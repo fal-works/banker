@@ -31,6 +31,16 @@ class StackExtension {
 		return _this.vector[index];
 	}
 
+	/**
+		@return The last (newest) element.
+	**/
+	public static inline function peek<T>(_this: ArrayBase<T>): T {
+		final index = _this.nextFreeSlotIndex - 1;
+		assert(index >= 0, _this.tag, "The list is empty.");
+
+		return _this.vector[index];
+	}
+
 	public static inline function toString<T>(_this: ArrayBase<T>): String {
 		return _this.vector.ref.joinIn(0, _this.size, ", ");
 	}
