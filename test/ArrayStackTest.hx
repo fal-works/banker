@@ -24,8 +24,19 @@ class ArrayStackTest {
 
 	static final _pop = testCase(pop, Ok);
 
+	static function emptyError() {
+		describe("This raises an exception.");
+		final stack = new ArrayStack<String>(5);
+		stack.push("AAA");
+		stack.pop();
+		stack.pop();
+	}
+
+	static final _emptyError = testCase(emptyError, Fail);
+
 	public static final all = testCaseGroup([
 		_push,
-		_pop
+		_pop,
+		_emptyError
 	]);
 }
