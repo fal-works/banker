@@ -1,7 +1,5 @@
 package banker.container.internal;
 
-import banker.vector.WritableVector;
-
 #if !banker_generic_disable
 @:generic
 #end
