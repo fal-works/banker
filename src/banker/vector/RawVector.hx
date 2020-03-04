@@ -22,12 +22,6 @@ typedef RawVectorData<T> = haxe.ds.Vector<T>;
 #end
 abstract RawVector<T>(RawVectorData<T>) {
 	/**
-		Casts `data` from `VectorData<T>` to `RawVector<T>`.
-	**/
-	public static inline function fromData<T>(data: RawVectorData<T>): RawVector<T>
-		return cast data;
-
-	/**
 		@return Shallow copy of `array` as `RawVector<T>`.
 	**/
 	public static inline function fromArrayCopy<T>(array: Array<T>): RawVector<T> {
@@ -44,6 +38,9 @@ abstract RawVector<T>(RawVectorData<T>) {
 		return fromData(RawVectorData.fromArrayCopy(array));
 		#end
 	}
+
+	static inline function fromData<T>(data: RawVectorData<T>): RawVector<T>
+		return cast data;
 
 	var data(get, never): RawVectorData<T>;
 
