@@ -25,7 +25,7 @@ class ArrayStackTest {
 	static final _pop = testCase(pop, Ok);
 
 	static function emptyError() {
-		describe("This raises an exception.");
+		describe("This raises an exception if assertion is enabled.");
 		final stack = new ArrayStack<String>(5);
 		stack.push("AAA");
 		stack.pop();

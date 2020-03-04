@@ -2,7 +2,7 @@ package banker.container.buffer.ring;
 
 class QueueExtension {
 	/**
-		Adds `value` as the back/last/newest element of `this`. Raises exception if `this` is full.
+		Adds `value` as the back/last/newest element of `this`.
 		Duplicates are allowed.
 	**/
 	public static inline function enqueue<T>(_this: RingBuffer<T>, value: T): Void {
@@ -24,7 +24,7 @@ class QueueExtension {
 	}
 
 	/**
-	 * Removes the front/top/oldest element from `this`. Raises exception if `this` is empty.
+	 * Removes the front/top/oldest element from `this`.
 	 * @return Removed element.
 	 */
 	public static inline function dequeue<T>(_this: RingBuffer<T>): T {

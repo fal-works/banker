@@ -2,7 +2,7 @@ package banker.container.buffer.ring;
 
 class DequeExtension {
 	/**
-		Adds `value` as the back/last/newest element of `this`. Raises exception if `this` is full.
+		Adds `value` as the back/last/newest element of `this`.
 		Duplicates are allowed.
 		Same as `Queue.enqueue()`.
 	**/
@@ -10,7 +10,7 @@ class DequeExtension {
 		QueueExtension.enqueue(_this, value);
 
 	/**
-		Removes the front/top/oldest element from `this`. Raises exception if `this` is empty.
+		Removes the front/top/oldest element from `this`.
 		Same as `Queue.dequeue()`.
 		@return Removed element.
 	**/
@@ -18,7 +18,7 @@ class DequeExtension {
 		return QueueExtension.dequeue(_this);
 
 	/**
-		Adds `value` as the front/top element of `this`. Raises exception if `this` is full.
+		Adds `value` as the front/top element of `this`.
 		Duplicates are allowed.
 	**/
 	public static inline function pushFront<T>(_this: RingBuffer<T>, value: T): Void {
@@ -40,7 +40,7 @@ class DequeExtension {
 	}
 
 	/**
-		Removes the back/last element from `this`. Raises exception if `this` is empty.
+		Removes the back/last element from `this`.
 		@return Removed element.
 	**/
 	public static inline function popBack<T>(_this: RingBuffer<T>): T {
