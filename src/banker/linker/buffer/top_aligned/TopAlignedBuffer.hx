@@ -117,4 +117,32 @@ class TopAlignedBuffer<K, V> extends Tagged {
 		updateWatermark(getUsageRatio()); // Currently does not work
 		#end
 	}
+
+	/**
+		Internal method for removing entry at `index` from `this`.
+
+		Removes the key-value pair at `index` by overwriting it with that at the last index
+		(thus the order is not preserved).
+		O(1) complexity.
+
+		`keyVector`, `valueVector` and `currentSize` are likely already obtained from `this`
+		before calling `removeAt()`, therefore this method requires them to be passed as arguments
+		rather than obtaining them again in this method.
+
+		@param keyVector `this.keyVector`
+		@param valueVector `this.valueVector`
+		@param currentSize Current size of `this`, used for determining the last index.
+		@param index Index of the entry to be removed.
+	**/
+	function removeAt(
+		keyVector: WritableVector<K>,
+		valueVector: WritableVector<V>,
+		currentSize: Int,
+		index: Int
+	): Void {
+		final lastIndex = currentSize - 1;
+		keyVector[index] = keyVector[lastIndex];
+		valueVector[index] = valueVector[lastIndex];
+		this.nextFreeSlotIndex = lastIndex;
+	}
 }

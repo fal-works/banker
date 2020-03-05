@@ -2,18 +2,6 @@ package banker.linker.buffer.top_aligned;
 
 class RemoveExtension {
 	/**
-		Removes the key-value pair at `index` by swapping elements with that at the last index
-		(hence the order is not preserved).
-		O(1) complexity.
-	**/
-	public static inline function removeSwapAt<K, V>(_this: TopAlignedBuffer<K, V>, index: Int): Void {
-		final lastIndex = _this.nextFreeSlotIndex - 1;
-		_this.keyVector[index] = _this.keyVector[lastIndex];
-		_this.valueVector[index] = _this.valueVector[lastIndex];
-		_this.nextFreeSlotIndex = lastIndex;
-	}
-
-	/**
 		Removes the first key-value pair that matches `key`.
 		O(n) complexity.
 		@return True if found and removed.
@@ -22,7 +10,7 @@ class RemoveExtension {
 		var found = false;
 		final keys = _this.keyVector;
 		final values = _this.valueVector;
-		var len = _this.size;
+		final len = _this.size;
 		var i = 0;
 		while (i < len) {
 			if (keys[i] != key) {
@@ -30,10 +18,7 @@ class RemoveExtension {
 				continue;
 			}
 
-			--len;
-			keys[i] = keys[len];
-			values[i] = values[len];
-			_this.nextFreeSlotIndex = len;
+			_this.removeAt(keys, values, len, i);
 			found = true;
 			break;
 		}
@@ -75,11 +60,14 @@ class RemoveExtension {
 		@return The mapped value.
 	**/
 	public static function removeGet<K, V>(_this: TopAlignedBuffer<K, V>, key: K): V {
-		final index = _this.keyVector.ref.findIndexIn(key, 0, _this.size);
+		final size = _this.size;
+		final keys = _this.keyVector;
+		final index = keys.ref.findIndexIn(key, 0, size);
 		assert(index >= 0, _this.tag, "Not found.");
 
-		final value = _this.valueVector[index];
-		removeSwapAt(_this, index);
+		final values = _this.valueVector;
+		final value = values[index];
+		_this.removeAt(keys, values, size, index);
 		return value;
 	}
 
@@ -89,11 +77,14 @@ class RemoveExtension {
 		@return The mapped value. Null if not found.
 	**/
 	public static function tryRemoveGet<K, V>(_this: TopAlignedBuffer<K, V>, key: K): Null<V> {
-		final index = _this.keyVector.ref.findIndexIn(key, 0, _this.size);
+		final size = _this.size;
+		final keys = _this.keyVector;
+		final index = keys.ref.findIndexIn(key, 0, size);
 
 		return if (index >= 0) {
-			final value = _this.valueVector[index];
-			removeSwapAt(_this, index);
+			final values = _this.valueVector;
+			final value = values[index];
+			_this.removeAt(keys, values, size, index);
 			value;
 		} else null;
 	}
@@ -114,10 +105,7 @@ class RemoveExtension {
 			}
 
 			callback(keys[i], values[i]);
-			final lastIndex = _this.nextFreeSlotIndex - 1;
-			keys[i] = keys[lastIndex];
-			values[i] = values[lastIndex];
-			_this.nextFreeSlotIndex = lastIndex;
+			_this.removeAt(keys, values, len, i);
 			break;
 		}
 	}

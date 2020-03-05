@@ -122,15 +122,6 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 	}
 
 	/**
-		Removes the key-value pair at `index` by swapping elements with that at the last index
-		(hence the order is not preserved).
-		O(1) complexity.
-	**/
-	public inline function removeSwapAt(index: Int): Void {
-		RemoveExtension.removeSwapAt(this, index);
-	}
-
-	/**
 		Removes the first key-value pair that matches `key`.
 		O(n) complexity.
 		@return True if found and removed.
