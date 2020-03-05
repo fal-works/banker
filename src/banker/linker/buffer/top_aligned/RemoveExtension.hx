@@ -81,7 +81,7 @@ class RemoveExtension {
 	}
 
 	/**
-		Removes all key-value pairs that match `key`.
+		Removes all key-value pairs that match `predicate`.
 		The order is not preserved.
 
 		Used for implementing `banker.linker.interfaces.Remove.removeAll()`.
@@ -89,15 +89,15 @@ class RemoveExtension {
 	**/
 	public static inline function removeSwapAll<K, V>(
 		_this: TopAlignedBuffer<K, V>,
-		key: K
+		predicate: (key: K, value: V) -> Bool
 	): Bool {
 		var found = false;
 		final keys = _this.keyVector;
-		final values = _this.keyVector;
+		final values = _this.valueVector;
 		var len = _this.size;
 		var i = 0;
 		while (i < len) {
-			if (keys[i] != key) {
+			if (!predicate(keys[i], values[i])) {
 				++i;
 				continue;
 			}
@@ -114,7 +114,7 @@ class RemoveExtension {
 	}
 
 	/**
-		Removes all key-value pairs that match `key`.
+		Removes all key-value pairs that match `predicate`.
 		The order is preserved.
 
 		Used for implementing `banker.linker.interfaces.Remove.removeAll()`.
@@ -122,11 +122,11 @@ class RemoveExtension {
 	**/
 	public static inline function removeShiftAll<K, V>(
 		_this: TopAlignedBuffer<K, V>,
-		key: K
+		predicate: (key: K, value: V) -> Bool
 	): Bool {
 		final size = _this.size;
 		final keys = _this.keyVector;
-		final values = _this.keyVector;
+		final values = _this.valueVector;
 
 		var found = false;
 		var readIndex = 0;
@@ -134,11 +134,12 @@ class RemoveExtension {
 
 		while (readIndex < size) {
 			final readingKey = keys[readIndex];
+			final readingValue = values[readIndex];
 			++readIndex;
 
-			if (readingKey != key) {
+			if (!predicate(readingKey, readingValue)) {
 				keys[writeIndex] = readingKey;
-				values[writeIndex] = values[readIndex];
+				values[writeIndex] = readingValue;
 				++writeIndex;
 				continue;
 			}

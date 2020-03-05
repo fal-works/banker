@@ -24,8 +24,8 @@ class ArrayMap<K, V> extends TopAlignedMapBuffer<K, V> implements Map<K, V> {
 		@see `banker.linker.interfaces.Remove`
 		@see `banker.linker.buffer.top_aligned.RemoveExtension`
 	**/
-	public function removeAll(key: K): Bool {
-		return RemoveExtension.removeSwapAll(this, key);
+	public function removeAll(predicate: (key: K, value: V) -> Bool): Bool {
+		return RemoveExtension.removeSwapAll(this, predicate);
 	}
 
 	/** @see `banker.linker.interfaces.Convert` **/

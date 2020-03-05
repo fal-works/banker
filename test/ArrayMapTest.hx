@@ -1,6 +1,7 @@
 package;
 
 import banker.linker.ArrayMap;
+import banker.linker.OrderedArrayMap;
 
 class ArrayMapTest {
 	static function getSet() {
@@ -35,15 +36,34 @@ class ArrayMapTest {
 		map.set("keyA", "valueA");
 		map.set("keyB", "valueB");
 		map.set("keyC", "valueC");
+		map.set("keyD", "valueD");
 		map.remove("keyA");
 		final valueC = map.removeGet("keyC");
 
 		assert(valueC == "valueC");
-		assert(map.toString() == "{ keyB => valueB }");
+		assert(map.toString() == "{ keyD => valueD, keyB => valueB }");
 		println("result: " + map.toString());
 	}
 
 	static final _remove = testCase(remove, Ok);
+
+
+	static function removeOrdered() {
+		describe();
+		final map = new OrderedArrayMap<String, String>(5);
+		map.set("keyA", "valueA");
+		map.set("keyB", "valueB");
+		map.set("keyC", "valueC");
+		map.set("keyD", "valueD");
+		map.remove("keyA");
+		final valueC = map.removeGet("keyC");
+
+		assert(valueC == "valueC");
+		assert(map.toString() == "{ keyB => valueB, keyD => valueD }");
+		println("result: " + map.toString());
+	}
+
+	static final _removeOrdered = testCase(removeOrdered, Ok);
 
 	static function getOrAdd() {
 		describe();
@@ -84,8 +104,8 @@ class ArrayMapTest {
 		assert(map.get(0) == 10);
 		println("result: " + map.toString());
 	}
-	static final _getSetInt = testCase(getSetInt, Ok);
 
+	static final _getSetInt = testCase(getSetInt, Ok);
 
 	static function forEach() {
 		describe();
@@ -106,15 +126,53 @@ class ArrayMapTest {
 		assert(valueSum == 42);
 		println("result: " + map.toString());
 	}
+
 	static final _forEach = testCase(forEach, Ok);
+
+	static function removeAll() {
+		describe();
+		final map = new ArrayMap<Int, Int>(5);
+		map.set(1, 10);
+		map.set(2, 20);
+		map.set(3, 30);
+		map.set(4, 40);
+		map.set(5, 50);
+
+		map.removeAll((key, value) -> key == 4 || value < 15 || key == 3);
+		assert(map.toString() == "{ 5 => 50, 2 => 20 }");
+
+		println("result: " + map.toString());
+	}
+
+	static final _removeAll = testCase(removeAll, Ok);
+
+	static function removeAllOrdered() {
+		describe();
+		final map = new OrderedArrayMap<Int, Int>(5);
+		map.set(1, 10);
+		map.set(2, 20);
+		map.set(3, 30);
+		map.set(4, 40);
+		map.set(5, 50);
+
+		map.removeAll((key, value) -> key == 4 || value < 15 || key == 3);
+		assert(map.toString() == "{ 2 => 20, 5 => 50 }");
+
+		println("result: " + map.toString());
+	}
+
+	static final _removeAllOrdered = testCase(removeAllOrdered, Ok);
 
 	public static final all = testCaseGroup([
 		_getSet,
 		_setOverwrite,
 		_remove,
+		_removeOrdered,
 		_getOrAdd,
 		_setIfAbsent,
 		_getSetInt,
-		_forEach
+		_forEach,
+		_removeAll,
+		_removeAllOrdered
 	]);
 }

@@ -29,8 +29,8 @@ interface Remove<K, V> {
 	function removeApply(key: K, callback: (key: K, value: V) -> Void): Void;
 
 	/**
-		Removes all key-value pairs that match `key`.
+		Removes all key-value pairs that match `predicate`.
 		@return `true` if any found and removed.
 	**/
-	function removeAll(key: K): Bool;
+	function removeAll(predicate: (key: K, value: V) -> Bool): Bool;
 }
