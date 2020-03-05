@@ -1,10 +1,12 @@
 package banker.container.buffer.top_aligned;
 
+import banker.common.internal.LimitedCapacityBuffer;
+
 #if !banker_generic_disable
 @:generic
 #end
 @:allow(banker.container)
-class TopAlignedBuffer<T> extends Tagged implements Buffer {
+class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	/** Max number of elements `this` can contain. **/
 	public var capacity(get, never): Int;
 

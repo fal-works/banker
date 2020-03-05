@@ -1,6 +1,6 @@
-package banker.container.buffer;
+package banker.common.internal;
 
-interface Buffer {
+interface LimitedCapacityBuffer {
 	/** Max number of elements `this` can contain. **/
 	var capacity(get, never): Int;
 

@@ -1,12 +1,13 @@
 package banker.linker.buffer.top_aligned;
 
 import sneaker.common.UnsupportedOperationException;
+import banker.common.internal.LimitedCapacityBuffer;
 
 #if !banker_generic_disable
 @:generic
 #end
 @:allow(banker.linker)
-class TopAlignedBuffer<K, V> extends Tagged {
+class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	/** The number of element pairs that can be put to the collection. **/
 	public var capacity(get, never): Int;
 

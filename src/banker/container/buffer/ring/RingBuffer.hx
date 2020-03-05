@@ -1,10 +1,12 @@
 package banker.container.buffer.ring;
 
+import banker.common.internal.LimitedCapacityBuffer;
+
 #if !banker_generic_disable
 @:generic
 #end
 @:allow(banker.container)
-class RingBuffer<T> extends Tagged implements Buffer {
+class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	/** Max number of elements `this` can contain. **/
 	public var capacity(get, never): Int;
 
