@@ -100,4 +100,13 @@ class MapExtension {
 			newValue;
 		}
 	}
+
+	/**
+		Checks if `this` has `key`.
+		O(n) complexity.
+		@return `true` if found.
+	**/
+	public static inline function hasKey<K, V>(_this: TopAlignedBuffer<K, V>, key: K): Bool {
+		return _this.keyVector.ref.hasIn(key, 0, _this.size);
+	}
 }

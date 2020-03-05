@@ -80,6 +80,15 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 	}
 
 	/**
+		Checks if `this` has `key`.
+		O(n) complexity.
+		@return `true` if found.
+	**/
+	public inline function hasKey(key: K): Bool {
+		return MapExtension.hasKey(this, key);
+	}
+
+	/**
 		Runs `callback` for each key.
 	**/
 	public inline function forEachKey(callback: K->Void): Void {
@@ -164,5 +173,25 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 	**/
 	public function removeApply(key: K, callback: K->V->Void): Void {
 		RemoveExtension.removeApply(this, key, callback);
+	}
+
+	public inline function keys(): Vector<K>
+		return this.keyVector.ref.slice(0, this.size);
+
+	public inline function values(): Vector<V>
+		return this.valueVector.ref.slice(0, this.size);
+
+	public inline function mapValues<W>(convertValue: V->W) {
+		final newMap = new ArrayMap<K, W>(this.capacity);
+		final keys = this.keyVector;
+		final values = this.valueVector;
+		final len = this.size;
+		var i = 0;
+		while (i < len) {
+			newMap.add(keys[i], convertValue(values[i]));
+			++i;
+		}
+
+		return newMap;
 	}
 }
