@@ -18,27 +18,26 @@ class ArrayMultiSet<T> extends TopAlignedSetBuffer<T> {
 		super(capacity);
 
 	/**
-		Adds `element` to `this`. Duplicates are allowed.
-
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushInternal()`
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
+		@see `banker.container.buffer.top_aligned.InternalExtension`
 	**/
-	override inline function pushInternal(index: Int, element: T): Void {
-		vector[index] = element;
-		nextFreeSlotIndex = index + 1;
-	}
+	override inline function pushInternal(index: Int, element: T): Void
+		InternalExtension.pushDuplicatesAllowed(this, index, element);
 
 	/**
-		Adds all elements in `vector` to `this`.
-		Duplicates are allowed.
-
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushFromVectorInternal()`
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
+		@see `banker.container.buffer.top_aligned.InternalExtension`
 	**/
 	override inline function pushFromVectorInternal(
 		index: Int,
 		otherVector: VectorReference<T>,
 		otherVectorLength: Int
 	): Void {
-		VectorTools.blit(otherVector, 0, this.vector, index, otherVectorLength);
-		this.nextFreeSlotIndex = index + otherVectorLength;
+		InternalExtension.pushFromVectorDuplicatesAllowed(
+			this,
+			index,
+			otherVector,
+			otherVectorLength
+		);
 	}
 }

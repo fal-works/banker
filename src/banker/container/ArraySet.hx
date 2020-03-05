@@ -18,18 +18,11 @@ class ArraySet<T> extends TopAlignedSetBuffer<T> {
 		super(capacity);
 
 	/**
-		Adds `element` to `this`.
-		Duplicates are not allowed; It has no effect if `element` already exists in `this`.
-
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushInternal()`
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
+		@see `banker.container.buffer.top_aligned.InternalExtension`
 	**/
-	override inline function pushInternal(index: Int, element: T): Void {
-		final vector = this.vector;
-		if (!vector.ref.hasIn(element, 0, index)) {
-			vector[index] = element;
-			nextFreeSlotIndex = index + 1;
-		}
-	}
+	override inline function pushInternal(index: Int, element: T): Void
+		InternalExtension.pushDuplicatesPrevented(this, index, element);
 
 	/**
 		Adds all elements in `vector` to `this`.
@@ -43,17 +36,6 @@ class ArraySet<T> extends TopAlignedSetBuffer<T> {
 		otherVector: VectorReference<T>,
 		otherVectorLength: Int
 	): Void {
-		final thisVector = this.vector;
-		var readIndex = 0;
-		var writeIndex = index;
-		while (readIndex < otherVectorLength) {
-			final element = otherVector[readIndex];
-			if (!vector.ref.hasIn(element, 0, writeIndex)) {
-				thisVector[writeIndex] = element;
-				++writeIndex;
-			}
-			++readIndex;
-		}
-		this.nextFreeSlotIndex = writeIndex;
+		InternalExtension.pushFromVectorDuplicatesPrevented(this, index, otherVector, otherVectorLength);
 	}
 }
