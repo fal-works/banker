@@ -4,7 +4,7 @@ interface Convert<K, V> {
 	/**
 		@return New vector containing all keys of `this`.
 	**/
-	function exportKeys<K, V>(): Vector<K>;
+	function exportKeys(): Vector<K>;
 
 	/**
 		@return New vector containing all values of `this`.
