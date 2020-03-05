@@ -28,6 +28,17 @@ class OrderedArrayMap<K, V> extends TopAlignedMapBuffer<K, V> implements Map<K, 
 		return RemoveExtension.removeShiftAll(this, predicate);
 	}
 
+	/**
+		@see `banker.linker.interfaces.Remove`
+		@see `banker.linker.buffer.top_aligned.RemoveExtension`
+	**/
+	public inline function removeApplyAll(
+		predicate: (key: K, value: V) -> Bool,
+		callback: (key: K, value: V) -> Void
+	): Bool {
+		return RemoveExtension.removeShiftApplyAll(this, predicate, callback);
+	}
+
 	/** @see `banker.linker.interfaces.Convert` **/
 	public inline function mapValues<W>(convertValue: V->W): OrderedArrayMap<K, W> {
 		final newMap = new OrderedArrayMap<K, W>(this.capacity);
