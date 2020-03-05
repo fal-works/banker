@@ -46,4 +46,16 @@ interface GetSet<K, V> {
 		@return `true` if found.
 	**/
 	function hasKey(key: K): Bool;
+
+	/**
+		Checks if `this` has `value`.
+		@return `true` if found.
+	**/
+	function hasValue(value: V): Bool;
+
+	/**
+		Checks if `this` has any entry that matches `predicate`.
+		@return `true` if found.
+	**/
+	function hasAny(predicate: (key: K, value: V) -> Bool): Bool;
 }

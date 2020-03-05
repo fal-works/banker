@@ -49,6 +49,14 @@ class TopAlignedMapBuffer<K, V> extends TopAlignedBuffer<K, V> implements Sequen
 	public inline function hasKey(key: K): Bool
 		return GetSetExtension.hasKey(this, key);
 
+	/** @see `banker.linker.interfaces.GetSet` **/
+	public inline function hasValue(value: V): Bool
+		return GetSetExtension.hasValue(this, value);
+
+	/** @see `banker.linker.interfaces.GetSet` **/
+	public inline function hasAny(predicate: (key: K, value: V) -> Bool): Bool
+		return GetSetExtension.hasAny(this, predicate);
+
 	/** @see `banker.linker.interfaces.Sequence` **/
 	public inline function forEachKey(callback: (key: K) -> Void): Void
 		SequenceExtension.forEachKey(this, callback);
