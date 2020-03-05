@@ -5,4 +5,5 @@ interface Set<T> extends Sequence<T> {
 	function remove(value: T): Bool;
 	function removeAll(predicate: (element: T) -> Bool): Bool;
 	function has(value: T): Bool;
+	function hasAny(predicate: (element: T) -> Bool): Bool;
 }

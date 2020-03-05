@@ -35,6 +35,10 @@ class ArraySet<T> extends TopAlignedUnorderedBuffer<T> implements Set<T> {
 	public inline function has(element: T): Bool
 		return SetExtension.has(this, element);
 
+	/** @see `banker.container.interfaces.Set` **/
+	public function hasAny(predicate: (element: T) -> Bool): Bool
+		return SetExtension.hasAny(this, predicate);
+
 	/** @see `banker.container.interfaces.Sequence` **/
 	public inline function forEach(callback: T->Void): Void
 		SequenceExtension.forEach(this, callback);

@@ -29,7 +29,10 @@ class SetExtension {
 		Used for implementing `banker.container.interfaces.Set.removeAll()`.
 		@return `true` if any found and removed.
 	**/
-	public static inline function removeSwapAll<T>(_this: TopAlignedBuffer<T>, predicate: (element: T) -> Bool): Bool {
+	public static inline function removeSwapAll<T>(
+		_this: TopAlignedBuffer<T>,
+		predicate: (element: T) -> Bool
+	): Bool {
 		final vector = _this.vector;
 
 		var found = false;
@@ -96,6 +99,29 @@ class SetExtension {
 		var i = 0;
 		while (i < size) {
 			if (vector[i] != element) {
+				++i;
+				continue;
+			}
+
+			found = true;
+			break;
+		}
+
+		return found;
+	}
+
+	/** @see `banker.container.interfaces.Set` **/
+	public static inline function hasAny<T>(
+		_this: TopAlignedBuffer<T>,
+		predicate: (element: T) -> Bool
+	): Bool {
+		final size = _this.nextFreeSlotIndex;
+		final vector = _this.vector;
+
+		var found = false;
+		var i = 0;
+		while (i < size) {
+			if (!predicate(vector[i])) {
 				++i;
 				continue;
 			}
