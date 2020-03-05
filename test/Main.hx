@@ -14,7 +14,8 @@ class Main {
 			// TopAlignedBufferTest.all,
 			// ArrayStackTest.all,
 			// ArrayQueueTest.all,
-			ArrayMapTest.all
+			// ArrayMapTest.all,
+			ArraySetTest.all
 		]));
 	}
 }
