@@ -1,33 +1,25 @@
 package banker.linker.buffer.top_aligned;
 
+import sneaker.common.UnsupportedOperationException;
+
 #if !banker_generic_disable
 @:generic
 #end
 @:allow(banker.linker)
 class TopAlignedBuffer<K, V> extends Tagged {
-	/**
-		The number of element pairs that can be put to the collection.
-	**/
+	/** The number of element pairs that can be put to the collection. **/
 	public var capacity(get, never): Int;
 
-	/**
-		Current number of element pairs.
-	**/
+	/** Current number of element pairs. **/
 	public var size(get, never): Int;
 
-	/**
-		The internal vector for keys.
-	**/
+	/** The internal vector for keys. **/
 	var keyVector: WritableVector<K>;
 
-	/**
-		The internal vector for values.
-	**/
+	/** The internal vector for values. **/
 	var valueVector: WritableVector<V>;
 
-	/**
-		The index indicating the free slot for putting next element.
-	**/
+	/** The index indicating the free slot for putting next element. **/
 	var nextFreeSlotIndex: Int = 0;
 
 	/**
@@ -129,13 +121,11 @@ class TopAlignedBuffer<K, V> extends Tagged {
 	/**
 		Internal method for removing entry at `index` from `this`.
 
-		Removes the key-value pair at `index` by overwriting it with that at the last index
-		(thus the order is not preserved).
-		O(1) complexity.
-
 		`keyVector`, `valueVector` and `currentSize` are likely already obtained from `this`
 		before calling `removeAt()`, therefore this method requires them to be passed as arguments
 		rather than obtaining them again in this method.
+
+		This method must be overridden by the concrete subclass.
 
 		@param keyVector `this.keyVector`
 		@param valueVector `this.valueVector`
@@ -148,9 +138,6 @@ class TopAlignedBuffer<K, V> extends Tagged {
 		currentSize: Int,
 		index: Int
 	): Void {
-		final lastIndex = currentSize - 1;
-		keyVector[index] = keyVector[lastIndex];
-		valueVector[index] = valueVector[lastIndex];
-		this.nextFreeSlotIndex = lastIndex;
+		throw new UnsupportedOperationException("This method must be overridden by the subclass.");
 	}
 }

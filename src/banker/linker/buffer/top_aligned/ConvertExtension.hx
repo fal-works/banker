@@ -1,18 +1,14 @@
 package banker.linker.buffer.top_aligned;
 
 class ConvertExtension {
-	/**
-		@return New vector containing all keys of `this`.
-	**/
+	/** @see `banker.linker.interfaces.Convert` **/
 	public static inline function exportKeys<K, V>(
 		_this: TopAlignedBuffer<K, V>
 	): Vector<K> {
 		return _this.keyVector.ref.slice(0, _this.size);
 	}
 
-	/**
-		@return New vector containing all values of `this`.
-	**/
+	/** @see `banker.linker.interfaces.Convert` **/
 	public static inline function exportValues<K, V>(
 		_this: TopAlignedBuffer<K, V>
 	): Vector<V> {
@@ -23,8 +19,10 @@ class ConvertExtension {
 		Overwrites `destination` with:
 		- Same keys as `this`
 		- Converted values from `this`
+
+		Used for implementing `banker.linker.interfaces.Convert.mapValues()`.
 	**/
-	public static inline function mapValues<K, V, W>(
+	public static inline function copyWithMappedValues<K, V, W>(
 		_this: TopAlignedBuffer<K, V>,
 		destination: TopAlignedBuffer<K, W>,
 		convertValue: V->W
