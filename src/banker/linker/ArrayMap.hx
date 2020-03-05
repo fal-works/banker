@@ -41,9 +41,9 @@ class ArrayMap<K, V> extends TopAlignedMapBuffer<K, V> implements Map<K, V> {
 		(thus the order is not preserved).
 		O(1) complexity.
 
-		@see `banker.linker.buffer.top_aligned.TopAlignedBuffer.removeAt()`
+		@see `banker.linker.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
 	**/
-	override function removeAt(
+	override function removeAtInternal(
 		keyVector: WritableVector<K>,
 		valueVector: WritableVector<V>,
 		currentSize: Int,

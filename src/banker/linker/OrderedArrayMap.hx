@@ -41,9 +41,9 @@ class OrderedArrayMap<K, V> extends TopAlignedMapBuffer<K, V> implements Map<K, 
 		indices towards index zero (thus the order is preserved).
 		O(n) complexity.
 
-		@see `banker.linker.buffer.top_aligned.TopAlignedBuffer.removeAt()`
+		@see `banker.linker.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
 	**/
-	override function removeAt(
+	override function removeAtInternal(
 		keyVector: WritableVector<K>,
 		valueVector: WritableVector<V>,
 		currentSize: Int,

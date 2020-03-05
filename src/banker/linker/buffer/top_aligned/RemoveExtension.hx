@@ -17,7 +17,7 @@ class RemoveExtension {
 				continue;
 			}
 
-			_this.removeAt(keys, values, len, i);
+			_this.removeAtInternal(keys, values, len, i);
 			found = true;
 			break;
 		}
@@ -37,7 +37,7 @@ class RemoveExtension {
 
 		final values = _this.valueVector;
 		final value = values[index];
-		_this.removeAt(keys, values, size, index);
+		_this.removeAtInternal(keys, values, size, index);
 		return value;
 	}
 
@@ -53,7 +53,7 @@ class RemoveExtension {
 		return if (index >= 0) {
 			final values = _this.valueVector;
 			final value = values[index];
-			_this.removeAt(keys, values, size, index);
+			_this.removeAtInternal(keys, values, size, index);
 			value;
 		} else null;
 	}
@@ -75,7 +75,7 @@ class RemoveExtension {
 			}
 
 			callback(keys[i], values[i]);
-			_this.removeAt(keys, values, len, i);
+			_this.removeAtInternal(keys, values, len, i);
 			break;
 		}
 	}

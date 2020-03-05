@@ -118,9 +118,10 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	/**
 		Internal method for removing entry at `index` from `this`.
 
-		`keyVector`, `valueVector` and `currentSize` are likely already obtained from `this`
-		before calling `removeAt()`, therefore this method requires them to be passed as arguments
-		rather than obtaining them again in this method.
+		`keyVector`, `valueVector` and `currentSize` are likely already obtained
+		from `this` before calling `removeAtInternal()`, therefore this method
+		requires them to be passed as arguments rather than obtaining them again
+		in this method.
 
 		This method must be overridden by the concrete subclass.
 
@@ -129,7 +130,7 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		@param currentSize Current size of `this`, used for determining the last index.
 		@param index Index of the entry to be removed.
 	**/
-	function removeAt(
+	function removeAtInternal(
 		keyVector: WritableVector<K>,
 		valueVector: WritableVector<V>,
 		currentSize: Int,
