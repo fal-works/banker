@@ -1,8 +1,7 @@
 package;
 
-import haxe.ds.Vector;
-import banker.vector.VectorTools;
 import banker.container.ArraySet;
+import banker.container.ArrayMultiSet;
 
 class ArraySetTest {
 	static function remove() {
@@ -79,7 +78,6 @@ class ArraySetTest {
 
 	static final _duplicate = testCase(duplicate, Ok);
 
-
 	static function duplicateVector() {
 		describe();
 		final set = new ArraySet<Int>(8);
@@ -92,12 +90,26 @@ class ArraySetTest {
 
 	static final _duplicateVector = testCase(duplicateVector, Ok);
 
+	static function multiSet() {
+		describe();
+		final set = new ArrayMultiSet<Int>(8);
+		set.add(2);
+		set.add(2);
+		set.add(4);
+		set.addFromVector(banker.vector.Vector.fromArrayCopy([1, 2, 4, 6]));
+		assert(set.toString() == "2, 2, 4, 1, 2, 4, 6");
+		println('data: ${set.toString()}');
+	}
+
+	static final _multiSet = testCase(multiSet, Ok);
+
 	public static final all = testCaseGroup([
 		_remove,
 		_removeAll,
 		_forEach,
 		_findFirst,
 		_duplicate,
-		_duplicateVector
+		_duplicateVector,
+		_multiSet
 	]);
 }
