@@ -18,6 +18,10 @@ class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
 	public inline function add(value: T): Void
 		StackExtension.push(this, value);
 
+	/** @see `banker.container.interfaces.List` **/
+	public inline function addFromVector(vector: VectorReference<T>): Void
+		StackExtension.pushFromVector(this, vector);
+
 	/** @see `banker.container.interfaces.Indexed` **/
 	public inline function get(index: Int): T
 		return IndexedExtension.get(this, index);
@@ -68,4 +72,25 @@ class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
 	/** @see `banker.container.interfaces.Set` **/
 	public inline function hasAny(predicate: (element: T) -> Bool): Bool
 		return SetExtension.hasAny(this, predicate);
+
+	/**
+		Adds `element` to `this`. Duplicates are allowed.
+
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushInternal()`
+	**/
+	override inline function pushInternal(index: Int, element: T): Void {
+		vector[index] = element;
+		nextFreeSlotIndex = index + 1;
+	}
+
+	/**
+		Adds all elements in `vector` to `this`.
+		Duplicates are allowed.
+
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushFromVectorInternal()`
+	**/
+	override inline function pushFromVectorInternal(index: Int, otherVector: VectorReference<T>, otherVectorLength: Int): Void {
+		VectorTools.blit(vector, 0, this.vector, index, otherVectorLength);
+		this.nextFreeSlotIndex = index + otherVectorLength;
+	}
 }

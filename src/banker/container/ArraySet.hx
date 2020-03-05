@@ -11,51 +11,44 @@ import banker.container.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-class ArraySet<T> extends TopAlignedUnorderedBuffer<T> implements Set<T> {
+class ArraySet<T> extends TopAlignedSetBuffer<T> {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
 
-	/** @see `banker.container.interfaces.Set` **/
-	public inline function add(element: T): Void
-		StackExtension.push(this, element);
+	/**
+		Adds `element` to `this`.
+		Duplicates are not allowed; It has no effect if `element` already exists in `this`.
 
-	/** @see `banker.container.interfaces.Set` **/
-	public function findFirst(
-		predicate: (element: T) -> Bool,
-		defaultValue: T
-	): T {@:nullSafety(Off) // HACK: Don't know why but this seems to be necessary
-		return SetExtension.findFirst(this, predicate, defaultValue);
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushInternal()`
+	**/
+	override inline function pushInternal(index: Int, element: T): Void {
+		final vector = this.vector;
+		if (!vector.ref.hasIn(element, 0, index)) {
+			vector[index] = element;
+			nextFreeSlotIndex = index + 1;
+		}
 	}
 
-	/** @see `banker.container.interfaces.Set` **/
-	public inline function remove(element: T): Bool
-		return SetExtension.remove(this, element);
-
 	/**
-		@see `banker.container.interfaces.Set`
-		@see `banker.container.buffer.top_aligned.SetExtension`
+		Adds all elements in `vector` to `this`.
+		Duplicates are not allowed; Only the elements that do not exist in `this` are pushed.
+		O(n^2) complexity.
+
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushFromVectorInternal()`
 	**/
-	public inline function removeAll(predicate: (element: T) -> Bool): Bool
-		return SetExtension.removeSwapAll(this, predicate);
-
-	/** @see `banker.container.interfaces.Set` **/
-	public inline function has(element: T): Bool
-		return SetExtension.has(this, element);
-
-	/** @see `banker.container.interfaces.Set` **/
-	public inline function hasAny(predicate: (element: T) -> Bool): Bool
-		return SetExtension.hasAny(this, predicate);
-
-	/** @see `banker.container.interfaces.Sequence` **/
-	public inline function forEach(callback: T->Void): Void
-		SequenceExtension.forEach(this, callback);
-
-	/** @see `banker.container.interfaces.Sequence` **/
-	public inline function filter(predicate: T->Bool): Vector<T>
-		return SequenceExtension.filter(this, predicate);
-
-	/** @see `banker.container.interfaces.Sequence` **/
-	public inline function map<S>(callback: T->S): Vector<S>
-		return SequenceExtension.map(this, callback);
+	override inline function pushFromVectorInternal(index: Int, otherVector: VectorReference<T>, otherVectorLength: Int): Void {
+		final thisVector = this.vector;
+		var readIndex = 0;
+		var writeIndex = index;
+		while (readIndex < otherVectorLength) {
+			final element = otherVector[readIndex];
+			if (!vector.ref.hasIn(element, 0, writeIndex)) {
+				thisVector[writeIndex] = element;
+				++writeIndex;
+			}
+			++readIndex;
+		}
+		this.nextFreeSlotIndex = writeIndex;
+	}
 }

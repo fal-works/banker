@@ -1,5 +1,7 @@
 package;
 
+import haxe.ds.Vector;
+import banker.vector.VectorTools;
 import banker.container.ArraySet;
 
 class ArraySetTest {
@@ -64,10 +66,38 @@ class ArraySetTest {
 
 	static final _findFirst = testCase(findFirst, Ok);
 
+	static function duplicate() {
+		describe();
+		final set = new ArraySet<Int>(5);
+		set.add(1);
+		set.add(2);
+		set.add(1);
+		set.add(3);
+		assert(set.toString() == "1, 2, 3");
+		println('data: ${set.toString()}');
+	}
+
+	static final _duplicate = testCase(duplicate, Ok);
+
+
+	static function duplicateVector() {
+		describe();
+		final set = new ArraySet<Int>(8);
+		set.add(2);
+		set.add(4);
+		set.addFromVector(banker.vector.Vector.fromArrayCopy([1, 2, 3, 4, 5, 6]));
+		assert(set.toString() == "2, 4, 1, 3, 5, 6");
+		println('data: ${set.toString()}');
+	}
+
+	static final _duplicateVector = testCase(duplicateVector, Ok);
+
 	public static final all = testCaseGroup([
 		_remove,
 		_removeAll,
 		_forEach,
-		_findFirst
+		_findFirst,
+		_duplicate,
+		_duplicateVector
 	]);
 }

@@ -7,6 +7,11 @@ interface Set<T> extends Sequence<T> {
 	function add(value: T): Void;
 
 	/**
+		Adds all elements in `vector` to `this`.
+	**/
+	function addFromVector(vector: VectorReference<T>): Void;
+
+	/**
 		@return The first found element that matches `predicate`. If not found, `defaultValue`.
 	**/
 	function findFirst(predicate: (element: T) -> Bool, defaultValue: T): T;

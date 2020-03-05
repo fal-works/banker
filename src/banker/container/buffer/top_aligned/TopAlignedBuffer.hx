@@ -81,4 +81,32 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	): T {
 		throw new UnsupportedOperationException("This method must be overridden by the subclass.");
 	}
+
+	/**
+		Internal method for pushing `element` at `index`.
+
+		`index` is already determined before calling `pushInternal()`,
+		therefore this method requires it to be passed as argument rather than
+		determining again in this method.
+
+		This method must be overridden by the concrete subclass
+		according to the specification e.g. whether to allow duplicates.
+	**/
+	function pushInternal(index: Int, element: T): Void {
+		throw new UnsupportedOperationException("This method must be overridden by the subclass.");
+	}
+
+	/**
+		Internal method for pushing elements from `otherVector` at `index`.
+
+		`otherVectorLength` is already determined before calling `pushFromVectorInternal()`,
+		therefore this method requires it to be passed as argument rather than
+		determining again in this method.
+
+		This method must be overridden by the concrete subclass
+		according to the specification e.g. whether to allow duplicates.
+	**/
+	function pushFromVectorInternal(index: Int, otherVector: VectorReference<T>, otherVectorLength: Int): Void {
+		throw new UnsupportedOperationException("This method must be overridden by the subclass.");
+	}
 }

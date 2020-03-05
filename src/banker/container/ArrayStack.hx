@@ -29,4 +29,25 @@ class ArrayStack<T> extends TopAlignedOrderedBuffer<T> implements Stack<T> {
 	/** @see `banker.container.interfaces.Stack` **/
 	public inline function pushFromVector(vector: VectorReference<T>): Void
 		StackExtension.pushFromVector(this, vector);
+
+	/**
+		Adds `element` to `this`. Duplicates are allowed.
+
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushInternal()`
+	**/
+	override inline function pushInternal(index: Int, element: T): Void {
+		vector[index] = element;
+		nextFreeSlotIndex = index + 1;
+	}
+
+	/**
+		Adds all elements in `vector` to `this`.
+		Duplicates are allowed.
+
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushFromVectorInternal()`
+	**/
+	override inline function pushFromVectorInternal(index: Int, otherVector: VectorReference<T>, otherVectorLength: Int): Void {
+		VectorTools.blit(vector, 0, this.vector, index, otherVectorLength);
+		this.nextFreeSlotIndex = index + otherVectorLength;
+	}
 }

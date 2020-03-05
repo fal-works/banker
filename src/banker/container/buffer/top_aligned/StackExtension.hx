@@ -6,9 +6,7 @@ class StackExtension {
 		final index = _this.nextFreeSlotIndex;
 		assert(index < _this.capacity, _this.tag, "The list is full.");
 
-		_this.nextFreeSlotIndex = index + 1;
-
-		_this.vector[index] = element;
+		_this.pushInternal(index, element);
 
 		#if banker_watermark_enable
 		updateWatermark(getUsageRatio()); // Currently does not work
@@ -46,8 +44,7 @@ class StackExtension {
 			"Not enough space."
 		);
 
-		VectorTools.blit(vector, 0, _this.vector, index, increment);
-		_this.nextFreeSlotIndex = index + increment;
+		_this.pushFromVectorInternal(index, vector, increment);
 
 		#if banker_watermark_enable
 		updateWatermark(getUsageRatio()); // Currently does not work
