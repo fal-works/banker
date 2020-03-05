@@ -50,4 +50,32 @@ class SequenceExtension {
 			++i;
 		}
 	}
+
+	/** @see `buffer.linker.interfaces.Sequence` **/
+	public static inline function forFirst<K, V>(
+		_this: TopAlignedBuffer<K, V>,
+		predicate: (key: K, value: V) -> Bool,
+		callback: (key: K, value: V) -> Void
+	): Bool {
+		final keys = _this.keyVector;
+		final values = _this.valueVector;
+		final len = _this.size;
+
+		var found = false;
+		var i = 0;
+		while (i < len) {
+			final key = keys[i];
+			final value = values[i];
+			if (!predicate(key, value)) {
+				++i;
+				continue;
+			}
+
+			callback(keys[i], values[i]);
+			found = true;
+			break;
+		}
+
+		return found;
+	}
 }

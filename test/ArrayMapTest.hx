@@ -163,6 +163,22 @@ class ArrayMapTest {
 
 	static final _removeAllOrdered = testCase(removeAllOrdered, Ok);
 
+	static function forFirst() {
+		describe();
+		final map = new ArrayMap<Int, Int>(5);
+		map.set(0, 10);
+		map.set(1, 11);
+		map.set(2, 12);
+
+		var found = 0;
+		map.forFirst((key, value) -> key >= 1, (key, value) -> found = value);
+
+		assert(found == 11);
+		println("Data: " + map.toString());
+	}
+
+	static final _forFirst = testCase(forFirst, Ok);
+
 	public static final all = testCaseGroup([
 		_getSet,
 		_setOverwrite,
@@ -173,6 +189,7 @@ class ArrayMapTest {
 		_getSetInt,
 		_forEach,
 		_removeAll,
-		_removeAllOrdered
+		_removeAllOrdered,
+		_forFirst
 	]);
 }

@@ -72,6 +72,14 @@ class TopAlignedMapBuffer<K, V> extends TopAlignedBuffer<K, V> implements Sequen
 		SequenceExtension.forEachIndex(this, callback);
 	}
 
+	/** @see `banker.linker.interfaces.Sequence` **/
+	public inline function forFirst(
+		predicate: (key: K, value: V) -> Bool,
+		callback: (key: K, value: V) -> Void
+	): Bool {
+		return SequenceExtension.forFirst(this, predicate, callback);
+	}
+
 	/** @see `banker.linker.interfaces.Remove` **/
 	public inline function remove(key: K): Bool
 		return RemoveExtension.remove(this, key);

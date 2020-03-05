@@ -26,4 +26,15 @@ interface Sequence<K, V> {
 			values: WritableVector<V>
 		) -> Void
 	): Void;
+
+	/**
+		Runs `callback` for the first found key-value pair that match `predicate`.
+		@param predicate Function that returns `true` if the given entry meets condition.
+		@param callback Function to apply to the found entry.
+		@return `true` if found.
+	**/
+	function forFirst(
+		predicate: (key: K, value: V) -> Bool,
+		callback: (key: K, value: V) -> Void
+	): Bool;
 }
