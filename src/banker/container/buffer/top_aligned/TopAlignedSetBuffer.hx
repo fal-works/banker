@@ -11,7 +11,10 @@ import banker.linker.ArrayMap;
 #if !banker_generic_disable
 @:generic
 #end
-class TopAlignedSetBuffer<T> extends TopAlignedBuffer<T> implements Set<T> implements Sequence<T> {
+class TopAlignedSetBuffer<T>
+	extends TopAlignedBuffer<T>
+	implements Set<T>
+	implements Sequence<T> {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);

@@ -139,6 +139,31 @@
 				}
 			]
 		},
+		"implementsExtends": {
+			"defaultWrap": "noWrap",
+			"rules": [
+				{
+					"conditions": [
+						{
+							"cond": "lineLength >= n",
+							"value": 90
+						}
+					],
+					"type": "onePerLine",
+					"additionalIndent": 1
+				},
+				{
+					"conditions": [
+						{
+							"cond": "itemCount >= n",
+							"value": 4
+						}
+					],
+					"type": "onePerLine",
+					"additionalIndent": 1
+				}
+			]
+		},
 		"metadataCallParameter": {
 			"defaultWrap": "noWrap",
 			"rules": [
