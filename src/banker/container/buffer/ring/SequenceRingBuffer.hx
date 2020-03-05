@@ -4,7 +4,7 @@ package banker.container.buffer.ring;
 @:generic
 #end
 @:allow(banker.container)
-class SequenceRingBuffer<T> extends RingBuffer<T> {
+class SequenceRingBuffer<T> extends RingBuffer<T> implements Sequence<T> {
 	public inline function forEach(callback: T->Void): Void
 		SequenceExtension.forEach(this, callback);
 
