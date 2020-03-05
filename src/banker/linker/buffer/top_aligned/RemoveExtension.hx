@@ -26,7 +26,10 @@ class RemoveExtension {
 	}
 
 	/** @see `banker.linker.interfaces.Remove` **/
-	public static inline function removeGet<K, V>(_this: TopAlignedBuffer<K, V>, key: K): V {
+	public static inline function removeGet<K, V>(
+		_this: TopAlignedBuffer<K, V>,
+		key: K
+	): V {
 		final size = _this.size;
 		final keys = _this.keyVector;
 		final index = keys.ref.findIndexIn(key, 0, size);

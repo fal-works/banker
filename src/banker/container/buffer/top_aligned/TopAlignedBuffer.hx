@@ -55,9 +55,8 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	/**
 		@return A `String` representation of `this`.
 	**/
-	public inline function toString<T>(): String {
+	public inline function toString<T>(): String
 		return vector.ref.joinIn(0, size, ", ");
-	}
 
 	inline function get_capacity()
 		return vector.length;

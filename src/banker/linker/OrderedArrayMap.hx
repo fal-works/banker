@@ -23,7 +23,8 @@ class OrderedArrayMap<K, V> extends TopAlignedMapBuffer<K, V> implements Map<K, 
 	/**
 		@see `banker.linker.interfaces.Remove`
 		@see `banker.linker.buffer.top_aligned.RemoveExtension`
-	**/	public function removeAll(key: K): Bool {
+	**/
+	public function removeAll(key: K): Bool {
 		return RemoveExtension.removeShiftAll(this, key);
 	}
 
