@@ -1,6 +1,24 @@
 package banker.linker.interfaces;
 
-interface Remove<K, V> {
+interface Set<K, V> {
+	/**
+		Checks if `this` has `key`.
+		@return `true` if found.
+	**/
+	function hasKey(key: K): Bool;
+
+	/**
+		Checks if `this` has `value`.
+		@return `true` if found.
+	**/
+	function hasValue(value: V): Bool;
+
+	/**
+		Checks if `this` has any entry that matches `predicate`.
+		@return `true` if found.
+	**/
+	function hasAny(predicate: (key: K, value: V) -> Bool): Bool;
+
 	/**
 		Finds the first key-value pair that matches `key` and removes it.
 		O(n) complexity.

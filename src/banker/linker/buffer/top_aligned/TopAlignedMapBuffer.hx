@@ -14,7 +14,10 @@ package banker.linker.buffer.top_aligned;
 #if !banker_generic_disable
 @:generic
 #end
-class TopAlignedMapBuffer<K, V> extends TopAlignedBuffer<K, V> implements Sequence<K, V> {
+class TopAlignedMapBuffer<K, V>
+	extends TopAlignedBuffer<K, V>
+	implements Map<K, V>
+	implements Sequence<K, V> {
 	/**
 		@param capacity Max number of key-value pairs `this` can contain.
 	**/
@@ -54,18 +57,6 @@ class TopAlignedMapBuffer<K, V> extends TopAlignedBuffer<K, V> implements Sequen
 	public inline function getOrAddWith(key: K, valueFactory: K->V): V
 		return GetSetExtension.getOrAddWith(this, key, valueFactory);
 
-	/** @see `banker.linker.interfaces.GetSet` **/
-	public inline function hasKey(key: K): Bool
-		return GetSetExtension.hasKey(this, key);
-
-	/** @see `banker.linker.interfaces.GetSet` **/
-	public inline function hasValue(value: V): Bool
-		return GetSetExtension.hasValue(this, value);
-
-	/** @see `banker.linker.interfaces.GetSet` **/
-	public inline function hasAny(predicate: (key: K, value: V) -> Bool): Bool
-		return GetSetExtension.hasAny(this, predicate);
-
 	/** @see `banker.linker.interfaces.Sequence` **/
 	public inline function forEachKey(callback: (key: K) -> Void): Void
 		SequenceExtension.forEachKey(this, callback);
@@ -96,6 +87,18 @@ class TopAlignedMapBuffer<K, V> extends TopAlignedBuffer<K, V> implements Sequen
 	): Bool {
 		return SequenceExtension.forFirst(this, predicate, callback);
 	}
+
+	/** @see `banker.linker.interfaces.Remove` **/
+	public inline function hasKey(key: K): Bool
+		return GetSetExtension.hasKey(this, key);
+
+	/** @see `banker.linker.interfaces.Remove` **/
+	public inline function hasValue(value: V): Bool
+		return GetSetExtension.hasValue(this, value);
+
+	/** @see `banker.linker.interfaces.Remove` **/
+	public inline function hasAny(predicate: (key: K, value: V) -> Bool): Bool
+		return GetSetExtension.hasAny(this, predicate);
 
 	/** @see `banker.linker.interfaces.Remove` **/
 	public inline function remove(key: K): Bool

@@ -12,7 +12,10 @@ import banker.linker.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayMap<K, V> extends TopAlignedMapBuffer<K, V> implements Map<K, V> {
+class ArrayMap<K, V>
+	extends TopAlignedMapBuffer<K, V>
+	implements Set<K, V>
+	implements Convert<K, V> {
 	/**
 		@param capacity Max number of key-value pairs `this` can contain.
 	**/
