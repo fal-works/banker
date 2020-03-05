@@ -1,6 +1,6 @@
 package banker.container.interfaces;
 
-interface Deque<T> {
+interface Deque<T> extends Sequence<T> {
 	/**
 		Adds `value` as the back/last/newest element of `this`.
 		Duplicates are allowed.
