@@ -45,4 +45,19 @@ class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
 	/** @see `banker.container.interfaces.Sequence` **/
 	public inline function map<S>(callback: T->S): Vector<S>
 		return SequenceExtension.map(this, callback);
+
+	/** @see `banker.container.interfaces.Set` **/
+	public inline function remove(element: T): Bool
+		return SetExtension.remove(this, element);
+
+	/**
+		@see `banker.container.interfaces.Set`
+		@see `banker.container.buffer.top_aligned.SetExtension`
+	**/
+	public inline function removeAll(predicate: (element: T) -> Bool): Bool
+		return SetExtension.removeShiftAll(this, predicate);
+
+	/** @see `banker.container.interfaces.Set` **/
+	public inline function has(element: T): Bool
+		return SetExtension.has(this, element);
 }
