@@ -2,7 +2,7 @@ package banker.container.interfaces;
 
 import banker.linker.ArrayMap;
 
-interface Set<T> extends Sequence<T> {
+interface Set<T> {
 	/**
 		Adds `value` to `this`.
 	**/

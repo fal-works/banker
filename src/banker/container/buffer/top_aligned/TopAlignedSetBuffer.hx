@@ -4,14 +4,14 @@ import banker.linker.ArrayMap;
 
 /**
 	Intermediate base class for top-aligned array-based unordered sets
-	that implements methods required by the `Set` interface.
+	that implements methods required by the `Set` and `Sequence` interfaces.
 
 	`pushInternal()` needs be implemented in the concrete subclass.
 **/
 #if !banker_generic_disable
 @:generic
 #end
-class TopAlignedSetBuffer<T> extends TopAlignedBuffer<T> implements Set<T> {
+class TopAlignedSetBuffer<T> extends TopAlignedBuffer<T> implements Set<T> implements Sequence<T> {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
@@ -20,7 +20,7 @@ class TopAlignedSetBuffer<T> extends TopAlignedBuffer<T> implements Set<T> {
 	public inline function add(element: T): Void
 		StackExtension.push(this, element);
 
-	/** @see `banker.container.interfaces.List` **/
+	/** @see `banker.container.interfaces.Set` **/
 	public inline function addFromVector(otherVector: VectorReference<T>): Void
 		StackExtension.pushFromVector(this, otherVector);
 
