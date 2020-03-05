@@ -5,7 +5,11 @@ class InternalExtension {
 		Adds `element` to `this`. Duplicates are allowed.
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
 	**/
-	public static inline function pushDuplicatesAllowed<T>(_this: TopAlignedBuffer<T>, index: Int, element: T): Void {
+	public static inline function pushDuplicatesAllowed<T>(
+		_this: TopAlignedBuffer<T>,
+		index: Int,
+		element: T
+	): Void {
 		_this.vector[index] = element;
 		_this.nextFreeSlotIndex = index + 1;
 	}
@@ -15,7 +19,11 @@ class InternalExtension {
 		Duplicates are not allowed; It has no effect if `element` already exists in `this`.
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
 	**/
-	public static inline function pushDuplicatesPrevented<T>(_this: TopAlignedBuffer<T>, index: Int, element: T): Void {
+	public static inline function pushDuplicatesPrevented<T>(
+		_this: TopAlignedBuffer<T>,
+		index: Int,
+		element: T
+	): Void {
 		final vector = _this.vector;
 		if (!vector.ref.hasIn(element, 0, index)) {
 			vector[index] = element;

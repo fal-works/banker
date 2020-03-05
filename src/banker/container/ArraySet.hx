@@ -36,6 +36,11 @@ class ArraySet<T> extends TopAlignedSetBuffer<T> {
 		otherVector: VectorReference<T>,
 		otherVectorLength: Int
 	): Void {
-		InternalExtension.pushFromVectorDuplicatesPrevented(this, index, otherVector, otherVectorLength);
+		InternalExtension.pushFromVectorDuplicatesPrevented(
+			this,
+			index,
+			otherVector,
+			otherVectorLength
+		);
 	}
 }
