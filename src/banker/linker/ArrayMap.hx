@@ -165,10 +165,10 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		RemoveExtension.removeApply(this, key, callback);
 	}
 
-	public inline function keys(): Vector<K>
+	public inline function exportKeys(): Vector<K>
 		return ConvertExtension.exportKeys(this);
 
-	public inline function values(): Vector<V>
+	public inline function exportValues(): Vector<V>
 		return ConvertExtension.exportValues(this);
 
 	public inline function mapValues<W>(convertValue: V->W): ArrayMap<K, W> {
