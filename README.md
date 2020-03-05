@@ -41,13 +41,13 @@ Fixed-length array.
 
 ### package: container
 
-Collection classes with 1 type argument.
+Collection classes with 1 type parameter.
 
 ![class diagram of container package](docs/container.svg)
 
 ### package: linker
 
-Collection classes with 2 type arguments.
+Collection classes with 2 type parameters.
 
 ![class diagram of linker package](docs/linker.svg)
 
@@ -56,4 +56,4 @@ Collection classes with 2 type arguments.
 
 |flag|description|
 |---|---|
-|banker_generic_disable||
+|banker_generic_disable|Disables `@:generic` meta.|
