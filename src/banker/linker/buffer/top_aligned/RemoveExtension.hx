@@ -28,9 +28,9 @@ class RemoveExtension {
 
 	/**
 		Removes all key-value pairs that match `key`.
-		@return  True if any found and removed.
+		@return `true` if any found and removed.
 	**/
-	public static function removeAll<K, V>(_this: TopAlignedBuffer<K, V>, key: K): Bool {
+	public static function removeSwapAll<K, V>(_this: TopAlignedBuffer<K, V>, key: K): Bool {
 		var found = false;
 		final keys = _this.keyVector;
 		final values = _this.keyVector;

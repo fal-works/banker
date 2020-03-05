@@ -135,7 +135,7 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		@return  True if any found and removed.
 	**/
 	public function removeAll(key: K): Bool {
-		return RemoveExtension.removeAll(this, key);
+		return RemoveExtension.removeSwapAll(this, key);
 	}
 
 	/**
