@@ -11,7 +11,7 @@ import banker.linker.ArrayMap;
 #if !banker_generic_disable
 @:generic
 #end
-class TopAlignedSetBuffer<T> extends TopAlignedUnorderedBuffer<T> implements Set<T> {
+class TopAlignedSetBuffer<T> extends TopAlignedBuffer<T> implements Set<T> {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
@@ -72,4 +72,16 @@ class TopAlignedSetBuffer<T> extends TopAlignedUnorderedBuffer<T> implements Set
 	/** @see `banker.container.interfaces.Sequence` **/
 	public inline function map<S>(callback: T->S): Vector<S>
 		return SequenceExtension.map(this, callback);
+
+	/**
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
+		@see `banker.container.buffer.top_aligned.InternalExtension`
+	**/
+	override function removeAtInternal(
+		vector: WritableVector<T>,
+		currentSize: Int,
+		index: Int
+	): T {
+		return InternalExtension.removeSwapAt(this, vector, currentSize, index);
+	}
 }

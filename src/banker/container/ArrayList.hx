@@ -10,7 +10,7 @@ import banker.linker.ArrayMap;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
+class ArrayList<T> extends TopAlignedBuffer<T> implements List<T> {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
@@ -83,6 +83,18 @@ class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
 		grouperCallback: (element: T) -> S
 	): ArrayMap<S, Int>
 		return SetExtension.countAll(this, grouperCallback);
+
+	/**
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
+		@see `banker.container.buffer.top_aligned.InternalExtension`
+	**/
+	override function removeAtInternal(
+		vector: WritableVector<T>,
+		currentSize: Int,
+		index: Int
+	): T {
+		return InternalExtension.removeShiftAt(this, vector, currentSize, index);
+	}
 
 	/**
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`

@@ -9,7 +9,7 @@ import banker.container.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayStack<T> extends TopAlignedOrderedBuffer<T> implements Stack<T> {
+class ArrayStack<T> extends TopAlignedBuffer<T> implements Stack<T> {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
@@ -29,6 +29,18 @@ class ArrayStack<T> extends TopAlignedOrderedBuffer<T> implements Stack<T> {
 	/** @see `banker.container.interfaces.Stack` **/
 	public inline function pushFromVector(otherVector: VectorReference<T>): Void
 		StackExtension.pushFromVector(this, otherVector);
+
+	/**
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
+		@see `banker.container.buffer.top_aligned.InternalExtension`
+	**/
+	override function removeAtInternal(
+		vector: WritableVector<T>,
+		currentSize: Int,
+		index: Int
+	): T {
+		return InternalExtension.removeShiftAt(this, vector, currentSize, index);
+	}
 
 	/**
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`

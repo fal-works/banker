@@ -63,4 +63,46 @@ class InternalExtension {
 		}
 		_this.nextFreeSlotIndex = writeIndex;
 	}
+
+	/**
+		Removes the element at `index` by overwriting it with that at the last index
+		(thus the order is not preserved).
+		O(1) complexity.
+
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
+	**/
+	public static inline function removeSwapAt<T>(
+		_this: TopAlignedBuffer<T>,
+		vector: WritableVector<T>,
+		currentSize: Int,
+		index: Int
+	): T {
+		final removed = vector[index];
+
+		final lastIndex = currentSize - 1;
+		vector[index] = vector[lastIndex];
+		_this.nextFreeSlotIndex = lastIndex;
+
+		return removed;
+	}
+
+	/**
+		Removes the element at `index` by overwriting it with that at the last index
+		(thus the order is not preserved).
+		O(1) complexity.
+
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
+	**/
+	public static inline function removeShiftAt<T>(
+		_this: TopAlignedBuffer<T>,
+		vector: WritableVector<T>,
+		currentSize: Int,
+		index: Int
+	): T {
+		final removed = vector[index];
+		vector.blitInternal(index + 1, index, currentSize - 1 - index);
+		_this.nextFreeSlotIndex = currentSize - 1;
+
+		return removed;
+	}
 }
