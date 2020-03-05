@@ -166,23 +166,14 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 	}
 
 	public inline function keys(): Vector<K>
-		return this.keyVector.ref.slice(0, this.size);
+		return ConvertExtension.exportKeys(this);
 
 	public inline function values(): Vector<V>
-		return this.valueVector.ref.slice(0, this.size);
+		return ConvertExtension.exportValues(this);
 
-	public inline function mapValues<W>(convertValue: V->W) {
+	public inline function mapValues<W>(convertValue: V->W): ArrayMap<K, W> {
 		final newMap = new ArrayMap<K, W>(this.capacity);
-		final keys = this.keyVector;
-		final values = this.valueVector;
-		final newKeys = newMap.keyVector;
-		final newValues = newMap.valueVector;
-		final len = this.size;
-		var i = 0;
-		while (i < len) {
-			newMap.addKeyValue(newKeys, newValues, i, keys[i], convertValue(values[i]));
-			++i;
-		}
+		ConvertExtension.mapValues(this, newMap, convertValue);
 
 		return newMap;
 	}
