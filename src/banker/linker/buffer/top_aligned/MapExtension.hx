@@ -21,35 +21,21 @@ class MapExtension {
 	}
 
 	/**
-		Adds a new key-value pair. Duplicate keys are allowed.
-	**/
-	public static inline function add<K, V>(_this: TopAlignedBuffer<K, V>, key: K, value: V): Void {
-		final size = _this.size;
-		assert(size < _this.capacity, _this.tag, "The map is full.");
-
-		_this.keyVector[size] = key;
-		_this.valueVector[size] = value;
-		_this.nextFreeSlotIndex = size + 1;
-
-		#if banker_watermark_enable
-		updateWatermark(usage()); // Currently does not work
-		#end
-	}
-
-	/**
 		Maps `key` to `value`.
 		If `key` already exists, the mapped value is overwritten.
 		If not, adds a new key-value pair.
 		@return  true if it is the first time that `key` is added.
 	**/
 	public static function set<K, V>(_this: TopAlignedBuffer<K, V>, key: K, value: V): Bool {
-		final index = _this.keyVector.ref.findIndexIn(key, 0, _this.size);
+		final size = _this.size;
+		final keys = _this.keyVector;
+		final index = keys.ref.findIndexIn(key, 0, _this.size);
 		return if (index >= 0) {
 			_this.valueVector[index] = value;
 			false;
 		} else {
-			assert(_this.size < _this.capacity, _this.tag, "The map is full.");
-			add(_this, key, value);
+			assert(size < _this.capacity, _this.tag, "The map is full.");
+			_this.addKeyValue(keys, _this.valueVector, key, value, size);
 			true;
 		}
 	}
@@ -59,11 +45,13 @@ class MapExtension {
 		@return  true if it is the first time that `key` is added.
 	**/
 	public static function setIfAbsent<K, V>(_this: TopAlignedBuffer<K, V>, key: K, value: V): Bool {
-		return if (_this.keyVector.ref.hasIn(key, 0, _this.size)) {
+		final size = _this.size;
+		final keys = _this.keyVector;
+		return if (keys.ref.hasIn(key, 0, size)) {
 			false;
 		} else {
-			assert(_this.size < _this.capacity, _this.tag, "The map is full.");
-			add(_this, key, value);
+			assert(size < _this.capacity, _this.tag, "The map is full.");
+			_this.addKeyValue(keys, _this.valueVector, key, value, size);
 			true;
 		}
 	}
@@ -73,12 +61,15 @@ class MapExtension {
 		If not found, adds a new pair of `key` and `defaultValue`, and returns `defaultValue`.
 	**/
 	public static inline function getOrAdd<K, V>(_this: TopAlignedBuffer<K, V>, key: K, defaultValue: V): V {
-		final index = _this.keyVector.ref.findIndexIn(key, 0, _this.size);
+		final size = _this.size;
+		final keys = _this.keyVector;
+		final index = keys.ref.findIndexIn(key, 0, size);
 
 		return if (index >= 0) {
 			_this.valueVector[index];
 		} else {
-			add(_this, key, defaultValue);
+			assert(size < _this.capacity, _this.tag, "The map is full.");
+			_this.addKeyValue(keys, _this.valueVector, key, defaultValue, size);
 			defaultValue;
 		}
 	}
@@ -89,14 +80,16 @@ class MapExtension {
 		adds the new key-value pair and returns the created value.
 	**/
 	public static inline function getOrAddWith<K, V>(_this: TopAlignedBuffer<K, V>, key: K, valueFactory: K->V): V {
-		final index = _this.keyVector.ref.findIndexIn(key, 0, _this.size);
+		final size = _this.size;
+		final keys = _this.keyVector;
+		final index = keys.ref.findIndexIn(key, 0, size);
 
 		return if (index >= 0) {
 			_this.valueVector[index];
 		} else {
 			final newValue = valueFactory(key);
-			add(_this, key, newValue);
-
+			assert(size < _this.capacity, _this.tag, "The map is full.");
+			_this.addKeyValue(keys, _this.valueVector, key, newValue, size);
 			newValue;
 		}
 	}

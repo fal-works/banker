@@ -96,4 +96,20 @@ class TopAlignedBuffer<K, V> extends Tagged {
 
 	inline function get_size(): Int
 		return nextFreeSlotIndex;
+
+	inline function addKeyValue(
+		keyVector: WritableVector<K>,
+		valueVector: WritableVector<V>,
+		key: K,
+		value: V,
+		currentSize: Int
+	) {
+		keyVector[currentSize] = key;
+		valueVector[currentSize] = value;
+		this.nextFreeSlotIndex = currentSize + 1;
+
+		#if banker_watermark_enable
+		updateWatermark(getUsageRatio()); // Currently does not work
+		#end
+	}
 }

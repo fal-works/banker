@@ -5,7 +5,13 @@ import banker.linker.buffer.top_aligned.*;
 class ArrayMapExtension {
 	public static function fromMap<K, V>(map: Map<K, V>, capacity: Int) {
 		final arrayMap = new ArrayMap<K, V>(capacity);
-		for (key => value in map) arrayMap.add(key, value);
+		final keys = arrayMap.keyVector;
+		final values = arrayMap.valueVector;
+		var i = 0;
+		for (key => value in map) {
+			arrayMap.addKeyValue(keys, values, key, value, i);
+			++i;
+		}
 		return arrayMap;
 	}
 }
@@ -35,13 +41,6 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 	**/
 	public inline function tryGet(key: K): Null<V> {
 		return MapExtension.tryGet(this, key);
-	}
-
-	/**
-		Adds a new key-value pair. Duplicate keys are allowed.
-	**/
-	public inline function add(key: K, value: V): Void {
-		MapExtension.add(this, key, value);
 	}
 
 	/**
@@ -185,10 +184,12 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		final newMap = new ArrayMap<K, W>(this.capacity);
 		final keys = this.keyVector;
 		final values = this.valueVector;
+		final newKeys = newMap.keyVector;
+		final newValues = newMap.valueVector;
 		final len = this.size;
 		var i = 0;
 		while (i < len) {
-			newMap.add(keys[i], convertValue(values[i]));
+			newMap.addKeyValue(newKeys, newValues, keys[i], convertValue(values[i]), i);
 			++i;
 		}
 
