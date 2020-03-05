@@ -21,4 +21,25 @@ class LinkerBuilder {
 		arrayMap.nextFreeSlotIndex = i;
 		return arrayMap;
 	}
+
+	/**
+		@param capacity Max number of key-value pairs that can be contained.
+		@return New `OrderedArrayMap` instance created from `map`.
+	**/
+	public static function orderedArrayMapFromStandardMap<K, V>(
+		map: haxe.ds.Map<K, V>,
+		capacity: Int
+	) {
+		final arrayMap = new OrderedArrayMap<K, V>(capacity);
+		final keys = arrayMap.keyVector;
+		final values = arrayMap.valueVector;
+		var i = 0;
+		for (key => value in map) {
+			keys[i] = key;
+			values[i] = value;
+			++i;
+		}
+		arrayMap.nextFreeSlotIndex = i;
+		return arrayMap;
+	}
 }
