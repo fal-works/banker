@@ -91,9 +91,10 @@ class RemoveExtension {
 		_this: TopAlignedBuffer<K, V>,
 		predicate: (key: K, value: V) -> Bool
 	): Bool {
-		var found = false;
 		final keys = _this.keyVector;
 		final values = _this.valueVector;
+
+		var found = false;
 		var len = _this.size;
 		var i = 0;
 		while (i < len) {
