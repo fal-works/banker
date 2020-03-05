@@ -99,15 +99,23 @@ class TopAlignedBuffer<K, V> extends Tagged {
 
 	/**
 		Internal method for adding `key` and `value` to `this` map.
-		`keyVector`, `valueVector` and `currentSize` must be obtained from `this`
-		before calling `addKeyValue()`, rather than obtaining them again in this method.
+
+		`keyVector`, `valueVector` and `currentSize` are likely already obtained from `this`
+		before calling `addKeyValue()`, therefore this method requires them to be passed as arguments
+		rather than obtaining them again in this method.
+
+		@param keyVector `this.keyVector`
+		@param valueVector `this.valueVector`
+		@param currentSize Current size of `this`, used for determining the last index.
+		@param key The key adding to `this`.
+		@param value The value adding to `this`.
 	**/
 	inline function addKeyValue(
 		keyVector: WritableVector<K>,
 		valueVector: WritableVector<V>,
+		currentSize: Int,
 		key: K,
-		value: V,
-		currentSize: Int
+		value: V
 	) {
 		keyVector[currentSize] = key;
 		valueVector[currentSize] = value;

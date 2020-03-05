@@ -9,7 +9,7 @@ class ArrayGetSetExtension {
 		final values = arrayMap.valueVector;
 		var i = 0;
 		for (key => value in map) {
-			arrayMap.addKeyValue(keys, values, key, value, i);
+			arrayMap.addKeyValue(keys, values, i, key, value);
 			++i;
 		}
 		return arrayMap;
@@ -180,7 +180,7 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		final len = this.size;
 		var i = 0;
 		while (i < len) {
-			newMap.addKeyValue(newKeys, newValues, keys[i], convertValue(values[i]), i);
+			newMap.addKeyValue(newKeys, newValues, i, keys[i], convertValue(values[i]));
 			++i;
 		}
 

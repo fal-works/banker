@@ -35,7 +35,7 @@ class GetSetExtension {
 			false;
 		} else {
 			assert(size < _this.capacity, _this.tag, "The map is full.");
-			_this.addKeyValue(keys, _this.valueVector, key, value, size);
+			_this.addKeyValue(keys, _this.valueVector, size, key, value);
 			true;
 		}
 	}
@@ -51,7 +51,7 @@ class GetSetExtension {
 			false;
 		} else {
 			assert(size < _this.capacity, _this.tag, "The map is full.");
-			_this.addKeyValue(keys, _this.valueVector, key, value, size);
+			_this.addKeyValue(keys, _this.valueVector, size, key, value);
 			true;
 		}
 	}
@@ -69,7 +69,7 @@ class GetSetExtension {
 			_this.valueVector[index];
 		} else {
 			assert(size < _this.capacity, _this.tag, "The map is full.");
-			_this.addKeyValue(keys, _this.valueVector, key, defaultValue, size);
+			_this.addKeyValue(keys, _this.valueVector, size, key, defaultValue);
 			defaultValue;
 		}
 	}
@@ -89,7 +89,7 @@ class GetSetExtension {
 		} else {
 			final newValue = valueFactory(key);
 			assert(size < _this.capacity, _this.tag, "The map is full.");
-			_this.addKeyValue(keys, _this.valueVector, key, newValue, size);
+			_this.addKeyValue(keys, _this.valueVector, size, key, newValue);
 			newValue;
 		}
 	}
