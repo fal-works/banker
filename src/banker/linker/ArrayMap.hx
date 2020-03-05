@@ -5,8 +5,9 @@ import banker.linker.buffer.top_aligned.*;
 /**
 	Array-based map.
 	Suited for iteration or holding small number of entries.
-	- O(n) complexity for `get()`.
-	- O(1) complexity for removing a single entry, but instead the order is not preserved.
+
+	Removing a single entry can be done faster than `OrderedArrayMap`,
+	but instead the order is not preserved.
 **/
 #if !banker_generic_disable
 @:generic
@@ -19,12 +20,15 @@ class ArrayMap<K, V> extends TopAlignedMapBuffer<K, V> implements Map<K, V> {
 		super(capacity);
 	}
 
-	/** @see `banker.linker.buffer.top_aligned.RemoveExtension` **/
+	/**
+		@see `banker.linker.interfaces.Remove`
+		@see `banker.linker.buffer.top_aligned.RemoveExtension`
+	**/
 	public function removeAll(key: K): Bool {
 		return RemoveExtension.removeSwapAll(this, key);
 	}
 
-	/** @see `banker.linker.buffer.top_aligned.ConvertExtension` **/
+	/** @see `banker.linker.interfaces.Convert` **/
 	public inline function mapValues<W>(convertValue: V->W): ArrayMap<K, W> {
 		final newMap = new ArrayMap<K, W>(this.capacity);
 		ConvertExtension.copyWithMappedValues(this, newMap, convertValue);
