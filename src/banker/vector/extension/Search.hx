@@ -50,7 +50,17 @@ class Search {
 		endIndex: Int
 	): Bool {
 		assert(startIndex >= 0 && endIndex <= _this.length);
-		return findIndexIn(_this, element, startIndex, endIndex) >= 0;
+		var found = false;
+		var i = startIndex;
+		while (i < endIndex) {
+			if (_this[i] == element) {
+				found = true;
+				break;
+			}
+			++i;
+		}
+
+		return found;
 	}
 
 	/**
