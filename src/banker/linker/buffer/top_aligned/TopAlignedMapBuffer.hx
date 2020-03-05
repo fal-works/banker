@@ -8,6 +8,7 @@ package banker.linker.buffer.top_aligned;
 	of the subclass.
 	- mapValues
 	- removeAll
+	- removeApplyAll
 	- removeAt (override)
 **/
 #if !banker_generic_disable
