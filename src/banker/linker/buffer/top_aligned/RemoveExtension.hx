@@ -109,4 +109,42 @@ class RemoveExtension {
 
 		return found;
 	}
+
+	/**
+		Removes all key-value pairs that match `key`.
+		The order is preserved.
+
+		Used for implementing `banker.linker.interfaces.Remove.removeAll()`.
+		@return `true` if any found and removed.
+	**/
+	public static function removeShiftAll<K, V>(
+		_this: TopAlignedBuffer<K, V>,
+		key: K
+	): Bool {
+		final size = _this.size;
+		final keys = _this.keyVector;
+		final values = _this.keyVector;
+
+		var found = false;
+		var readIndex = 0;
+		var writeIndex = 0;
+
+		while (readIndex < size) {
+			final readingKey = keys[readIndex];
+			++readIndex;
+
+			if (readingKey != key) {
+				keys[writeIndex] = readingKey;
+				values[writeIndex] = values[readIndex];
+				++writeIndex;
+				continue;
+			}
+
+			found = true;
+		}
+
+		_this.nextFreeSlotIndex = writeIndex;
+
+		return found;
+	}
 }
