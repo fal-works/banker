@@ -2,6 +2,7 @@ package banker.container;
 
 // NOTE: Automatic static extension does not seem to work on generic classes
 import banker.container.buffer.top_aligned.*;
+import banker.linker.ArrayMap;
 
 /**
 	Array-based stack.
@@ -77,6 +78,12 @@ class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
 	public inline function count(predicate: (element: T) -> Bool): Int
 		return SetExtension.count(this, predicate);
 
+	/** @see `banker.container.interfaces.Set` **/
+	public inline function countAll<S>(
+		grouperCallback: (element: T) -> S
+	): ArrayMap<S, Int>
+		return SetExtension.countAll(this, grouperCallback);
+
 	/**
 		Adds `element` to `this`. Duplicates are allowed.
 
@@ -93,7 +100,11 @@ class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
 
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushFromVectorInternal()`
 	**/
-	override inline function pushFromVectorInternal(index: Int, otherVector: VectorReference<T>, otherVectorLength: Int): Void {
+	override inline function pushFromVectorInternal(
+		index: Int,
+		otherVector: VectorReference<T>,
+		otherVectorLength: Int
+	): Void {
 		VectorTools.blit(otherVector, 0, this.vector, index, otherVectorLength);
 		this.nextFreeSlotIndex = index + otherVectorLength;
 	}
