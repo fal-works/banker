@@ -1,5 +1,6 @@
 package banker.container.buffer.top_aligned;
 
+import sneaker.common.UnsupportedOperationException;
 import banker.common.internal.LimitedCapacityBuffer;
 
 #if !banker_generic_disable
@@ -59,4 +60,25 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 
 	inline function get_size(): Int
 		return nextFreeSlotIndex;
+
+	/**
+		Internal method for removing element at `index` from `this`.
+
+		`vector` and `currentSize` are likely already obtained from `this` before
+		calling `removeAtInternal()`, therefore this method requires them to be
+		passed as arguments rather than obtaining them again in this method.
+
+		This method must be overridden by the concrete subclass.
+
+		@param vector `this.vector`
+		@param currentSize Current size of `this`, used for determining the last index.
+		@param index Index of the element to be removed.
+	**/
+	function removeAtInternal(
+		vector: WritableVector<T>,
+		currentSize: Int,
+		index: Int
+	): T {
+		throw new UnsupportedOperationException("This method must be overridden by the subclass.");
+	}
 }

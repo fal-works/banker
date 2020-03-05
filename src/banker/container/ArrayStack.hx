@@ -9,7 +9,7 @@ import banker.container.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayStack<T> extends TopAlignedBuffer<T> implements Stack<T> {
+class ArrayStack<T> extends TopAlignedOrderedBuffer<T> implements Stack<T> {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);

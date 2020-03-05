@@ -9,7 +9,7 @@ import banker.container.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayList<T> extends TopAlignedBuffer<T> implements List<T> {
+class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);

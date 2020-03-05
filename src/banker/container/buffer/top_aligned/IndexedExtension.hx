@@ -47,21 +47,11 @@ class IndexedExtension {
 		return value;
 	}
 
-	/**
-		Removes the element at a given index in the internal vector.
-		O(n) complexity.
-		@return The removed element.
-		@see `banker.container.interfaces.Indexed`
-	**/
+	/** @see `banker.container.interfaces.Indexed` **/
 	public static inline function removeAt<T>(_this: TopAlignedBuffer<T>, index: Int): T {
 		final size = _this.size;
 		assert(index >= 0 && index < size, _this.tag, "Out of bound.");
 
-		final vector = _this.vector;
-		final removed = vector[index];
-		vector.blitInternal(index + 1, index, size - 1 - index);
-		_this.nextFreeSlotIndex = size - 1;
-
-		return removed;
+		return _this.removeAtInternal(_this.vector, size, index);
 	}
 }
