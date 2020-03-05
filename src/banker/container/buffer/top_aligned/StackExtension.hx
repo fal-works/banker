@@ -45,10 +45,17 @@ class StackExtension {
 		Adds all elements in `vector` as the last (newest) elements of `this`.
 		Duplicates are allowed.
 	**/
-	public static inline function pushFromVector<T>(_this: TopAlignedBuffer<T>, vector: VectorReference<T>): Void {
+	public static inline function pushFromVector<T>(
+		_this: TopAlignedBuffer<T>,
+		vector: VectorReference<T>
+	): Void {
 		final index = _this.nextFreeSlotIndex;
 		final increment = vector.length;
-		assert(index + increment <= _this.capacity, _this.tag, "Not enough space.");
+		assert(
+			index + increment <= _this.capacity,
+			_this.tag,
+			"Not enough space."
+		);
 
 		VectorTools.blit(vector, 0, _this.vector, index, increment);
 		_this.nextFreeSlotIndex = index + increment;

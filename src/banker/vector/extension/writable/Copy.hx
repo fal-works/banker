@@ -12,6 +12,12 @@ class Copy {
 	): Void {
 		assert(sourcePosition + rangeLength <= _this.length);
 		assert(destinationPosition + rangeLength <= _this.length);
-		VectorTools.blit(_this, sourcePosition, _this, destinationPosition, rangeLength);
+		VectorTools.blit(
+			_this,
+			sourcePosition,
+			_this,
+			destinationPosition,
+			rangeLength
+		);
 	}
 }

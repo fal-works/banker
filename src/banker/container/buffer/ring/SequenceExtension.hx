@@ -1,7 +1,10 @@
 package banker.container.buffer.ring;
 
 class SequenceExtension {
-	public static inline function forEach<T>(_this: RingBuffer<T>, callback: T -> Void): Void {
+	public static inline function forEach<T>(
+		_this: RingBuffer<T>,
+		callback: T->Void
+	): Void {
 		final size = _this.size;
 		final headIndex = _this.headIndex;
 		final tailIndex = _this.tailIndex;
@@ -16,7 +19,10 @@ class SequenceExtension {
 		}
 	}
 
-	public static inline function filter<T>(_this: RingBuffer<T>, predicate: T -> Bool): Vector<T> {
+	public static inline function filter<T>(
+		_this: RingBuffer<T>,
+		predicate: T->Bool
+	): Vector<T> {
 		final size = _this.size;
 		final headIndex = _this.headIndex;
 		final tailIndex = _this.tailIndex;
@@ -48,7 +54,10 @@ class SequenceExtension {
 	}
 
 	@:access(banker.vector.WritableVector)
-	public static inline function map<T, S>(_this: RingBuffer<T>, callback: T -> S): Vector<S> {
+	public static inline function map<T, S>(
+		_this: RingBuffer<T>,
+		callback: T->S
+	): Vector<S> {
 		final size = _this.size;
 		final headIndex = _this.headIndex;
 		final tailIndex = _this.tailIndex;
