@@ -45,7 +45,7 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		return size / capacity;
 
 	/** @inheritdoc **/
-	public function toString(): String {
+	public inline function toString(): String {
 		final size = this.size;
 		return if (size == 0) {
 			"{}";
