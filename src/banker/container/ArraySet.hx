@@ -24,6 +24,13 @@ class ArraySet<T> extends TopAlignedUnorderedBuffer<T> implements Set<T> {
 	public inline function remove(element: T): Bool
 		return SetExtension.remove(this, element);
 
+	/**
+		@see `banker.container.interfaces.Set`
+		@see `banker.container.buffer.top_aligned.SetExtension`
+	**/
+	public inline function removeAll(predicate: (element: T) -> Bool): Bool
+		return SetExtension.removeSwapAll(this, predicate);
+
 	/** @see `banker.container.interfaces.Set` **/
 	public inline function has(element: T): Bool
 		return SetExtension.has(this, element);
