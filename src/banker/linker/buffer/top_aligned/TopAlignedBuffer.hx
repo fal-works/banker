@@ -97,6 +97,11 @@ class TopAlignedBuffer<K, V> extends Tagged {
 	inline function get_size(): Int
 		return nextFreeSlotIndex;
 
+	/**
+		Internal method for adding `key` and `value` to `this` map.
+		`keyVector`, `valueVector` and `currentSize` must be obtained from `this`
+		before calling `addKeyValue()`, rather than obtaining them again in this method.
+	**/
 	inline function addKeyValue(
 		keyVector: WritableVector<K>,
 		valueVector: WritableVector<V>,
