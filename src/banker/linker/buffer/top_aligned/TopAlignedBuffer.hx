@@ -8,10 +8,10 @@ import banker.common.internal.LimitedCapacityBuffer;
 #end
 @:allow(banker.linker)
 class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
-	/** The number of element pairs that can be put to the collection. **/
+	/** @inheritdoc **/
 	public var capacity(get, never): Int;
 
-	/** Current number of element pairs. **/
+	/** @inheritdoc **/
 	public var size(get, never): Int;
 
 	/** The internal vector for keys. **/
@@ -40,15 +40,11 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		valueVector.fill(cast null);
 	}
 
-	/**
-		@return Current usage ratio between 0 and 1.
-	**/
+	/** @inheritdoc **/
 	public inline function getUsageRatio(): Float
 		return size / capacity;
 
-	/**
-		@return A `String` representation of `this`.
-	**/
+	/** @inheritdoc **/
 	public function toString(): String {
 		final size = this.size;
 		return if (size == 0) {

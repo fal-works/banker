@@ -7,10 +7,10 @@ import banker.common.internal.LimitedCapacityBuffer;
 #end
 @:allow(banker.container)
 class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
-	/** Max number of elements `this` can contain. **/
+	/** @inheritdoc **/
 	public var capacity(get, never): Int;
 
-	/** Current number of elements. **/
+	/** @inheritdoc **/
 	public var size(get, never): Int;
 
 	/** The internal vector. **/
@@ -54,9 +54,11 @@ class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		vector.fill(cast null);
 	}
 
-	/**
-		@return A `String` representation of `this`.
-	**/
+	/** @inheritdoc **/
+	public inline function getUsageRatio(): Float
+		return size / capacity;
+
+	/** @inheritdoc **/
 	public inline function toString<T>(): String {
 		final size = this.size;
 		final headIndex = this.headIndex;
@@ -72,12 +74,6 @@ class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 			former + ", " + latter;
 		}
 	}
-
-	/**
-		@return Current usage ratio between 0 and 1.
-	**/
-	public inline function getUsageRatio(): Float
-		return size / capacity;
 
 	inline function get_capacity()
 		return vector.length;

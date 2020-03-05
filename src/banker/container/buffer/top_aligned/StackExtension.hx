@@ -1,10 +1,7 @@
 package banker.container.buffer.top_aligned;
 
 class StackExtension {
-	/**
-		Adds `element` as the last (newest) element of `this`.
-		Duplicates are allowed.
-	**/
+	/** @see `banker.container.interfaces.Stack` **/
 	public static inline function push<T>(_this: TopAlignedBuffer<T>, element: T): Void {
 		final index = _this.nextFreeSlotIndex;
 		assert(index < _this.capacity, _this.tag, "The list is full.");
@@ -18,10 +15,7 @@ class StackExtension {
 		#end
 	}
 
-	/**
-		Removes the last (newest) element.
-		@return Removed element.
-	**/
+	/** @see `banker.container.interfaces.Stack` **/
 	public static inline function pop<T>(_this: TopAlignedBuffer<T>): T {
 		final index = _this.nextFreeSlotIndex - 1;
 		assert(index >= 0, _this.tag, "The list is empty.");
@@ -31,9 +25,7 @@ class StackExtension {
 		return _this.vector[index];
 	}
 
-	/**
-		@return The last (newest) element.
-	**/
+	/** @see `banker.container.interfaces.Stack` **/
 	public static inline function peek<T>(_this: TopAlignedBuffer<T>): T {
 		final index = _this.nextFreeSlotIndex - 1;
 		assert(index >= 0, _this.tag, "The list is empty.");
@@ -41,10 +33,7 @@ class StackExtension {
 		return _this.vector[index];
 	}
 
-	/**
-		Adds all elements in `vector` as the last (newest) elements of `this`.
-		Duplicates are allowed.
-	**/
+	/** @see `banker.container.interfaces.Stack` **/
 	public static inline function pushFromVector<T>(
 		_this: TopAlignedBuffer<T>,
 		vector: VectorReference<T>

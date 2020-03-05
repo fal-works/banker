@@ -1,21 +1,14 @@
 package banker.container.buffer.top_aligned;
 
-import banker.vector.VectorTools;
-
 class IndexedExtension {
-	/**
-		@return The element at `index`.
-	**/
+	/** @see `banker.container.interfaces.Indexed` **/
 	public static inline function get<T>(_this: TopAlignedBuffer<T>, index: Int): T {
 		assert(index < _this.size);
 		return _this.vector[index];
 	}
 
-	/**
-		Overwrites the element at `index` with `value`.
-		`index` must be already used, i.e. cannot be equal or greater than current `this.size`.
-		@return `value`
-	**/
+
+	/** @see `banker.container.interfaces.Indexed` **/
 	public static inline function set<T>(
 		_this: TopAlignedBuffer<T>,
 		index: Int,
@@ -30,6 +23,7 @@ class IndexedExtension {
 		Each existing elements at and after `index` shifts to the next index.
 		O(n) complexity.
 		@return `value`
+		@see `banker.container.interfaces.Indexed`
 	**/
 	public static inline function insertAt<T>(
 		_this: TopAlignedBuffer<T>,
@@ -57,6 +51,7 @@ class IndexedExtension {
 		Removes the element at a given index in the internal vector.
 		O(n) complexity.
 		@return The removed element.
+		@see `banker.container.interfaces.Indexed`
 	**/
 	public static inline function removeAt<T>(_this: TopAlignedBuffer<T>, index: Int): T {
 		final size = _this.size;

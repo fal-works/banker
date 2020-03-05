@@ -21,4 +21,9 @@ interface LimitedCapacityBuffer {
 		@return Current usage ratio between 0 and 1.
 	**/
 	function getUsageRatio(): Float;
+
+	/**
+		@return A `String` representation of `this`.
+	**/
+	function toString(): String;
 }

@@ -7,10 +7,10 @@ import banker.common.internal.LimitedCapacityBuffer;
 #end
 @:allow(banker.container)
 class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
-	/** Max number of elements `this` can contain. **/
+	/** @inheritdoc **/
 	public var capacity(get, never): Int;
 
-	/** Current number of elements. **/
+	/** @inheritdoc **/
 	public var size(get, never): Int;
 
 	/** The internal vector. **/
@@ -46,15 +46,11 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		vector.fill(cast null);
 	}
 
-	/**
-		@return Current usage ratio between 0 and 1.
-	**/
+	/** @inheritdoc **/
 	public inline function getUsageRatio(): Float
 		return size / capacity;
 
-	/**
-		@return A `String` representation of `this`.
-	**/
+	/** @inheritdoc **/
 	public inline function toString<T>(): String
 		return vector.ref.joinIn(0, size, ", ");
 

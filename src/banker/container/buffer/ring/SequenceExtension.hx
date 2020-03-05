@@ -1,6 +1,7 @@
 package banker.container.buffer.ring;
 
 class SequenceExtension {
+	/** @see `banker.container.interfaces.Sequence` **/
 	public static inline function forEach<T>(
 		_this: RingBuffer<T>,
 		callback: T->Void
@@ -19,6 +20,7 @@ class SequenceExtension {
 		}
 	}
 
+	/** @see `banker.container.interfaces.Sequence` **/
 	public static inline function filter<T>(
 		_this: RingBuffer<T>,
 		predicate: T->Bool
@@ -53,6 +55,7 @@ class SequenceExtension {
 		}
 	}
 
+	/** @see `banker.container.interfaces.Sequence` **/
 	@:access(banker.vector.WritableVector)
 	public static inline function map<T, S>(
 		_this: RingBuffer<T>,

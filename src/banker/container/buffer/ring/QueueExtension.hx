@@ -1,10 +1,8 @@
 package banker.container.buffer.ring;
 
 class QueueExtension {
-	/**
-		Adds `value` as the back/last/newest element of `this`.
-		Duplicates are allowed.
-	**/
+
+	/** @see `banker.container.interfaces.Queue` **/
 	public static inline function enqueue<T>(_this: RingBuffer<T>, value: T): Void {
 		final size = _this.size;
 		final capacity = _this.capacity;
@@ -23,10 +21,7 @@ class QueueExtension {
 		#end
 	}
 
-	/**
-	 * Removes the front/top/oldest element from `this`.
-	 * @return Removed element.
-	 */
+	/** @see `banker.container.interfaces.Queue` **/
 	public static inline function dequeue<T>(_this: RingBuffer<T>): T {
 		final size = _this.size;
 		assert(size > 0, _this.tag, "The queue is empty.");

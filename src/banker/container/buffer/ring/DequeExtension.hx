@@ -1,26 +1,15 @@
 package banker.container.buffer.ring;
 
 class DequeExtension {
-	/**
-		Adds `value` as the back/last/newest element of `this`.
-		Duplicates are allowed.
-		Same as `Queue.enqueue()`.
-	**/
+	/** @see `banker.container.interfaces.Deque` **/
 	public static inline function pushBack<T>(_this: RingBuffer<T>, value: T): Void
 		QueueExtension.enqueue(_this, value);
 
-	/**
-		Removes the front/top/oldest element from `this`.
-		Same as `Queue.dequeue()`.
-		@return Removed element.
-	**/
+	/** @see `banker.container.interfaces.Deque` **/
 	public static inline function popFront<T>(_this: RingBuffer<T>): T
 		return QueueExtension.dequeue(_this);
 
-	/**
-		Adds `value` as the front/top element of `this`.
-		Duplicates are allowed.
-	**/
+	/** @see `banker.container.interfaces.Deque` **/
 	public static inline function pushFront<T>(_this: RingBuffer<T>, value: T): Void {
 		final size = _this.size;
 		final capacity = _this.capacity;
@@ -39,10 +28,7 @@ class DequeExtension {
 		#end
 	}
 
-	/**
-		Removes the back/last element from `this`.
-		@return Removed element.
-	**/
+	/** @see `banker.container.interfaces.Deque` **/
 	public static inline function popBack<T>(_this: RingBuffer<T>): T {
 		final size = _this.size;
 		assert(size > 0, _this.tag, "The queue is empty.");

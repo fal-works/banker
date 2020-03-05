@@ -1,6 +1,7 @@
 package banker.container.buffer.top_aligned;
 
 class SequenceExtension {
+	/** @see `banker.container.interfaces.Sequence` **/
 	public static inline function forEach<T>(
 		_this: TopAlignedBuffer<T>,
 		callback: T->Void
@@ -8,6 +9,7 @@ class SequenceExtension {
 		_this.vector.ref.forEachIn(callback, 0, _this.size);
 	}
 
+	/** @see `banker.container.interfaces.Sequence` **/
 	public static inline function filter<T>(
 		_this: TopAlignedBuffer<T>,
 		predicate: T->Bool
@@ -15,6 +17,7 @@ class SequenceExtension {
 		return _this.vector.ref.filterIn(predicate, 0, _this.size);
 	}
 
+	/** @see `banker.container.interfaces.Sequence` **/
 	public static inline function map<T, S>(
 		_this: TopAlignedBuffer<T>,
 		callback: T->S
