@@ -26,7 +26,7 @@ class RemoveExtension {
 	}
 
 	/** @see `banker.linker.interfaces.Remove` **/
-	public static function removeGet<K, V>(_this: TopAlignedBuffer<K, V>, key: K): V {
+	public static inline function removeGet<K, V>(_this: TopAlignedBuffer<K, V>, key: K): V {
 		final size = _this.size;
 		final keys = _this.keyVector;
 		final index = keys.ref.findIndexIn(key, 0, size);
@@ -39,7 +39,7 @@ class RemoveExtension {
 	}
 
 	/** @see `banker.linker.interfaces.Remove` **/
-	public static function tryRemoveGet<K, V>(
+	public static inline function tryRemoveGet<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
 	): Null<V> {
@@ -56,7 +56,7 @@ class RemoveExtension {
 	}
 
 	/** @see `banker.linker.interfaces.Remove` **/
-	public static function removeApply<K, V>(
+	public static inline function removeApply<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
 		callback: K->V->Void
@@ -84,7 +84,7 @@ class RemoveExtension {
 		Used for implementing `banker.linker.interfaces.Remove.removeAll()`.
 		@return `true` if any found and removed.
 	**/
-	public static function removeSwapAll<K, V>(
+	public static inline function removeSwapAll<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
 	): Bool {
@@ -117,7 +117,7 @@ class RemoveExtension {
 		Used for implementing `banker.linker.interfaces.Remove.removeAll()`.
 		@return `true` if any found and removed.
 	**/
-	public static function removeShiftAll<K, V>(
+	public static inline function removeShiftAll<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
 	): Bool {

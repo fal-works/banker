@@ -18,7 +18,7 @@ class GetSetExtension {
 	}
 
 	/** @see `banker.linker.interfaces.GetSet` **/
-	public static function set<K, V>(
+	public static inline function set<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
 		value: V
@@ -37,7 +37,7 @@ class GetSetExtension {
 	}
 
 	/** @see `banker.linker.interfaces.GetSet` **/
-	public static function setIfAbsent<K, V>(
+	public static inline function setIfAbsent<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
 		value: V

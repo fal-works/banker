@@ -30,7 +30,7 @@ class TopAlignedMapBuffer<K, V> extends TopAlignedBuffer<K, V> implements Sequen
 		return GetSetExtension.tryGet(this, key);
 
 	/** @see `banker.linker.interfaces.GetSet` **/
-	public function set(key: K, value: V): Bool
+	public inline function set(key: K, value: V): Bool
 		return GetSetExtension.set(this, key, value);
 
 	/** @see `banker.linker.interfaces.GetSet` **/
@@ -77,15 +77,15 @@ class TopAlignedMapBuffer<K, V> extends TopAlignedBuffer<K, V> implements Sequen
 		return RemoveExtension.remove(this, key);
 
 	/** @see `banker.linker.interfaces.Remove` **/
-	public function removeGet(key: K): V
+	public inline function removeGet(key: K): V
 		return RemoveExtension.removeGet(this, key);
 
 	/** @see `banker.linker.interfaces.Remove` **/
-	public function tryRemoveGet(key: K): Null<V>
+	public inline function tryRemoveGet(key: K): Null<V>
 		return RemoveExtension.tryRemoveGet(this, key);
 
 	/** @see `banker.linker.interfaces.Remove` **/
-	public function removeApply(key: K, callback: (key: K, value: V) -> Void): Void
+	public inline function removeApply(key: K, callback: (key: K, value: V) -> Void): Void
 		RemoveExtension.removeApply(this, key, callback);
 
 	/** @see `banker.linker.interfaces.Convert` **/
