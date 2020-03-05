@@ -13,7 +13,8 @@ class Main {
 			// VectorTest.all,
 			// TopAlignedBufferTest.all,
 			// ArrayStackTest.all,
-			ArrayQueueTest.all
+			// ArrayQueueTest.all,
+			ArrayMapTest.all
 		]));
 	}
 }
