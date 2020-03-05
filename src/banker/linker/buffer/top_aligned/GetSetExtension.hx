@@ -1,6 +1,6 @@
 package banker.linker.buffer.top_aligned;
 
-class MapExtension {
+class GetSetExtension {
 	/**
 		Gets value for `key`. Be sure that `key` exists.
 		@return The value that is mapped to `key`.

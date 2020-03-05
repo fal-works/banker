@@ -2,7 +2,7 @@ package banker.linker;
 
 import banker.linker.buffer.top_aligned.*;
 
-class ArrayMapExtension {
+class ArrayGetSetExtension {
 	public static function fromMap<K, V>(map: Map<K, V>, capacity: Int) {
 		final arrayMap = new ArrayMap<K, V>(capacity);
 		final keys = arrayMap.keyVector;
@@ -32,7 +32,7 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		@return The value that is mapped to `key`.
 	**/
 	public inline function get(key: K): V {
-		return MapExtension.get(this, key);
+		return GetSetExtension.get(this, key);
 	}
 
 	/**
@@ -40,7 +40,7 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		@return The value that is mapped to `key`. `null` if `key` does not exist.
 	**/
 	public inline function tryGet(key: K): Null<V> {
-		return MapExtension.tryGet(this, key);
+		return GetSetExtension.tryGet(this, key);
 	}
 
 	/**
@@ -50,7 +50,7 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		@return  true if it is the first time that `key` is added.
 	**/
 	public function set(key: K, value: V): Bool {
-		return MapExtension.set(this, key, value);
+		return GetSetExtension.set(this, key, value);
 	}
 
 	/**
@@ -58,7 +58,7 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		@return  true if it is the first time that `key` is added.
 	**/
 	public inline function setIfAbsent(key: K, value: V): Bool {
-		return MapExtension.setIfAbsent(this, key, value);
+		return GetSetExtension.setIfAbsent(this, key, value);
 	}
 
 	/**
@@ -66,7 +66,7 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		If not found, adds a new pair of `key` and `defaultValue`, and returns `defaultValue`.
 	**/
 	public inline function getOrAdd(key: K, defaultValue: V): V {
-		return MapExtension.getOrAdd(this, key, defaultValue);
+		return GetSetExtension.getOrAdd(this, key, defaultValue);
 	}
 
 	/**
@@ -75,7 +75,7 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		adds the new key-value pair and returns the created value.
 	**/
 	public inline function getOrAddWith(key: K, valueFactory: K->V): V {
-		return MapExtension.getOrAddWith(this, key, valueFactory);
+		return GetSetExtension.getOrAddWith(this, key, valueFactory);
 	}
 
 	/**
@@ -84,7 +84,7 @@ class ArrayMap<K, V> extends TopAlignedBuffer<K, V> {
 		@return `true` if found.
 	**/
 	public inline function hasKey(key: K): Bool {
-		return MapExtension.hasKey(this, key);
+		return GetSetExtension.hasKey(this, key);
 	}
 
 	/**
