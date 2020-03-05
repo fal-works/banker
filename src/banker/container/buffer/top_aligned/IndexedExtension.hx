@@ -7,7 +7,6 @@ class IndexedExtension {
 		return _this.vector[index];
 	}
 
-
 	/** @see `banker.container.interfaces.Indexed` **/
 	public static inline function set<T>(
 		_this: TopAlignedBuffer<T>,

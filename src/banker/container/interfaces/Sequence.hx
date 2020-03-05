@@ -1,7 +1,6 @@
 package banker.container.interfaces;
 
 // This may not be a good name
-
 interface Sequence<T> {
 	/**
 		Runs `callback` for each element of `this`.

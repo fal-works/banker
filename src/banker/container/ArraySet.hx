@@ -21,8 +21,10 @@ class ArraySet<T> extends TopAlignedUnorderedBuffer<T> implements Set<T> {
 		StackExtension.push(this, element);
 
 	/** @see `banker.container.interfaces.Set` **/
-	public function findFirst(predicate: (element: T) -> Bool, defaultValue: T): T {
-		@:nullSafety(Off) // HACK: Don't know why but this seems to be necessary
+	public function findFirst(
+		predicate: (element: T) -> Bool,
+		defaultValue: T
+	): T {@:nullSafety(Off) // HACK: Don't know why but this seems to be necessary
 		return SetExtension.findFirst(this, predicate, defaultValue);
 	}
 

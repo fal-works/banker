@@ -1,7 +1,6 @@
 package banker.container.buffer.ring;
 
 class QueueExtension {
-
 	/** @see `banker.container.interfaces.Queue` **/
 	public static inline function enqueue<T>(_this: RingBuffer<T>, value: T): Void {
 		final size = _this.size;

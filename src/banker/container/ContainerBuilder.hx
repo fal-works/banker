@@ -6,7 +6,7 @@ class ContainerBuilder {
 	/**
 		Creates an `ArrayStack` instance by copying data from `vector`.
 		@param capacity Max number of elements that can be contained.
-		    If negative (default), the capacity will be the same as `vector.length`.
+				If negative (default), the capacity will be the same as `vector.length`.
 	**/
 	public static inline function arrayStackFromVector<T>(
 		vector: VectorReference<T>,
@@ -23,7 +23,7 @@ class ContainerBuilder {
 	/**
 		Creates an `ArrayList` instance by copying data from `vector`.
 		@param capacity Max number of elements that can be contained.
-		    If negative (default), the capacity will be the same as `vector.length`.
+				If negative (default), the capacity will be the same as `vector.length`.
 	**/
 	public static inline function arrayListFromVector<T>(
 		vector: VectorReference<T>,
