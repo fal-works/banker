@@ -157,4 +157,17 @@ class SetExtension {
 
 		return found;
 	}
+
+	/** @see `banker.container.interfaces.Set` **/
+	public static inline function count<T>(_this: TopAlignedBuffer<T>, predicate: (element: T) -> Bool): Int {
+		final size = _this.size;
+		final vector = _this.vector;
+		var count = 0;
+		var i = 0;
+		while (i < size) {
+			if (predicate(vector[i])) ++count;
+			++i;
+		}
+		return count;
+	}
 }

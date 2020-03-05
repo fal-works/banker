@@ -49,6 +49,10 @@ class TopAlignedSetBuffer<T> extends TopAlignedUnorderedBuffer<T> implements Set
 	public inline function hasAny(predicate: (element: T) -> Bool): Bool
 		return SetExtension.hasAny(this, predicate);
 
+	/** @see `banker.container.interfaces.Set` **/
+	public inline function count(predicate: (element: T) -> Bool): Int
+		return SetExtension.count(this, predicate);
+
 	/** @see `banker.container.interfaces.Sequence` **/
 	public inline function forEach(callback: T->Void): Void
 		SequenceExtension.forEach(this, callback);

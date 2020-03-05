@@ -73,6 +73,10 @@ class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
 	public inline function hasAny(predicate: (element: T) -> Bool): Bool
 		return SetExtension.hasAny(this, predicate);
 
+	/** @see `banker.container.interfaces.Set` **/
+	public inline function count(predicate: (element: T) -> Bool): Int
+		return SetExtension.count(this, predicate);
+
 	/**
 		Adds `element` to `this`. Duplicates are allowed.
 

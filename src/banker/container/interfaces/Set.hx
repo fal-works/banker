@@ -37,4 +37,9 @@ interface Set<T> extends Sequence<T> {
 		@return `ture` if `this` contains any element that matches `predicate`.
 	**/
 	function hasAny(predicate: (element: T) -> Bool): Bool;
+
+	/**
+		@return The number of elements in `this` that match to `predicate`.
+	**/
+	function count(predicate: (element: T) -> Bool): Int;
 }

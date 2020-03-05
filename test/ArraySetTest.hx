@@ -103,6 +103,20 @@ class ArraySetTest {
 
 	static final _multiSet = testCase(multiSet, Ok);
 
+	static function count() {
+		describe();
+		final set = new ArraySet<Int>(8);
+		set.add(1);
+		set.add(2);
+		set.add(3);
+		set.add(4);
+		final count = set.count(n -> n > 1 && n < 4);
+		assert(count == 2);
+		println('data: ${set.toString()}');
+	}
+
+	static final _count = testCase(count, Ok);
+
 	public static final all = testCaseGroup([
 		_remove,
 		_removeAll,
@@ -110,6 +124,7 @@ class ArraySetTest {
 		_findFirst,
 		_duplicate,
 		_duplicateVector,
-		_multiSet
+		_multiSet,
+		_count
 	]);
 }
