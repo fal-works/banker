@@ -7,9 +7,9 @@ interface Set<T> extends Sequence<T> {
 	function add(value: T): Void;
 
 	/**
-		Adds all elements in `vector` to `this`.
+		Adds all elements in `otherVector` to `this`.
 	**/
-	function addFromVector(vector: VectorReference<T>): Void;
+	function addFromVector(otherVector: VectorReference<T>): Void;
 
 	/**
 		@return The first found element that matches `predicate`. If not found, `defaultValue`.

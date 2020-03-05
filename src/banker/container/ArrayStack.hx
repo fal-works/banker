@@ -27,8 +27,8 @@ class ArrayStack<T> extends TopAlignedOrderedBuffer<T> implements Stack<T> {
 		return StackExtension.peek(this);
 
 	/** @see `banker.container.interfaces.Stack` **/
-	public inline function pushFromVector(vector: VectorReference<T>): Void
-		StackExtension.pushFromVector(this, vector);
+	public inline function pushFromVector(otherVector: VectorReference<T>): Void
+		StackExtension.pushFromVector(this, otherVector);
 
 	/**
 		Adds `element` to `this`. Duplicates are allowed.

@@ -18,7 +18,7 @@ interface Stack<T> {
 	function peek(): T;
 
 	/**
-		Adds all elements in `vector` to `this`.
+		Adds all elements in `otherVector` to `this`.
 	**/
-	function pushFromVector(vector: VectorReference<T>): Void;
+	function pushFromVector(otherVector: VectorReference<T>): Void;
 }

@@ -34,17 +34,17 @@ class StackExtension {
 	/** @see `banker.container.interfaces.Stack` **/
 	public static inline function pushFromVector<T>(
 		_this: TopAlignedBuffer<T>,
-		vector: VectorReference<T>
+		otherVector: VectorReference<T>
 	): Void {
 		final index = _this.nextFreeSlotIndex;
-		final increment = vector.length;
+		final otherVectorLength = otherVector.length;
 		assert(
-			index + increment <= _this.capacity,
+			index + otherVectorLength <= _this.capacity,
 			_this.tag,
 			"Not enough space."
 		);
 
-		_this.pushFromVectorInternal(index, vector, increment);
+		_this.pushFromVectorInternal(index, otherVector, otherVectorLength);
 
 		#if banker_watermark_enable
 		updateWatermark(getUsageRatio()); // Currently does not work

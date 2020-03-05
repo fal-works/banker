@@ -19,8 +19,8 @@ class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
 		StackExtension.push(this, value);
 
 	/** @see `banker.container.interfaces.List` **/
-	public inline function addFromVector(vector: VectorReference<T>): Void
-		StackExtension.pushFromVector(this, vector);
+	public inline function addFromVector(otherVector: VectorReference<T>): Void
+		StackExtension.pushFromVector(this, otherVector);
 
 	/** @see `banker.container.interfaces.Indexed` **/
 	public inline function get(index: Int): T

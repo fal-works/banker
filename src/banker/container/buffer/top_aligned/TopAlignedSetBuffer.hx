@@ -19,8 +19,8 @@ class TopAlignedSetBuffer<T> extends TopAlignedUnorderedBuffer<T> implements Set
 		StackExtension.push(this, element);
 
 	/** @see `banker.container.interfaces.List` **/
-	public inline function addFromVector(vector: VectorReference<T>): Void
-		StackExtension.pushFromVector(this, vector);
+	public inline function addFromVector(otherVector: VectorReference<T>): Void
+		StackExtension.pushFromVector(this, otherVector);
 
 	/** @see `banker.container.interfaces.Set` **/
 	public function findFirst(
