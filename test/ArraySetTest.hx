@@ -50,9 +50,24 @@ class ArraySetTest {
 
 	static final _forEach = testCase(forEach, Ok);
 
+	static function findFirst() {
+		describe();
+		final set = new ArraySet<Int>(5);
+		set.add(1);
+		set.add(2);
+		set.add(3);
+		set.add(4);
+		final found: Int = set.findFirst(n -> n >= 3, -1);
+		assert(found == 3);
+		println("data: " + set.toString() + "  found: " + found);
+	}
+
+	static final _findFirst = testCase(findFirst, Ok);
+
 	public static final all = testCaseGroup([
 		_remove,
 		_removeAll,
-		_forEach
+		_forEach,
+		_findFirst
 	]);
 }

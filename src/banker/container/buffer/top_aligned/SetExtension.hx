@@ -2,6 +2,31 @@ package banker.container.buffer.top_aligned;
 
 class SetExtension {
 	/** @see `banker.container.interfaces.Set` **/
+	public static inline function findFirst<T>(
+		_this: TopAlignedBuffer<T>,
+		predicate: (element: T) -> Bool,
+		defaultValue: T
+	): T {
+		final size = _this.size;
+		final vector = _this.vector;
+
+		var found = defaultValue;
+		var i = 0;
+		while (i < size) {
+			final element = vector[i];
+			if (!predicate(element)) {
+				++i;
+				continue;
+			}
+
+			found = element;
+			break;
+		}
+
+		return found;
+	}
+
+	/** @see `banker.container.interfaces.Set` **/
 	public static inline function remove<T>(_this: TopAlignedBuffer<T>, element: T): Bool {
 		final size = _this.nextFreeSlotIndex;
 		final vector = _this.vector;

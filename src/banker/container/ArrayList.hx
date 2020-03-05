@@ -47,6 +47,10 @@ class ArrayList<T> extends TopAlignedOrderedBuffer<T> implements List<T> {
 		return SequenceExtension.map(this, callback);
 
 	/** @see `banker.container.interfaces.Set` **/
+	public function findFirst(predicate: (element: T) -> Bool, defaultValue: T): T
+		return SetExtension.findFirst(this, predicate, defaultValue);
+
+	/** @see `banker.container.interfaces.Set` **/
 	public inline function remove(element: T): Bool
 		return SetExtension.remove(this, element);
 
