@@ -9,6 +9,18 @@ class GetSetExtension {
 	}
 
 	/** @see `banker.linker.interfaces.GetSet` **/
+	public static inline function getOr<K, V>(_this: TopAlignedBuffer<K, V>, key: K, defaultValue: V): V {
+		final index = _this.keyVector.ref.findIndexIn(key, 0, _this.size);
+		return if (index >= 0) _this.valueVector[index] else defaultValue;
+	}
+
+	/** @see `banker.linker.interfaces.GetSet` **/
+	public static inline function getOrElse<K, V>(_this: TopAlignedBuffer<K, V>, key: K, valueFactory: () -> V): V {
+		final index = _this.keyVector.ref.findIndexIn(key, 0, _this.size);
+		return if (index >= 0) _this.valueVector[index] else valueFactory();
+	}
+
+	/** @see `banker.linker.interfaces.GetSet` **/
 	public static inline function tryGet<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K

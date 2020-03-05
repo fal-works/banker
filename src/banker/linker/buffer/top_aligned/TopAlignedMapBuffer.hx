@@ -27,6 +27,14 @@ class TopAlignedMapBuffer<K, V> extends TopAlignedBuffer<K, V> implements Sequen
 		return GetSetExtension.get(this, key);
 
 	/** @see `banker.linker.interfaces.GetSet` **/
+	public inline function getOr(key: K, defaultValue: V): V
+		return GetSetExtension.getOr(this, key, defaultValue);
+
+	/** @see `banker.linker.interfaces.GetSet` **/
+	public inline function getOrElse(key: K, valueFactory: () -> V): V
+		return GetSetExtension.getOrElse(this, key, valueFactory);
+
+	/** @see `banker.linker.interfaces.GetSet` **/
 	public inline function tryGet(key: K): Null<V>
 		return GetSetExtension.tryGet(this, key);
 

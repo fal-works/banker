@@ -10,6 +10,18 @@ interface GetSet<K, V> {
 
 	/**
 		Gets value for `key`.
+		@return The value that is mapped to `key`. If not found, `defaultValue`.
+	**/
+	function getOr(key: K, defaultValue: V): V;
+
+	/**
+		Gets value for `key`.
+		@return The value that is mapped to `key`. If not found, the result from `valueFactory()`.
+	**/
+	function getOrElse(key: K, valueFactory: () -> V): V;
+
+	/**
+		Gets value for `key`.
 		@return The value that is mapped to `key`. `null` if `key` does not exist.
 	**/
 	function tryGet(key: K): Null<V>;
