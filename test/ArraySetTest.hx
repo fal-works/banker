@@ -117,6 +117,22 @@ class ArraySetTest {
 
 	static final _count = testCase(count, Ok);
 
+
+	static function countAll() {
+		describe();
+		final set = new ArraySet<Int>(8);
+		set.add(1);
+		set.add(2);
+		set.add(3);
+		set.add(4);
+		set.add(5);
+		final populationMap = set.countAll(n -> if (n % 2 == 0) "even" else "odd");
+		final populationMapString = populationMap.toString();
+		assert(populationMapString == "{ odd => 3, even => 2 }");
+		println('data: ${set.toString()}  map: ${populationMapString}');
+	}
+
+	static final _countAll = testCase(countAll, Ok);
 	public static final all = testCaseGroup([
 		_remove,
 		_removeAll,
@@ -125,6 +141,7 @@ class ArraySetTest {
 		_duplicate,
 		_duplicateVector,
 		_multiSet,
-		_count
+		_count,
+		_countAll
 	]);
 }

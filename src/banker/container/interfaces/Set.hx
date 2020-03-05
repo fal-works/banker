@@ -1,5 +1,7 @@
 package banker.container.interfaces;
 
+import banker.linker.ArrayMap;
+
 interface Set<T> extends Sequence<T> {
 	/**
 		Adds `value` to `this`.
@@ -42,4 +44,11 @@ interface Set<T> extends Sequence<T> {
 		@return The number of elements in `this` that match to `predicate`.
 	**/
 	function count(predicate: (element: T) -> Bool): Int;
+
+	/**
+		Groups all elements of `this` using `grouperCallback` and
+		counts how many elements belong to each group.
+		@return A map with element groups as keys and numbers of elements as values.
+	**/
+	function countAll<S>(grouperCallback: (element: T) -> S): ArrayMap<S, Int>;
 }

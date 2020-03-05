@@ -1,5 +1,7 @@
 package banker.container.buffer.top_aligned;
 
+import banker.linker.ArrayMap;
+
 /**
 	Intermediate base class for top-aligned array-based unordered sets
 	that implements methods required by the `Set` interface.
@@ -52,6 +54,10 @@ class TopAlignedSetBuffer<T> extends TopAlignedUnorderedBuffer<T> implements Set
 	/** @see `banker.container.interfaces.Set` **/
 	public inline function count(predicate: (element: T) -> Bool): Int
 		return SetExtension.count(this, predicate);
+
+	/** @see `banker.container.interfaces.Set` **/
+	public inline function countAll<S>(grouperCallback: (element: T) -> S): ArrayMap<S, Int>
+		return SetExtension.countAll(this, grouperCallback);
 
 	/** @see `banker.container.interfaces.Sequence` **/
 	public inline function forEach(callback: T->Void): Void

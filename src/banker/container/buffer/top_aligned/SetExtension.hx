@@ -1,5 +1,7 @@
 package banker.container.buffer.top_aligned;
 
+import banker.linker.ArrayMap;
+
 class SetExtension {
 	/** @see `banker.container.interfaces.Set` **/
 	public static inline function findFirst<T>(
@@ -169,5 +171,22 @@ class SetExtension {
 			++i;
 		}
 		return count;
+	}
+
+	/** @see `banker.container.interfaces.Set` **/
+	public static inline function countAll<T, S>(
+		_this: TopAlignedBuffer<T>,
+		grouperCallback: (element: T) -> S
+	): ArrayMap<S, Int> {
+		final size = _this.size;
+		final vector = _this.vector;
+		final populationMap = new ArrayMap<S, Int>(size);
+		var i = 0;
+		while (i < size) {
+			final group = grouperCallback(vector[i]);
+			populationMap.set(group, populationMap.getOr(group, 0) + 1);
+			++i;
+		}
+		return populationMap;
 	}
 }
