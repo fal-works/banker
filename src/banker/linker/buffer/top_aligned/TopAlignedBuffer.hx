@@ -54,17 +54,6 @@ class TopAlignedBuffer<K, V> extends Tagged {
 		return size / capacity;
 
 	/**
-		@param capacity The number of elements that can be added to this.
-	**/
-	function new(capacity: Int) {
-		assert(capacity >= 0);
-		super();
-
-		this.keyVector = new WritableVector<K>(capacity);
-		this.valueVector = new WritableVector<V>(capacity);
-	}
-
-	/**
 		@return A `String` representation of `this`.
 	**/
 	public function toString(): String {
@@ -89,6 +78,17 @@ class TopAlignedBuffer<K, V> extends Tagged {
 
 			buffer.toString();
 		}
+	}
+
+	/**
+		@param capacity The number of elements that can be added to this.
+	**/
+	function new(capacity: Int) {
+		assert(capacity >= 0);
+		super();
+
+		this.keyVector = new WritableVector<K>(capacity);
+		this.valueVector = new WritableVector<V>(capacity);
 	}
 
 	inline function get_capacity(): Int
