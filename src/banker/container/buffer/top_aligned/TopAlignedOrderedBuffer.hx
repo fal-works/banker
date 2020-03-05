@@ -1,8 +1,5 @@
 package banker.container.buffer.top_aligned;
 
-import sneaker.common.UnsupportedOperationException;
-import banker.common.internal.LimitedCapacityBuffer;
-
 #if !banker_generic_disable
 @:generic
 #end
