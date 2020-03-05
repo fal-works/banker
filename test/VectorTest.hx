@@ -69,7 +69,6 @@ class VectorTest {
 		vector.ref.forEach(n -> println(n));
 	}, Visual);
 
-
 	static final fill = testCase(() -> {
 		describe("This prints [4, 4, 4].");
 		final vector = WritableVector.fromArrayCopy([

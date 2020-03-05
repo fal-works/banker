@@ -83,7 +83,14 @@ class ArraySetTest {
 		final set = new ArraySet<Int>(8);
 		set.add(2);
 		set.add(4);
-		set.addFromVector(banker.vector.Vector.fromArrayCopy([1, 2, 3, 4, 5, 6]));
+		set.addFromVector(banker.vector.Vector.fromArrayCopy([
+			1,
+			2,
+			3,
+			4,
+			5,
+			6
+		]));
 		assert(set.toString() == "2, 4, 1, 3, 5, 6");
 		println('data: ${set.toString()}');
 	}
@@ -96,7 +103,12 @@ class ArraySetTest {
 		set.add(2);
 		set.add(2);
 		set.add(4);
-		set.addFromVector(banker.vector.Vector.fromArrayCopy([1, 2, 4, 6]));
+		set.addFromVector(banker.vector.Vector.fromArrayCopy([
+			1,
+			2,
+			4,
+			6
+		]));
 		assert(set.toString() == "2, 2, 4, 1, 2, 4, 6");
 		println('data: ${set.toString()}');
 	}
@@ -116,7 +128,6 @@ class ArraySetTest {
 	}
 
 	static final _count = testCase(count, Ok);
-
 
 	static function countAll() {
 		describe();

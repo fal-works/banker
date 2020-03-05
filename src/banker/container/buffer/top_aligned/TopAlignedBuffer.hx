@@ -106,7 +106,11 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		This method must be overridden by the concrete subclass
 		according to the specification e.g. whether to allow duplicates.
 	**/
-	function pushFromVectorInternal(index: Int, otherVector: VectorReference<T>, otherVectorLength: Int): Void {
+	function pushFromVectorInternal(
+		index: Int,
+		otherVector: VectorReference<T>,
+		otherVectorLength: Int
+	): Void {
 		throw new UnsupportedOperationException("This method must be overridden by the subclass.");
 	}
 }

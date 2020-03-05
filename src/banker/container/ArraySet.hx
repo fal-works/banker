@@ -38,7 +38,11 @@ class ArraySet<T> extends TopAlignedSetBuffer<T> {
 
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushFromVectorInternal()`
 	**/
-	override inline function pushFromVectorInternal(index: Int, otherVector: VectorReference<T>, otherVectorLength: Int): Void {
+	override inline function pushFromVectorInternal(
+		index: Int,
+		otherVector: VectorReference<T>,
+		otherVectorLength: Int
+	): Void {
 		final thisVector = this.vector;
 		var readIndex = 0;
 		var writeIndex = index;

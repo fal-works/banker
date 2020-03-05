@@ -46,7 +46,11 @@ class ArrayStack<T> extends TopAlignedOrderedBuffer<T> implements Stack<T> {
 
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushFromVectorInternal()`
 	**/
-	override inline function pushFromVectorInternal(index: Int, otherVector: VectorReference<T>, otherVectorLength: Int): Void {
+	override inline function pushFromVectorInternal(
+		index: Int,
+		otherVector: VectorReference<T>,
+		otherVectorLength: Int
+	): Void {
 		VectorTools.blit(otherVector, 0, this.vector, index, otherVectorLength);
 		this.nextFreeSlotIndex = index + otherVectorLength;
 	}

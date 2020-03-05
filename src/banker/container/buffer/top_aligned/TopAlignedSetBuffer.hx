@@ -56,7 +56,9 @@ class TopAlignedSetBuffer<T> extends TopAlignedUnorderedBuffer<T> implements Set
 		return SetExtension.count(this, predicate);
 
 	/** @see `banker.container.interfaces.Set` **/
-	public inline function countAll<S>(grouperCallback: (element: T) -> S): ArrayMap<S, Int>
+	public inline function countAll<S>(
+		grouperCallback: (element: T) -> S
+	): ArrayMap<S, Int>
 		return SetExtension.countAll(this, grouperCallback);
 
 	/** @see `banker.container.interfaces.Sequence` **/

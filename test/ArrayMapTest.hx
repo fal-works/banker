@@ -47,7 +47,6 @@ class ArrayMapTest {
 
 	static final _remove = testCase(remove, Ok);
 
-
 	static function removeOrdered() {
 		describe();
 		final map = new OrderedArrayMap<String, String>(5);
