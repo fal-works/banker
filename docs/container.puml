@@ -1,0 +1,84 @@
+@startuml container
+
+' ---- (style) --------------------------------
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+' ---- (diagram) ------------------------------
+
+package interfaces {
+  interface Deque
+  interface Indexed
+  interface Queue
+  interface Sequence
+  interface Set
+  interface Stack
+}
+package ring_buffer {
+  class ArrayDeque
+  class ArrayQueue
+}
+
+package top_aligned_buffer {
+  class ArrayList
+  class ArrayMultiSet
+  class ArraySet
+  class ArrayStack
+}
+
+Deque <|.... ArrayDeque
+Sequence <|.... ArrayDeque
+Indexed <|.... ArrayList
+Sequence <|.... ArrayList
+Set <|.... ArrayList
+Set <|.... ArrayMultiSet
+Sequence <|.... ArrayMultiSet
+Queue <|.... ArrayQueue
+Sequence <|.... ArrayQueue
+Set <|.... ArraySet
+Sequence <|.... ArraySet
+Stack <|.... ArrayStack
+
+package order {
+  abstract Ordered
+  abstract Unordered
+}
+
+ArrayDeque ---|> Ordered
+ArrayList ---|> Ordered
+ArrayQueue ---|> Ordered
+ArrayStack ---|> Ordered
+ArraySet ---|> Unordered
+ArrayMultiSet ---|> Unordered
+
+package uniqueness {
+  abstract Unique
+  abstract NotUnique
+}
+
+ArrayDeque ----|> NotUnique
+ArrayList ----|> NotUnique
+ArrayQueue ----|> NotUnique
+ArrayStack ----|> NotUnique
+ArraySet ----|> Unique
+ArrayMultiSet ----|> NotUnique
+
+@enduml

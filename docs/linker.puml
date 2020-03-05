@@ -1,0 +1,59 @@
+@startuml linker
+
+' ---- (style) --------------------------------
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+' ---- (diagram) ------------------------------
+
+package interfaces {
+  interface Map
+  interface Set
+  interface Sequence
+}
+
+package implementations {
+  class ArrayMap
+  class OrderedArrayMap
+}
+
+Map <|... ArrayMap
+Map <|... OrderedArrayMap
+Set <|... ArrayMap
+Set <|... OrderedArrayMap
+Sequence <|... ArrayMap
+Sequence <|... OrderedArrayMap
+
+package order {
+  abstract Ordered
+  abstract Unordered
+}
+ArrayMap ---|> Unordered
+OrderedArrayMap ---|> Ordered
+
+package uniqueness {
+  abstract Unique
+}
+ArrayMap ---|> Unique
+OrderedArrayMap ---|> Unique
+
+
+@enduml

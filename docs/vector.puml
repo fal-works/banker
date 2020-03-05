@@ -1,0 +1,66 @@
+@startuml vector
+
+' ---- (style) --------------------------------
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+' ---- (diagram) ------------------------------
+
+package main_vector_classes {
+  class Vector {
+    {method} -
+  }
+  note right
+  no features, but
+  guaranteed to be
+  NOT WRITABLE
+  from anywhere
+  end note
+
+  class WritableVector {
+    {method} WRITE features
+  }
+  class VectorReference {
+    {method} READ features
+  }
+
+  WritableVector --> VectorReference: convertible
+  Vector --> VectorReference: convertible
+  note right
+  Converting to
+  VectorReference
+  can be done without
+  runtime cost
+  end note
+}
+
+package underlying_types {
+  class RawVector
+  class hl_NativeArray
+  class haxe_ds_Vector
+
+  hl_NativeArray <|-- RawVector
+  haxe_ds_Vector <|-- RawVector
+}
+
+RawVector <|-- main_vector_classes
+
+@enduml

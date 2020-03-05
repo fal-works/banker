@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="426px" preserveAspectRatio="none" style="width:408px;height:426px;" version="1.1" viewBox="0 0 408 426" width="408px" zoomAndPan="magnify"><defs/><g><!--cluster interfaces--><polygon fill="#FFFFFF" points="88,24,165,24,172,47.6094,384,47.6094,384,108,88,108,88,24" style="stroke: #A0A0A0; stroke-width: 1.5;"/><line style="stroke: #A0A0A0; stroke-width: 1.5;" x1="88" x2="172" y1="47.6094" y2="47.6094"/><text fill="#A0A0A0" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="71" x="92" y="40.5332">interfaces</text><!--cluster implementations--><polygon fill="#FFFFFF" points="42,177,164,177,171,200.6094,319,200.6094,319,261,42,261,42,177" style="stroke: #A0A0A0; stroke-width: 1.5;"/><line style="stroke: #A0A0A0; stroke-width: 1.5;" x1="42" x2="171" y1="200.6094" y2="200.6094"/><text fill="#A0A0A0" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="116" x="46" y="193.5332">implementations</text><!--cluster order--><polygon fill="#FFFFFF" points="22,330,67,330,74,353.6094,258,353.6094,258,414,22,414,22,330" style="stroke: #A0A0A0; stroke-width: 1.5;"/><line style="stroke: #A0A0A0; stroke-width: 1.5;" x1="22" x2="74" y1="353.6094" y2="353.6094"/><text fill="#A0A0A0" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="39" x="26" y="346.5332">order</text><!--cluster uniqueness--><polygon fill="#FFFFFF" points="282,330,371,330,378,353.6094,386,353.6094,386,414,282,414,282,330" style="stroke: #A0A0A0; stroke-width: 1.5;"/><line style="stroke: #A0A0A0; stroke-width: 1.5;" x1="282" x2="378" y1="353.6094" y2="353.6094"/><text fill="#A0A0A0" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="83" x="286" y="346.5332">uniqueness</text><!--class Map--><rect fill="#FFFFFF" height="32" id="Map" style="stroke: #202020; stroke-width: 1.5;" width="55" x="104.5" y="60"/><ellipse cx="119.5" cy="76" fill="#E6E6FA" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M120.6719,80.7188 L121.4063,80.7188 L121.4063,82.8594 L117.7188,82.8594 L117.7188,80.7188 L118.4531,80.7188 L118.4531,71.375 L117.7188,71.375 L117.7188,69.2344 L121.4063,69.2344 L121.4063,71.375 L120.6719,71.375 L120.6719,80.7188 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="23" x="133.5" y="80.9102">Map</text><!--class Set--><rect fill="#FFFFFF" height="32" id="Set" style="stroke: #202020; stroke-width: 1.5;" width="50" x="195" y="60"/><ellipse cx="210" cy="76" fill="#E6E6FA" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M211.1719,80.7188 L211.9063,80.7188 L211.9063,82.8594 L208.2188,82.8594 L208.2188,80.7188 L208.9531,80.7188 L208.9531,71.375 L208.2188,71.375 L208.2188,69.2344 L211.9063,69.2344 L211.9063,71.375 L211.1719,71.375 L211.1719,80.7188 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="18" x="224" y="80.9102">Set</text><!--class Sequence--><rect fill="#FFFFFF" height="32" id="Sequence" style="stroke: #202020; stroke-width: 1.5;" width="88" x="280" y="60"/><ellipse cx="295" cy="76" fill="#E6E6FA" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M296.1719,80.7188 L296.9063,80.7188 L296.9063,82.8594 L293.2188,82.8594 L293.2188,80.7188 L293.9531,80.7188 L293.9531,71.375 L293.2188,71.375 L293.2188,69.2344 L296.9063,69.2344 L296.9063,71.375 L296.1719,71.375 L296.1719,80.7188 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="56" x="309" y="80.9102">Sequence</text><!--class ArrayMap--><rect fill="#FFFFFF" height="32" id="ArrayMap" style="stroke: #202020; stroke-width: 1.5;" width="82" x="58" y="213"/><ellipse cx="73" cy="229" fill="#ADD1B2" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M76.6875,230.2031 Q76.4375,233.6875 75.2969,234.8438 Q74.2656,235.8594 72.8594,235.8594 Q71.4531,235.8594 70.4219,234.8438 Q68.6719,233.0781 68.6719,229.4063 Q68.6719,225.1563 70.5469,223.25 Q71.5938,222.2344 72.9219,222.2344 Q74.3281,222.2344 75.1719,223.0469 Q76.6563,224.5625 76.5781,227.4375 L74.4531,227.4375 Q74.375,225.1094 73.7344,224.4688 Q73.4531,224.1719 72.9219,224.1719 Q72.4688,224.1719 72.1094,224.5469 Q70.875,225.7656 70.875,229.2813 Q70.875,232.3281 71.9219,233.3438 Q72.3438,233.7813 72.8594,233.7813 Q73.3125,233.7813 73.75,233.3438 Q74.3125,232.7969 74.3906,230.2031 L76.6875,230.2031 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="50" x="87" y="233.9102">ArrayMap</text><!--class OrderedArrayMap--><rect fill="#FFFFFF" height="32" id="OrderedArrayMap" style="stroke: #202020; stroke-width: 1.5;" width="127" x="175.5" y="213"/><ellipse cx="190.5" cy="229" fill="#ADD1B2" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M194.1875,230.2031 Q193.9375,233.6875 192.7969,234.8438 Q191.7656,235.8594 190.3594,235.8594 Q188.9531,235.8594 187.9219,234.8438 Q186.1719,233.0781 186.1719,229.4063 Q186.1719,225.1563 188.0469,223.25 Q189.0938,222.2344 190.4219,222.2344 Q191.8281,222.2344 192.6719,223.0469 Q194.1563,224.5625 194.0781,227.4375 L191.9531,227.4375 Q191.875,225.1094 191.2344,224.4688 Q190.9531,224.1719 190.4219,224.1719 Q189.9688,224.1719 189.6094,224.5469 Q188.375,225.7656 188.375,229.2813 Q188.375,232.3281 189.4219,233.3438 Q189.8438,233.7813 190.3594,233.7813 Q190.8125,233.7813 191.25,233.3438 Q191.8125,232.7969 191.8906,230.2031 L194.1875,230.2031 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="95" x="204.5" y="233.9102">OrderedArrayMap</text><!--class Ordered--><rect fill="#FFFFFF" height="32" id="Ordered" style="stroke: #202020; stroke-width: 1.5;" width="77" x="164.5" y="366"/><ellipse cx="179.5" cy="382" fill="#A9DCDF" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M177.4688,388.3594 L175.1719,388.3594 L178.6719,374.7344 L180.5313,374.7344 L184.0156,388.3594 L181.7188,388.3594 L180.7969,384.5781 L178.4063,384.5781 L177.4688,388.3594 Z M179.5313,378.75 L179.6563,378.75 L178.9063,382.625 L180.2813,382.625 L179.5313,378.75 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="45" x="193.5" y="386.9102">Ordered</text><!--class Unordered--><rect fill="#FFFFFF" height="32" id="Unordered" style="stroke: #202020; stroke-width: 1.5;" width="91" x="38.5" y="366"/><ellipse cx="53.5" cy="382" fill="#A9DCDF" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M51.4688,388.3594 L49.1719,388.3594 L52.6719,374.7344 L54.5313,374.7344 L58.0156,388.3594 L55.7188,388.3594 L54.7969,384.5781 L52.4063,384.5781 L51.4688,388.3594 Z M53.5313,378.75 L53.6563,378.75 L52.9063,382.625 L54.2813,382.625 L53.5313,378.75 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="59" x="67.5" y="386.9102">Unordered</text><!--class Unique--><rect fill="#FFFFFF" height="32" id="Unique" style="stroke: #202020; stroke-width: 1.5;" width="72" x="298" y="366"/><ellipse cx="313" cy="382" fill="#A9DCDF" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M310.9688,388.3594 L308.6719,388.3594 L312.1719,374.7344 L314.0313,374.7344 L317.5156,388.3594 L315.2188,388.3594 L314.2969,384.5781 L311.9063,384.5781 L310.9688,388.3594 Z M313.0313,378.75 L313.1563,378.75 L312.4063,382.625 L313.7813,382.625 L313.0313,378.75 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="40" x="327" y="386.9102">Unique</text><!--reverse link Map to ArrayMap--><path d="M100.2685,107.006 C89.0766,119.689 77.8334,135.37 72,152 C64.5842,173.141 76.985,197.543 87.3285,212.872 " fill="none" id="Map&lt;-ArrayMap" style="stroke: #202020; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="95.5775,101.786,114.492,92.235,105.6621,111.497,95.5775,101.786" style="stroke: #202020; stroke-width: 1.0;"/><!--reverse link Map to OrderedArrayMap--><path d="M154.42,108.64 C176.984,140.482 210.838,188.258 228.074,212.581 " fill="none" id="Map&lt;-OrderedArrayMap" style="stroke: #202020; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="148.503,112.396,142.651,92.031,159.926,104.302,148.503,112.396" style="stroke: #202020; stroke-width: 1.0;"/><!--reverse link Set to ArrayMap--><path d="M195.358,107.751 C169.848,139.587 131.028,188.031 111.356,212.581 " fill="none" id="Set&lt;-ArrayMap" style="stroke: #202020; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="189.987,103.261,207.956,92.031,200.912,112.015,189.987,103.261" style="stroke: #202020; stroke-width: 1.0;"/><!--reverse link Set to OrderedArrayMap--><path d="M224.439,112.275 C228.433,144.021 234.114,189.167 237.06,212.581 " fill="none" id="Set&lt;-OrderedArrayMap" style="stroke: #202020; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="217.443,112.748,221.891,92.031,231.333,111,217.443,112.748" style="stroke: #202020; stroke-width: 1.0;"/><!--reverse link Sequence to ArrayMap--><path d="M283.991,102.902 C276.741,107.385 269.196,111.914 262,116 C250.722,122.404 168.492,161.376 158,169 C140.304,181.858 122.957,200.074 111.704,212.855 " fill="none" id="Sequence&lt;-ArrayMap" style="stroke: #202020; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="280.394,96.895,301.042,92.134,287.87,108.732,280.394,96.895" style="stroke: #202020; stroke-width: 1.0;"/><!--reverse link Sequence to OrderedArrayMap--><path d="M338.535,111.228 C342.113,124.783 343.341,140.162 337,153 C323.527,180.277 294.848,200.369 271.978,212.855 " fill="none" id="Sequence&lt;-OrderedArrayMap" style="stroke: #202020; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="331.823,113.247,331.726,92.057,345.016,108.561,331.823,113.247" style="stroke: #202020; stroke-width: 1.0;"/><!--link ArrayMap to Unordered--><path d="M97.5069,245.031 C95.194,268.314 90.6816,313.738 87.5109,345.657 " fill="none" id="ArrayMap-&gt;Unordered" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="none" points="94.4745,346.3707,85.5317,365.5807,80.5431,344.9867,94.4745,346.3707" style="stroke: #202020; stroke-width: 1.0;"/><!--link OrderedArrayMap to Ordered--><path d="M235.417,245.031 C229.839,268.426 218.931,314.178 211.316,346.1186 " fill="none" id="OrderedArrayMap-&gt;Ordered" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="none" points="218.124,347.7494,206.676,365.5807,204.505,344.5026,218.124,347.7494" style="stroke: #202020; stroke-width: 1.0;"/><!--link ArrayMap to Unique--><path d="M120.811,245.145 C131.803,252.59 145.436,261.541 158,269 C201.254,294.677 215.754,294.698 258,322 C272.371,331.2874 287.41,342.5891 300.281,352.806 " fill="none" id="ArrayMap-&gt;Unique" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="none" points="305.126,347.7233,316.223,365.7746,296.291,358.5836,305.126,347.7233" style="stroke: #202020; stroke-width: 1.0;"/><!--link OrderedArrayMap to Unique--><path d="M248.456,245.031 C263.529,268.988 293.351,316.39 313.489,348.3976 " fill="none" id="OrderedArrayMap-&gt;Unique" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="none" points="319.574,344.9247,324.299,365.5807,307.724,352.3799,319.574,344.9247" style="stroke: #202020; stroke-width: 1.0;"/><!--
+@startuml linker.svg
+
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+
+package interfaces {
+  interface Map
+  interface Set
+  interface Sequence
+}
+
+package implementations {
+  class ArrayMap
+  class OrderedArrayMap
+}
+
+Map <|... ArrayMap
+Map <|... OrderedArrayMap
+Set <|... ArrayMap
+Set <|... OrderedArrayMap
+Sequence <|... ArrayMap
+Sequence <|... OrderedArrayMap
+
+package order {
+  abstract Ordered
+  abstract Unordered
+}
+ArrayMap - - -|> Unordered
+OrderedArrayMap - - -|> Ordered
+
+package uniqueness {
+  abstract Unique
+}
+ArrayMap - - -|> Unique
+OrderedArrayMap - - -|> Unique
+
+
+@enduml
+
+PlantUML version 1.2019.09(Tue Aug 27 01:19:51 GMT+09:00 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 1.8.0_242-b08
+Operating System: Windows 10
+OS Version: 10.0
+Default Encoding: MS932
+Language: ja
+Country: JP
+--></g></svg>
