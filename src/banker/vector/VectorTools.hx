@@ -25,6 +25,25 @@ class VectorTools {
 	}
 
 	/**
+		Copies `rangeLength` of elements from `source` to `destination`,
+		both beginning at the position of index `0`.
+	**/
+	public static inline function blitZero<T>(
+		source: VectorReference<T>,
+		destination: WritableVector<T>,
+		rangeLength: Int
+	): Void {
+		assert(rangeLength <= source.length);
+		assert(rangeLength <= destination.length);
+		destination.ref.data.blit(
+			0,
+			source.data,
+			0,
+			rangeLength
+		);
+	}
+
+	/**
 		Blits data from vector to array.
 	**/
 	public static inline function blitToArray<T>(
