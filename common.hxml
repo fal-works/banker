@@ -6,3 +6,4 @@
 --macro nullSafety("banker", Strict)
 -lib sneaker
 -main Main
+# -D banker_watermark_enable

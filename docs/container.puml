@@ -39,7 +39,7 @@ package ring_buffer {
 
 package top_aligned_buffer {
   class ArrayList
-  class ArrayMultiSet
+  class ArrayMultiset
   class ArraySet
   class ArrayStack
 }
@@ -49,8 +49,8 @@ Sequence <|.... ArrayDeque
 Indexed <|.... ArrayList
 Sequence <|.... ArrayList
 Set <|.... ArrayList
-Set <|.... ArrayMultiSet
-Sequence <|.... ArrayMultiSet
+Set <|.... ArrayMultiset
+Sequence <|.... ArrayMultiset
 Queue <|.... ArrayQueue
 Sequence <|.... ArrayQueue
 Set <|.... ArraySet
@@ -67,7 +67,7 @@ ArrayList ---|> Ordered
 ArrayQueue ---|> Ordered
 ArrayStack ---|> Ordered
 ArraySet ---|> Unordered
-ArrayMultiSet ---|> Unordered
+ArrayMultiset ---|> Unordered
 
 package uniqueness {
   abstract Unique
@@ -79,6 +79,6 @@ ArrayList ----|> NotUnique
 ArrayQueue ----|> NotUnique
 ArrayStack ----|> NotUnique
 ArraySet ----|> Unique
-ArrayMultiSet ----|> NotUnique
+ArrayMultiset ----|> NotUnique
 
 @enduml

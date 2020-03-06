@@ -38,15 +38,15 @@ class CloneExtension {
 	}
 
 	/**
-		@return Shallow copy of `this` as an `ArrayMultiSet`.
+		@return Shallow copy of `this` as an `ArrayMultiset`.
 		@see `cloneAsList()` about the argument `newCapacity`.
 	**/
-	public static inline function cloneAsMultiSet<T>(
+	public static inline function cloneAsMultiset<T>(
 		_this: TopAlignedBuffer<T>,
 		newCapacity: Int
-	): ArrayMultiSet<T> {
+	): ArrayMultiset<T> {
 		final newCapacityValue = if (newCapacity < 0) _this.capacity else newCapacity;
-		final newContainer = new ArrayMultiSet<T>(newCapacityValue);
+		final newContainer = new ArrayMultiset<T>(newCapacityValue);
 		newContainer.blitAllFrom(_this);
 		return newContainer;
 	}

@@ -12,7 +12,7 @@ import banker.container.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayMultiSet<T> extends TopAlignedSetBuffer<T> {
+class ArrayMultiset<T> extends TopAlignedSetBuffer<T> {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);

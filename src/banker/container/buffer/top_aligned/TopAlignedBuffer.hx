@@ -65,8 +65,8 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		return CloneExtension.cloneAsStack(this, newCapacity);
 
 	/** @see banker.container.buffer.top_aligned.CloneExtension **/
-	public inline function cloneAsMultiSet(newCapacity = -1): ArrayMultiSet<T>
-		return CloneExtension.cloneAsMultiSet(this, newCapacity);
+	public inline function cloneAsMultiset(newCapacity = -1): ArrayMultiset<T>
+		return CloneExtension.cloneAsMultiset(this, newCapacity);
 
 	inline function get_capacity()
 		return vector.length;

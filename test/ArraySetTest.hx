@@ -1,7 +1,7 @@
 package;
 
 import banker.container.ArraySet;
-import banker.container.ArrayMultiSet;
+import banker.container.ArrayMultiset;
 
 class ArraySetTest {
 	static function remove() {
@@ -97,9 +97,9 @@ class ArraySetTest {
 
 	static final _duplicateVector = testCase(duplicateVector, Ok);
 
-	static function multiSet() {
+	static function Multiset() {
 		describe();
-		final set = new ArrayMultiSet<Int>(8);
+		final set = new ArrayMultiset<Int>(8);
 		set.add(2);
 		set.add(2);
 		set.add(4);
@@ -113,7 +113,7 @@ class ArraySetTest {
 		println('data: ${set.toString()}');
 	}
 
-	static final _multiSet = testCase(multiSet, Ok);
+	static final _Multiset = testCase(Multiset, Ok);
 
 	static function count() {
 		describe();
@@ -151,7 +151,7 @@ class ArraySetTest {
 		_findFirst,
 		_duplicate,
 		_duplicateVector,
-		_multiSet,
+		_Multiset,
 		_count,
 		_countAll
 	]);
