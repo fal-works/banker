@@ -24,13 +24,13 @@ class LinkerBuilder {
 
 	/**
 		@param capacity Max number of key-value pairs that can be contained.
-		@return New `OrderedArrayMap` instance created from `map`.
+		@return New `ArrayOrderedMap` instance created from `map`.
 	**/
 	public static function orderedArrayMapFromStandardMap<K, V>(
 		map: haxe.ds.Map<K, V>,
 		capacity: Int
 	) {
-		final arrayMap = new OrderedArrayMap<K, V>(capacity);
+		final arrayMap = new ArrayOrderedMap<K, V>(capacity);
 		final keys = arrayMap.keyVector;
 		final values = arrayMap.valueVector;
 		var i = 0;

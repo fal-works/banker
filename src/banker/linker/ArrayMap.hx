@@ -6,7 +6,7 @@ import banker.linker.buffer.top_aligned.*;
 	Array-based map.
 	Suited for iteration or holding small number of entries.
 
-	Removing a single entry can be done faster than `OrderedArrayMap`,
+	Removing a single entry can be done faster than `ArrayOrderedMap`,
 	but instead the order is not preserved.
 **/
 #if !banker_generic_disable

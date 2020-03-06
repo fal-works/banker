@@ -12,7 +12,7 @@ import banker.linker.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-class OrderedArrayMap<K, V>
+class ArrayOrderedMap<K, V>
 	extends TopAlignedMapBuffer<K, V>
 	implements Set<K, V>
 	implements Convert<K, V> {
@@ -43,8 +43,8 @@ class OrderedArrayMap<K, V>
 	}
 
 	/** @see `banker.linker.interfaces.Convert` **/
-	public inline function mapValues<W>(convertValue: V->W): OrderedArrayMap<K, W> {
-		final newMap = new OrderedArrayMap<K, W>(this.capacity);
+	public inline function mapValues<W>(convertValue: V->W): ArrayOrderedMap<K, W> {
+		final newMap = new ArrayOrderedMap<K, W>(this.capacity);
 		ConvertExtension.copyWithMappedValues(this, newMap, convertValue);
 
 		return newMap;

@@ -66,15 +66,15 @@ class ConvertExtension {
 	}
 
 	/**
-		@return Shallow copy of `this` as an `OrderedArrayMap`.
+		@return Shallow copy of `this` as an `ArrayOrderedMap`.
 		@see `cloneAsMap()` about the argument `newCapacity`.
 	**/
 	public static inline function cloneAsOrderedMap<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		newCapacity: Int
-	): OrderedArrayMap<K, V> {
+	): ArrayOrderedMap<K, V> {
 		final newCapacityValue = if (newCapacity < 0) _this.capacity else newCapacity;
-		final newContainer = new OrderedArrayMap<K, V>(newCapacityValue);
+		final newContainer = new ArrayOrderedMap<K, V>(newCapacityValue);
 		newContainer.blitAllFrom(_this);
 		return newContainer;
 	}

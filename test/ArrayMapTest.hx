@@ -1,7 +1,7 @@
 package;
 
 import banker.linker.ArrayMap;
-import banker.linker.OrderedArrayMap;
+import banker.linker.ArrayOrderedMap;
 
 class ArrayMapTest {
 	static function getSet() {
@@ -49,7 +49,7 @@ class ArrayMapTest {
 
 	static function removeOrdered() {
 		describe();
-		final map = new OrderedArrayMap<String, String>(5);
+		final map = new ArrayOrderedMap<String, String>(5);
 		map.set("keyA", "valueA");
 		map.set("keyB", "valueB");
 		map.set("keyC", "valueC");
@@ -147,7 +147,7 @@ class ArrayMapTest {
 
 	static function removeAllOrdered() {
 		describe();
-		final map = new OrderedArrayMap<Int, Int>(5);
+		final map = new ArrayOrderedMap<Int, Int>(5);
 		map.set(1, 10);
 		map.set(2, 20);
 		map.set(3, 30);

@@ -32,28 +32,28 @@ package interfaces {
 
 package implementations {
   class ArrayMap
-  class OrderedArrayMap
+  class ArrayOrderedMap
 }
 
 Map <|... ArrayMap
-Map <|... OrderedArrayMap
+Map <|... ArrayOrderedMap
 Set <|... ArrayMap
-Set <|... OrderedArrayMap
+Set <|... ArrayOrderedMap
 Sequence <|... ArrayMap
-Sequence <|... OrderedArrayMap
+Sequence <|... ArrayOrderedMap
 
 package order {
   abstract Ordered
   abstract Unordered
 }
 ArrayMap ---|> Unordered
-OrderedArrayMap ---|> Ordered
+ArrayOrderedMap ---|> Ordered
 
 package uniqueness {
   abstract Unique
 }
 ArrayMap ---|> Unique
-OrderedArrayMap ---|> Unique
+ArrayOrderedMap ---|> Unique
 
 
 @enduml
