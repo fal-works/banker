@@ -1,5 +1,7 @@
 package banker.vector.extension;
 
+import banker.common.MathTools;
+
 class Copy {
 	/**
 		@return Shallow copy of `this`.
@@ -15,6 +17,37 @@ class Copy {
 		_this: VectorReference<T>
 	): WritableVector<T> {
 		return WritableVector.fromData(_this.data.copy());
+	}
+
+	/**
+		Creates a resized copy.
+		@param newLength If this is less than the current length,
+		the overflowing data is truncated.
+		@return Shallow copy of `this` with `newLength`.
+	**/
+	public static inline function copyResized<T>(
+		_this: VectorReference<T>,
+		newLength: Int
+	): Vector<T>
+		return copyResizedWritable(_this, newLength).nonWritable();
+
+	/**
+		Creates a resized copy.
+		@param newLength If this is less than the current length,
+		the overflowing data is truncated.
+		@return Shallow copy of `this` with `newLength`.
+	**/
+	public static inline function copyResizedWritable<T>(
+		_this: VectorReference<T>,
+		newLength: Int
+	): WritableVector<T> {
+		final newVector = new WritableVector(newLength);
+		VectorTools.blitZero(
+			_this,
+			newVector,
+			MathTools.minInt(_this.length, newLength)
+		);
+		return newVector;
 	}
 
 	/**
