@@ -50,6 +50,19 @@ class TopAlignedMapBuffer<K, V>
 		return MapExtension.setIfAbsent(this, key, value);
 
 	/** @see `banker.linker.interfaces.Map` **/
+	public inline function setIf(
+		key: K,
+		newValue: V,
+		predicate: (
+			key: K,
+			oldValue: V,
+			newValue: V
+		) -> Bool
+	): Bool {
+		return MapExtension.setIf(this, key, newValue, predicate);
+	}
+
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function getOrAdd(key: K, defaultValue: V): V
 		return MapExtension.getOrAdd(this, key, defaultValue);
 

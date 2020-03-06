@@ -34,20 +34,28 @@ interface Map<K, V> {
 	**/
 	function set(key: K, value: V): Bool;
 
-	// /**
-	//  * Maps `key` to `value`.
-	//  * - If `key` already exists, the mapped value will be overwritten only if `compareCallback` returns `true`.
-	//  * - if `key` does not exist, adds a new key-value pair.
-	//  * @param compareCallback Function that returns `true` if the old value should be overwritten.
-	//  * @return `true` if `key` is newly added by this operation.
-	//  */
-	// function setIf(key: K, predicate: (key: K, oldValue: V, newValue: V) -> Bool): Bool;
-
 	/**
 		Maps `key` to `value` only if `key` does not exist.
 		@return `true` if `key` is newly added by this operation.
 	**/
 	function setIfAbsent(key: K, value: V): Bool;
+
+	/**
+	 * Maps `key` to `value`.
+	 * - If `key` already exists, the mapped value will be overwritten only if `compareCallback` returns `true`.
+	 * - if `key` does not exist, adds a new key-value pair.
+	 * @param predicate Function that returns `true` if the old value should be overwritten.
+	 * @return `true` if `newValue` is set for `key` by this operation.
+	 */
+	function setIf(
+		key: K,
+		newValue: V,
+		predicate: (
+			key: K,
+			oldValue: V,
+			newValue: V
+		) -> Bool
+	): Bool;
 
 	/**
 		Returns the value that is mapped to `key`.

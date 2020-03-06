@@ -178,6 +178,23 @@ class ArrayMapTest {
 
 	static final _forFirst = testCase(forFirst, Ok);
 
+	static function setIf() {
+		describe();
+		final map = new ArrayMap<Int, Int>(5);
+		map.set(0, 10);
+		map.set(1, 11);
+
+		map.setIf(0, 1000, (key, oldValue, newValue) -> oldValue < newValue);
+		map.setIf(1, -1000, (key, oldValue, newValue) -> oldValue < newValue);
+		assert(map.get(0) == 1000); // changed
+		assert(map.get(1) == 11); // unchanged
+		assert(map.toString() == "{ 0 => 1000, 1 => 11 }");
+
+		println("Data: " + map.toString());
+	}
+
+	static final _setIf = testCase(setIf, Ok);
+
 	public static final all = testCaseGroup([
 		_getSet,
 		_setOverwrite,
@@ -189,6 +206,7 @@ class ArrayMapTest {
 		_forEach,
 		_removeAll,
 		_removeAllOrdered,
-		_forFirst
+		_forFirst,
+		_setIf
 	]);
 }

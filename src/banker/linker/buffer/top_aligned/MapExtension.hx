@@ -45,7 +45,7 @@ class MapExtension {
 	): Bool {
 		final size = _this.size;
 		final keys = _this.keyVector;
-		final index = keys.ref.findIndexIn(key, 0, _this.size);
+		final index = keys.ref.findIndexIn(key, 0, size);
 		return if (index >= 0) {
 			_this.valueVector[index] = value;
 			false;
@@ -69,6 +69,35 @@ class MapExtension {
 		} else {
 			assert(size < _this.capacity, _this.tag, "The map is full.");
 			_this.addKeyValue(keys, _this.valueVector, size, key, value);
+			true;
+		}
+	}
+
+	/** @see `banker.linker.interfaces.Map` **/
+	public static inline function setIf<K, V>(
+		_this: TopAlignedBuffer<K, V>,
+		key: K,
+		newValue: V,
+		predicate: (
+			key: K,
+			oldValue: V,
+			newValue: V
+		) -> Bool
+	): Bool {
+		final size = _this.size;
+		final keys = _this.keyVector;
+		final values = _this.valueVector;
+		final index = keys.ref.findIndexIn(key, 0, size);
+		return if (index >= 0) {
+			if (predicate(key, values[index], newValue)) {
+				values[index] = newValue;
+				true;
+			} else {
+				false;
+			}
+		} else {
+			assert(size < _this.capacity, _this.tag, "The map is full.");
+			_this.addKeyValue(keys, values, size, key, newValue);
 			true;
 		}
 	}
