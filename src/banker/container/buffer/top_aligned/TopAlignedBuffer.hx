@@ -2,6 +2,7 @@ package banker.container.buffer.top_aligned;
 
 import sneaker.exception.NotOverriddenException;
 import banker.common.internal.LimitedCapacityBuffer;
+import banker.common.MathTools.minInt;
 
 #if !banker_generic_disable
 @:generic
@@ -55,11 +56,36 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	public inline function toString<T>(): String
 		return vector.ref.joinIn(0, size, ", ");
 
+	/** @see banker.container.buffer.top_aligned.CloneExtension **/
+	public inline function cloneAsList(newCapacity = -1): ArrayList<T>
+		return CloneExtension.cloneAsList(this, newCapacity);
+
+	/** @see banker.container.buffer.top_aligned.CloneExtension **/
+	public inline function cloneAsStack(newCapacity = -1): ArrayStack<T>
+		return CloneExtension.cloneAsStack(this, newCapacity);
+
+	/** @see banker.container.buffer.top_aligned.CloneExtension **/
+	public inline function cloneAsMultiSet(newCapacity = -1): ArrayMultiSet<T>
+		return CloneExtension.cloneAsMultiSet(this, newCapacity);
+
 	inline function get_capacity()
 		return vector.length;
 
 	inline function get_size(): Int
 		return nextFreeSlotIndex;
+
+	/**
+		Overwrites `this` by copying elements from `other`.
+		Overflowing data is truncated.
+
+		Should only be used for cloning instance as
+		this does not check uniqueness of elements.
+	**/
+	inline function blitAllFrom(other: TopAlignedBuffer<T>): Void {
+		final length = minInt(this.capacity, other.size);
+		VectorTools.blitZero(other.vector, this.vector, length);
+		this.nextFreeSlotIndex = length;
+	}
 
 	/**
 		Internal method for removing element at `index` from `this`.

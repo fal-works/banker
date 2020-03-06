@@ -17,6 +17,10 @@ class ArraySet<T> extends TopAlignedSetBuffer<T> implements Sequence<T> {
 	public function new(capacity: Int)
 		super(capacity);
 
+	/** @see banker.container.buffer.top_aligned.CloneExtension **/
+	public inline function cloneAsSet(newCapacity = -1): ArraySet<T>
+		return CloneExtension.cloneAsSet(this, newCapacity);
+
 	/**
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
 		@see `banker.container.buffer.top_aligned.InternalExtension`
