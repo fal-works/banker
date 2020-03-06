@@ -24,22 +24,22 @@ class ArrayMap<K, V>
 	}
 
 	/**
-		@see `banker.linker.interfaces.Remove`
-		@see `banker.linker.buffer.top_aligned.RemoveExtension`
+		@see `banker.linker.interfaces.Set`
+		@see `banker.linker.buffer.top_aligned.SetExtension`
 	**/
 	public inline function removeAll(predicate: (key: K, value: V) -> Bool): Bool {
-		return RemoveExtension.removeSwapAll(this, predicate);
+		return SetExtension.removeSwapAll(this, predicate);
 	}
 
 	/**
-		@see `banker.linker.interfaces.Remove`
-		@see `banker.linker.buffer.top_aligned.RemoveExtension`
+		@see `banker.linker.interfaces.Set`
+		@see `banker.linker.buffer.top_aligned.SetExtension`
 	**/
 	public inline function removeApplyAll(
 		predicate: (key: K, value: V) -> Bool,
 		callback: (key: K, value: V) -> Void
 	): Bool {
-		return RemoveExtension.removeSwapApplyAll(this, predicate, callback);
+		return SetExtension.removeSwapApplyAll(this, predicate, callback);
 	}
 
 	/** @see `banker.linker.interfaces.Convert` **/

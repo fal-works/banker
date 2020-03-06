@@ -1,14 +1,14 @@
 package banker.linker.buffer.top_aligned;
 
-class GetSetExtension {
-	/** @see `banker.linker.interfaces.GetSet` **/
+class MapExtension {
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function get<K, V>(_this: TopAlignedBuffer<K, V>, key: K): V {
 		final index = _this.keyVector.ref.findIndexIn(key, 0, _this.size);
 		assert(index >= 0, _this.tag, "Not found.");
 		return _this.valueVector[index];
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function getOr<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
@@ -18,7 +18,7 @@ class GetSetExtension {
 		return if (index >= 0) _this.valueVector[index] else defaultValue;
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function getOrElse<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
@@ -28,7 +28,7 @@ class GetSetExtension {
 		return if (index >= 0) _this.valueVector[index] else valueFactory();
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function tryGet<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
@@ -37,7 +37,7 @@ class GetSetExtension {
 		return if (index >= 0) _this.valueVector[index] else null;
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function set<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
@@ -56,7 +56,7 @@ class GetSetExtension {
 		}
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function setIfAbsent<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
@@ -73,7 +73,7 @@ class GetSetExtension {
 		}
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function getOrAdd<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
@@ -92,7 +92,7 @@ class GetSetExtension {
 		}
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function getOrAddWith<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
@@ -112,7 +112,7 @@ class GetSetExtension {
 		}
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function hasKey<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
@@ -120,7 +120,7 @@ class GetSetExtension {
 		return _this.keyVector.ref.hasIn(key, 0, _this.size);
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function hasValue<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		value: V
@@ -128,7 +128,7 @@ class GetSetExtension {
 		return _this.valueVector.ref.hasIn(value, 0, _this.size);
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public static inline function hasAny<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		predicate: (key: K, value: V) -> Bool

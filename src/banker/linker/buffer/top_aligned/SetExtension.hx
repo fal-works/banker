@@ -1,7 +1,7 @@
 package banker.linker.buffer.top_aligned;
 
-class RemoveExtension {
-	/** @see `banker.linker.interfaces.Remove` **/
+class SetExtension {
+	/** @see `banker.linker.interfaces.Set` **/
 	public static inline function remove<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
@@ -25,7 +25,7 @@ class RemoveExtension {
 		return found;
 	}
 
-	/** @see `banker.linker.interfaces.Remove` **/
+	/** @see `banker.linker.interfaces.Set` **/
 	public static inline function removeGet<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
@@ -41,7 +41,7 @@ class RemoveExtension {
 		return value;
 	}
 
-	/** @see `banker.linker.interfaces.Remove` **/
+	/** @see `banker.linker.interfaces.Set` **/
 	public static inline function tryRemoveGet<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
@@ -58,7 +58,7 @@ class RemoveExtension {
 		} else null;
 	}
 
-	/** @see `banker.linker.interfaces.Remove` **/
+	/** @see `banker.linker.interfaces.Set` **/
 	public static inline function removeApply<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
@@ -84,7 +84,7 @@ class RemoveExtension {
 		Removes all key-value pairs that match `predicate`.
 		The order is not preserved.
 
-		Used for implementing `banker.linker.interfaces.Remove.removeAll()`.
+		Used for implementing `banker.linker.interfaces.Set.removeAll()`.
 		@return `true` if any found and removed.
 	**/
 	public static inline function removeSwapAll<K, V>(
@@ -118,7 +118,7 @@ class RemoveExtension {
 		Removes all key-value pairs that match `predicate`.
 		The order is preserved.
 
-		Used for implementing `banker.linker.interfaces.Remove.removeAll()`.
+		Used for implementing `banker.linker.interfaces.Set.removeAll()`.
 		@return `true` if any found and removed.
 	**/
 	public static inline function removeShiftAll<K, V>(
@@ -158,7 +158,7 @@ class RemoveExtension {
 		applies `callback` to each removed pair.
 		The order is not preserved.
 
-		Used for implementing `banker.linker.interfaces.Remove.removeApplyAll()`.
+		Used for implementing `banker.linker.interfaces.Set.removeApplyAll()`.
 		@return `true` if any found and removed.
 	**/
 	public static inline function removeSwapApplyAll<K, V>(
@@ -198,7 +198,7 @@ class RemoveExtension {
 		applies `callback` to each removed pair.
 		The order is preserved.
 
-		Used for implementing `banker.linker.interfaces.Remove.removeAll()`.
+		Used for implementing `banker.linker.interfaces.Set.removeAll()`.
 		@return `true` if any found and removed.
 	**/
 	public static inline function removeShiftApplyAll<K, V>(

@@ -25,37 +25,37 @@ class TopAlignedMapBuffer<K, V>
 		super(capacity);
 	}
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function get(key: K): V
-		return GetSetExtension.get(this, key);
+		return MapExtension.get(this, key);
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function getOr(key: K, defaultValue: V): V
-		return GetSetExtension.getOr(this, key, defaultValue);
+		return MapExtension.getOr(this, key, defaultValue);
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function getOrElse(key: K, valueFactory: () -> V): V
-		return GetSetExtension.getOrElse(this, key, valueFactory);
+		return MapExtension.getOrElse(this, key, valueFactory);
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function tryGet(key: K): Null<V>
-		return GetSetExtension.tryGet(this, key);
+		return MapExtension.tryGet(this, key);
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function set(key: K, value: V): Bool
-		return GetSetExtension.set(this, key, value);
+		return MapExtension.set(this, key, value);
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function setIfAbsent(key: K, value: V): Bool
-		return GetSetExtension.setIfAbsent(this, key, value);
+		return MapExtension.setIfAbsent(this, key, value);
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function getOrAdd(key: K, defaultValue: V): V
-		return GetSetExtension.getOrAdd(this, key, defaultValue);
+		return MapExtension.getOrAdd(this, key, defaultValue);
 
-	/** @see `banker.linker.interfaces.GetSet` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function getOrAddWith(key: K, valueFactory: K->V): V
-		return GetSetExtension.getOrAddWith(this, key, valueFactory);
+		return MapExtension.getOrAddWith(this, key, valueFactory);
 
 	/** @see `banker.linker.interfaces.Sequence` **/
 	public inline function forEachKey(callback: (key: K) -> Void): Void
@@ -88,33 +88,33 @@ class TopAlignedMapBuffer<K, V>
 		return SequenceExtension.forFirst(this, predicate, callback);
 	}
 
-	/** @see `banker.linker.interfaces.Remove` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function hasKey(key: K): Bool
-		return GetSetExtension.hasKey(this, key);
+		return MapExtension.hasKey(this, key);
 
-	/** @see `banker.linker.interfaces.Remove` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function hasValue(value: V): Bool
-		return GetSetExtension.hasValue(this, value);
+		return MapExtension.hasValue(this, value);
 
-	/** @see `banker.linker.interfaces.Remove` **/
+	/** @see `banker.linker.interfaces.Map` **/
 	public inline function hasAny(predicate: (key: K, value: V) -> Bool): Bool
-		return GetSetExtension.hasAny(this, predicate);
+		return MapExtension.hasAny(this, predicate);
 
-	/** @see `banker.linker.interfaces.Remove` **/
+	/** @see `banker.linker.interfaces.Set` **/
 	public inline function remove(key: K): Bool
-		return RemoveExtension.remove(this, key);
+		return SetExtension.remove(this, key);
 
-	/** @see `banker.linker.interfaces.Remove` **/
+	/** @see `banker.linker.interfaces.Set` **/
 	public inline function removeGet(key: K): V
-		return RemoveExtension.removeGet(this, key);
+		return SetExtension.removeGet(this, key);
 
-	/** @see `banker.linker.interfaces.Remove` **/
+	/** @see `banker.linker.interfaces.Set` **/
 	public inline function tryRemoveGet(key: K): Null<V>
-		return RemoveExtension.tryRemoveGet(this, key);
+		return SetExtension.tryRemoveGet(this, key);
 
-	/** @see `banker.linker.interfaces.Remove` **/
+	/** @see `banker.linker.interfaces.Set` **/
 	public inline function removeApply(key: K, callback: (key: K, value: V) -> Void): Void
-		RemoveExtension.removeApply(this, key, callback);
+		SetExtension.removeApply(this, key, callback);
 
 	/** @see `banker.linker.interfaces.Convert` **/
 	public inline function exportKeys(): Vector<K>
