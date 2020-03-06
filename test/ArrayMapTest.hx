@@ -198,6 +198,30 @@ class ArrayMapTest {
 
 	static final _setIf = testCase(setIf, Ok);
 
+	static function clone() {
+		describe();
+		final map = new ArrayMap<Int, Int>(5);
+		map.set(0, 10);
+		map.set(1, 11);
+		map.set(2, 12);
+
+		final cloned = map.cloneAsMap();
+		assert(map.capacity == cloned.capacity);
+		assert(map.size == cloned.size);
+		assert(map.toString() == cloned.toString());
+
+		final cloned2 = map.cloneAsMap(2);
+		assert(cloned2.capacity == 2);
+		assert(cloned2.size == 2);
+		assert(cloned2.toString() == "{ 0 => 10, 1 => 11 }");
+
+		println('src:      ${map.toString()}');
+		println('cloned:   ${cloned.toString()}');
+		println('cloned 2: ${cloned2.toString()}');
+	}
+
+	static final _clone = testCase(clone, Ok);
+
 	public static final all = testCaseGroup([
 		_getSet,
 		_setOverwrite,
@@ -210,6 +234,7 @@ class ArrayMapTest {
 		_removeAll,
 		_removeAllOrdered,
 		_forFirst,
-		_setIf
+		_setIf,
+		_clone
 	]);
 }

@@ -44,4 +44,38 @@ class ConvertExtension {
 
 		destination.nextFreeSlotIndex = size;
 	}
+
+	/**
+		Creates a copy.
+
+		- If `newCapacity` is negative,
+		  the new container has the same capacity as `this`.
+		- If `newCapacity` is less than the number of current elements (`this.size`),
+		  the overflowing data is truncated.
+
+		@return Shallow copy of `this` as an `ArrayMap`.
+	**/
+	public static inline function cloneAsMap<K, V>(
+		_this: TopAlignedBuffer<K, V>,
+		newCapacity: Int
+	): ArrayMap<K, V> {
+		final newCapacityValue = if (newCapacity < 0) _this.capacity else newCapacity;
+		final newContainer = new ArrayMap<K, V>(newCapacityValue);
+		newContainer.blitAllFrom(_this);
+		return newContainer;
+	}
+
+	/**
+		@return Shallow copy of `this` as an `OrderedArrayMap`.
+		@see `cloneAsMap()` about the argument `newCapacity`.
+	**/
+	public static inline function cloneAsOrderedMap<K, V>(
+		_this: TopAlignedBuffer<K, V>,
+		newCapacity: Int
+	): OrderedArrayMap<K, V> {
+		final newCapacityValue = if (newCapacity < 0) _this.capacity else newCapacity;
+		final newContainer = new OrderedArrayMap<K, V>(newCapacityValue);
+		newContainer.blitAllFrom(_this);
+		return newContainer;
+	}
 }

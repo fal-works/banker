@@ -2,6 +2,7 @@ package banker.linker.buffer.top_aligned;
 
 import sneaker.exception.NotOverriddenException;
 import banker.common.internal.LimitedCapacityBuffer;
+import banker.common.MathTools.minInt;
 
 #if !banker_generic_disable
 @:generic
@@ -39,6 +40,14 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		keyVector.fill(cast null);
 		valueVector.fill(cast null);
 	}
+
+	/** @see banker.linker.buffer.top_aligned.ConvertExtension **/
+	public inline function cloneAsMap(newCapacity = -1): ArrayMap<K, V>
+		return ConvertExtension.cloneAsMap(this, newCapacity);
+
+	/** @see banker.linker.buffer.top_aligned.ConvertExtension **/
+	public inline function cloneAsOrderedMap(newCapacity = -1): OrderedArrayMap<K, V>
+		return ConvertExtension.cloneAsOrderedMap(this, newCapacity);
 
 	/** @inheritdoc **/
 	public inline function getUsageRatio(): Float
@@ -113,6 +122,20 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		#if banker_watermark_enable
 		updateWatermark(getUsageRatio()); // Currently does not work
 		#end
+	}
+
+	/**
+		Overwrites `this` by copying entries from `other`.
+		Overflowing data is truncated.
+
+		Should only be used for cloning instance as
+		this does not check uniqueness of entries.
+	**/
+	inline function blitAllFrom(other: TopAlignedBuffer<K, V>): Void {
+		final length = minInt(this.capacity, other.size);
+		VectorTools.blitZero(other.keyVector, this.keyVector, length);
+		VectorTools.blitZero(other.valueVector, this.valueVector, length);
+		this.nextFreeSlotIndex = length;
 	}
 
 	/**
