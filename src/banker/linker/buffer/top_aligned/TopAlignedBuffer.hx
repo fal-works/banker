@@ -1,6 +1,6 @@
 package banker.linker.buffer.top_aligned;
 
-import sneaker.common.UnsupportedOperationException;
+import sneaker.exception.NotOverriddenException;
 import banker.common.internal.LimitedCapacityBuffer;
 
 #if !banker_generic_disable
@@ -136,6 +136,6 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		currentSize: Int,
 		index: Int
 	): Void {
-		throw new UnsupportedOperationException("This method must be overridden by the subclass.");
+		throw new NotOverriddenException();
 	}
 }

@@ -1,6 +1,6 @@
 package banker.container.buffer.top_aligned;
 
-import sneaker.common.UnsupportedOperationException;
+import sneaker.exception.NotOverriddenException;
 import banker.common.internal.LimitedCapacityBuffer;
 
 #if !banker_generic_disable
@@ -79,7 +79,7 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		currentSize: Int,
 		index: Int
 	): T {
-		throw new UnsupportedOperationException("This method must be overridden by the subclass.");
+		throw new NotOverriddenException();
 	}
 
 	/**
@@ -93,7 +93,7 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		according to the specification e.g. whether to allow duplicates.
 	**/
 	function pushInternal(index: Int, element: T): Void {
-		throw new UnsupportedOperationException("This method must be overridden by the subclass.");
+		throw new NotOverriddenException();
 	}
 
 	/**
@@ -111,6 +111,6 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		otherVector: VectorReference<T>,
 		otherVectorLength: Int
 	): Void {
-		throw new UnsupportedOperationException("This method must be overridden by the subclass.");
+		throw new NotOverriddenException();
 	}
 }
