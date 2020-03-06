@@ -2,6 +2,46 @@ package banker.linker.buffer.top_aligned;
 
 class SetExtension {
 	/** @see `banker.linker.interfaces.Set` **/
+	public static inline function hasKey<K, V>(
+		_this: TopAlignedBuffer<K, V>,
+		key: K
+	): Bool {
+		return _this.keyVector.ref.hasIn(key, 0, _this.size);
+	}
+
+	/** @see `banker.linker.interfaces.Set` **/
+	public static inline function hasValue<K, V>(
+		_this: TopAlignedBuffer<K, V>,
+		value: V
+	): Bool {
+		return _this.valueVector.ref.hasIn(value, 0, _this.size);
+	}
+
+	/** @see `banker.linker.interfaces.Set` **/
+	public static inline function hasAny<K, V>(
+		_this: TopAlignedBuffer<K, V>,
+		predicate: (key: K, value: V) -> Bool
+	): Bool {
+		final keys = _this.keyVector;
+		final values = _this.valueVector;
+		final size = _this.size;
+
+		var found = false;
+		var i = 0;
+		while (i < size) {
+			if (!predicate(keys[i], values[i])) {
+				++i;
+				continue;
+			}
+
+			found = true;
+			break;
+		}
+
+		return found;
+	}
+
+	/** @see `banker.linker.interfaces.Set` **/
 	public static inline function remove<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K

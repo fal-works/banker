@@ -88,17 +88,17 @@ class TopAlignedMapBuffer<K, V>
 		return SequenceExtension.forFirst(this, predicate, callback);
 	}
 
-	/** @see `banker.linker.interfaces.Map` **/
+	/** @see `banker.linker.interfaces.Set` **/
 	public inline function hasKey(key: K): Bool
-		return MapExtension.hasKey(this, key);
+		return SetExtension.hasKey(this, key);
 
-	/** @see `banker.linker.interfaces.Map` **/
+	/** @see `banker.linker.interfaces.Set` **/
 	public inline function hasValue(value: V): Bool
-		return MapExtension.hasValue(this, value);
+		return SetExtension.hasValue(this, value);
 
-	/** @see `banker.linker.interfaces.Map` **/
+	/** @see `banker.linker.interfaces.Set` **/
 	public inline function hasAny(predicate: (key: K, value: V) -> Bool): Bool
-		return MapExtension.hasAny(this, predicate);
+		return SetExtension.hasAny(this, predicate);
 
 	/** @see `banker.linker.interfaces.Set` **/
 	public inline function remove(key: K): Bool
