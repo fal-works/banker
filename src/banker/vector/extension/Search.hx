@@ -107,7 +107,7 @@ class Search {
 	public static inline function findFirst<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool
-	): Null<T> {@:nullSafety(Off) // XXX: Don't know why this is necessary
+	): Null<T> { @:nullSafety(Off) // XXX: Don't know why this is necessary
 		return findFirstIn(_this, predicate, 0, _this.length);
 	}
 }

@@ -10,10 +10,38 @@
 		"elseIf": "keep",
 		"forBody": "keep",
 		"ifBody": "keep",
+		"ifElse": "keep",
 		"whileBody": "keep"
 	},
 	"whitespace": {
-		"typeHintColonPolicy": "onlyAfter"
+		"typeHintColonPolicy": "onlyAfter",
+		"bracesConfig": {
+			"anonTypeBraces": {
+				"openingPolicy": "around",
+				"closingPolicy": "around",
+				"removeInnerWhenEmpty": true
+			},
+			"blockBraces": {
+				"openingPolicy": "around",
+				"closingPolicy": "around",
+				"removeInnerWhenEmpty": true
+			},
+			"objectLiteralBraces": {
+				"openingPolicy": "around",
+				"closingPolicy": "around",
+				"removeInnerWhenEmpty": true
+			},
+			"typedefBraces": {
+				"openingPolicy": "around",
+				"closingPolicy": "around",
+				"removeInnerWhenEmpty": true
+			},
+			"unknownBraces": {
+				"openingPolicy": "around",
+				"closingPolicy": "around",
+				"removeInnerWhenEmpty": true
+			}
+		}
 	},
 	"wrapping": {
 		"arrayWrap": {

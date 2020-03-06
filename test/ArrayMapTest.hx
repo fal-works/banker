@@ -184,8 +184,11 @@ class ArrayMapTest {
 		map.set(0, 10);
 		map.set(1, 11);
 
-		map.setIf(0, 1000, (key, oldValue, newValue) -> oldValue < newValue);
-		map.setIf(1, -1000, (key, oldValue, newValue) -> oldValue < newValue);
+		final newIsGreater = function(key: Int, oldValue: Int, newValue: Int) return
+			oldValue < newValue;
+
+		map.setIf(0, 1000, newIsGreater);
+		map.setIf(1, -1000, newIsGreater);
 		assert(map.get(0) == 1000); // changed
 		assert(map.get(1) == 11); // unchanged
 		assert(map.toString() == "{ 0 => 1000, 1 => 11 }");

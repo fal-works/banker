@@ -31,7 +31,7 @@ class TopAlignedSetBuffer<T>
 	public function findFirst(
 		predicate: (element: T) -> Bool,
 		defaultValue: T
-	): T {@:nullSafety(Off) // HACK: Don't know why but this seems to be necessary
+	): T { @:nullSafety(Off) // HACK: Don't know why but this seems to be necessary
 		return SetExtension.findFirst(this, predicate, defaultValue);
 	}
 
