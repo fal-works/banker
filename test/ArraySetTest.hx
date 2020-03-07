@@ -97,7 +97,7 @@ class ArraySetTest {
 
 	static final _duplicateVector = testCase(duplicateVector, Ok);
 
-	static function Multiset() {
+	static function multiset() {
 		describe();
 		final set = new ArrayMultiset<Int>(8);
 		set.add(2);
@@ -113,7 +113,7 @@ class ArraySetTest {
 		println('data: ${set.toString()}');
 	}
 
-	static final _Multiset = testCase(Multiset, Ok);
+	static final _multiset = testCase(multiset, Ok);
 
 	static function count() {
 		describe();
@@ -151,7 +151,7 @@ class ArraySetTest {
 		_findFirst,
 		_duplicate,
 		_duplicateVector,
-		_Multiset,
+		_multiset,
 		_count,
 		_countAll
 	]);
