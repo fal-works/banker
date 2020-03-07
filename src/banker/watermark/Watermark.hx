@@ -17,7 +17,7 @@ class Watermark {
 
 	/**
 		Prints data about the maximum usage ratio of data collection objects
-		since the program was started.
+		since the program was started (or since the last call of `Watermark.reset()`).
 
 		- The data is grouped by tag names.
 		- The value is the size to capacity ratio in percentage.

@@ -23,8 +23,8 @@ class WatermarkData {
 	#end
 
 	/**
-		@return The maximum usage ratio (since the program was started)
-		of the data collection objects which have any tag with `name`.
+		@return The recorded maximum usage ratio of the data collection objects
+		which have any tag with `name`.
 	**/
 	public function get(name: String): Percentage
 		return Percentage.none;
