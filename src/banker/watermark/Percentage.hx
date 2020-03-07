@@ -17,7 +17,7 @@ typedef UInt8 = Int;
 	No boundary checks implemented, however the values out of the range
 	from 0 to 100 should not be used.
 **/
-abstract Percentage(UInt8) from Int from UInt8 to Int to UInt8 {
+abstract Percentage(UInt8) {
 	/** Special value used as an alternative to `null`. **/
 	public static inline final none = new Percentage(-1);
 

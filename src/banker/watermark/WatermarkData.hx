@@ -58,7 +58,7 @@ private class NullWatermarkData extends WatermarkData {
 
 #if banker_watermark_enable
 private class ConcreteWatermarkData extends WatermarkData {
-	static inline final mapExpandThreshold: Percentage = 90;
+	static inline final mapExpandThreshold = Percentage.fromInt(90); // 90%
 	static inline final mapExpandFactor = 1.5;
 	static inline final mapInitialCapacity = 32;
 	static inline final mapName = "Watermark map";
@@ -73,7 +73,7 @@ private class ConcreteWatermarkData extends WatermarkData {
 		This is automatically replaced for expanding the capacity when it is getting full.
 	**/
 	public var map = new ArrayOrderedMap<String, Percentage>(mapInitialCapacity)
-		.newTag(mapName);
+		.newTag(mapName, WatermarkSettings.watermarkDataMapBits);
 
 	var maxNameLength = 0;
 
