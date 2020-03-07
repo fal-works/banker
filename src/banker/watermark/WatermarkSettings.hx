@@ -21,13 +21,13 @@ class WatermarkSettings {
 	public static var usageDataMapBits(default, set) = 0x00000000;
 
 	/**
-		Log type used in `Watermark.printUsage()`.
+		Log type used in `Watermark.printData()`.
 		@see README of `sneaker` library.
 	**/
 	public static var logType = createDefaultLogType();
 
 	/**
-		Sets a log level for `Watermark.printUsage()`.
+		Sets a log level for `Watermark.printData()`.
 		@see README of `sneaker` library.
 	**/
 	public static function setLogLevel(level: Int) {
