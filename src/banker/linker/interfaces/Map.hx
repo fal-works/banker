@@ -42,10 +42,10 @@ interface Map<K, V> {
 
 	/**
 	 * Maps `key` to `value`.
-	 * - If `key` already exists, the mapped value will be overwritten only if `compareCallback` returns `true`.
+	 * - If `key` already exists, the mapped value will be overwritten only if `predicate` returns `true`.
 	 * - if `key` does not exist, adds a new key-value pair.
 	 * @param predicate Function that returns `true` if the old value should be overwritten.
-	 * @return `true` if `newValue` is set for `key` by this operation.
+	 * @return The result of `predicate`, whether or not `newValue` is set by this operation.
 	 */
 	function setIf(
 		key: K,
