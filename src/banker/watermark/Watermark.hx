@@ -26,4 +26,11 @@ class Watermark {
 	**/
 	public static inline function printData(): Void
 		data.print();
+
+	/**
+		Clears all usage data.
+		Settings in `WatermarkSettings` remain.
+	**/
+	public static inline function reset(): Void
+		data.reset();
 }

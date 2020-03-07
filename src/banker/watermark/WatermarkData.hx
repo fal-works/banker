@@ -41,6 +41,11 @@ class WatermarkData {
 	public function print(): Void {}
 
 	/**
+		Resets all data.
+	**/
+	public function reset(): Void {}
+
+	/**
 		@see `WatermarkSettings.usageDataMapBits`
 	**/
 	function setUsageDataMapBits(bits: Int): Int
@@ -78,8 +83,10 @@ private class ConcreteWatermarkData extends WatermarkData {
 		The map that actually stores data about the maximum usage ratio for each data collection object.
 		This is automatically replaced for expanding the capacity when it is getting full.
 	**/
-	public var map = new ArrayOrderedMap<String, Percentage>(mapInitialCapacity)
-		.newTag(mapName, WatermarkSettings.usageDataMapBits);
+	public var map = new ArrayOrderedMap<String, Percentage>(mapInitialCapacity).newTag(
+		mapName,
+		WatermarkSettings.usageDataMapBits
+	);
 
 	var maxNameLength = 0;
 
@@ -112,6 +119,10 @@ private class ConcreteWatermarkData extends WatermarkData {
 
 		WatermarkSettings.logType.print(buffer.toString());
 	}
+
+	/** @inheritdoc **/
+	override public function reset(): Void
+		map.clearPhysical();
 
 	/** @inheritdoc **/
 	override function setUsageDataMapBits(bits: Int): Int {
