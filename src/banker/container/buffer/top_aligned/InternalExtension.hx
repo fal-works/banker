@@ -11,7 +11,7 @@ class InternalExtension {
 		element: T
 	): Void {
 		_this.vector[index] = element;
-		_this.nextFreeSlotIndex = index + 1;
+		_this.setSize(index + 1);
 	}
 
 	/**
@@ -27,7 +27,7 @@ class InternalExtension {
 		final vector = _this.vector;
 		if (!vector.ref.hasIn(element, 0, index)) {
 			vector[index] = element;
-			_this.nextFreeSlotIndex = index + 1;
+			_this.setSize(index + 1);
 		}
 	}
 
@@ -43,7 +43,7 @@ class InternalExtension {
 		otherVectorLength: Int
 	): Void {
 		VectorTools.blit(otherVector, 0, _this.vector, index, otherVectorLength);
-		_this.nextFreeSlotIndex = index + otherVectorLength;
+		_this.setSize(index + otherVectorLength);
 	}
 
 	/**
@@ -69,7 +69,7 @@ class InternalExtension {
 			}
 			++readIndex;
 		}
-		_this.nextFreeSlotIndex = writeIndex;
+		_this.setSize(writeIndex);
 	}
 
 	/**
@@ -109,7 +109,7 @@ class InternalExtension {
 	): T {
 		final removed = vector[index];
 		vector.blitInternal(index + 1, index, currentSize - 1 - index);
-		_this.nextFreeSlotIndex = currentSize - 1;
+		_this.setSize(currentSize - 1);
 
 		return removed;
 	}

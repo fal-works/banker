@@ -67,6 +67,6 @@ class ArrayOrderedMap<K, V>
 		final movingRange = nextSize - index;
 		keyVector.blitInternal(index + 1, index, movingRange);
 		valueVector.blitInternal(index + 1, index, movingRange);
-		this.nextFreeSlotIndex = nextSize;
+		this.setSize(nextSize);
 	}
 }

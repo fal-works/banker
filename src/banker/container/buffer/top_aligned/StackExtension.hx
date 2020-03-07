@@ -7,10 +7,6 @@ class StackExtension {
 		assert(index < _this.capacity, _this.tag, "The list is full.");
 
 		_this.pushInternal(index, element);
-
-		#if banker_watermark_enable
-		updateWatermark(getUsageRatio()); // Currently does not work
-		#end
 	}
 
 	/** @see `banker.container.interfaces.Stack` **/
@@ -18,7 +14,7 @@ class StackExtension {
 		final index = _this.nextFreeSlotIndex - 1;
 		assert(index >= 0, _this.tag, "The list is empty.");
 
-		_this.nextFreeSlotIndex = index;
+		_this.setSize(index);
 
 		return _this.vector[index];
 	}
@@ -45,9 +41,5 @@ class StackExtension {
 		);
 
 		_this.pushFromVectorInternal(index, otherVector, otherVectorLength);
-
-		#if banker_watermark_enable
-		updateWatermark(getUsageRatio()); // Currently does not work
-		#end
 	}
 }

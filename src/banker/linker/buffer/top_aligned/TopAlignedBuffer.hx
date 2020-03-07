@@ -3,6 +3,7 @@ package banker.linker.buffer.top_aligned;
 import sneaker.exception.NotOverriddenException;
 import banker.common.internal.LimitedCapacityBuffer;
 import banker.common.MathTools.minInt;
+import banker.watermark.Percentage;
 
 #if !banker_generic_disable
 @:generic
@@ -29,7 +30,7 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		but the references remain internally.
 	**/
 	public inline function clear(): Void
-		this.nextFreeSlotIndex = 0;
+		setSize(0);
 
 	/**
 		Clears `this` physically, i.e. the `size` is set to `0`
@@ -50,7 +51,7 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		return ConvertExtension.cloneAsOrderedMap(this, newCapacity);
 
 	/** @inheritdoc **/
-	public inline function getUsageRatio(): Float
+	public inline function getUsageRatio(): Percentage
 		return size / capacity;
 
 	/** @inheritdoc **/
@@ -96,6 +97,20 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		return nextFreeSlotIndex;
 
 	/**
+		Internal method for setting the current size of `this`.
+
+		This also calls `setWatermark()` if watermark mode is enabled.
+		Set `this.nextFreeSlotIndex` directly for avoiding this.
+	**/
+	inline function setSize(index: Int): Int {
+		this.nextFreeSlotIndex = index;
+		#if banker_watermark_enable
+		this.setWatermark(index / this.capacity);
+		#end
+		return index;
+	}
+
+	/**
 		Internal method for adding `key` and `value` to `this` map.
 
 		`keyVector`, `valueVector` and `currentSize` are likely already obtained from `this`
@@ -117,11 +132,7 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	) {
 		keyVector[currentSize] = key;
 		valueVector[currentSize] = value;
-		this.nextFreeSlotIndex = currentSize + 1;
-
-		#if banker_watermark_enable
-		updateWatermark(getUsageRatio()); // Currently does not work
-		#end
+		setSize(currentSize + 1);
 	}
 
 	/**

@@ -66,6 +66,6 @@ class ArrayMap<K, V>
 		final lastIndex = currentSize - 1;
 		keyVector[index] = keyVector[lastIndex];
 		valueVector[index] = valueVector[lastIndex];
-		this.nextFreeSlotIndex = lastIndex;
+		this.setSize(lastIndex);
 	}
 }

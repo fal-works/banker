@@ -37,11 +37,7 @@ class IndexedExtension {
 		vector.blitInternal(index, index + 1, movingElementCount);
 		vector[index] = value;
 
-		_this.nextFreeSlotIndex = size + 1;
-
-		#if banker_watermark_enable
-		updateWatermark(_this.getUsageRatio()); // Currently does not work
-		#end
+		_this.setSize(size + 1);
 
 		return value;
 	}

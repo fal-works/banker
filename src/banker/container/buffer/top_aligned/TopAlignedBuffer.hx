@@ -3,6 +3,7 @@ package banker.container.buffer.top_aligned;
 import sneaker.exception.NotOverriddenException;
 import banker.common.internal.LimitedCapacityBuffer;
 import banker.common.MathTools.minInt;
+import banker.watermark.Percentage;
 
 #if !banker_generic_disable
 @:generic
@@ -36,7 +37,7 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		but the references remain in the internal vector.
 	**/
 	public inline function clear(): Void {
-		nextFreeSlotIndex = 0;
+		setSize(0);
 	}
 
 	/**
@@ -49,7 +50,7 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	}
 
 	/** @inheritdoc **/
-	public inline function getUsageRatio(): Float
+	public inline function getUsageRatio(): Percentage
 		return size / capacity;
 
 	/** @inheritdoc **/
@@ -75,6 +76,19 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		return nextFreeSlotIndex;
 
 	/**
+		Internal method for setting the current size of `this`.
+
+		This also calls `setWatermark()` if watermark mode is enabled.
+		Set `this.nextFreeSlotIndex` directly for avoiding this.
+	**/
+	inline function setSize(size: Int): Void {
+		this.nextFreeSlotIndex = size;
+		#if banker_watermark_enable
+		this.setWatermark(size / this.capacity);
+		#end
+	}
+
+	/**
 		Overwrites `this` by copying elements from `other`.
 		Overflowing data is truncated.
 
@@ -85,6 +99,7 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		final length = minInt(this.capacity, other.size);
 		VectorTools.blitZero(other.vector, this.vector, length);
 		this.nextFreeSlotIndex = length;
+		// do not update watermark as `this` is just created and has the same tag as `other`
 	}
 
 	/**

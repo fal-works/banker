@@ -13,11 +13,7 @@ class QueueExtension {
 		final nextTailIndex = tailIndex + 1;
 		_this.tailIndex = if (nextTailIndex < capacity) nextTailIndex else 0;
 
-		_this.internalSize = size + 1;
-
-		#if banker_watermark_enable
-		_this.updateWatermark(_this.usage()); // Currently does not work
-		#end
+		_this.setSize(size + 1);
 	}
 
 	/** @see `banker.container.interfaces.Queue` **/
@@ -29,7 +25,7 @@ class QueueExtension {
 		final nextHeadIndex = headIndex + 1;
 
 		_this.headIndex = if (nextHeadIndex < _this.capacity) nextHeadIndex else 0;
-		_this.internalSize = size - 1;
+		_this.setSize(size - 1);
 
 		return _this.vector[headIndex];
 	}

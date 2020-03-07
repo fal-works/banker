@@ -21,11 +21,7 @@ class DequeExtension {
 		_this.headIndex = nextHeadIndex;
 		_this.vector[nextHeadIndex] = value;
 
-		_this.internalSize = size + 1;
-
-		#if banker_watermark_enable
-		_this.updateWatermark(_this.usage()); // Currently does not work
-		#end
+		_this.setSize(size + 1);
 	}
 
 	/** @see `banker.container.interfaces.Deque` **/
@@ -37,7 +33,7 @@ class DequeExtension {
 		final nextTailIndex = if (tailIndex > 0) tailIndex - 1 else _this.capacity - 1;
 
 		_this.tailIndex = nextTailIndex;
-		_this.internalSize = size - 1;
+		_this.setSize(size - 1);
 
 		return _this.vector[nextTailIndex];
 	}

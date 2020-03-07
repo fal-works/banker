@@ -1,6 +1,7 @@
 package banker.container.buffer.ring;
 
 import banker.common.internal.LimitedCapacityBuffer;
+import banker.watermark.Percentage;
 
 #if !banker_generic_disable
 @:generic
@@ -42,7 +43,7 @@ class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	public inline function clear(): Void {
 		headIndex = 0;
 		tailIndex = 0;
-		internalSize = 0;
+		setSize(0);
 	}
 
 	/**
@@ -55,7 +56,7 @@ class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	}
 
 	/** @inheritdoc **/
-	public inline function getUsageRatio(): Float
+	public inline function getUsageRatio(): Percentage
 		return size / capacity;
 
 	/** @inheritdoc **/
@@ -80,4 +81,17 @@ class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 
 	inline function get_size(): Int
 		return internalSize;
+
+	/**
+		Internal method for setting the current size of `this`.
+
+		This also calls `setWatermark()` if watermark mode is enabled.
+		Set `this.internalSize` directly for avoiding this.
+	**/
+	inline function setSize(size: Int): Void {
+		this.internalSize = size;
+		#if banker_watermark_enable
+		this.setWatermark(size / this.capacity);
+		#end
+	}
 }

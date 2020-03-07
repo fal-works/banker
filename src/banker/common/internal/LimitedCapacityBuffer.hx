@@ -1,6 +1,10 @@
 package banker.common.internal;
 
-interface LimitedCapacityBuffer {
+import sneaker.tag.interfaces.Tagged;
+import banker.watermark.Percentage;
+
+@:using(banker.watermark.TaggedExtension)
+interface LimitedCapacityBuffer extends Tagged {
 	/** Max number of elements `this` can contain. **/
 	var capacity(get, never): Int;
 
@@ -18,9 +22,9 @@ interface LimitedCapacityBuffer {
 	function clearPhysical(): Void;
 
 	/**
-		@return Current usage ratio between 0 and 1.
+		@return Current usage ratio.
 	**/
-	function getUsageRatio(): Float;
+	function getUsageRatio(): Percentage;
 
 	/**
 		@return A `String` representation of `this`.

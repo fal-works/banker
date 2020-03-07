@@ -76,7 +76,7 @@ class SetExtension {
 			found = true;
 		}
 
-		_this.nextFreeSlotIndex = len;
+		_this.setSize(len);
 
 		return found;
 	}
@@ -112,7 +112,7 @@ class SetExtension {
 			found = true;
 		}
 
-		_this.nextFreeSlotIndex = writeIndex;
+		_this.setSize(writeIndex);
 
 		return found;
 	}
