@@ -24,7 +24,10 @@ class TaggedExtension {
 		usageRatio: Percentage
 	): Void {
 		#if banker_watermark_enable
-		Watermark.data.set(instance.tag.name, usageRatio);
+		final tag = instance.tag;
+
+		if (!WatermarkSettings.excludeTagBits(tag.bits))
+			Watermark.data.set(tag.name, usageRatio);
 		#end
 	}
 }

@@ -12,6 +12,7 @@ import sneaker.string_buffer.StringBuffer;
 	@see `Watermark.data` from which this class is used.
 	@see `ConcreteWatermarkData` for the actual implementation.
 **/
+@:allow(banker.watermark.WatermarkSettings)
 class WatermarkData {
 	public static function createNull(): WatermarkData
 		return new NullWatermarkData();
@@ -38,6 +39,12 @@ class WatermarkData {
 		Prints all data.
 	**/
 	public function print(): Void {}
+
+	/**
+		@see `WatermarkSettings.usageDataMapBits`
+	**/
+	function setUsageDataMapBits(bits: Int): Int
+		return WatermarkSettings.usageDataMapBits;
 }
 
 private class NullWatermarkData extends WatermarkData {
@@ -73,7 +80,7 @@ private class ConcreteWatermarkData extends WatermarkData {
 		This is automatically replaced for expanding the capacity when it is getting full.
 	**/
 	public var map = new ArrayOrderedMap<String, Percentage>(mapInitialCapacity)
-		.newTag(mapName, WatermarkSettings.watermarkDataMapBits);
+		.newTag(mapName, WatermarkSettings.usageDataMapBits);
 
 	var maxNameLength = 0;
 
@@ -105,6 +112,12 @@ private class ConcreteWatermarkData extends WatermarkData {
 		});
 
 		WatermarkSettings.logType.print(buffer.toString());
+	}
+
+	/** @inheritdoc **/
+	override function setUsageDataMapBits(bits: Int): Int {
+		map.newTag(map.tag.name, bits);
+		return bits;
 	}
 
 	inline function expandMap(): Void
