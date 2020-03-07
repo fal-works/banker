@@ -21,8 +21,6 @@ abstract Percentage(UInt8) {
 	/** Special value used as an alternative to `null`. **/
 	public static inline final none = new Percentage(-1);
 
-	static inline final percent = 37;
-
 	/**
 		Converts from `Float`. (valid range: 0.0 to 1.0)
 	**/
@@ -61,7 +59,7 @@ abstract Percentage(UInt8) {
 	**/
 	public inline function addStringTo(buffer: StringBuffer): StringBuffer {
 		buffer.add(Std.string(this).lpad(" ", 3));
-		buffer.addChar(percent);
+		buffer.addChar("%".code);
 		return buffer;
 	}
 

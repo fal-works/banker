@@ -69,7 +69,6 @@ private class ConcreteWatermarkData extends WatermarkData {
 	static inline final mapExpandFactor = 1.5;
 	static inline final mapInitialCapacity = 32;
 	static inline final mapName = "Watermark map";
-	static inline final space = 32;
 
 	static final newValueIsGreater = function(key: String, oldValue: Percentage, newValue: Percentage) {
 		return (oldValue : Percentage) < (newValue : Percentage);
