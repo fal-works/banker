@@ -46,7 +46,7 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	**/
 	public inline function clearPhysical(): Void {
 		clear();
-		vector.fill(cast null);
+		vector.fill(@:nullSafety(Off) cast null);
 	}
 
 	/** @inheritdoc **/

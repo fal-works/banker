@@ -38,8 +38,8 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	**/
 	public inline function clearPhysical(): Void {
 		clear();
-		keyVector.fill(cast null);
-		valueVector.fill(cast null);
+		keyVector.fill(@:nullSafety(Off) cast null);
+		valueVector.fill(@:nullSafety(Off) cast null);
 	}
 
 	/** @see banker.linker.buffer.top_aligned.ConvertExtension **/
