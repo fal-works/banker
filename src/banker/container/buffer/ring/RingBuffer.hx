@@ -1,6 +1,6 @@
 package banker.container.buffer.ring;
 
-import banker.common.internal.LimitedCapacityBuffer;
+import banker.common.LimitedCapacityBuffer;
 import banker.watermark.Percentage;
 
 #if !banker_generic_disable

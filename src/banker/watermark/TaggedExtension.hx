@@ -3,7 +3,7 @@ package banker.watermark;
 import sneaker.tag.interfaces.Tagged;
 
 /**
-	Extension used for `banker.common.internal.LimitedCapacityBuffer`.
+	Extension used for `banker.common.LimitedCapacityBuffer`.
 
 	This can also be used for any data collection class that is `Tagged`
 	and	can provide its usage ratio in some way, so that the class can be

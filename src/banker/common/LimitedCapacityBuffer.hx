@@ -1,8 +1,11 @@
-package banker.common.internal;
+package banker.common;
 
 import sneaker.tag.interfaces.Tagged;
 import banker.watermark.Percentage;
 
+/**
+	Data collection objects that have limited capacities.
+**/
 @:using(banker.watermark.TaggedExtension)
 interface LimitedCapacityBuffer extends Tagged {
 	/** Max number of elements `this` can contain. **/

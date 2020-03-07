@@ -1,7 +1,7 @@
 package banker.container.buffer.top_aligned;
 
 import sneaker.exception.NotOverriddenException;
-import banker.common.internal.LimitedCapacityBuffer;
+import banker.common.LimitedCapacityBuffer;
 import banker.common.MathTools.minInt;
 import banker.watermark.Percentage;
 
