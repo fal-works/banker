@@ -51,9 +51,35 @@ Collection classes with 2 type parameters.
 
 ![class diagram of linker package](docs/linker.svg)
 
+### package: watermark
+
+If the compiler flag `banker_watermark_enable` is set, "watermark" feature is activated.
+
+This is a simple profiling feature for all data collection objects (in `container` and `linker` packages) with limited capacity.
+
+It automatically records the maximum usage (size to capacity ratio) per instance group,  
+which enables you to check and adjust the capacity of each data collection object.
+
+Instances are grouped by the name of `Tag` that is attached to each instance.  
+About the `Tag`s, see also the [sneaker](https://github.com/fal-works/sneaker) library which underlies this feature.
+
+#### How to use
+
+Just set the compiler flag `banker_watermark_enable`, and the profiling runs automatically.
+
+To see the result, import:
+
+```haxe
+import banker.watermark.Watermark;
+```
+
+and call `Watermark.printData()` whenever you like.
+
+
 
 ## Compilation flags
 
 |flag|description|
 |---|---|
+|banker_watermark_enable|Enables watermark mode (see above).|
 |banker_generic_disable|Disables `@:generic` meta.|
