@@ -10,7 +10,11 @@ import banker.linker.ArrayMap;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayList<T> extends TopAlignedBuffer<T> implements List<T> {
+@:ripper.spirits(buffer.top_aligned.Indexed)
+class ArrayList<T>
+	extends TopAlignedBuffer<T>
+	implements List<T>
+	implements ripper.Body {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
@@ -22,22 +26,6 @@ class ArrayList<T> extends TopAlignedBuffer<T> implements List<T> {
 	/** @see `banker.container.interfaces.List` **/
 	public inline function addFromVector(otherVector: VectorReference<T>): Void
 		StackExtension.pushFromVector(this, otherVector);
-
-	/** @see `banker.container.interfaces.Indexed` **/
-	public inline function get(index: Int): T
-		return IndexedExtension.get(this, index);
-
-	/** @see `banker.container.interfaces.Indexed` **/
-	public inline function set(index: Int, value: T): T
-		return IndexedExtension.set(this, index, value);
-
-	/** @see `banker.container.interfaces.Indexed` **/
-	public inline function insertAt(index: Int, value: T): T
-		return IndexedExtension.insertAt(this, index, value);
-
-	/** @see `banker.container.interfaces.Indexed` **/
-	public inline function removeAt(index: Int): T
-		return IndexedExtension.removeAt(this, index);
 
 	/** @see `banker.container.interfaces.Sequence` **/
 	public inline function forEach(callback: T->Void): Void
