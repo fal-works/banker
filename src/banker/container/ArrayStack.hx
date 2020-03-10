@@ -9,7 +9,11 @@ import banker.container.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.spirits(buffer.top_aligned.Stack, buffer.top_aligned.Ordered)
+@:ripper.spirits(
+	buffer.top_aligned.Stack,
+	buffer.top_aligned.Ordered,
+	buffer.top_aligned.NotUnique
+)
 class ArrayStack<T>
 	extends TopAlignedBuffer<T>
 	implements banker.container.interfaces.Stack<T>
@@ -17,30 +21,6 @@ class ArrayStack<T>
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
-
-	/**
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
-		@see `banker.container.buffer.top_aligned.InternalExtension`
-	**/
-	override inline function pushInternal(index: Int, element: T): Void
-		InternalExtension.pushDuplicatesAllowed(this, index, element);
-
-	/**
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
-		@see `banker.container.buffer.top_aligned.InternalExtension`
-	**/
-	override inline function pushFromVectorInternal(
-		index: Int,
-		otherVector: VectorReference<T>,
-		otherVectorLength: Int
-	): Void {
-		InternalExtension.pushFromVectorDuplicatesAllowed(
-			this,
-			index,
-			otherVector,
-			otherVectorLength
-		);
-	}
 
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
 	public function setTag(tag: Tag): ArrayStack<T>

@@ -15,7 +15,8 @@ import banker.container.buffer.top_aligned.*;
 @:ripper.spirits(
 	buffer.top_aligned.Sequence,
 	buffer.top_aligned.UnorderedSet,
-	buffer.top_aligned.Unordered
+	buffer.top_aligned.Unordered,
+	buffer.top_aligned.Unique
 )
 class ArraySet<T>
 	extends TopAlignedBuffer<T>
@@ -29,33 +30,6 @@ class ArraySet<T>
 	/** @see banker.container.buffer.top_aligned.CloneExtension **/
 	public inline function cloneAsSet(newCapacity = -1): ArraySet<T>
 		return CloneExtension.cloneAsSet(this, newCapacity);
-
-	/**
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
-		@see `banker.container.buffer.top_aligned.InternalExtension`
-	**/
-	override inline function pushInternal(index: Int, element: T): Void
-		InternalExtension.pushDuplicatesPrevented(this, index, element);
-
-	/**
-		Adds all elements in `vector` to `this`.
-		Duplicates are not allowed; Only the elements that do not exist in `this` are pushed.
-		O(n^2) complexity.
-
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.pushFromVectorInternal()`
-	**/
-	override inline function pushFromVectorInternal(
-		index: Int,
-		otherVector: VectorReference<T>,
-		otherVectorLength: Int
-	): Void {
-		InternalExtension.pushFromVectorDuplicatesPrevented(
-			this,
-			index,
-			otherVector,
-			otherVectorLength
-		);
-	}
 
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
 	public function setTag(tag: Tag): ArraySet<T>
