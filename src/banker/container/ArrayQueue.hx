@@ -21,4 +21,12 @@ class ArrayQueue<T> extends SequenceRingBuffer<T> implements Queue<T> {
 	/** @see `banker.container.interfaces.Queue` **/
 	public inline function dequeue(): T
 		return QueueExtension.dequeue(this);
+
+	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
+	public function setTag(tag: Tag): ArrayQueue<T>
+		return TaggedExtension.setTag(this, tag);
+
+	/** @see `sneaker.tag.TaggedExtension.newTag()` **/
+	public function newTag(name: String, bits = 0xFFFFFFFF): ArrayQueue<T>
+		return TaggedExtension.newTag(this, name, bits);
 }

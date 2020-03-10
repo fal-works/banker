@@ -69,4 +69,12 @@ class ArrayOrderedMap<K, V>
 		valueVector.blitInternal(index + 1, index, movingRange);
 		this.setSize(nextSize);
 	}
+
+	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
+	public function setTag(tag: Tag): ArrayOrderedMap<K, V>
+		return TaggedExtension.setTag(this, tag);
+
+	/** @see `sneaker.tag.TaggedExtension.newTag()` **/
+	public function newTag(name: String, bits = 0xFFFFFFFF): ArrayOrderedMap<K, V>
+		return TaggedExtension.newTag(this, name, bits);
 }

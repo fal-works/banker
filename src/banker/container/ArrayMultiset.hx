@@ -40,4 +40,11 @@ class ArrayMultiset<T> extends TopAlignedSetBuffer<T> {
 			otherVectorLength
 		);
 	}
+	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
+	public function setTag(tag: Tag): ArrayMultiset<T>
+		return TaggedExtension.setTag(this, tag);
+
+	/** @see `sneaker.tag.TaggedExtension.newTag()` **/
+	public function newTag(name: String, bits = 0xFFFFFFFF): ArrayMultiset<T>
+		return TaggedExtension.newTag(this, name, bits);
 }

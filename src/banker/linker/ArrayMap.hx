@@ -68,4 +68,12 @@ class ArrayMap<K, V>
 		valueVector[index] = valueVector[lastIndex];
 		this.setSize(lastIndex);
 	}
+
+	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
+	public function setTag(tag: Tag): ArrayMap<K, V>
+		return TaggedExtension.setTag(this, tag);
+
+	/** @see `sneaker.tag.TaggedExtension.newTag()` **/
+	public function newTag(name: String, bits = 0xFFFFFFFF): ArrayMap<K, V>
+		return TaggedExtension.newTag(this, name, bits);
 }

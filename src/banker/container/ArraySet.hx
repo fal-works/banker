@@ -47,4 +47,12 @@ class ArraySet<T> extends TopAlignedSetBuffer<T> implements Sequence<T> {
 			otherVectorLength
 		);
 	}
+
+	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
+	public function setTag(tag: Tag): ArraySet<T>
+		return TaggedExtension.setTag(this, tag);
+
+	/** @see `sneaker.tag.TaggedExtension.newTag()` **/
+	public function newTag(name: String, bits = 0xFFFFFFFF): ArraySet<T>
+		return TaggedExtension.newTag(this, name, bits);
 }

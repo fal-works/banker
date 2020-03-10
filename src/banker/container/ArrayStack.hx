@@ -65,4 +65,12 @@ class ArrayStack<T> extends TopAlignedBuffer<T> implements Stack<T> {
 			otherVectorLength
 		);
 	}
+
+	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
+	public function setTag(tag: Tag): ArrayStack<T>
+		return TaggedExtension.setTag(this, tag);
+
+	/** @see `sneaker.tag.TaggedExtension.newTag()` **/
+	public function newTag(name: String, bits = 0xFFFFFFFF): ArrayStack<T>
+		return TaggedExtension.newTag(this, name, bits);
 }

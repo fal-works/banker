@@ -29,4 +29,12 @@ class ArrayDeque<T> extends SequenceRingBuffer<T> implements Deque<T> {
 	/** @see `banker.container.interfaces.Deque` **/
 	public inline function popBack(): T
 		return DequeExtension.popBack(this);
+
+	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
+	public function setTag(tag: Tag): ArrayDeque<T>
+		return TaggedExtension.setTag(this, tag);
+
+	/** @see `sneaker.tag.TaggedExtension.newTag()` **/
+	public function newTag(name: String, bits = 0xFFFFFFFF): ArrayDeque<T>
+		return TaggedExtension.newTag(this, name, bits);
 }

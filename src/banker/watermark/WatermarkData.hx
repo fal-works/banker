@@ -2,7 +2,6 @@ package banker.watermark;
 
 #if banker_watermark_enable
 using StringTools;
-using sneaker.tag.TaggedExtension;
 
 import banker.linker.ArrayOrderedMap;
 import sneaker.string_buffer.StringBuffer;
