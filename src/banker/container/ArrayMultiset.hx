@@ -12,7 +12,11 @@ import banker.container.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.spirits(buffer.top_aligned.Sequence, buffer.top_aligned.UnorderedSet)
+@:ripper.spirits(
+	buffer.top_aligned.Sequence,
+	buffer.top_aligned.UnorderedSet,
+	buffer.top_aligned.Unordered
+)
 class ArrayMultiset<T>
 	extends TopAlignedBuffer<T>
 	implements banker.container.interfaces.Set<T>
@@ -21,18 +25,6 @@ class ArrayMultiset<T>
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
-
-	/**
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
-		@see `banker.container.buffer.top_aligned.InternalExtension`
-	**/
-	override function removeAtInternal(
-		vector: WritableVector<T>,
-		currentSize: Int,
-		index: Int
-	): T {
-		return InternalExtension.removeSwapAt(this, vector, currentSize, index);
-	}
 
 	/**
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`

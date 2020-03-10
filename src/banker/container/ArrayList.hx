@@ -13,7 +13,8 @@ import banker.linker.ArrayMap;
 @:ripper.spirits(
 	buffer.top_aligned.Indexed,
 	buffer.top_aligned.Sequence,
-	buffer.top_aligned.OrderedSet
+	buffer.top_aligned.OrderedSet,
+	buffer.top_aligned.Ordered
 )
 class ArrayList<T>
 	extends TopAlignedBuffer<T>
@@ -22,18 +23,6 @@ class ArrayList<T>
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
-
-	/**
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
-		@see `banker.container.buffer.top_aligned.InternalExtension`
-	**/
-	override function removeAtInternal(
-		vector: WritableVector<T>,
-		currentSize: Int,
-		index: Int
-	): T {
-		return InternalExtension.removeShiftAt(this, vector, currentSize, index);
-	}
 
 	/**
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`

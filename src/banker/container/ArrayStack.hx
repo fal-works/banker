@@ -9,7 +9,7 @@ import banker.container.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.spirits(buffer.top_aligned.Stack)
+@:ripper.spirits(buffer.top_aligned.Stack, buffer.top_aligned.Ordered)
 class ArrayStack<T>
 	extends TopAlignedBuffer<T>
 	implements banker.container.interfaces.Stack<T>
@@ -17,18 +17,6 @@ class ArrayStack<T>
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
-
-	/**
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
-		@see `banker.container.buffer.top_aligned.InternalExtension`
-	**/
-	override function removeAtInternal(
-		vector: WritableVector<T>,
-		currentSize: Int,
-		index: Int
-	): T {
-		return InternalExtension.removeShiftAt(this, vector, currentSize, index);
-	}
 
 	/**
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
