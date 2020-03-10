@@ -16,7 +16,7 @@ class Set<T>
 		StackExtension.pushFromVector(this, otherVector);
 
 	/** @see `banker.container.interfaces.Set` **/
-	public function findFirst(
+	public inline function findFirst(
 		predicate: (element: T) -> Bool,
 		defaultValue: T
 	): T { @:nullSafety(Off) // HACK: Don't know why but this seems to be necessary
