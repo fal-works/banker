@@ -1,10 +1,12 @@
-package banker.container.buffer.ring;
+package banker.container.buffer.ring.features;
 
 #if !banker_generic_disable
 @:generic
 #end
-@:allow(banker.container)
-class SequenceRingBuffer<T> extends RingBuffer<T> implements Sequence<T> {
+class Sequence<T>
+	extends RingBuffer<T>
+	implements banker.container.interfaces.Sequence<T>
+	implements ripper.Spirit {
 	/** @see `banker.container.interfaces.Sequence` **/
 	public inline function forEach(callback: T->Void): Void
 		SequenceExtension.forEach(this, callback);

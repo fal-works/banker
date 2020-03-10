@@ -1,7 +1,6 @@
 package banker.container;
 
-// NOTE: Automatic static extension does not seem to work on generic classes
-import banker.container.buffer.ring.*;
+import banker.container.buffer.ring.*; // Necessary for spirits
 
 /**
 	Array-based deque.
@@ -9,10 +8,11 @@ import banker.container.buffer.ring.*;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.spirits(buffer.ring.features.Deque)
+@:ripper.spirits(buffer.ring.features.Deque, buffer.ring.features.Sequence)
 class ArrayDeque<T>
-	extends SequenceRingBuffer<T>
+	extends RingBuffer<T>
 	implements Deque<T>
+	implements Sequence<T>
 	implements ripper.Body {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
