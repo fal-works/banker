@@ -4,8 +4,6 @@ import banker.watermark.Watermark;
 import banker.watermark.WatermarkSettings;
 import banker.container.ArrayStack;
 
-class ExStack<T> extends ArrayStack<T> {
-}
 
 class WatermarkTest {
 	static function watermark() {
@@ -13,7 +11,7 @@ class WatermarkTest {
 
 		Watermark.reset();
 
-		final stackA1 = new ExStack<Int>(10).newTag("stack group A");
+		final stackA1 = new ArrayStack<Int>(10).newTag("stack group A");
 		for (i in 0...2) stackA1.push(i);
 
 		final stackA2 = new ArrayStack<Int>(10).newTag("stack group A"); // same name
