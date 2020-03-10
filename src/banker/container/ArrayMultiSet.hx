@@ -12,10 +12,27 @@ import banker.container.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayMultiset<T> extends TopAlignedSetBuffer<T> {
+@:ripper.spirits(buffer.top_aligned.Sequence, buffer.top_aligned.UnorderedSet)
+class ArrayMultiset<T>
+	extends TopAlignedBuffer<T>
+	implements banker.container.interfaces.Set<T>
+	implements banker.container.interfaces.Sequence<T>
+	implements ripper.Body {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
+
+	/**
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
+		@see `banker.container.buffer.top_aligned.InternalExtension`
+	**/
+	override function removeAtInternal(
+		vector: WritableVector<T>,
+		currentSize: Int,
+		index: Int
+	): T {
+		return InternalExtension.removeSwapAt(this, vector, currentSize, index);
+	}
 
 	/**
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
@@ -40,6 +57,7 @@ class ArrayMultiset<T> extends TopAlignedSetBuffer<T> {
 			otherVectorLength
 		);
 	}
+
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
 	public function setTag(tag: Tag): ArrayMultiset<T>
 		return TaggedExtension.setTag(this, tag);

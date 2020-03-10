@@ -10,7 +10,11 @@ import banker.linker.ArrayMap;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.spirits(buffer.top_aligned.Indexed)
+@:ripper.spirits(
+	buffer.top_aligned.Indexed,
+	buffer.top_aligned.Sequence,
+	buffer.top_aligned.OrderedSet
+)
 class ArrayList<T>
 	extends TopAlignedBuffer<T>
 	implements List<T>
@@ -18,59 +22,6 @@ class ArrayList<T>
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
-
-	/** @see `banker.container.interfaces.List` **/
-	public inline function add(value: T): Void
-		StackExtension.push(this, value);
-
-	/** @see `banker.container.interfaces.List` **/
-	public inline function addFromVector(otherVector: VectorReference<T>): Void
-		StackExtension.pushFromVector(this, otherVector);
-
-	/** @see `banker.container.interfaces.Sequence` **/
-	public inline function forEach(callback: T->Void): Void
-		SequenceExtension.forEach(this, callback);
-
-	/** @see `banker.container.interfaces.Sequence` **/
-	public inline function filter(predicate: T->Bool): Vector<T>
-		return SequenceExtension.filter(this, predicate);
-
-	/** @see `banker.container.interfaces.Sequence` **/
-	public inline function map<S>(callback: T->S): Vector<S>
-		return SequenceExtension.map(this, callback);
-
-	/** @see `banker.container.interfaces.Set` **/
-	public function findFirst(predicate: (element: T) -> Bool, defaultValue: T): T
-		return SetExtension.findFirst(this, predicate, defaultValue);
-
-	/** @see `banker.container.interfaces.Set` **/
-	public inline function remove(element: T): Bool
-		return SetExtension.remove(this, element);
-
-	/**
-		@see `banker.container.interfaces.Set`
-		@see `banker.container.buffer.top_aligned.SetExtension`
-	**/
-	public inline function removeAll(predicate: (element: T) -> Bool): Bool
-		return SetExtension.removeShiftAll(this, predicate);
-
-	/** @see `banker.container.interfaces.Set` **/
-	public inline function has(element: T): Bool
-		return SetExtension.has(this, element);
-
-	/** @see `banker.container.interfaces.Set` **/
-	public inline function hasAny(predicate: (element: T) -> Bool): Bool
-		return SetExtension.hasAny(this, predicate);
-
-	/** @see `banker.container.interfaces.Set` **/
-	public inline function count(predicate: (element: T) -> Bool): Int
-		return SetExtension.count(this, predicate);
-
-	/** @see `banker.container.interfaces.Set` **/
-	public inline function countAll<S>(
-		grouperCallback: (element: T) -> S
-	): ArrayMap<S, Int>
-		return SetExtension.countAll(this, grouperCallback);
 
 	/**
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`

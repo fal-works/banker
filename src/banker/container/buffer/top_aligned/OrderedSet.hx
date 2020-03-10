@@ -1,24 +1,12 @@
 package banker.container.buffer.top_aligned;
 
-import banker.linker.ArrayMap;
-
-/**
-	Intermediate base class for top-aligned array-based unordered sets
-	that implements methods required by the `Set` and `Sequence` interfaces.
-
-	`pushInternal()` needs be implemented in the concrete subclass.
-**/
 #if !banker_generic_disable
 @:generic
 #end
-class TopAlignedSetBuffer<T>
+class OrderedSet<T>
 	extends TopAlignedBuffer<T>
-	implements Set<T>
-	implements Sequence<T> {
-	/** @inheritdoc **/
-	public function new(capacity: Int)
-		super(capacity);
-
+	implements banker.container.interfaces.Set<T>
+	implements ripper.Spirit {
 	/** @see `banker.container.interfaces.Set` **/
 	public inline function add(element: T): Void
 		StackExtension.push(this, element);
@@ -44,7 +32,7 @@ class TopAlignedSetBuffer<T>
 		@see `banker.container.buffer.top_aligned.SetExtension`
 	**/
 	public inline function removeAll(predicate: (element: T) -> Bool): Bool
-		return SetExtension.removeSwapAll(this, predicate);
+		return SetExtension.removeShiftAll(this, predicate);
 
 	/** @see `banker.container.interfaces.Set` **/
 	public inline function has(element: T): Bool
@@ -61,30 +49,6 @@ class TopAlignedSetBuffer<T>
 	/** @see `banker.container.interfaces.Set` **/
 	public inline function countAll<S>(
 		grouperCallback: (element: T) -> S
-	): ArrayMap<S, Int>
+	): banker.linker.ArrayMap<S, Int>
 		return SetExtension.countAll(this, grouperCallback);
-
-	/** @see `banker.container.interfaces.Sequence` **/
-	public inline function forEach(callback: T->Void): Void
-		SequenceExtension.forEach(this, callback);
-
-	/** @see `banker.container.interfaces.Sequence` **/
-	public inline function filter(predicate: T->Bool): Vector<T>
-		return SequenceExtension.filter(this, predicate);
-
-	/** @see `banker.container.interfaces.Sequence` **/
-	public inline function map<S>(callback: T->S): Vector<S>
-		return SequenceExtension.map(this, callback);
-
-	/**
-		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
-		@see `banker.container.buffer.top_aligned.InternalExtension`
-	**/
-	override function removeAtInternal(
-		vector: WritableVector<T>,
-		currentSize: Int,
-		index: Int
-	): T {
-		return InternalExtension.removeSwapAt(this, vector, currentSize, index);
-	}
 }
