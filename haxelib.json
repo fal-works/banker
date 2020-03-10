@@ -11,6 +11,7 @@
 		"fal-works"
 	],
 	"dependencies": {
-		"sneaker": "0.1.2"
+		"sneaker": "0.3.0",
+		"ripper": "0.1.0"
 	}
 }
