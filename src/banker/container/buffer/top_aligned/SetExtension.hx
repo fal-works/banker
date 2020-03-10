@@ -53,68 +53,13 @@ class SetExtension {
 		Removes all elements that match `predicate`.
 		The order is not preserved.
 
-		Used for implementing `banker.container.interfaces.Set.removeAll()`.
 		@return `true` if any found and removed.
 	**/
-	public static inline function removeSwapAll<T>(
+	public static inline function removeAll<T>(
 		_this: TopAlignedBuffer<T>,
 		predicate: (element: T) -> Bool
 	): Bool {
-		final vector = _this.vector;
-
-		var found = false;
-		var len = _this.size;
-		var i = 0;
-		while (i < len) {
-			if (!predicate(vector[i])) {
-				++i;
-				continue;
-			}
-
-			--len;
-			vector[i] = vector[len];
-			found = true;
-		}
-
-		_this.setSize(len);
-
-		return found;
-	}
-
-	/**
-		Removes all elements that match `predicate`.
-		The order is preserved.
-
-		Used for implementing `banker.container.interfaces.Set.removeAll()`.
-		@return `true` if any found and removed.
-	**/
-	public static inline function removeShiftAll<T>(
-		_this: TopAlignedBuffer<T>,
-		predicate: (element: T) -> Bool
-	): Bool {
-		final size = _this.size;
-		final vector = _this.vector;
-
-		var found = false;
-		var readIndex = 0;
-		var writeIndex = 0;
-
-		while (readIndex < size) {
-			final readingElement = vector[readIndex];
-			++readIndex;
-
-			if (!predicate(readingElement)) {
-				vector[writeIndex] = readingElement;
-				++writeIndex;
-				continue;
-			}
-
-			found = true;
-		}
-
-		_this.setSize(writeIndex);
-
-		return found;
+		return _this.removeAllInternal(predicate);
 	}
 
 	/** @see `banker.container.interfaces.Set` **/

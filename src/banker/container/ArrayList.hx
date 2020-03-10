@@ -13,7 +13,7 @@ import banker.linker.ArrayMap;
 @:ripper.spirits(
 	buffer.top_aligned.Indexed,
 	buffer.top_aligned.Sequence,
-	buffer.top_aligned.OrderedSet,
+	buffer.top_aligned.Set,
 	buffer.top_aligned.Ordered,
 	buffer.top_aligned.NotUnique
 )

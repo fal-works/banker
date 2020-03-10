@@ -3,7 +3,7 @@ package banker.container.buffer.top_aligned;
 #if !banker_generic_disable
 @:generic
 #end
-class OrderedSet<T>
+class Set<T>
 	extends TopAlignedBuffer<T>
 	implements banker.container.interfaces.Set<T>
 	implements ripper.Spirit {
@@ -32,7 +32,7 @@ class OrderedSet<T>
 		@see `banker.container.buffer.top_aligned.SetExtension`
 	**/
 	public inline function removeAll(predicate: (element: T) -> Bool): Bool
-		return SetExtension.removeShiftAll(this, predicate);
+		return SetExtension.removeAll(this, predicate);
 
 	/** @see `banker.container.interfaces.Set` **/
 	public inline function has(element: T): Bool

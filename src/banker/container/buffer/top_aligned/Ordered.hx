@@ -17,4 +17,11 @@ class Ordered<T> extends TopAlignedBuffer<T> implements ripper.Spirit {
 	): T {
 		return InternalExtension.removeShiftAt(this, vector, currentSize, index);
 	}
+
+	/**
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
+		@see `banker.container.buffer.top_aligned.InternalExtension`
+	**/
+	override function removeAllInternal(predicate: (value: T) -> Bool): Bool
+		return InternalExtension.removeShiftAll(this, predicate);
 }

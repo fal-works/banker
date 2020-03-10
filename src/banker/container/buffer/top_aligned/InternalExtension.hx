@@ -113,4 +113,72 @@ class InternalExtension {
 
 		return removed;
 	}
+
+	/**
+		Removes all elements that match `predicate`.
+		The order is not preserved.
+
+		@return `true` if any found and removed.
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.removeAllInternal()`
+	**/
+	public static inline function removeSwapAll<T>(
+		_this: TopAlignedBuffer<T>,
+		predicate: (element: T) -> Bool
+	): Bool {
+		final vector = _this.vector;
+
+		var found = false;
+		var len = _this.size;
+		var i = 0;
+		while (i < len) {
+			if (!predicate(vector[i])) {
+				++i;
+				continue;
+			}
+
+			--len;
+			vector[i] = vector[len];
+			found = true;
+		}
+
+		_this.setSize(len);
+
+		return found;
+	}
+
+	/**
+		Removes all elements that match `predicate`.
+		The order is preserved.
+
+		@return `true` if any found and removed.
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.removeAllInternal()`
+	**/
+	public static inline function removeShiftAll<T>(
+		_this: TopAlignedBuffer<T>,
+		predicate: (value: T) -> Bool
+	): Bool {
+		final size = _this.size;
+		final vector = _this.vector;
+
+		var found = false;
+		var readIndex = 0;
+		var writeIndex = 0;
+
+		while (readIndex < size) {
+			final readingElement = vector[readIndex];
+			++readIndex;
+
+			if (!predicate(readingElement)) {
+				vector[writeIndex] = readingElement;
+				++writeIndex;
+				continue;
+			}
+
+			found = true;
+		}
+
+		_this.setSize(writeIndex);
+
+		return found;
+	}
 }

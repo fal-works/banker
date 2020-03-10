@@ -14,7 +14,7 @@ import banker.container.buffer.top_aligned.*;
 #end
 @:ripper.spirits(
 	buffer.top_aligned.Sequence,
-	buffer.top_aligned.UnorderedSet,
+	buffer.top_aligned.Set,
 	buffer.top_aligned.Unordered,
 	buffer.top_aligned.NotUnique
 )

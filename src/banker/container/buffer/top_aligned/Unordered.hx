@@ -17,4 +17,11 @@ class Unordered<T> extends TopAlignedBuffer<T> implements ripper.Spirit {
 	): T {
 		return InternalExtension.removeSwapAt(this, vector, currentSize, index);
 	}
+
+	/**
+		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
+		@see `banker.container.buffer.top_aligned.InternalExtension`
+	**/
+	override function removeAllInternal(predicate: (value: T) -> Bool): Bool
+		return InternalExtension.removeSwapAll(this, predicate);
 }
