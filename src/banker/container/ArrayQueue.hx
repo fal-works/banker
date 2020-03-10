@@ -9,18 +9,14 @@ import banker.container.buffer.ring.*;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayQueue<T> extends SequenceRingBuffer<T> implements Queue<T> {
+@:ripper.spirits(buffer.ring.Queue)
+class ArrayQueue<T>
+	extends SequenceRingBuffer<T>
+	implements banker.container.interfaces.Queue<T>
+	implements ripper.Body {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
-
-	/** @see `banker.container.interfaces.Queue` **/
-	public inline function enqueue(element: T): Void
-		QueueExtension.enqueue(this, element);
-
-	/** @see `banker.container.interfaces.Queue` **/
-	public inline function dequeue(): T
-		return QueueExtension.dequeue(this);
 
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
 	public function setTag(tag: Tag): ArrayQueue<T>

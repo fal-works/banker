@@ -9,26 +9,14 @@ import banker.container.buffer.ring.*;
 #if !banker_generic_disable
 @:generic
 #end
-class ArrayDeque<T> extends SequenceRingBuffer<T> implements Deque<T> {
+@:ripper.spirits(buffer.ring.Deque)
+class ArrayDeque<T>
+	extends SequenceRingBuffer<T>
+	implements banker.container.interfaces.Deque<T>
+	implements ripper.Body {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
 		super(capacity);
-
-	/** @see `banker.container.interfaces.Deque` **/
-	public inline function pushBack(element: T): Void
-		DequeExtension.pushBack(this, element);
-
-	/** @see `banker.container.interfaces.Deque` **/
-	public inline function popFront(): T
-		return DequeExtension.popFront(this);
-
-	/** @see `banker.container.interfaces.Deque` **/
-	public inline function pushFront(element: T): Void
-		DequeExtension.pushFront(this, element);
-
-	/** @see `banker.container.interfaces.Deque` **/
-	public inline function popBack(): T
-		return DequeExtension.popBack(this);
 
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
 	public function setTag(tag: Tag): ArrayDeque<T>
