@@ -1,7 +1,6 @@
 package banker.container;
 
-// NOTE: Automatic static extension does not work on generic classes
-import banker.container.buffer.top_aligned.*;
+import banker.container.buffer.top_aligned.*; // Necessary for spirits
 
 /**
 	Array-based set.
@@ -13,10 +12,10 @@ import banker.container.buffer.top_aligned.*;
 @:generic
 #end
 @:ripper.spirits(
-	buffer.top_aligned.Sequence,
-	buffer.top_aligned.Set,
-	buffer.top_aligned.Unordered,
-	buffer.top_aligned.NotUnique
+	buffer.top_aligned.features.Sequence,
+	buffer.top_aligned.features.Set,
+	buffer.top_aligned.constraints.Unordered,
+	buffer.top_aligned.constraints.NotUnique
 )
 class ArrayMultiset<T>
 	extends TopAlignedBuffer<T>

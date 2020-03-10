@@ -1,6 +1,4 @@
-package banker.container.buffer.top_aligned;
-
-import banker.container.buffer.top_aligned.InternalExtension;
+package banker.container.buffer.top_aligned.constraints;
 
 #if !banker_generic_disable
 @:generic

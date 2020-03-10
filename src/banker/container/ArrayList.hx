@@ -1,8 +1,6 @@
 package banker.container;
 
-// NOTE: Automatic static extension does not seem to work on generic classes
-import banker.container.buffer.top_aligned.*;
-import banker.linker.ArrayMap;
+import banker.container.buffer.top_aligned.*; // Necessary for spirits
 
 /**
 	Array-based stack.
@@ -11,15 +9,17 @@ import banker.linker.ArrayMap;
 @:generic
 #end
 @:ripper.spirits(
-	buffer.top_aligned.Indexed,
-	buffer.top_aligned.Sequence,
-	buffer.top_aligned.Set,
-	buffer.top_aligned.Ordered,
-	buffer.top_aligned.NotUnique
+	buffer.top_aligned.features.Indexed,
+	buffer.top_aligned.features.Sequence,
+	buffer.top_aligned.features.Set,
+	buffer.top_aligned.constraints.Ordered,
+	buffer.top_aligned.constraints.NotUnique
 )
 class ArrayList<T>
 	extends TopAlignedBuffer<T>
-	implements List<T>
+	implements Indexed<T>
+	implements Sequence<T>
+	implements Set<T>
 	implements ripper.Body {
 	/** @inheritdoc **/
 	public function new(capacity: Int)

@@ -1,6 +1,4 @@
-package banker.container.buffer.top_aligned;
-
-import banker.container.buffer.top_aligned.IndexedExtension;
+package banker.container.buffer.top_aligned.features;
 
 #if !banker_generic_disable
 @:generic

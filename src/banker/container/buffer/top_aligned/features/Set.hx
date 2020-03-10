@@ -1,4 +1,4 @@
-package banker.container.buffer.top_aligned;
+package banker.container.buffer.top_aligned.features;
 
 #if !banker_generic_disable
 @:generic
