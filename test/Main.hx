@@ -2,13 +2,14 @@ package;
 
 import sneaker.unit_test.TesterSettings;
 
-// @formatter:off
-
 // dunno how to do tests!
 class Main {
-	static final testCases = testCaseGroup([
+	static final basicTestCases = testCaseGroup([
 		NullableTest.all,
-		VectorTest.all,
+		VectorTest.all
+	]);
+
+	static final testCases = testCaseGroup([
 		TopAlignedBufferTest.all,
 		ArrayStackTest.all,
 		ArrayQueueTest.all,
@@ -22,6 +23,7 @@ class Main {
 		// TesterSettings.hidePassedResults = true;
 		TesterSettings.showCallStack = true;
 
+		test(basicTestCases);
 		test(testCases);
 		test(watermarkTestCases);
 	}
