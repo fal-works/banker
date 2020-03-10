@@ -1,6 +1,4 @@
-package banker.container.buffer.ring;
-
-import banker.container.buffer.ring.DequeExtension;
+package banker.container.buffer.ring.features;
 
 #if !banker_generic_disable
 @:generic

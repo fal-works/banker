@@ -9,10 +9,10 @@ import banker.container.buffer.ring.*;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.spirits(buffer.ring.Deque)
+@:ripper.spirits(buffer.ring.features.Deque)
 class ArrayDeque<T>
 	extends SequenceRingBuffer<T>
-	implements banker.container.interfaces.Deque<T>
+	implements Deque<T>
 	implements ripper.Body {
 	/** @inheritdoc **/
 	public function new(capacity: Int)

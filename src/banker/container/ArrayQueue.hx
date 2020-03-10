@@ -9,10 +9,10 @@ import banker.container.buffer.ring.*;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.spirits(buffer.ring.Queue)
+@:ripper.spirits(buffer.ring.features.Queue)
 class ArrayQueue<T>
 	extends SequenceRingBuffer<T>
-	implements banker.container.interfaces.Queue<T>
+	implements Queue<T>
 	implements ripper.Body {
 	/** @inheritdoc **/
 	public function new(capacity: Int)
