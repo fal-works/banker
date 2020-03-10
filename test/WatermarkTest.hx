@@ -4,7 +4,6 @@ import banker.watermark.Watermark;
 import banker.watermark.WatermarkSettings;
 import banker.container.ArrayStack;
 
-
 class WatermarkTest {
 	static function watermark() {
 		describe("This prints watermark result (A: 50%, B: 75%) if `banker_watermark_enabled` is set.");
@@ -46,7 +45,6 @@ class WatermarkTest {
 	}
 
 	static final _exclude = testCase(exclude, Visual);
-
 
 	public static final all = testCaseGroup([
 		_watermark,

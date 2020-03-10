@@ -3,7 +3,6 @@ package banker.watermark;
 using StringTools;
 
 import sneaker.string_buffer.StringBuffer;
-
 #if hl
 import hl.UI8 as UInt8;
 #else

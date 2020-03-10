@@ -49,9 +49,9 @@ class ConvertExtension {
 		Creates a copy.
 
 		- If `newCapacity` is negative,
-		  the new container has the same capacity as `this`.
+			the new container has the same capacity as `this`.
 		- If `newCapacity` is less than the number of current elements (`this.size`),
-		  the overflowing data is truncated.
+			the overflowing data is truncated.
 
 		@return Shallow copy of `this` as an `ArrayMap`.
 	**/

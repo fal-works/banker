@@ -35,12 +35,7 @@ class VectorTools {
 	): Void {
 		assert(rangeLength <= source.length);
 		assert(rangeLength <= destination.length);
-		destination.ref.data.blit(
-			0,
-			source.data,
-			0,
-			rangeLength
-		);
+		destination.ref.data.blit(0, source.data, 0, rangeLength);
 	}
 
 	/**

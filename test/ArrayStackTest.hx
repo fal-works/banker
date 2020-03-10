@@ -34,7 +34,6 @@ class ArrayStackTest {
 
 	static final _emptyError = testCase(emptyError, Fail);
 
-
 	static function clone() {
 		describe("This raises an exception if assertion is enabled.");
 		final stack = new ArrayStack<String>(5);
