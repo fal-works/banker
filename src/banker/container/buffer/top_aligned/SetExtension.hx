@@ -49,12 +49,7 @@ class SetExtension {
 		return found;
 	}
 
-	/**
-		Removes all elements that match `predicate`.
-		The order is not preserved.
-
-		@return `true` if any found and removed.
-	**/
+	/** @see `banker.container.interfaces.Set` **/
 	public static inline function removeAll<T>(
 		_this: TopAlignedBuffer<T>,
 		predicate: (element: T) -> Bool
