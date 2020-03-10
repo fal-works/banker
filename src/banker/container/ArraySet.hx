@@ -26,10 +26,6 @@ class ArraySet<T>
 	public function new(capacity: Int)
 		super(capacity);
 
-	/** @see banker.container.buffer.top_aligned.CloneExtension **/
-	public inline function cloneAsSet(newCapacity = -1): ArraySet<T>
-		return CloneExtension.cloneAsSet(this, newCapacity);
-
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
 	public function setTag(tag: Tag): ArraySet<T>
 		return TaggedExtension.setTag(this, tag);

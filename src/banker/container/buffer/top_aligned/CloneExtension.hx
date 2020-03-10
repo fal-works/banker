@@ -52,18 +52,14 @@ class CloneExtension {
 	}
 
 	/**
+		@param _this Must consist of unique elements.
 		@return Shallow copy of `this` as an `ArraySet`.
 		@see `cloneAsList()` about the argument `newCapacity`.
 	**/
 	public static inline function cloneAsSet<T>(
-		_this: ArraySet<T>,
+		_this: TopAlignedBuffer<T>,
 		newCapacity: Int
 	): ArraySet<T> {
-		/*
-			Theoretically _this can be any instance that extends
-			TopAlignedBuffer and consitsts of unique elements.
-		*/
-
 		final newCapacityValue = if (newCapacity < 0) _this.capacity else newCapacity;
 		final newContainer = new ArraySet<T>(newCapacityValue);
 		newContainer.blitAllFrom(_this);
