@@ -74,14 +74,11 @@ About the `Tag`s, see also the [sneaker](https://github.com/fal-works/sneaker) l
 
 Just set the compiler flag `banker_watermark_enable`, and the profiling runs automatically.
 
-To see the result, import:
+To see the result, call the below whenever you like:
 
 ```haxe
-import banker.watermark.Watermark;
+banker.watermark.Watermark.printData();
 ```
-
-and call `Watermark.printData()` whenever you like.
-
 
 
 ## Compilation flags
@@ -90,3 +87,9 @@ and call `Watermark.printData()` whenever you like.
 |---|---|
 |banker_watermark_enable|Enables watermark mode (see above).|
 |banker_generic_disable|Disables `@:generic` meta.|
+
+
+## Dependencies
+
+- [sneaker](https://github.com/fal-works/sneaker) for assertion and logging
+- [ripper](https://github.com/fal-works/ripper) for partial implementation
