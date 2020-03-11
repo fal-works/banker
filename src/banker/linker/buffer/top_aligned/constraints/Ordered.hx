@@ -14,7 +14,13 @@ class Ordered<K, V> extends TopAlignedBuffer<K, V> implements ripper.Spirit {
 		currentSize: Int,
 		index: Int
 	): Void {
-		InternalExtension.removeShiftAt(this, keyVector, valueVector, currentSize, index);
+		InternalExtension.removeShiftAt(
+			this,
+			keyVector,
+			valueVector,
+			currentSize,
+			index
+		);
 	}
 
 	/**

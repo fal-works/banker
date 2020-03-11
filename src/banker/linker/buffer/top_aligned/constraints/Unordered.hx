@@ -14,7 +14,13 @@ class Unordered<K, V> extends TopAlignedBuffer<K, V> implements ripper.Spirit {
 		currentSize: Int,
 		index: Int
 	): Void {
-		InternalExtension.removeSwapAt(this, keyVector, valueVector, currentSize, index);
+		InternalExtension.removeSwapAt(
+			this,
+			keyVector,
+			valueVector,
+			currentSize,
+			index
+		);
 	}
 
 	/**

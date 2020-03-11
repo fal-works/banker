@@ -5,6 +5,7 @@ import banker.pool.SafeObjectPool;
 
 class Actor {
 	static var nextId = 0;
+
 	public final id: Int;
 
 	public function new() {
