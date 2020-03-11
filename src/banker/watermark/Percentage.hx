@@ -3,11 +3,6 @@ package banker.watermark;
 using StringTools;
 
 import sneaker.string_buffer.StringBuffer;
-#if hl
-import hl.UI8 as UInt8;
-#else
-typedef UInt8 = Int;
-#end
 
 /**
 	Naive implementation of persentage type for the watermark feature.
@@ -16,7 +11,7 @@ typedef UInt8 = Int;
 	No boundary checks implemented, however the values out of the range
 	from 0 to 100 should not be used.
 **/
-abstract Percentage(UInt8) {
+abstract Percentage(Int) {
 	/** Special value used as an alternative to `null`. **/
 	public static inline final none = new Percentage(-1);
 
@@ -62,7 +57,7 @@ abstract Percentage(UInt8) {
 		return buffer;
 	}
 
-	inline function new(value: UInt8)
+	inline function new(value: Int)
 		this = value;
 
 	@:op(A == B)
