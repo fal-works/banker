@@ -5,5 +5,8 @@
 -dce full
 --macro nullSafety("banker", Strict)
 -lib sneaker
+-lib ripper
 -main Main
 # -D banker_watermark_enable
+# -D ripper_log_debug
+# -D sneaker_log_level=600
