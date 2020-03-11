@@ -51,6 +51,13 @@ Collection classes with 2 type parameters.
 
 ![class diagram of linker package](docs/linker.svg)
 
+### package: pool
+
+Provides object pool classes:
+
+- `ObjectPool<T>`
+- `SafeObjectPool<T>`
+
 ### package: watermark
 
 If the compiler flag `banker_watermark_enable` is set, "watermark" feature is activated.

@@ -17,14 +17,17 @@ class Main {
 		ArraySetTest.all
 	]);
 
+	static final poolTestCases = ObjectPoolTest.all;
+
 	static final watermarkTestCases = WatermarkTest.all;
 
 	static function main() {
 		// TesterSettings.hidePassedResults = true;
-		TesterSettings.showCallStack = true;
+		// TesterSettings.showCallStack = true;
 
 		test(basicTestCases);
 		test(testCases);
 		test(watermarkTestCases);
+		test(poolTestCases);
 	}
 }
