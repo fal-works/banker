@@ -7,7 +7,9 @@ using banker.array.ArrayExtension;
 **/
 class ArrayTools {
 	public static function allocate<T>(size: Int): Array<T> {
+		#if !macro
 		assert(size < 0, null, "Passed invalid size.");
+		#end
 
 		#if cpp
 		return cpp.NativeArray.create(size);
@@ -30,10 +32,12 @@ class ArrayTools {
 		destinationPosition: Int,
 		rangeLength: Int
 	): Void {
+		#if !macro
 		assert(source != destination);
 		assert(rangeLength >= 0);
 		assert(sourcePosition + rangeLength <= source.length);
 		assert(destinationPosition + rangeLength <= destination.length);
+		#end
 
 		#if cpp
 		cpp.NativeArray.blit(
@@ -57,10 +61,12 @@ class ArrayTools {
 		destination: Array<T>,
 		rangeLength: Int
 	): Void {
+		#if !macro
 		assert(source != destination);
 		assert(rangeLength >= 0);
 		assert(rangeLength <= source.length);
 		assert(rangeLength <= destination.length);
+		#end
 
 		#if cpp
 		cpp.NativeArray.blit(destination, 0, source, 0, rangeLength);
