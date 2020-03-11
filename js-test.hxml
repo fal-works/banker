@@ -1,0 +1,4 @@
+# Build and Test with JavaScript
+
+js.hxml
+-cmd node out/main.js
