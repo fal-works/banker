@@ -42,6 +42,14 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		valueVector.fill(@:nullSafety(Off) cast null);
 	}
 
+	/** @see `banker.linker.interfaces.Convert` **/
+	public inline function exportKeys(): Vector<K>
+		return ConvertExtension.exportKeys(this);
+
+	/** @see `banker.linker.interfaces.Convert` **/
+	public inline function exportValues(): Vector<V>
+		return ConvertExtension.exportValues(this);
+
 	/** @see banker.linker.buffer.top_aligned.ConvertExtension **/
 	public inline function cloneAsMap(newCapacity = -1): ArrayMap<K, V>
 		return ConvertExtension.cloneAsMap(this, newCapacity);
@@ -170,6 +178,36 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		currentSize: Int,
 		index: Int
 	): Void {
+		throw new NotOverriddenException();
+	}
+
+	/**
+		Internal method for removing multiple entries.
+
+		This method must be overridden by the concrete subclass
+		according the specification e.g. whether to preserve order.
+
+		@see `banker.linker.interfaces.Set`
+		@see `banker.linker.buffer.top_aligned.InternalExtension`
+	**/
+	function removeAllInternal(predicate: (key: K, value: V) -> Bool): Bool {
+		throw new NotOverriddenException();
+	}
+
+	/**
+		Internal method for removing multiple entries
+		and applying a callback function to them.
+
+		This method must be overridden by the concrete subclass
+		according the specification e.g. whether to preserve order.
+
+		@see `banker.linker.interfaces.Set`
+		@see `banker.linker.buffer.top_aligned.InternalExtension`
+	**/
+	function removeApplyAllInternal(
+		predicate: (key: K, value: V) -> Bool,
+		callback: (key: K, value: V) -> Void
+	): Bool {
 		throw new NotOverriddenException();
 	}
 }

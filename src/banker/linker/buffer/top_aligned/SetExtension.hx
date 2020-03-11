@@ -120,158 +120,20 @@ class SetExtension {
 		}
 	}
 
-	/**
-		Removes all key-value pairs that match `predicate`.
-		The order is not preserved.
-
-		Used for implementing `banker.linker.interfaces.Set.removeAll()`.
-		@return `true` if any found and removed.
-	**/
-	public static inline function removeSwapAll<K, V>(
+	/** @see `banker.linker.interfaces.Set` **/
+	public static inline function removeAll<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		predicate: (key: K, value: V) -> Bool
 	): Bool {
-		final keys = _this.keyVector;
-		final values = _this.valueVector;
-
-		var found = false;
-		var len = _this.size;
-		var i = 0;
-		while (i < len) {
-			if (!predicate(keys[i], values[i])) {
-				++i;
-				continue;
-			}
-
-			--len;
-			keys[i] = keys[len];
-			values[i] = values[len];
-			found = true;
-		}
-
-		_this.setSize(len);
-
-		return found;
+		return _this.removeAllInternal(predicate);
 	}
 
-	/**
-		Removes all key-value pairs that match `predicate`.
-		The order is preserved.
-
-		Used for implementing `banker.linker.interfaces.Set.removeAll()`.
-		@return `true` if any found and removed.
-	**/
-	public static inline function removeShiftAll<K, V>(
-		_this: TopAlignedBuffer<K, V>,
-		predicate: (key: K, value: V) -> Bool
-	): Bool {
-		final size = _this.size;
-		final keys = _this.keyVector;
-		final values = _this.valueVector;
-
-		var found = false;
-		var readIndex = 0;
-		var writeIndex = 0;
-
-		while (readIndex < size) {
-			final readingKey = keys[readIndex];
-			final readingValue = values[readIndex];
-			++readIndex;
-
-			if (!predicate(readingKey, readingValue)) {
-				keys[writeIndex] = readingKey;
-				values[writeIndex] = readingValue;
-				++writeIndex;
-				continue;
-			}
-
-			found = true;
-		}
-
-		_this.setSize(writeIndex);
-
-		return found;
-	}
-
-	/**
-		Removes all key-value pairs that match `predicate` and
-		applies `callback` to each removed pair.
-		The order is not preserved.
-
-		Used for implementing `banker.linker.interfaces.Set.removeApplyAll()`.
-		@return `true` if any found and removed.
-	**/
-	public static inline function removeSwapApplyAll<K, V>(
+	/** @see `banker.linker.interfaces.Set` **/
+	public static inline function removeApplyAll<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		predicate: (key: K, value: V) -> Bool,
 		callback: (key: K, value: V) -> Void
 	): Bool {
-		final keys = _this.keyVector;
-		final values = _this.valueVector;
-
-		var found = false;
-		var len = _this.size;
-		var i = 0;
-		while (i < len) {
-			final key = keys[i];
-			final value = values[i];
-			if (!predicate(key, value)) {
-				++i;
-				continue;
-			}
-
-			--len;
-			keys[i] = keys[len];
-			values[i] = values[len];
-			found = true;
-
-			callback(key, value);
-		}
-
-		_this.setSize(len);
-
-		return found;
-	}
-
-	/**
-		Removes all key-value pairs that match `predicate` and
-		applies `callback` to each removed pair.
-		The order is preserved.
-
-		Used for implementing `banker.linker.interfaces.Set.removeAll()`.
-		@return `true` if any found and removed.
-	**/
-	public static inline function removeShiftApplyAll<K, V>(
-		_this: TopAlignedBuffer<K, V>,
-		predicate: (key: K, value: V) -> Bool,
-		callback: (key: K, value: V) -> Void
-	): Bool {
-		final size = _this.size;
-		final keys = _this.keyVector;
-		final values = _this.valueVector;
-
-		var found = false;
-		var readIndex = 0;
-		var writeIndex = 0;
-
-		while (readIndex < size) {
-			final readingKey = keys[readIndex];
-			final readingValue = values[readIndex];
-			++readIndex;
-
-			if (!predicate(readingKey, readingValue)) {
-				keys[writeIndex] = readingKey;
-				values[writeIndex] = readingValue;
-				++writeIndex;
-				continue;
-			}
-
-			callback(readingKey, readingValue);
-			found = true;
-		}
-
-		_this.setSize(writeIndex);
-
-		return found;
+		return _this.removeApplyAllInternal(predicate, callback);
 	}
 }

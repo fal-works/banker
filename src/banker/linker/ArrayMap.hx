@@ -12,34 +12,24 @@ import banker.linker.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
+@:ripper.spirits(
+	buffer.top_aligned.features.Map,
+	buffer.top_aligned.features.Sequence,
+	buffer.top_aligned.features.Set,
+	buffer.top_aligned.constraints.Unordered
+)
 class ArrayMap<K, V>
-	extends TopAlignedMapBuffer<K, V>
+	extends TopAlignedBuffer<K, V>
+	implements Map<K, V>
+	implements Sequence<K, V>
 	implements Set<K, V>
-	implements Convert<K, V> {
+	implements Convert<K, V>
+	implements ripper.Body {
 	/**
 		@param capacity Max number of key-value pairs `this` can contain.
 	**/
 	public function new(capacity: Int) {
 		super(capacity);
-	}
-
-	/**
-		@see `banker.linker.interfaces.Set`
-		@see `banker.linker.buffer.top_aligned.SetExtension`
-	**/
-	public inline function removeAll(predicate: (key: K, value: V) -> Bool): Bool {
-		return SetExtension.removeSwapAll(this, predicate);
-	}
-
-	/**
-		@see `banker.linker.interfaces.Set`
-		@see `banker.linker.buffer.top_aligned.SetExtension`
-	**/
-	public inline function removeApplyAll(
-		predicate: (key: K, value: V) -> Bool,
-		callback: (key: K, value: V) -> Void
-	): Bool {
-		return SetExtension.removeSwapApplyAll(this, predicate, callback);
 	}
 
 	/** @see `banker.linker.interfaces.Convert` **/
@@ -48,25 +38,6 @@ class ArrayMap<K, V>
 		ConvertExtension.copyWithMappedValues(this, newMap, convertValue);
 
 		return newMap;
-	}
-
-	/**
-		Removes the key-value pair at `index` by overwriting it with that at the last index
-		(thus the order is not preserved).
-		O(1) complexity.
-
-		@see `banker.linker.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
-	**/
-	override function removeAtInternal(
-		keyVector: WritableVector<K>,
-		valueVector: WritableVector<V>,
-		currentSize: Int,
-		index: Int
-	): Void {
-		final lastIndex = currentSize - 1;
-		keyVector[index] = keyVector[lastIndex];
-		valueVector[index] = valueVector[lastIndex];
-		this.setSize(lastIndex);
 	}
 
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
