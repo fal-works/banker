@@ -21,6 +21,7 @@ typedef ChunkFunction = {
 	name: String,
 	arguments: Array<FunctionArg>,
 	expression: Expr,
+	documentation: String,
 	position: Position
 }
 
@@ -134,6 +135,7 @@ class Chunk {
 		`variables`: Variables of each entity in the chunk.
 		`chunkFields`: Fields of the chunk, each of which is a vector type variable.
 		`constructorExpressions`: Expression list to be reified in the chunk constructor.
+		`iterators`: Chunk-iterators.
 	**/
 	static function prepare(buildFields: Array<Field>) {
 		final variables: Array<ChunkVariable> = [];
@@ -161,6 +163,7 @@ class Chunk {
 						name: buildFieldName,
 						arguments: func.args,
 						expression: func.expr,
+						documentation: buildField.doc,
 						position: buildField.pos
 					});
 					debug('  Registered as an chunk-iterator.');
@@ -206,7 +209,6 @@ class Chunk {
 
 		return {
 			variables: variables,
-			functions: functions,
 			chunkFields: chunkFields,
 			constructorExpressions: constructorExpressions,
 			iterators: iterators
@@ -218,10 +220,10 @@ class Chunk {
 		variables: Array<ChunkVariable>
 	): ChunkIterator {
 		final arguments = func.arguments;
+
 		final outsideLoopLocalVariables: Array<Expr> = [];
 		final insideLoopLocalVariables: Array<Expr> = [];
 		final externalArguments: Array<FunctionArg> = [];
-		var documentation = "dummy";
 
 		debug('Scanning arguments.');
 		for (k in 0...arguments.length) {
@@ -298,7 +300,7 @@ class Chunk {
 			name: func.name,
 			kind: FFun(iterator),
 			pos: func.position,
-			doc: documentation,
+			doc: func.documentation,
 			access: [APublic, AInline]
 		};
 
