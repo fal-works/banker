@@ -46,8 +46,5 @@ class WatermarkTest {
 
 	static final _exclude = testCase(exclude, Visual);
 
-	public static final all = testCaseGroup([
-		_watermark,
-		_exclude
-	]);
+	public static final all = testCaseGroup([_watermark, _exclude]);
 }

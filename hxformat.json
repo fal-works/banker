@@ -60,7 +60,7 @@
 					"conditions": [
 						{
 							"cond": "itemCount <= n",
-							"value": 1
+							"value": 2
 						}
 					],
 					"type": "noWrap"
