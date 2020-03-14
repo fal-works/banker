@@ -3,11 +3,14 @@
 -cp src
 -cp test
 -dce full
+
 --macro nullSafety("banker", Strict)
+--macro Main.initialize()
+-main Main
+
 -lib sneaker
 -lib ripper
--main Main
+
 # -D banker_watermark_enable
--D ripper_log_disable
-# -D ripper_log_debug
-# -D sneaker_log_level=600
+# -D sneaker_log_level=500
+-D sneaker_macro_log_level=500
