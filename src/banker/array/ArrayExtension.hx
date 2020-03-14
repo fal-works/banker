@@ -141,4 +141,56 @@ class ArrayExtension {
 		set(array, indexA, get(array, indexB));
 		set(array, indexB, tmp);
 	}
+
+	/**
+		Compares two arrays with `==` operator.
+		@return `true` if all elements are equal (including the order).
+	**/
+	public static inline function equals<T>(
+		array: Array<T>,
+		otherArray: Array<T>
+	): Bool {
+		final len = array.length;
+
+		return if (otherArray.length != len) false;
+		else {
+			var foundDifference = false;
+
+			for (i in 0...len) {
+				trace(array[i] + ", " + otherArray[i]);
+				if (get(array, i) == get(otherArray, i)) continue;
+
+				foundDifference = true;
+				break;
+			}
+
+			!foundDifference;
+		}
+	}
+
+	/**
+		Compares two arrays with `compare` callback.
+		@return `true` if all elements are equal (including the order).
+	**/
+	public static inline function compare<T>(
+		array: Array<T>,
+		otherArray: Array<T>,
+		compare: (a: T, b: T) -> Bool
+	): Bool {
+		final len = array.length;
+
+		return if (otherArray.length != len) false;
+		else {
+			var foundDifference = false;
+
+			for (i in 0...len) {
+				if (compare(get(array, i), get(otherArray, i))) continue;
+
+				foundDifference = true;
+				break;
+			}
+
+			!foundDifference;
+		}
+	}
 }
