@@ -136,4 +136,21 @@ class ArrayFunctionalExtension {
 			++i;
 		}
 	}
+
+	/**
+		An alternative to `Lambda.map()`.
+		@return New array with elements that are mapped from `array` by `callback`.
+	**/
+	public static inline function map<T, S>(array: Array<T>, callback: T->S): Array<S> {
+		final newArray = ArrayTools.allocate(array.length);
+
+		final len = array.length;
+		var i = 0;
+		while (i < len) {
+			newArray[i] = callback(get(array, i));
+			++i;
+		}
+
+		return newArray;
+	}
 }
