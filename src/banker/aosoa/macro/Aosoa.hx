@@ -35,16 +35,13 @@ class Aosoa {
 		aosoaConstructor.doc = "Aosoa class.";
 		if (constructorPosition != null) aosoaConstructor.pos = constructorPosition;
 
-		final iterate = createIterateMethod(chunk, classPosition);
-		aosoaClass.fields.push(iterate);
-
-		addCustomIterateMethods(aosoaClass.fields, chunk);
+		addIterators(aosoaClass.fields, chunk);
 
 		return aosoaClass.fields;
 	}
 
-	static function addCustomIterateMethods(fields: Fields, chunk: Chunk.ChunkDefinition) {
-		final iterators = chunk.customIterators;
+	static function addIterators(fields: Fields, chunk: Chunk.ChunkDefinition) {
+		final iterators = chunk.iterators;
 
 		for (i in 0...iterators.length) {
 			fields.push(createCustomIterateMethod(iterators[i]));
@@ -88,44 +85,6 @@ class Aosoa {
 			pos: field.pos,
 			doc: field.doc,
 			access: [APublic]
-		};
-
-		return field;
-	}
-
-	/**
-		Creates `iterate()` method for adding to the Aosoa class.
-	**/
-	static function createIterateMethod(chunk: Chunk.ChunkDefinition, position: Position) {
-		final functionBody = macro {
-			final len = this.chunkCount;
-			final chunkSize = this.chunkSize;
-			var i = 0;
-
-			while (i < len) {
-				chunks[i].iterate(
-					callback,
-					chunkSize
-				); // TODO: process only alive entities
-				++i;
-			}
-		};
-
-		final iterateFunction: Function = {
-			args: [{
-				name: "callback",
-				type: chunk.iterateCallbackType
-			}],
-			ret: null,
-			expr: functionBody
-		};
-
-		final field: Field = {
-			name: "iterate",
-			kind: FFun(iterateFunction),
-			pos: position,
-			doc: "Runs `callback` for each entity.",
-			access: [APublic, AInline]
 		};
 
 		return field;

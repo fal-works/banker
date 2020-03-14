@@ -35,8 +35,7 @@ typedef ChunkIterator = {
 typedef ChunkDefinition = {
 	typeDefinition: TypeDefinition,
 	variables: Array<ChunkVariable>,
-	iterateCallbackType: ComplexType,
-	customIterators: Array<ChunkIterator>
+	iterators: Array<ChunkIterator>
 };
 
 /**
@@ -68,14 +67,10 @@ class Chunk {
 		chunkClass.doc = 'Chunk (or SoA: Structure of Arrays) of `$structureName`.';
 		chunkClass.pos = position;
 
-		final iterate = createIterationMethod(prepared.variables, position);
-		chunkClass.fields.push(iterate.field);
-
 		return {
 			typeDefinition: chunkClass,
 			variables: prepared.variables,
-			iterateCallbackType: iterate.callbackType,
-			customIterators: prepared.customIterators
+			iterators: prepared.iterators
 		};
 	}
 
@@ -151,11 +146,6 @@ class Chunk {
 			final buildFieldName = buildField.name;
 			debug('Found field: ${buildFieldName}');
 
-			if (buildFieldName == "iterate") {
-				warn('Field name `iterate` is reserved. Please use another name.');
-				continue;
-			}
-
 			final access = buildField.access;
 
 			// TODO: metadata @:preserve
@@ -203,13 +193,13 @@ class Chunk {
 			}
 		}
 
-		final customIterators: Array<ChunkIterator> = [];
+		final iterators: Array<ChunkIterator> = [];
 		for (i in 0...functions.length) {
 			final func = functions[i];
 			debug('Create iterator: ${func.name}');
 
-			final iterator = createCustomIterator(func, variables);
-			customIterators.push(iterator);
+			final iterator = createIterator(func, variables);
+			iterators.push(iterator);
 			chunkFields.push(iterator.field);
 			debug('  Created.');
 		}
@@ -219,11 +209,11 @@ class Chunk {
 			functions: functions,
 			chunkFields: chunkFields,
 			constructorExpressions: constructorExpressions,
-			customIterators: customIterators
+			iterators: iterators
 		};
 	}
 
-	static function createCustomIterator(
+	static function createIterator(
 		func: ChunkFunction,
 		variables: Array<ChunkVariable>
 	): ChunkIterator {
@@ -317,62 +307,6 @@ class Chunk {
 			externalArguments: externalArguments
 		};
 		return iterator;
-	}
-
-	/**
-		Creates `iterate()` method for adding to the Chunk class.
-	**/
-	static function createIterationMethod(
-		variables: Array<ChunkVariable>,
-		position: Position
-	) {
-		final callArgumentTypes: Array<ComplexType> = [];
-		final localVariableDeclarations: Array<Expr> = [];
-		final arguments: Array<Expr> = [];
-		var documentation = "Runs `callback()` for each entity in this chunk.\n";
-
-		for (i in 0...variables.length) {
-			final variable = variables[i];
-			final variableName = variable.name;
-
-			callArgumentTypes.push(TNamed(variableName, variable.vectorType));
-			localVariableDeclarations.push(macro final $variableName = this.$variableName);
-			arguments.push(macro $i{variableName});
-			documentation += '\n@param ${variableName}';
-		}
-		callArgumentTypes.push(TNamed("index", (macro:Int)));
-		arguments.push(macro i);
-
-		final callbackType = TFunction(callArgumentTypes, (macro:Void));
-
-		final iterateFunction: Function = {
-			args: [
-				{ name: "callback", type: callbackType },
-				{ name: "endIndex", type: (macro:Int) }
-			],
-			ret: null,
-			expr: macro {
-				$b{localVariableDeclarations};
-				var i = 0;
-				while (i < endIndex) {
-					callback($a{arguments});
-					++i;
-				}
-			}
-		};
-
-		final field: Field = {
-			name: "iterate",
-			kind: FFun(iterateFunction),
-			pos: position,
-			doc: documentation,
-			access: [APublic, AInline]
-		};
-
-		return {
-			field: field,
-			callbackType: callbackType
-		};
 	}
 }
 #end
