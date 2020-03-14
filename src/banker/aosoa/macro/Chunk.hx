@@ -2,7 +2,9 @@ package banker.aosoa.macro;
 
 #if macro
 using Lambda;
+using haxe.EnumTools;
 using banker.aosoa.macro.FieldExtension;
+using banker.aosoa.macro.MacroExtension;
 
 import banker.aosoa.macro.MacroTypes;
 
@@ -11,13 +13,21 @@ import banker.aosoa.macro.MacroTypes;
 **/
 typedef ChunkVariable = {
 	name: String,
-	type: ComplexType
+	type: ComplexType,
+	vectorType: ComplexType
 };
 
 typedef ChunkFunction = {
 	name: String,
-	callArguments: Array<ComplexType>
+	arguments: Array<FunctionArg>,
+	expression: Expr,
+	position: Position
 }
+
+typedef ChunkIterator = {
+	field: Field,
+	externalArguments: Array<FunctionArg>
+};
 
 /**
 	Information about a Chunk class to be defined in any module.
@@ -25,7 +35,8 @@ typedef ChunkFunction = {
 typedef ChunkDefinition = {
 	typeDefinition: TypeDefinition,
 	variables: Array<ChunkVariable>,
-	iterateCallbackType: ComplexType
+	iterateCallbackType: ComplexType,
+	customIterators: Array<ChunkIterator>
 };
 
 /**
@@ -57,16 +68,14 @@ class Chunk {
 		chunkClass.doc = 'Chunk (or SoA: Structure of Arrays) of `$structureName`.';
 		chunkClass.pos = position;
 
-		final customIterators = createCustomIterators(prepared.functions, prepared.variables, position);
-		chunkClass.fields = chunkClass.fields.concat(customIterators.map(iterator -> iterator.field));
-
 		final iterate = createIterationMethod(prepared.variables, position);
 		chunkClass.fields.push(iterate.field);
 
 		return {
 			typeDefinition: chunkClass,
 			variables: prepared.variables,
-			iterateCallbackType: iterate.callbackType
+			iterateCallbackType: iterate.callbackType,
+			customIterators: prepared.customIterators
 		};
 	}
 
@@ -133,8 +142,8 @@ class Chunk {
 	**/
 	static function prepare(buildFields: Array<Field>) {
 		final variables: Array<ChunkVariable> = [];
-		final functions: Array<Function> = [];
-		final chunkFields: Array<Field> = [];
+		final functions: Array<ChunkFunction> = [];
+		var chunkFields: Array<Field> = [];
 		final constructorExpressions: Array<Expr> = [];
 
 		for (i in 0...buildFields.length) {
@@ -153,11 +162,18 @@ class Chunk {
 
 			switch buildField.kind {
 				case FFun(func):
-					if (access != null && access.has(AStatic) && func.ret == null && func.expr != null && func.params == null) {
-						final arguments = func.args;
-						if (arguments.length > 0) functions.push(func);
+					if (access == null || !access.has(AStatic) || func.ret != null) {
+						debug('  Skipping.');
+						continue;
 					}
-					debug('  Registered as a candidate of iterating functions.');
+
+					functions.push({
+						name: buildFieldName,
+						arguments: func.args,
+						expression: func.expr,
+						position: buildField.pos
+					});
+					debug('  Registered as an chunk-iterator.');
 				case FVar(varType, initialValue):
 					if (varType == null) {
 						warn('Type must be explicitly declared: ${buildFieldName}');
@@ -176,7 +192,8 @@ class Chunk {
 						constructorExpressions.push(constructorExpression);
 						variables.push({
 							name: buildFieldName,
-							type: varType
+							type: varType,
+							vectorType: vectorType
 						});
 						debug('  Converted to vector.');
 					} else
@@ -186,96 +203,145 @@ class Chunk {
 			}
 		}
 
+		final customIterators: Array<ChunkIterator> = [];
+		for (i in 0...functions.length) {
+			final func = functions[i];
+			debug('Create iterator: ${func.name}');
+
+			final iterator = createCustomIterator(func, variables);
+			customIterators.push(iterator);
+			chunkFields.push(iterator.field);
+			debug('  Created.');
+		}
+
 		return {
 			variables: variables,
 			functions: functions,
 			chunkFields: chunkFields,
-			constructorExpressions: constructorExpressions
+			constructorExpressions: constructorExpressions,
+			customIterators: customIterators
 		};
 	}
 
-	static function createCustomIterator(func: Function, variables: Array<ChunkVariable>, position: Position) {
-		final arguments = func.args;
-		final embeddedArguments: Array<FunctionArg> = [];
-		final localVariableDeclarations: Array<Expr> = [];
-		final callArguments: Array<Expr> = [];
+	static function createCustomIterator(
+		func: ChunkFunction,
+		variables: Array<ChunkVariable>
+	): ChunkIterator {
+		final arguments = func.arguments;
+		final outsideLoopLocalVariables: Array<Expr> = [];
+		final insideLoopLocalVariables: Array<Expr> = [];
+		final externalArguments: Array<FunctionArg> = [];
 		var documentation = "dummy";
 
+		debug('Scanning arguments.');
 		for (k in 0...arguments.length) {
 			final argument = arguments[k];
 			final type = argument.type;
-			if (type == null) continue;
-			if (!variables.exists(variable -> variable.name == argument.name && variable.type == type))
-				continue;
+
+			var isVector = false;
+			var associated = false;
+			for (m in 0...variables.length) {
+				final variable = variables[m];
+				if (variable.name != argument.name) continue;
+
+				if (variable.type.compareComplexType(argument.type)) {
+					debug('- ${argument.name} ... Found corresponding variable.');
+					associated = true;
+					break;
+				}
+				if (variable.vectorType.compareComplexType(argument.type)) {
+					debug('- ${argument.name} ... Found corresponding vector.');
+					associated = true;
+					isVector = true;
+					break;
+				}
+				debug('- ${argument.name} ... No corresponding variable. Add to external arguments.');
+				externalArguments.push(argument);
+			}
+
+			if (!associated) continue;
 
 			final variableName = argument.name;
-			embeddedArguments.push(argument);
-			localVariableDeclarations.push(macro final $variableName = this.$variableName);
-			callArguments.push(macro $i{variableName}[i]);
+
+			if (isVector) {
+				outsideLoopLocalVariables.push(macro final $variableName = this.$variableName);
+			} else {
+				final vectorName = variableName + "ChunkVector";
+				outsideLoopLocalVariables.push(macro final $vectorName = this.$variableName);
+				insideLoopLocalVariables.push(macro final $variableName = $i{vectorName}[i]);
+			}
 		}
 
-		if (embeddedArguments.length == 0) return null;
+		final loopBodyExpressions = insideLoopLocalVariables.concat([
+			func.expression,
+			macro ++i,
+		]);
 
-		final callbackType = TFunction([], (macro:Void));
+		final indexInitialization = macro var i = 0;
+		final loopStatement = macro while (i < endIndex) $b{loopBodyExpressions};
+
+		final wholeExpressions = outsideLoopLocalVariables.concat([
+			indexInitialization,
+			loopStatement
+		]);
+
 		final iterator: Function = {
-			args: [
-				{ name: "callback", type: callbackType },
-				{ name: "endIndex", type: (macro:Int) }
-			],
+			args: externalArguments.concat([{ name: "endIndex", type: (macro:Int) }]),
 			ret: null,
-			expr: macro {
-				$b{localVariableDeclarations};
+			expr: macro $b{wholeExpressions}
+		};
+
+		// This will generate something like the below:
+		/*
+			function someIterator(externalArgs, endIndex: Int) {
+				declare(outsideLoopLocalVariables);
 				var i = 0;
 				while (i < endIndex) {
-					callback($a{callArguments});
+					declare(insideLoopLocalVariables);
+					run(func.expression);
 					++i;
 				}
 			}
-		};
-
+		*/
 
 		final field: Field = {
-			name: "iterate",
+			name: func.name,
 			kind: FFun(iterator),
-			pos: position,
+			pos: func.position,
 			doc: documentation,
 			access: [APublic, AInline]
 		};
 
-		return {
+		final iterator: ChunkIterator = {
 			field: field,
-			callbackType: callbackType
+			externalArguments: externalArguments
 		};
-	}
-
-	static function createCustomIterators(functions: Array<Function>, variables: Array<ChunkVariable>, position: Position) {
-		final iterators = [];
-		for (i in 0...functions.length) {
-			final iterator = createCustomIterator(functions[i], variables, position);
-			if (iterator != null) iterators.push(iterator);
-		}
-
-		return iterators;
+		return iterator;
 	}
 
 	/**
 		Creates `iterate()` method for adding to the Chunk class.
 	**/
-	static function createIterationMethod(variables: Array<ChunkVariable>, position: Position) {
+	static function createIterationMethod(
+		variables: Array<ChunkVariable>,
+		position: Position
+	) {
 		final callArgumentTypes: Array<ComplexType> = [];
 		final localVariableDeclarations: Array<Expr> = [];
-		final callArguments: Array<Expr> = [];
+		final arguments: Array<Expr> = [];
 		var documentation = "Runs `callback()` for each entity in this chunk.\n";
 
 		for (i in 0...variables.length) {
 			final variable = variables[i];
 			final variableName = variable.name;
 
-			callArgumentTypes.push(TNamed(variableName, variable.type));
+			callArgumentTypes.push(TNamed(variableName, variable.vectorType));
 			localVariableDeclarations.push(macro final $variableName = this.$variableName);
-			callArguments.push(macro $i{variableName}[i]);
+			arguments.push(macro $i{variableName});
 			documentation += '\n@param ${variableName}';
 		}
+		callArgumentTypes.push(TNamed("index", (macro:Int)));
+		arguments.push(macro i);
 
 		final callbackType = TFunction(callArgumentTypes, (macro:Void));
 
@@ -289,7 +355,7 @@ class Chunk {
 				$b{localVariableDeclarations};
 				var i = 0;
 				while (i < endIndex) {
-					callback($a{callArguments});
+					callback($a{arguments});
 					++i;
 				}
 			}

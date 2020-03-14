@@ -38,7 +38,59 @@ class Aosoa {
 		final iterate = createIterateMethod(chunk, classPosition);
 		aosoaClass.fields.push(iterate);
 
+		addCustomIterateMethods(aosoaClass.fields, chunk);
+
 		return aosoaClass.fields;
+	}
+
+	static function addCustomIterateMethods(fields: Fields, chunk: Chunk.ChunkDefinition) {
+		final iterators = chunk.customIterators;
+
+		for (i in 0...iterators.length) {
+			fields.push(createCustomIterateMethod(iterators[i]));
+		}
+
+		return fields;
+	}
+
+	/**
+		Creates method for adding to the Aosoa class.
+	**/
+	static function createCustomIterateMethod(iterator: Chunk.ChunkIterator) {
+		final field = iterator.field;
+		final name = field.name;
+		final argumentExpressions = iterator.externalArguments.map(argument -> macro $i{argument.name});
+		argumentExpressions.pop();
+		argumentExpressions.push(macro endIndex);
+
+		final functionBody = macro {
+			final chunks = this.chunks;
+			final chunkCount = chunks.length;
+			final endIndex = this.chunkSize; // TODO: process only alive entities
+			var i = 0;
+
+			while (i < chunkCount) {
+				final chunk = chunks[i];
+				chunk.$name($a{argumentExpressions});
+				++i;
+			}
+		};
+
+		final iteratorFunction: Function = {
+			args: iterator.externalArguments,
+			ret: null,
+			expr: functionBody
+		};
+
+		final field: Field = {
+			name: name,
+			kind: FFun(iteratorFunction),
+			pos: field.pos,
+			doc: field.doc,
+			access: [APublic]
+		};
+
+		return field;
 	}
 
 	/**

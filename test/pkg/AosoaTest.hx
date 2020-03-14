@@ -1,6 +1,10 @@
 package pkg;
 
 class Actor implements banker.aosoa.Structure {
+	static function print(x: Float, y: Float) {
+		println('$x, $y');
+	}
+
 	var x: Float = 0;
 
 	@:banker.factory(Math.random)
@@ -24,10 +28,23 @@ class AosoaTest {
 	static function iterate() {
 		describe("This prints 6 lines of position infos.");
 		final actorAosoa = new Actor(2, 3);
-		actorAosoa.iterate((x, y) -> println(x + ", " + y));
+		actorAosoa.iterate((x, y, i) -> println(x[i] + ", " + y[i]));
 	}
 
 	static final _iterate = testCase(iterate, Visual);
 
-	public static final all = testCaseGroup([_basic, _iterate]);
+	static function customIterate() {
+		describe("This prints 6 lines of position infos.");
+		final actorAosoa = new Actor(2, 3);
+		actorAosoa.print();
+		// actorAosoa.iterate((x, y, i) -> println(x[i] + ", " + y[i]));
+	}
+
+	static final _customIterate = testCase(customIterate, Visual);
+
+	public static final all = testCaseGroup([
+		_basic,
+		_iterate,
+		_customIterate
+	]);
 }
