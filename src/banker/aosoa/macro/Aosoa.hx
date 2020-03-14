@@ -17,7 +17,6 @@ class Aosoa {
 		final aosoaClass = macro class {
 			public final chunks: banker.vector.Vector<$chunkComplexType>;
 			public final chunkSize: Int;
-			public final chunkCount: Int;
 
 			public function new(chunkSize: Int, chunkCount: Int) {
 				this.chunks = banker.vector.Vector.createPopulated(
@@ -25,13 +24,12 @@ class Aosoa {
 					() -> new $chunkTypePath(chunkSize)
 				);
 				this.chunkSize = chunkSize;
-				this.chunkCount = chunkCount;
 			}
 		}
 
 		aosoaClass.pos = classPosition;
 
-		final aosoaConstructor = aosoaClass.fields[3];
+		final aosoaConstructor = aosoaClass.fields[2];
 		aosoaConstructor.doc = "Aosoa class.";
 		if (constructorPosition != null) aosoaConstructor.pos = constructorPosition;
 

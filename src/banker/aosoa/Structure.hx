@@ -10,7 +10,6 @@ package banker.aosoa;
 	- The following fields are added.
 		- `chunks`: Vector of "Chunk"s of which the whole AoSoA consists.
 		- `chunkSize`: Number of elements that a Chunk contains.
-		- `chunkCount`: Number of Chunks.
 		- `iterate()`: Iterates all entities.
 **/
 @:autoBuild(banker.aosoa.macro.BuildMacro.build())
