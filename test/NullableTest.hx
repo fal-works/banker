@@ -14,8 +14,5 @@ class NullableTest {
 		final nullable: Null<Any> = "AAA";
 		assert(nullable.exists());
 	}, Ok);
-	public static final all = testCaseGroup([
-		isNull,
-		exists
-	]);
+	public static final all = testCaseGroup([isNull, exists]);
 }
