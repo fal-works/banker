@@ -247,11 +247,13 @@ class Chunk {
 					isVector = true;
 					break;
 				}
-				debug('- ${argument.name} ... No corresponding variable. Add to external arguments.');
-				externalArguments.push(argument);
 			}
 
-			if (!associated) continue;
+			if (!associated) {
+				debug('- ${argument.name} ... No corresponding variable. Add to external arguments.');
+				externalArguments.push(argument);
+				continue;
+			}
 
 			final variableName = argument.name;
 
