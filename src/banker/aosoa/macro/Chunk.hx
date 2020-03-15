@@ -7,6 +7,7 @@ using sneaker.macro.FieldExtension;
 using banker.aosoa.macro.FieldExtension;
 using banker.aosoa.macro.MacroExtension;
 
+import haxe.macro.Context;
 import banker.aosoa.macro.MacroTypes;
 
 /**
@@ -262,12 +263,12 @@ class Chunk {
 				final variable = variables[m];
 				if (variable.name != argument.name) continue;
 
-				if (variable.type.compareComplexType(argument.type)) {
+				if (variable.type.unifyComplex(argument.type)) {
 					debug('- ${argument.name} ... Found corresponding variable.');
 					associated = true;
 					break;
 				}
-				if (variable.vectorType.compareComplexType(argument.type)) {
+				if (variable.vectorType.unifyComplex(argument.type)) {
 					debug('- ${argument.name} ... Found corresponding vector.');
 					associated = true;
 					isVector = true;

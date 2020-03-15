@@ -1,14 +1,18 @@
 package pkg;
 
+import banker.vector.WritableVector as Vec;
+
 class Actor implements banker.aosoa.Structure {
+	/** Prints position of all entities. **/
 	static function print(x: Float, y: Float) {
 		println('$x, $y');
 	}
 
+	/** Use new entity. **/
 	@:banker.useEntity
 	static function use(
-		x: banker.vector.WritableVector<Float>,
-		y: banker.vector.WritableVector<Float>,
+		x: Vec<Float>,
+		y: Vec<Float>,
 		newX: Float,
 		newY: Float
 	) {
@@ -16,8 +20,10 @@ class Actor implements banker.aosoa.Structure {
 		y[i] = newY;
 	}
 
+	/** X position. **/
 	var x: Float = 0;
 
+	/** Y position. **/
 	@:banker.factory(Math.random)
 	var y: Float;
 }
@@ -55,5 +61,9 @@ class AosoaTest {
 
 	static final _use = testCase(use, Ok);
 
-	public static final all = testCaseGroup([_basic, _iterate, _use]);
+	public static final all = testCaseGroup([
+		_basic,
+		_iterate,
+		_use
+	]);
 }

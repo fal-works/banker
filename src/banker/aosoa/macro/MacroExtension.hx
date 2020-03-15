@@ -1,6 +1,8 @@
 package banker.aosoa.macro;
 
 #if macro
+using haxe.macro.ComplexTypeTools;
+using haxe.macro.TypeTools;
 using banker.array.ArrayExtension;
 
 class MacroExtension {
@@ -8,7 +10,7 @@ class MacroExtension {
 		return switch a {
 			case TPType(aType):
 				switch b {
-					case TPType(bType): compareComplexType(aType, bType);
+					case TPType(bType): unifyComplex(aType, bType);
 					case TPExpr(bExpr): false;
 				}
 			case TPExpr(aExpr):
@@ -19,26 +21,13 @@ class MacroExtension {
 		}
 	}
 
-	public static function compareComplexType(a: ComplexType, b: ComplexType): Bool {
-		return switch a {
-			case TPath(aPath):
-				switch b {
-					case TPath(bPath):
-						if (aPath.name != bPath.name || aPath.sub != bPath.sub) false;
-						else if (!aPath.pack.equals(bPath.pack)) {
-							false;
-						}
-						else {
-							final aParams = aPath.params;
-							final bParams = bPath.params;
-							if (aParams == null) bParams == null;
-							else if (bParams == null) aParams == null;
-							else aParams.compare(bParams, compareTypeParam);
-						}
-					default: false;
-				}
-			default: false;
-		}
+	public static function unifyComplex(a: ComplexType, b: ComplexType): Bool {
+		return if (a == null)
+			throw "a is null."
+		else if (b == null)
+			throw "b is null."
+		else
+			a.toType().unify(b.toType());
 	}
 }
 #end
