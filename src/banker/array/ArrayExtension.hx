@@ -257,4 +257,22 @@ class ArrayExtension {
 			++readIndex;
 		}
 	}
+
+	/**
+		Removes an element at `index.
+		@return Removed element.
+	**/
+	public static inline function removeAt<T>(
+		_this: Array<T>,
+		index: Int
+	): T {
+		final arrayLength = _this.length;
+		final rangeLength = arrayLength - index - 1;
+		final removed = get(_this, index);
+
+		blitInternal(_this, index + 1, index, rangeLength);
+		_this.resize(arrayLength - 1);
+
+		return removed;
+	}
 }
