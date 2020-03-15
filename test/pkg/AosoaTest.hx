@@ -1,5 +1,6 @@
 package pkg;
 
+import sneaker.print.Printer;
 import banker.vector.WritableVector as Vec;
 
 class Actor implements banker.aosoa.Structure {
@@ -46,9 +47,9 @@ class AosoaTest {
 	static final _basic = testCase(basic, Ok);
 
 	static function iterate() {
-		describe("This prints 6 lines of position infos.");
+		describe("This prints 5 lines of position infos.");
 		final actorAosoa = new Actor(2, 3);
-		for (i in 0...2 * 3) actorAosoa.useEmpty();
+		for (i in 0...5) actorAosoa.useEmpty();
 		actorAosoa.synchronize();
 		actorAosoa.print();
 	}
@@ -63,6 +64,8 @@ class AosoaTest {
 		actorAosoa.synchronize();
 		assert(chunk.x[0] == 10);
 		assert(chunk.y[0] == 20);
+		actorAosoa.print();
+		assert(Printer.lastBuffered == "10, 20");
 	}
 
 	static final _use = testCase(use, Ok);
