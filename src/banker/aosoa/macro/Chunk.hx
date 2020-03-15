@@ -60,6 +60,7 @@ class Chunk {
 		position: Position
 	): ChunkDefinition {
 		final prepared = prepare(buildFields);
+		final variables = prepared.variables;
 
 		final chunkClassName = structureName + "Chunk";
 		final chunkClass: TypeDefinition = macro class $chunkClassName {
@@ -139,7 +140,6 @@ class Chunk {
 		`variables`: Variables of each entity in the chunk.
 		`chunkFields`: Fields of the chunk, each of which is a vector type variable.
 		`constructorExpressions`: Expression list to be reified in the chunk constructor.
-		`iterators`: Chunk-iterators.
 	**/
 	static function prepare(buildFields: Array<Field>) {
 		final variables: Array<ChunkVariable> = [];
@@ -147,6 +147,8 @@ class Chunk {
 		final useFunctions: Array<ChunkFunction> = [];
 		var chunkFields: Array<Field> = [];
 		final constructorExpressions: Array<Expr> = [];
+		final disuseExpressions: Array<Expr> = []; // not yet used
+		final synchronizeExpressions: Array<Expr> = []; // not yet used
 
 		for (i in 0...buildFields.length) {
 			final buildField = buildFields[i];
@@ -193,18 +195,27 @@ class Chunk {
 						initialValue
 					);
 
-					if (constructorExpression != null) {
-						final vectorType = macro:banker.vector.WritableVector<$varType>;
-						chunkFields.push(buildField.setVariableType(vectorType).addAccess(AFinal));
-						constructorExpressions.push(constructorExpression);
-						variables.push({
-							name: buildFieldName,
-							type: varType,
-							vectorType: vectorType
-						});
-						debug('  Converted to vector.');
-					} else
+					if (constructorExpression == null) {
 						warn("Field must be initialized or have @:banker.factory metadata.");
+						break;
+					}
+
+					disuseExpressions.push(macro $i{buildFieldName}[i] = $i{buildFieldName}[lastIndex]);
+					synchronizeExpressions.push(macro banker.vector.VectorTools.blitZero(
+						$i{buildFieldName}, // TODO: change to buffer
+						$i{buildFieldName},
+						endIndex
+					));
+
+					final vectorType = macro:banker.vector.WritableVector<$varType>;
+					chunkFields.push(buildField.setVariableType(vectorType).addAccess(AFinal));
+					constructorExpressions.push(constructorExpression);
+					variables.push({
+						name: buildFieldName,
+						type: varType,
+						vectorType: vectorType
+					});
+					debug('  Converted to vector.');
 				default:
 					warn('Found field that is not a variable: ${buildFieldName}');
 			}
@@ -236,6 +247,7 @@ class Chunk {
 			variables: variables,
 			chunkFields: chunkFields,
 			constructorExpressions: constructorExpressions,
+			disuseExpressions: disuseExpressions,
 			iterators: iterators,
 			useMethods: useMethods
 		};
@@ -363,7 +375,8 @@ class Chunk {
 		final pieces = generateMethodPieces(func.arguments, variables);
 		final externalArguments = pieces.externalArguments;
 
-		final wholeExpressions = pieces.declareLocalVector.concat(pieces.declareLocalValue).concat([func.expression]);
+		final wholeExpressions = pieces.declareLocalVector.concat(pieces.declareLocalValue)
+			.concat([func.expression]);
 
 		final iterator: Function = {
 			args: externalArguments.concat([{ name: "i", type: (macro:Int) }]),
