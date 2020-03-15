@@ -30,6 +30,18 @@ class MacroTools {
 	}
 
 	/**
+		Define new imports in the current module in which the macro was called.
+	**/
+	public static function defineImports(importExpressions: Array<ImportExpr>): Void {
+		Context.defineModule(
+			Context.getLocalModule(),
+			[],
+			Context.getLocalImports().concat(importExpressions),
+			Context.getLocalUsing().map(typeRefToTypePath)
+		);
+	}
+
+	/**
 		Defines `subTypes` in the current module in which the macro was called.
 	**/
 	public static function defineSubType(subTypes: Array<TypeDefinition>): Void {
