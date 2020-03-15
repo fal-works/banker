@@ -117,39 +117,64 @@ class ArrayExtension {
 	}
 
 	/**
-		@return `true` if the array contains an element that is `element == value`.
+		@return The index of the first found element that is `element == value`.
 	**/
-	public static inline function has<T>(array: Array<T>, value: T): Bool {
+	public static inline function indexOfMatching<T>(
+		array: Array<T>,
+		predicate: (element: T) -> Bool
+	): Int {
 		final len = array.length;
-		var found = false;
+		var index = -1;
 		var i = 0;
 		while (i < len) {
-			if (value == get(array, i)) {
-				found = true;
+			if (predicate(get(array, i))) {
+				index = i;
 				break;
 			}
 			++i;
 		}
 
-		return found;
+		return index;
 	}
+
+	/**
+		@return `true` if the array contains an element that is `element == value`.
+	**/
+	public static inline function has<T>(array: Array<T>, value: T): Bool
+		return array.indexOf(value, 0) >= 0;
 
 	/**
 		@return `true` if the array contains any element that matches `predicate`.
 	**/
-	public static inline function hasAny<T>(array: Array<T>, predicate: (element: T) -> Bool): Bool {
-		final len = array.length;
-		var found = false;
-		var i = 0;
-		while (i < len) {
-			if (predicate(get(array, i))) {
-				found = true;
-				break;
-			}
-			++i;
-		}
+	public static inline function hasAny<T>(
+		array: Array<T>,
+		predicate: (element: T) -> Bool
+	): Bool {
+		return indexOfMatching(array, predicate) >= 0;
+	}
 
-		return found;
+	/**
+		@return The first found element that is `element == value`.
+	**/
+	public static inline function find<T>(
+		array: Array<T>,
+		value: T,
+		defaultValue: T
+	): T {
+		final index = array.indexOf(value, 0);
+		return if (index >= 0) get(array, index) else defaultValue;
+	}
+
+	/**
+		@return The first found element that matches `predicate`.
+	**/
+	public static inline function findFirst<T>(
+		array: Array<T>,
+		predicate: (element: T) -> Bool,
+		defaultValue: T
+	): T {
+		final index = indexOfMatching(array, predicate);
+		return if (index >= 0) get(array, index) else defaultValue;
 	}
 
 	public static inline function swap<T>(
