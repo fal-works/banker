@@ -9,6 +9,10 @@ class Actor implements banker.aosoa.Structure {
 		println('$x, $y');
 	}
 
+	static function disuseIf20(x: Float, y: Float) {
+		if (x == 20) disuse = true;
+	}
+
 	@:banker.useEntity
 	static function useEmpty() {}
 
@@ -70,9 +74,30 @@ class AosoaTest {
 
 	static final _use = testCase(use, Ok);
 
+
+	static function disuse() {
+		describe("This prints: 10, 40, 30, 50");
+		final actorAosoa = new Actor(4, 2);
+
+		actorAosoa.use(10, 10);
+		actorAosoa.use(20, 20); // will be removed
+		actorAosoa.use(30, 30);
+		actorAosoa.use(40, 40); // will move to index 1
+
+		actorAosoa.use(50, 50);
+
+		actorAosoa.synchronize();
+		actorAosoa.disuseIf20();
+		actorAosoa.synchronize();
+		actorAosoa.print();
+	}
+
+	static final _disuse = testCase(disuse, Visual);
+
 	public static final all = testCaseGroup([
 		_basic,
 		_iterate,
-		_use
+		_use,
+		_disuse
 	]);
 }
