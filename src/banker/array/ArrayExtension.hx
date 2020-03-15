@@ -117,10 +117,7 @@ class ArrayExtension {
 	}
 
 	/**
-		Checks if the array contains the element.
-		@param   array
-		@param   value
-		@return  True if the element is contained.
+		@return `true` if the array contains an element that is `element == value`.
 	**/
 	public static inline function has<T>(array: Array<T>, value: T): Bool {
 		final len = array.length;
@@ -128,6 +125,24 @@ class ArrayExtension {
 		var i = 0;
 		while (i < len) {
 			if (value == get(array, i)) {
+				found = true;
+				break;
+			}
+			++i;
+		}
+
+		return found;
+	}
+
+	/**
+		@return `true` if the array contains any element that matches `predicate`.
+	**/
+	public static inline function hasAny<T>(array: Array<T>, predicate: (element: T) -> Bool): Bool {
+		final len = array.length;
+		var found = false;
+		var i = 0;
+		while (i < len) {
+			if (predicate(get(array, i))) {
 				found = true;
 				break;
 			}
