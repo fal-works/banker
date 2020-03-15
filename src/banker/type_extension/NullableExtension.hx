@@ -19,14 +19,14 @@ class NullableExtension {
 		@return `_this` if it is not null. Otherwise `defaultValue`.
 	**/
 	public static inline function or<T>(_this: Null<T>, defaultValue: T): T {
-		return if (exists(_this)) _this else defaultValue;
+		return if (_this != null) _this else defaultValue;
 	}
 
 	/**
 		@return `_this` if it is not null. Otherwise the result of `getDefaultValue()`.
 	**/
 	public static inline function orElse<T>(_this: Null<T>, getDefaultValue: () -> T): T {
-		return if (exists(_this)) _this else getDefaultValue();
+		return if (_this != null) _this else getDefaultValue();
 	}
 
 	/**
@@ -34,7 +34,7 @@ class NullableExtension {
 		@param callback A function that takes `_this` as argument.
 	**/
 	public static inline function may<T>(_this: Null<T>, callback: T->Void): Void {
-		if (exists(_this)) callback(_this);
+		if (_this != null) callback(_this);
 	}
 
 	/**
@@ -42,6 +42,6 @@ class NullableExtension {
 		@return The result of `callback` if `_this` is not null. Otherwise `null`.
 	**/
 	public static inline function map<T, U>(_this: Null<T>, callback: T->U): Null<U> {
-		return if (exists(_this)) callback(_this) else null;
+		return if (_this != null) callback(_this) else null;
 	}
 }
