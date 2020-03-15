@@ -17,6 +17,8 @@ class Aosoa {
 		final aosoaClass = macro class {
 			public final chunks: banker.vector.Vector<$chunkComplexType>;
 			public final chunkSize: Int;
+			var chunkIndex = 0;
+			var slotIndex = 0;
 
 			public function new(chunkSize: Int, chunkCount: Int) {
 				this.chunks = banker.vector.Vector.createPopulated(
@@ -29,32 +31,50 @@ class Aosoa {
 
 		aosoaClass.pos = classPosition;
 
-		final aosoaConstructor = aosoaClass.fields[2];
+		final aosoaConstructor = aosoaClass.fields[4];
 		aosoaConstructor.doc = "Aosoa class.";
 		if (constructorPosition != null) aosoaConstructor.pos = constructorPosition;
 
-		addIterators(aosoaClass.fields, chunk);
+		final fields = aosoaClass.fields;
 
-		return aosoaClass.fields;
-	}
-
-	static function addIterators(fields: Fields, chunk: Chunk.ChunkDefinition) {
 		final iterators = chunk.iterators;
+		for (i in 0...iterators.length)
+			fields.push(createIterater(iterators[i]));
 
-		for (i in 0...iterators.length) {
-			fields.push(createCustomIterateMethod(iterators[i]));
-		}
+		final useMethods = chunk.useMethods;
+		for (i in 0...useMethods.length)
+			fields.push(createUseMethod(useMethods[i]));
 
 		return fields;
+	}
+
+	static function createMethod(chunkField: Field, functionBody: Expr, externalArguments: Array<FunctionArg>) {
+		final builtFunction: Function = {
+			args: externalArguments,
+			ret: null,
+			expr: functionBody
+		};
+
+		final field: Field = {
+			name: chunkField.name,
+			kind: FFun(builtFunction),
+			pos: chunkField.pos,
+			doc: chunkField.doc,
+			access: [APublic]
+		};
+
+		return field;
 	}
 
 	/**
 		Creates method for adding to the Aosoa class.
 	**/
-	static function createCustomIterateMethod(iterator: Chunk.ChunkIterator) {
+	static function createIterater(iterator: Chunk.ChunkMethod) {
 		final field = iterator.field;
-		final name = field.name;
-		final argumentExpressions = iterator.externalArguments.map(argument -> macro $i{argument.name});
+		final methodName = field.name;
+
+		final externalArguments = iterator.externalArguments;
+		final argumentExpressions = externalArguments.map(argument -> macro $i{argument.name});
 		argumentExpressions.pop();
 		argumentExpressions.push(macro endIndex);
 
@@ -66,26 +86,44 @@ class Aosoa {
 
 			while (i < chunkCount) {
 				final chunk = chunks[i];
-				chunk.$name($a{argumentExpressions});
+				chunk.$methodName($a{argumentExpressions});
 				++i;
 			}
 		};
 
-		final iteratorFunction: Function = {
-			args: iterator.externalArguments,
-			ret: null,
-			expr: functionBody
+		return createMethod(field, functionBody, externalArguments);
+	}
+
+	/**
+		Creates method for using new entity to the Aosoa class.
+	**/
+	static function createUseMethod(iterator: Chunk.ChunkMethod) {
+		final field = iterator.field;
+		final methodName = field.name;
+
+		final externalArguments = iterator.externalArguments;
+		final argumentExpressions = externalArguments.map(argument -> macro $i{argument.name});
+		argumentExpressions.push(macro slotIndex);
+
+		final functionBody = macro {
+			final chunks = this.chunks;
+
+			final chunkIndex = this.chunkIndex;
+			var slotIndex = this.slotIndex;
+
+			final chunk = chunks[chunkIndex];
+			chunk.$methodName($a{argumentExpressions});
+
+			++slotIndex;
+			if (slotIndex < this.chunkSize) {
+				this.slotIndex = slotIndex;
+			} else {
+				this.chunkIndex = chunkIndex + 1;
+				this.slotIndex = 0;
+			}
 		};
 
-		final field: Field = {
-			name: name,
-			kind: FFun(iteratorFunction),
-			pos: field.pos,
-			doc: field.doc,
-			access: [APublic]
-		};
-
-		return field;
+		return createMethod(field, functionBody, externalArguments);
 	}
 }
 #end

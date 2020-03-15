@@ -5,6 +5,17 @@ class Actor implements banker.aosoa.Structure {
 		println('$x, $y');
 	}
 
+	@:banker.useEntity
+	static function use(
+		x: banker.vector.WritableVector<Float>,
+		y: banker.vector.WritableVector<Float>,
+		newX: Float,
+		newY: Float
+	) {
+		x[i] = newX;
+		y[i] = newY;
+	}
+
 	var x: Float = 0;
 
 	@:banker.factory(Math.random)
@@ -33,8 +44,16 @@ class AosoaTest {
 
 	static final _iterate = testCase(iterate, Visual);
 
-	public static final all = testCaseGroup([
-		_basic,
-		_iterate
-	]);
+	static function use() {
+		describe("This goes without error.");
+		final actorAosoa = new Actor(2, 3);
+		actorAosoa.use(10, 20);
+		final chunk = actorAosoa.chunks[0];
+		assert(chunk.x[0] == 10);
+		assert(chunk.y[0] == 20);
+	}
+
+	static final _use = testCase(use, Ok);
+
+	public static final all = testCaseGroup([_basic, _iterate, _use]);
 }

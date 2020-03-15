@@ -3,6 +3,7 @@ package banker.aosoa.macro;
 #if macro
 using Lambda;
 using haxe.EnumTools;
+using sneaker.macro.FieldExtension;
 using banker.aosoa.macro.FieldExtension;
 using banker.aosoa.macro.MacroExtension;
 
@@ -25,7 +26,7 @@ typedef ChunkFunction = {
 	position: Position
 }
 
-typedef ChunkIterator = {
+typedef ChunkMethod = {
 	field: Field,
 	externalArguments: Array<FunctionArg>
 };
@@ -36,7 +37,8 @@ typedef ChunkIterator = {
 typedef ChunkDefinition = {
 	typeDefinition: TypeDefinition,
 	variables: Array<ChunkVariable>,
-	iterators: Array<ChunkIterator>
+	iterators: Array<ChunkMethod>,
+	useMethods: Array<ChunkMethod>
 };
 
 /**
@@ -71,7 +73,8 @@ class Chunk {
 		return {
 			typeDefinition: chunkClass,
 			variables: prepared.variables,
-			iterators: prepared.iterators
+			iterators: prepared.iterators,
+			useMethods: prepared.useMethods
 		};
 	}
 
@@ -140,6 +143,7 @@ class Chunk {
 	static function prepare(buildFields: Array<Field>) {
 		final variables: Array<ChunkVariable> = [];
 		final functions: Array<ChunkFunction> = [];
+		final useFunctions: Array<ChunkFunction> = [];
 		var chunkFields: Array<Field> = [];
 		final constructorExpressions: Array<Expr> = [];
 
@@ -154,19 +158,28 @@ class Chunk {
 
 			switch buildField.kind {
 				case FFun(func):
+					// Must be static and have no return value
 					if (access == null || !access.has(AStatic) || func.ret != null) {
 						debug('  Skipping.');
 						continue;
 					}
 
-					functions.push({
+					final func:ChunkFunction = {
 						name: buildFieldName,
 						arguments: func.args,
 						expression: func.expr,
 						documentation: buildField.doc,
 						position: buildField.pos
-					});
-					debug('  Registered as an chunk-iterator.');
+					};
+
+					if (buildField.hasMetadata(":banker.useEntity")) {
+						useFunctions.push(func);
+						debug('  Registered as a function for using new entity.');
+					}
+					else {
+						functions.push(func);
+						debug('  Registered as an chunk-iterator.');
+					}
 				case FVar(varType, initialValue):
 					if (varType == null) {
 						warn('Type must be explicitly declared: ${buildFieldName}');
@@ -196,7 +209,7 @@ class Chunk {
 			}
 		}
 
-		final iterators: Array<ChunkIterator> = [];
+		final iterators: Array<ChunkMethod> = [];
 		for (i in 0...functions.length) {
 			final func = functions[i];
 			debug('Create iterator: ${func.name}');
@@ -207,22 +220,35 @@ class Chunk {
 			debug('  Created.');
 		}
 
+		final useMethods: Array<ChunkMethod> = [];
+		for (i in 0...useFunctions.length) {
+			final func = useFunctions[i];
+			debug('Create use method: ${func.name}');
+
+			final useMethod = createUse(func, variables);
+			useMethods.push(useMethod);
+			chunkFields.push(useMethod.field);
+			debug('  Created.');
+		}
+
 		return {
 			variables: variables,
 			chunkFields: chunkFields,
 			constructorExpressions: constructorExpressions,
-			iterators: iterators
+			iterators: iterators,
+			useMethods: useMethods
 		};
 	}
 
-	static function createIterator(
-		func: ChunkFunction,
+	/**
+		Generates expression pieces for creating iterate/use method from an user-defined function.
+	**/
+	static function generateMethodPieces(
+		arguments: Array<FunctionArg>,
 		variables: Array<ChunkVariable>
-	): ChunkIterator {
-		final arguments = func.arguments;
-
-		final outsideLoopLocalVariables: Array<Expr> = [];
-		final insideLoopLocalVariables: Array<Expr> = [];
+	) {
+		final declareLocalVector: Array<Expr> = [];
+		final declareLocalValue: Array<Expr> = [];
 		final externalArguments: Array<FunctionArg> = [];
 
 		debug('Scanning arguments.');
@@ -255,29 +281,57 @@ class Chunk {
 				continue;
 			}
 
-			final variableName = argument.name;
+			final componentName = argument.name;
 
 			if (isVector) {
-				outsideLoopLocalVariables.push(macro final $variableName = this.$variableName);
+				declareLocalVector.push(macro final $componentName = this.$componentName);
 			} else {
-				final vectorName = variableName + "ChunkVector";
-				outsideLoopLocalVariables.push(macro final $vectorName = this.$variableName);
-				insideLoopLocalVariables.push(macro final $variableName = $i{vectorName}[i]);
+				final vectorName = componentName + "ChunkVector";
+				declareLocalVector.push(macro final $vectorName = this.$componentName);
+				declareLocalValue.push(macro final $componentName = $i{vectorName}[i]);
 			}
 		}
 
-		final loopBodyExpressions = insideLoopLocalVariables.concat([
-			func.expression,
-			macro ++i,
-		]);
+		return {
+			declareLocalValue: declareLocalValue,
+			declareLocalVector: declareLocalVector,
+			externalArguments: externalArguments
+		};
+	}
+
+	static function createMethod(
+		originalFunction: ChunkFunction,
+		builtFunction: Function,
+		externalArguments: Array<FunctionArg>
+	) {
+		final field: Field = {
+			name: originalFunction.name,
+			kind: FFun(builtFunction),
+			pos: originalFunction.position,
+			doc: originalFunction.documentation,
+			access: [APublic, AInline]
+		};
+
+		final method: ChunkMethod = {
+			field: field,
+			externalArguments: externalArguments
+		};
+		return method;
+	}
+
+	static function createIterator(
+		func: ChunkFunction,
+		variables: Array<ChunkVariable>
+	): ChunkMethod {
+		final pieces = generateMethodPieces(func.arguments, variables);
+		final externalArguments = pieces.externalArguments;
+
+		final loopBodyExpressions = pieces.declareLocalValue.concat([func.expression, macro ++i,]);
 
 		final indexInitialization = macro var i = 0;
 		final loopStatement = macro while (i < endIndex) $b{loopBodyExpressions};
 
-		final wholeExpressions = outsideLoopLocalVariables.concat([
-			indexInitialization,
-			loopStatement
-		]);
+		final wholeExpressions = pieces.declareLocalVector.concat([indexInitialization, loopStatement]);
 
 		final iterator: Function = {
 			args: externalArguments.concat([{ name: "endIndex", type: (macro:Int) }]),
@@ -288,29 +342,44 @@ class Chunk {
 		// This will generate something like the below:
 		/*
 			function someIterator(externalArgs, endIndex: Int) {
-				declare(outsideLoopLocalVariables);
+				declareLocalVector();
 				var i = 0;
 				while (i < endIndex) {
-					declare(insideLoopLocalVariables);
-					run(func.expression);
+					declareLocalValue();
+					func();
 					++i;
 				}
 			}
-		*/
+		**/
 
-		final field: Field = {
-			name: func.name,
-			kind: FFun(iterator),
-			pos: func.position,
-			doc: func.documentation,
-			access: [APublic, AInline]
+		return createMethod(func, iterator, externalArguments);
+	}
+
+	static function createUse(
+		func: ChunkFunction,
+		variables: Array<ChunkVariable>
+	): ChunkMethod {
+		final pieces = generateMethodPieces(func.arguments, variables);
+		final externalArguments = pieces.externalArguments;
+
+		final wholeExpressions = pieces.declareLocalVector.concat(pieces.declareLocalValue).concat([func.expression]);
+
+		final iterator: Function = {
+			args: externalArguments.concat([{ name: "i", type: (macro:Int) }]),
+			ret: null,
+			expr: macro $b{wholeExpressions}
 		};
 
-		final iterator: ChunkIterator = {
-			field: field,
-			externalArguments: externalArguments
-		};
-		return iterator;
+		// This will generate something like the below:
+		/*
+			function use(externalArgs, i: Int) {
+				declareLocalVector();
+				declareLocalValue();
+				func();
+			}
+		**/
+
+		return createMethod(func, iterator, externalArguments);
 	}
 }
 #end
