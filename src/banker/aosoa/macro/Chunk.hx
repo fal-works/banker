@@ -74,11 +74,16 @@ class Chunk {
 				this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
 			}
 
-			public function synchronize(chunkSize: Int, defaultReadWriteIndexMap: banker.vector.Vector<Int>) {
+			public function synchronize(
+				chunkSize: Int,
+				defaultReadWriteIndexMap: banker.vector.Vector<Int>
+			): Int {
 				final nextWriteIndex = this.nextWriteIndex;
 				$b{prepared.synchronizeExpressions};
-				this.endReadIndex = nextWriteIndex;
 				banker.vector.VectorTools.blitZero(defaultReadWriteIndexMap, this.readWriteIndexMap, chunkSize);
+
+				this.endReadIndex = nextWriteIndex;
+				return nextWriteIndex;
 			}
 		};
 		chunkClass.fields = chunkClass.fields.concat(prepared.chunkFields);

@@ -36,9 +36,23 @@ class Aosoa {
 
 			public function synchronize() {
 				final chunks = this.chunks;
+				final chunkCount = chunks.length;
+				final chunkSize = this.chunkSize;
 				final defaultReadWriteIndexMap = this.defaultReadWriteIndexMap;
-				for (i in 0...this.nextWriteChunkIndex + 1) chunks[i].synchronize(this.chunkSize, defaultReadWriteIndexMap);
-				this.endReadChunkIndex = this.nextWriteChunkIndex;
+				var usedChunkMaxIndex = 0;
+				var endReadEntityIndex = chunkSize;
+
+				for (chunkIndex in 0...chunkCount) {
+					endReadEntityIndex = chunks[chunkIndex].synchronize(
+						chunkSize,
+						defaultReadWriteIndexMap
+					);
+
+					if (endReadEntityIndex > 0) usedChunkMaxIndex = chunkIndex;
+					else break;
+				}
+
+				this.endReadChunkIndex = usedChunkMaxIndex + 1;
 			}
 		}
 
@@ -106,7 +120,7 @@ class Aosoa {
 			final endReadChunkIndex = this.endReadChunkIndex;
 			var i = 0;
 
-			while (i < endReadChunkIndex + 1) {
+			while (i < endReadChunkIndex) {
 				final chunk = chunks[i];
 				final nextWriteIndex = chunk.$iteratorName($a{argumentExpressions});
 
