@@ -67,9 +67,13 @@ class Chunk {
 		final chunkClass: TypeDefinition = macro class $chunkClassName {
 			public var endReadIndex(default, null) = 0;
 			public var nextWriteIndex(default, null) = 0;
+
 			final readWriteIndexMap: banker.vector.WritableVector<Int>;
 
-			public function new(chunkSize: Int, defaultReadWriteIndexMap: banker.vector.Vector<Int>) {
+			public function new(
+				chunkSize: Int,
+				defaultReadWriteIndexMap: banker.vector.Vector<Int>
+			) {
 				$b{prepared.constructorExpressions};
 				this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
 			}
@@ -80,7 +84,11 @@ class Chunk {
 			): Int {
 				final nextWriteIndex = this.nextWriteIndex;
 				$b{prepared.synchronizeExpressions};
-				banker.vector.VectorTools.blitZero(defaultReadWriteIndexMap, this.readWriteIndexMap, chunkSize);
+				banker.vector.VectorTools.blitZero(
+					defaultReadWriteIndexMap,
+					this.readWriteIndexMap,
+					chunkSize
+				);
 
 				this.endReadIndex = nextWriteIndex;
 				return nextWriteIndex;
@@ -345,32 +353,34 @@ class Chunk {
 		};
 	}
 
-	static function createMethod(
+	/**
+		Creates field from given information.
+		Used in `createIterator()` and `createUseMethod()`.
+	**/
+	static function createMethodField(
 		originalFunction: ChunkFunction,
-		builtFunction: Function,
-		externalArguments: Array<FunctionArg>
-	) {
+		builtFunction: Function
+	): Field {
 		final field: Field = {
 			name: originalFunction.name,
 			kind: FFun(builtFunction),
-			pos: originalFunction.position,
+			pos: Context.currentPos(),
 			doc: originalFunction.documentation,
 			access: [APublic, AInline]
 		};
 
-		final method: ChunkMethod = {
-			field: field,
-			externalArguments: externalArguments
-		};
-		return method;
+		return field;
 	}
 
+	/**
+		Creates method for iterating over the chunk.
+	**/
 	static function createIterator(
-		func: ChunkFunction,
+		originalFunction: ChunkFunction,
 		variables: Array<ChunkVariable>,
 		disuseExpressions: Array<Expr>
 	): ChunkMethod {
-		final pieces = generateMethodPieces(func.arguments, variables);
+		final pieces = generateMethodPieces(originalFunction.arguments, variables);
 		final externalArguments = pieces.externalArguments;
 
 		final initializeBeforeLoops: Array<Expr> = [];
@@ -400,7 +410,7 @@ class Chunk {
 
 		final loopBodyExpressions: Array<Expr> = [];
 		loopBodyExpressions.pushFromArray(initializeLoop);
-		loopBodyExpressions.push(func.expression);
+		loopBodyExpressions.push(originalFunction.expression);
 		loopBodyExpressions.pushFromArray(finalizeLoop);
 
 		final loopStatement = macro while (readIndex < endReadIndex) $b{loopBodyExpressions};
@@ -411,7 +421,7 @@ class Chunk {
 		wholeExpressions.pushFromArray(finalizeAfterLoops);
 		wholeExpressions.push(macro return this.nextWriteIndex);
 
-		final iterator: Function = {
+		final iteratorFunction: Function = {
 			args: externalArguments,
 			ret: (macro:Int),
 			expr: macro $b{wholeExpressions}
@@ -432,7 +442,7 @@ class Chunk {
 					i = readWriteIndexMap[readIndex]; // write index
 					declareLocalValue();
 
-					func();
+					originalFunction();
 
 					++readIndex;
 					if (disuse) {
@@ -449,14 +459,20 @@ class Chunk {
 			}
 		**/
 
-		return createMethod(func, iterator, externalArguments);
+		return {
+			field: createMethodField(originalFunction, iteratorFunction),
+			externalArguments: externalArguments
+		};
 	}
 
+	/**
+		Creates method for using new entity in the chunk.
+	**/
 	static function createUse(
-		func: ChunkFunction,
+		originalFunction: ChunkFunction,
 		variables: Array<ChunkVariable>
 	): ChunkMethod {
-		final pieces = generateMethodPieces(func.arguments, variables);
+		final pieces = generateMethodPieces(originalFunction.arguments, variables);
 		final externalArguments = pieces.externalArguments;
 
 		final expressions: Array<Expr> = [];
@@ -464,13 +480,13 @@ class Chunk {
 		expressions.pushFromArray(pieces.declareLocalVector);
 		expressions.pushFromArray(pieces.declareLocalValue); // Not sure if it is necessary
 
-		expressions.push(func.expression);
+		expressions.push(originalFunction.expression);
 
 		expressions.push(macro final nextIndex = i + 1);
 		expressions.push(macro this.nextWriteIndex = nextIndex);
 		expressions.push(macro return nextIndex);
 
-		final iterator: Function = {
+		final useFunction: Function = {
 			args: externalArguments,
 			ret: (macro:Int),
 			expr: macro $b{expressions}
@@ -483,7 +499,7 @@ class Chunk {
 				declareLocalVector();
 				declareLocalValue();
 
-				func();
+				originalFunction();
 
 				final nextIndex = i + 1;
 				this.nextWriteIndex = nextIndex;
@@ -491,7 +507,10 @@ class Chunk {
 			}
 		**/
 
-		return createMethod(func, iterator, externalArguments);
+		return {
+			field: createMethodField(originalFunction, useFunction),
+			externalArguments: externalArguments
+		};
 	}
 }
 #end

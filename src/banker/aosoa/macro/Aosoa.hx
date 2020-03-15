@@ -19,6 +19,7 @@ class Aosoa {
 		final aosoaClass = macro class {
 			public final chunks: banker.vector.Vector<$chunkComplexType>;
 			public final chunkSize: Int;
+
 			final defaultReadWriteIndexMap: banker.vector.Vector<Int>;
 			var endReadChunkIndex = 0;
 			var nextWriteChunkIndex = 0;
@@ -85,7 +86,15 @@ class Aosoa {
 		return fields;
 	}
 
-	static function createMethod(chunkField: Field, functionBody: Expr, externalArguments: Array<FunctionArg>) {
+	/**
+		Creates field from given information.
+		Used in `createIterator()` and `createUseMethod()`.
+	**/
+	static function createMethodField(
+		chunkField: Field,
+		functionBody: Expr,
+		externalArguments: Array<FunctionArg>
+	): Field {
 		final builtFunction: Function = {
 			args: externalArguments,
 			ret: null,
@@ -104,13 +113,13 @@ class Aosoa {
 	}
 
 	/**
-		Creates method for adding to the Aosoa class.
+		Creates method for iterating over the entire Aosoa.
 	**/
-	static function createIterater(iterator: Chunk.ChunkMethod) {
-		final field = iterator.field;
-		final iteratorName = field.name;
+	static function createIterater(chunkIterator: Chunk.ChunkMethod): Field {
+		final chunkField = chunkIterator.field;
+		final methodName = chunkField.name;
 
-		final externalArguments = iterator.externalArguments;
+		final externalArguments = chunkIterator.externalArguments;
 		final argumentExpressions = externalArguments.map(argument -> macro $i{argument.name});
 		argumentExpressions.pop();
 
@@ -122,7 +131,7 @@ class Aosoa {
 
 			while (i < endReadChunkIndex) {
 				final chunk = chunks[i];
-				final nextWriteIndex = chunk.$iteratorName($a{argumentExpressions});
+				final nextWriteIndex = chunk.$methodName($a{argumentExpressions});
 
 				if (nextWriteIndex < chunkSize && i < this.nextWriteChunkIndex)
 					this.nextWriteChunkIndex = i;
@@ -131,17 +140,17 @@ class Aosoa {
 			}
 		};
 
-		return createMethod(field, functionBody, externalArguments);
+		return createMethodField(chunkField, functionBody, externalArguments);
 	}
 
 	/**
-		Creates method for using new entity to the Aosoa class.
+		Creates method for using new entity in the Aosoa.
 	**/
-	static function createUseMethod(iterator: Chunk.ChunkMethod) {
-		final field = iterator.field;
-		final useMethodName = field.name;
+	static function createUseMethod(chunkUseMethod: Chunk.ChunkMethod): Field {
+		final chunkField = chunkUseMethod.field;
+		final methodName = chunkField.name;
 
-		final externalArguments = iterator.externalArguments;
+		final externalArguments = chunkUseMethod.externalArguments;
 		final argumentExpressions = externalArguments.map(argument -> macro $i{argument.name});
 
 		final functionBody = macro {
@@ -150,17 +159,17 @@ class Aosoa {
 
 			var nextWriteChunkIndex = this.nextWriteChunkIndex;
 			var chunk = chunks[nextWriteChunkIndex];
-			while(chunk.nextWriteIndex == chunkSize) {
+			while (chunk.nextWriteIndex == chunkSize) {
 				++nextWriteChunkIndex;
 				chunk = chunks[nextWriteChunkIndex];
 			}
 
-			chunk.$useMethodName($a{argumentExpressions});
+			chunk.$methodName($a{argumentExpressions});
 
 			this.nextWriteChunkIndex = nextWriteChunkIndex;
 		};
 
-		return createMethod(field, functionBody, externalArguments);
+		return createMethodField(chunkField, functionBody, externalArguments);
 	}
 }
 #end
