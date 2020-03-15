@@ -313,13 +313,14 @@ class Chunk {
 
 			if (isVector) {
 				// provide WRITE access to the buffer via $componentName
-				final bufferName = componentName + "ChunkBuffer";
-				declareLocalVector.push(macro final $componentName = this.$bufferName);
+				final writeVectorName = componentName + "ChunkBuffer";
+				declareLocalVector.push(macro final $componentName = this.$writeVectorName);
 			} else {
 				// provide READ access to the current value via $componentName
-				final vectorName = componentName + "ChunkVector";
-				declareLocalVector.push(macro final $vectorName = this.$componentName);
-				declareLocalValue.push(macro final $componentName = $i{vectorName}[i]);
+				final localVectorName = componentName + "ChunkVector";
+				final readVectorName = componentName;
+				declareLocalVector.push(macro final $localVectorName = this.$readVectorName);
+				declareLocalValue.push(macro final $componentName = $i{localVectorName}[i]);
 			}
 		}
 
