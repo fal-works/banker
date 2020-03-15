@@ -97,13 +97,17 @@ class Aosoa {
 
 		final functionBody = macro {
 			final chunks = this.chunks;
-			final chunkCount = chunks.length;
+			final chunkSize = this.chunkSize;
 			final endReadChunkIndex = this.endReadChunkIndex;
 			var i = 0;
 
 			while (i < endReadChunkIndex + 1) {
 				final chunk = chunks[i];
-				chunk.$iteratorName($a{argumentExpressions});
+				final nextWriteIndex = chunk.$iteratorName($a{argumentExpressions});
+
+				if (nextWriteIndex < chunkSize && i < this.nextWriteChunkIndex)
+					this.nextWriteChunkIndex = i;
+
 				++i;
 			}
 		};

@@ -365,13 +365,15 @@ class Chunk {
 		final pieces = generateMethodPieces(func.arguments, variables);
 		final externalArguments = pieces.externalArguments;
 
-		final initializeBeforeLoops = pieces.declareLocalVector.copy();
+		final initializeBeforeLoops: Array<Expr> = [];
+		initializeBeforeLoops.pushFromArray(pieces.declareLocalVector);
 		initializeBeforeLoops.push(macro final endReadIndex = this.endReadIndex);
 		initializeBeforeLoops.push(macro var nextWriteIndex = this.nextWriteIndex);
 		initializeBeforeLoops.push(macro var disuse: Bool);
 		initializeBeforeLoops.push(macro var i = 0);
 
-		final initializeLoop = pieces.declareLocalValue.copy();
+		final initializeLoop: Array<Expr> = [];
+		initializeLoop.pushFromArray(pieces.declareLocalValue);
 		initializeLoop.push(macro disuse = false);
 
 		final finalizeLoop: Array<Expr> = [];
@@ -385,23 +387,22 @@ class Chunk {
 		final finalizeAfterLoops: Array<Expr> = [];
 		finalizeAfterLoops.push(macro this.nextWriteIndex = nextWriteIndex);
 
-		final loopBodyExpressions = [
-			initializeLoop,
-			[func.expression],
-			finalizeLoop
-		].flatten();
+		final loopBodyExpressions: Array<Expr> = [];
+		loopBodyExpressions.pushFromArray(initializeLoop);
+		loopBodyExpressions.push(func.expression);
+		loopBodyExpressions.pushFromArray(finalizeLoop);
 
 		final loopStatement = macro while (i < endReadIndex) $b{loopBodyExpressions};
 
-		final wholeExpressions = [
-			initializeBeforeLoops,
-			[loopStatement],
-			finalizeAfterLoops
-		].flatten();
+		final wholeExpressions: Array<Expr> = [];
+		wholeExpressions.pushFromArray(initializeBeforeLoops);
+		wholeExpressions.push(loopStatement);
+		wholeExpressions.pushFromArray(finalizeAfterLoops);
+		wholeExpressions.push(macro return this.nextWriteIndex);
 
 		final iterator: Function = {
 			args: externalArguments,
-			ret: null,
+			ret: (macro:Int),
 			expr: macro $b{wholeExpressions}
 		};
 
@@ -412,6 +413,7 @@ class Chunk {
 				final endReadIndex = this.endReadIndex;
 				var disuse: Bool;
 				var i = 0;
+
 				while (i < endReadIndex) {
 					declareLocalValue();
 					func();
@@ -421,6 +423,8 @@ class Chunk {
 						disuse = false;
 					}
 				}
+
+				return this.nextWriteIndex;
 			}
 		**/
 
@@ -438,10 +442,12 @@ class Chunk {
 		expressions.push(macro final i = this.nextWriteIndex);
 		expressions.pushFromArray(pieces.declareLocalVector);
 		expressions.pushFromArray(pieces.declareLocalValue); // Not sure if it is necessary
+
 		expressions.push(func.expression);
-		expressions.push(macro final nextWriteIndex = i + 1);
-		expressions.push(macro this.nextWriteIndex = nextWriteIndex);
-		expressions.push(macro return nextWriteIndex);
+
+		expressions.push(macro final nextIndex = i + 1);
+		expressions.push(macro this.nextWriteIndex = nextIndex);
+		expressions.push(macro return nextIndex);
 
 		final iterator: Function = {
 			args: externalArguments,
@@ -455,8 +461,12 @@ class Chunk {
 				final i = this.nextWriteIndex;
 				declareLocalVector();
 				declareLocalValue();
+
 				func();
-				this.nextWriteIndex = i;
+
+				final nextIndex = i + 1;
+				this.nextWriteIndex = nextIndex;
+				return nextIndex;
 			}
 		**/
 
