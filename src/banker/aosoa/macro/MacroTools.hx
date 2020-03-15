@@ -42,19 +42,7 @@ class MacroTools {
 	}
 
 	/**
-		Defines `subTypes` in the current module in which the macro was called.
-	**/
-	public static function defineSubType(subTypes: Array<TypeDefinition>): Void {
-		Context.defineModule(
-			Context.getLocalModule(),
-			subTypes,
-			Context.getLocalImports(),
-			Context.getLocalUsing().map(typeRefToTypePath)
-		);
-	}
-
-	/**
-		@return Inforomation about the current module and package
+		@return Information about the current module and package
 		in which the macro was called.
 	**/
 	public static function getLocalModuleInfo(): ModuleInfo {
@@ -80,24 +68,40 @@ class MacroTools {
 	}
 
 	/**
-		Defines a type as a sub-type in the local module.
+		Defines `typeDefinition` as a sub-type in the current module in which the macro was called.
 		@return `path`: TypePath of the type. `pathString`: Dot-separated path of the type.
 	**/
-	public static function define(typeDefinition: TypeDefinition): DefinedType {
-		final localModule = MacroTools.getLocalModuleInfo();
-		typeDefinition.pack = localModule.packages;
-		MacroTools.defineSubType([typeDefinition]);
+	public static function defineSubTypes(typeDefinitions: Array<TypeDefinition>): Array<DefinedType> {
+		final localModule = getLocalModuleInfo();
 
-		final subTypeName = typeDefinition.name;
+		Context.defineModule(
+			Context.getLocalModule(),
+			typeDefinitions,
+			Context.getLocalImports(),
+			Context.getLocalUsing().map(typeRefToTypePath)
+		);
 
-		return {
-			path: {
-				pack: localModule.packages,
-				name: localModule.name,
-				sub: subTypeName
-			},
-			pathString: '${localModule.path}.${subTypeName}'
-		};
+		final definedTypes: Array<DefinedType> = [];
+
+		for (i in 0...typeDefinitions.length) {
+			final typeDefinition = typeDefinitions[i];
+
+			typeDefinition.pack = localModule.packages;
+
+			final subTypeName = typeDefinition.name;
+
+			final definedType = {
+				path: {
+					pack: localModule.packages,
+					name: localModule.name,
+					sub: subTypeName
+				},
+				pathString: '${localModule.path}.${subTypeName}'
+			};
+			definedTypes.push(definedType);
+		}
+
+		return definedTypes;
 	}
 }
 

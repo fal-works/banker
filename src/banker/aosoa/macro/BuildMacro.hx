@@ -29,7 +29,7 @@ class BuildMacro {
 			position
 		);
 
-		final chunkType = MacroTools.define(chunk.typeDefinition);
+		final chunkType = MacroTools.defineSubTypes([chunk.typeDefinition])[0];
 		debug('Created Chunk class: ${chunkType.pathString}');
 
 		final aosoaClassName = localClassName + "Aosoa";
