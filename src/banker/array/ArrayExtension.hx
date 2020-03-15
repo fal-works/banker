@@ -156,14 +156,10 @@ class ArrayExtension {
 		Compares two arrays with `==` operator.
 		@return `true` if all elements are equal (including the order).
 	**/
-	public static inline function equals<T>(
-		array: Array<T>,
-		otherArray: Array<T>
-	): Bool {
+	public static inline function equals<T>(array: Array<T>, otherArray: Array<T>): Bool {
 		final len = array.length;
 
-		return if (otherArray.length != len) false;
-		else {
+		return if (otherArray.length != len) false; else {
 			var foundDifference = false;
 
 			for (i in 0...len) {
@@ -188,8 +184,7 @@ class ArrayExtension {
 	): Bool {
 		final len = array.length;
 
-		return if (otherArray.length != len) false;
-		else {
+		return if (otherArray.length != len) false; else {
 			var foundDifference = false;
 
 			for (i in 0...len) {

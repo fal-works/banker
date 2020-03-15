@@ -74,7 +74,6 @@ class AosoaTest {
 
 	static final _use = testCase(use, Ok);
 
-
 	static function disuse() {
 		describe("This prints: 10, 40, 30, 50");
 		final actorAosoa = new Actor(4, 2);
