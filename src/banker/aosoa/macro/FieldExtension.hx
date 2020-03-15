@@ -29,6 +29,21 @@ class FieldExtension {
 	}
 
 	/**
+		@return Shallow copy of `this`.
+	**/
+	public static function clone(_this: Field): Field
+		return Reflect.copy(_this);
+
+	/**
+		Overwrites `this.name`.
+		@return `this` field.
+	**/
+	public static function setName(_this: Field, name: String): Field {
+		_this.name = name;
+		return _this;
+	}
+
+	/**
 		Overwrites the `kind` of `this` field with a variable type of `type`.
 		@return `this` field.
 	**/
