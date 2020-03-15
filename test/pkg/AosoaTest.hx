@@ -55,6 +55,7 @@ class AosoaTest {
 		final actorAosoa = new Actor(2, 3);
 		actorAosoa.use(10, 20);
 		final chunk = actorAosoa.chunks[0];
+		actorAosoa.synchronize();
 		assert(chunk.x[0] == 10);
 		assert(chunk.y[0] == 20);
 	}

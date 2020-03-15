@@ -68,6 +68,10 @@ class Chunk {
 			public function new(chunkSize: Int) {
 				$b{prepared.constructorExpressions}
 			}
+
+			public function synchronize(endIndex: Int) {
+				$b{prepared.synchronizeExpressions}
+			}
 		};
 		chunkClass.fields = chunkClass.fields.concat(prepared.chunkFields);
 		chunkClass.doc = 'Chunk (or SoA: Structure of Arrays) of `$structureName`.';
@@ -182,6 +186,7 @@ class Chunk {
 					};
 
 					if (buildField.hasMetadata(":banker.useEntity")) {
+						debug('  Found metadata: @:banker.useEntity');
 						useFunctions.push(func);
 						debug('  Registered as a function for using new entity.');
 					}
@@ -196,6 +201,8 @@ class Chunk {
 					}
 
 					final buffered = !buildField.hasMetadata(":banker.noBuffer");
+					if (!buffered)
+						debug('  Found metadata: @:banker.noBuffer');
 
 					final constructorExpression = createConstructorExpression(
 						buildField,
@@ -269,6 +276,7 @@ class Chunk {
 			chunkFields: chunkFields,
 			constructorExpressions: constructorExpressions,
 			disuseExpressions: disuseExpressions,
+			synchronizeExpressions: synchronizeExpressions,
 			iterators: iterators,
 			useMethods: useMethods
 		};
@@ -318,8 +326,11 @@ class Chunk {
 			final componentName = argument.name;
 
 			if (isVector) {
-				declareLocalVector.push(macro final $componentName = this.$componentName);
+				// provide WRITE access to the buffer via $componentName
+				final bufferName = componentName + "ChunkBuffer";
+				declareLocalVector.push(macro final $componentName = this.$bufferName);
 			} else {
+				// provide READ access to the current value via $componentName
 				final vectorName = componentName + "ChunkVector";
 				declareLocalVector.push(macro final $vectorName = this.$componentName);
 				declareLocalValue.push(macro final $componentName = $i{vectorName}[i]);

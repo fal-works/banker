@@ -27,6 +27,12 @@ class Aosoa {
 				);
 				this.chunkSize = chunkSize;
 			}
+
+			public function synchronize() {
+				final chunks = this.chunks;
+				final chunkSize = this.chunkSize;
+				for (i in 0...chunkIndex + 1) chunks[i].synchronize(chunkSize);
+			}
 		}
 
 		aosoaClass.pos = classPosition;
