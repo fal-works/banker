@@ -19,20 +19,25 @@ class Aosoa {
 		final aosoaClass = macro class {
 			public final chunks: banker.vector.Vector<$chunkComplexType>;
 			public final chunkSize: Int;
+			final defaultReadWriteIndexMap: banker.vector.Vector<Int>;
 			var endReadChunkIndex = 0;
 			var nextWriteChunkIndex = 0;
 
 			public function new(chunkSize: Int, chunkCount: Int) {
+				final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkSize) i]);
+
 				this.chunks = banker.vector.Vector.createPopulated(
 					chunkCount,
-					() -> new $chunkTypePath(chunkSize)
+					() -> new $chunkTypePath(chunkSize, defaultReadWriteIndexMap)
 				);
 				this.chunkSize = chunkSize;
+				this.defaultReadWriteIndexMap = defaultReadWriteIndexMap;
 			}
 
 			public function synchronize() {
 				final chunks = this.chunks;
-				for (i in 0...this.nextWriteChunkIndex + 1) chunks[i].synchronize();
+				final defaultReadWriteIndexMap = this.defaultReadWriteIndexMap;
+				for (i in 0...this.nextWriteChunkIndex + 1) chunks[i].synchronize(this.chunkSize, defaultReadWriteIndexMap);
 				this.endReadChunkIndex = this.nextWriteChunkIndex;
 			}
 		}

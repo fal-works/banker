@@ -67,15 +67,18 @@ class Chunk {
 		final chunkClass: TypeDefinition = macro class $chunkClassName {
 			public var endReadIndex(default, null) = 0;
 			public var nextWriteIndex(default, null) = 0;
+			final readWriteIndexMap: banker.vector.WritableVector<Int>;
 
-			public function new(chunkSize: Int) {
+			public function new(chunkSize: Int, defaultReadWriteIndexMap: banker.vector.Vector<Int>) {
 				$b{prepared.constructorExpressions};
+				this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
 			}
 
-			public function synchronize() {
+			public function synchronize(chunkSize: Int, defaultReadWriteIndexMap: banker.vector.Vector<Int>) {
 				final nextWriteIndex = this.nextWriteIndex;
 				$b{prepared.synchronizeExpressions};
 				this.endReadIndex = nextWriteIndex;
+				banker.vector.VectorTools.blitZero(defaultReadWriteIndexMap, this.readWriteIndexMap, chunkSize);
 			}
 		};
 		chunkClass.fields = chunkClass.fields.concat(prepared.chunkFields);
@@ -367,20 +370,23 @@ class Chunk {
 
 		final initializeBeforeLoops: Array<Expr> = [];
 		initializeBeforeLoops.pushFromArray(pieces.declareLocalVector);
+		initializeBeforeLoops.push(macro final readWriteIndexMap = this.readWriteIndexMap);
 		initializeBeforeLoops.push(macro final endReadIndex = this.endReadIndex);
+		initializeBeforeLoops.push(macro var readIndex = 0);
 		initializeBeforeLoops.push(macro var nextWriteIndex = this.nextWriteIndex);
-		initializeBeforeLoops.push(macro var disuse: Bool);
+		initializeBeforeLoops.push(macro var disuse = false);
 		initializeBeforeLoops.push(macro var i = 0);
 
 		final initializeLoop: Array<Expr> = [];
+		initializeLoop.push(macro i = readWriteIndexMap[readIndex]);
 		initializeLoop.pushFromArray(pieces.declareLocalValue);
-		initializeLoop.push(macro disuse = false);
 
 		final finalizeLoop: Array<Expr> = [];
-		finalizeLoop.push(macro ++i);
+		finalizeLoop.push(macro ++readIndex);
 		finalizeLoop.push(macro if (disuse) {
-			$b{disuseExpressions};
 			--nextWriteIndex;
+			$b{disuseExpressions};
+			readWriteIndexMap[nextWriteIndex] = readIndex;
 			disuse = false;
 		});
 
@@ -392,7 +398,7 @@ class Chunk {
 		loopBodyExpressions.push(func.expression);
 		loopBodyExpressions.pushFromArray(finalizeLoop);
 
-		final loopStatement = macro while (i < endReadIndex) $b{loopBodyExpressions};
+		final loopStatement = macro while (readIndex < endReadIndex) $b{loopBodyExpressions};
 
 		final wholeExpressions: Array<Expr> = [];
 		wholeExpressions.pushFromArray(initializeBeforeLoops);
@@ -411,20 +417,30 @@ class Chunk {
 			function someIterator(externalArgs) {
 				declareLocalVector();
 				final endReadIndex = this.endReadIndex;
-				var disuse: Bool;
-				var i = 0;
+				final readWriteIndexMap = this.readWriteIndexMap;
+				var readIndex = 0;
+				var nextWriteIndex = this.nextWriteIndex
+				var disuse = false;
+				var i: Int;
 
-				while (i < endReadIndex) {
+				while (readIndex < endReadIndex) {
+					i = readWriteIndexMap[readIndex]; // write index
 					declareLocalValue();
+
 					func();
-					++i;
+
+					++readIndex;
 					if (disuse) {
+						--nextWriteIndex;
 						disuseExpr();
+						readWriteIndexMap[nextWriteIndex] = readIndex;
 						disuse = false;
 					}
 				}
 
-				return this.nextWriteIndex;
+				this.nextWriteIndex = nextWriteIndex
+
+				return nextWriteIndex;
 			}
 		**/
 
