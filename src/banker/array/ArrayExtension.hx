@@ -2,7 +2,9 @@ package banker.array;
 
 class ArrayExtension {
 	public static inline function get<T>(array: Array<T>, index: Int): T {
+		#if !macro
 		assert(index >= 0 && index < array.length, null, "Out of bound.");
+		#end
 
 		#if cpp
 		return cpp.NativeArray.unsafeGet(array, index);
@@ -16,7 +18,9 @@ class ArrayExtension {
 		index: Int,
 		value: T
 	): Void {
+		#if !macro
 		assert(index >= 0 && index < array.length, null, "Out of bound.");
+		#end
 
 		#if cpp
 		cpp.NativeArray.unsafeSet(array, index, value);
@@ -39,7 +43,9 @@ class ArrayExtension {
 		startIndex: Int,
 		endIndex: Int
 	): Array<T> {
+		#if !macro
 		assert(startIndex >= 0 && endIndex < array.length);
+		#end
 
 		var i = startIndex;
 		while (i < endIndex) {
@@ -71,8 +77,10 @@ class ArrayExtension {
 		destinationPosition: Int,
 		rangeLength: Int
 	): Array<T> {
+		#if !macro
 		assert(sourcePosition + rangeLength <= array.length);
 		assert(destinationPosition + rangeLength <= array.length);
+		#end
 
 		#if cpp
 		cpp.NativeArray.blit(
@@ -134,8 +142,10 @@ class ArrayExtension {
 		indexA: Int,
 		indexB: Int
 	): Void {
+		#if !macro
 		assert(indexA >= 0 && indexA < array.length);
 		assert(indexB >= 0 && indexB < array.length);
+		#end
 
 		var tmp = get(array, indexA);
 		set(array, indexA, get(array, indexB));
@@ -157,7 +167,6 @@ class ArrayExtension {
 			var foundDifference = false;
 
 			for (i in 0...len) {
-				trace(array[i] + ", " + otherArray[i]);
 				if (get(array, i) == get(otherArray, i)) continue;
 
 				foundDifference = true;
