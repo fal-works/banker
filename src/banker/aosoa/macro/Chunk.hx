@@ -65,8 +65,8 @@ class Chunk {
 
 		final chunkClassName = structureName + "Chunk";
 		final chunkClass: TypeDefinition = macro class $chunkClassName {
-			public var endReadIndex = 0;
-			public var nextWriteIndex = 0;
+			public var endReadIndex(default, null) = 0;
+			public var nextWriteIndex(default, null) = 0;
 
 			public function new(chunkSize: Int) {
 				$b{prepared.constructorExpressions};
