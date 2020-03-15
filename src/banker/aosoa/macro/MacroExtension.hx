@@ -29,5 +29,10 @@ class MacroExtension {
 		else
 			a.toType().unify(b.toType());
 	}
+
+	public static function argumentIsWriteIndex(argument: FunctionArg): Bool
+		return argument.name == "i" && unifyComplex(argument.type, intType);
+
+	static final intType: ComplexType = (macro:Int);
 }
 #end

@@ -22,7 +22,8 @@ class Actor implements banker.aosoa.Structure {
 		x: Vec<Float>,
 		y: Vec<Float>,
 		newX: Float,
-		newY: Float
+		newY: Float,
+		i: Int
 	) {
 		x[i] = newX;
 		y[i] = newY;

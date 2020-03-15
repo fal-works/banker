@@ -181,7 +181,7 @@ class Chunk {
 
 					final func:ChunkFunction = {
 						name: buildFieldName,
-						arguments: func.args,
+						arguments: func.args.copy(),
 						expression: func.expr,
 						documentation: documentation,
 						position: buildField.pos
@@ -285,17 +285,26 @@ class Chunk {
 		Generates expression pieces for creating iterate/use method from an user-defined function.
 	**/
 	static function generateMethodPieces(
+		methodName: String,
 		arguments: Array<FunctionArg>,
 		variables: Array<ChunkVariable>
 	) {
 		final declareLocalVector: Array<Expr> = [];
 		final declareLocalValue: Array<Expr> = [];
 		final externalArguments: Array<FunctionArg> = [];
+		var iArgumentIndex = -1;
+		var needsWriteAccess = false;
 
 		debug('  Scanning arguments.');
 		for (k in 0...arguments.length) {
 			final argument = arguments[k];
 			final type = argument.type;
+
+			if (argument.argumentIsWriteIndex()) {
+				iArgumentIndex = k;
+				debug('  - i ... Found index for write access.');
+				continue;
+			}
 
 			var isVector = false;
 			var associated = false;
@@ -312,6 +321,7 @@ class Chunk {
 					debug('  - ${argument.name} ... Found corresponding vector.');
 					associated = true;
 					isVector = true;
+					needsWriteAccess = true;
 					break;
 				}
 			}
@@ -336,6 +346,9 @@ class Chunk {
 				declareLocalValue.push(macro final $componentName = $i{localVectorName}[i]);
 			}
 		}
+
+		if (iArgumentIndex == -1 && needsWriteAccess)
+			warn('Found vector argument but missing argument `i: Int` in function $methodName().');
 
 		return {
 			declareLocalValue: declareLocalValue,
@@ -371,7 +384,11 @@ class Chunk {
 		variables: Array<ChunkVariable>,
 		disuseExpressions: Array<Expr>
 	): ChunkMethod {
-		final pieces = generateMethodPieces(originalFunction.arguments, variables);
+		final pieces = generateMethodPieces(
+			originalFunction.name,
+			originalFunction.arguments,
+			variables
+		);
 		final externalArguments = pieces.externalArguments;
 
 		final initializeBeforeLoops: Array<Expr> = [];
@@ -464,7 +481,11 @@ class Chunk {
 		originalFunction: ChunkFunction,
 		variables: Array<ChunkVariable>
 	): ChunkMethod {
-		final pieces = generateMethodPieces(originalFunction.arguments, variables);
+		final pieces = generateMethodPieces(
+			originalFunction.name,
+			originalFunction.arguments,
+			variables
+		);
 		final externalArguments = pieces.externalArguments;
 
 		final expressions: Array<Expr> = [];
