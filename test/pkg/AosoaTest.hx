@@ -8,6 +8,9 @@ class Actor implements banker.aosoa.Structure {
 		println('$x, $y');
 	}
 
+	@:banker.useEntity
+	static function useEmpty() {}
+
 	/** Use new entity. **/
 	@:banker.useEntity
 	static function use(
@@ -45,6 +48,8 @@ class AosoaTest {
 	static function iterate() {
 		describe("This prints 6 lines of position infos.");
 		final actorAosoa = new Actor(2, 3);
+		for (i in 0...2 * 3) actorAosoa.useEmpty();
+		actorAosoa.synchronize();
 		actorAosoa.print();
 	}
 

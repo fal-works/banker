@@ -19,8 +19,8 @@ class Aosoa {
 		final aosoaClass = macro class {
 			public final chunks: banker.vector.Vector<$chunkComplexType>;
 			public final chunkSize: Int;
-			var chunkIndex = 0;
-			var slotIndex = 0;
+			var endReadChunkIndex = 0;
+			var nextWriteChunkIndex = 0;
 
 			public function new(chunkSize: Int, chunkCount: Int) {
 				this.chunks = banker.vector.Vector.createPopulated(
@@ -32,14 +32,14 @@ class Aosoa {
 
 			public function synchronize() {
 				final chunks = this.chunks;
-				final chunkSize = this.chunkSize;
-				for (i in 0...chunkIndex + 1) chunks[i].synchronize(chunkSize);
+				for (i in 0...this.nextWriteChunkIndex + 1) chunks[i].synchronize();
+				this.endReadChunkIndex = this.nextWriteChunkIndex;
 			}
 		}
 
 		aosoaClass.pos = classPosition;
 
-		final aosoaConstructor = aosoaClass.fields[4];
+		final aosoaConstructor = aosoaClass.fields[5];
 		aosoaConstructor.doc = "Aosoa class.";
 		if (constructorPosition != null) aosoaConstructor.pos = constructorPosition;
 
@@ -89,22 +89,21 @@ class Aosoa {
 	**/
 	static function createIterater(iterator: Chunk.ChunkMethod) {
 		final field = iterator.field;
-		final methodName = field.name;
+		final iteratorName = field.name;
 
 		final externalArguments = iterator.externalArguments;
 		final argumentExpressions = externalArguments.map(argument -> macro $i{argument.name});
 		argumentExpressions.pop();
-		argumentExpressions.push(macro endIndex);
 
 		final functionBody = macro {
 			final chunks = this.chunks;
 			final chunkCount = chunks.length;
-			final endIndex = this.chunkSize; // TODO: process only alive entities
+			final endReadChunkIndex = this.endReadChunkIndex;
 			var i = 0;
 
-			while (i < chunkCount) {
+			while (i < endReadChunkIndex + 1) {
 				final chunk = chunks[i];
-				chunk.$methodName($a{argumentExpressions});
+				chunk.$iteratorName($a{argumentExpressions});
 				++i;
 			}
 		};
@@ -117,28 +116,25 @@ class Aosoa {
 	**/
 	static function createUseMethod(iterator: Chunk.ChunkMethod) {
 		final field = iterator.field;
-		final methodName = field.name;
+		final useMethodName = field.name;
 
 		final externalArguments = iterator.externalArguments;
 		final argumentExpressions = externalArguments.map(argument -> macro $i{argument.name});
-		argumentExpressions.push(macro slotIndex);
 
 		final functionBody = macro {
 			final chunks = this.chunks;
+			final chunkSize = this.chunkSize;
 
-			final chunkIndex = this.chunkIndex;
-			var slotIndex = this.slotIndex;
-
-			final chunk = chunks[chunkIndex];
-			chunk.$methodName($a{argumentExpressions});
-
-			++slotIndex;
-			if (slotIndex < this.chunkSize) {
-				this.slotIndex = slotIndex;
-			} else {
-				this.chunkIndex = chunkIndex + 1;
-				this.slotIndex = 0;
+			var nextWriteChunkIndex = this.nextWriteChunkIndex;
+			var chunk = chunks[nextWriteChunkIndex];
+			while(chunk.nextWriteIndex == chunkSize) {
+				++nextWriteChunkIndex;
+				chunk = chunks[nextWriteChunkIndex];
 			}
+
+			chunk.$useMethodName($a{argumentExpressions});
+
+			this.nextWriteChunkIndex = nextWriteChunkIndex;
 		};
 
 		return createMethod(field, functionBody, externalArguments);

@@ -4,6 +4,7 @@ package banker.aosoa.macro;
 using Lambda;
 using haxe.EnumTools;
 using sneaker.macro.FieldExtension;
+using banker.array.ArrayExtension;
 using banker.aosoa.macro.FieldExtension;
 using banker.aosoa.macro.MacroExtension;
 
@@ -64,12 +65,17 @@ class Chunk {
 
 		final chunkClassName = structureName + "Chunk";
 		final chunkClass: TypeDefinition = macro class $chunkClassName {
+			public var endReadIndex = 0;
+			public var nextWriteIndex = 0;
+
 			public function new(chunkSize: Int) {
-				$b{prepared.constructorExpressions}
+				$b{prepared.constructorExpressions};
 			}
 
-			public function synchronize(endIndex: Int) {
-				$b{prepared.synchronizeExpressions}
+			public function synchronize() {
+				final nextWriteIndex = this.nextWriteIndex;
+				$b{prepared.synchronizeExpressions};
+				this.endReadIndex = nextWriteIndex;
 			}
 		};
 		chunkClass.fields = chunkClass.fields.concat(prepared.chunkFields);
@@ -220,10 +226,10 @@ class Chunk {
 					synchronizeExpressions.push(macro banker.vector.VectorTools.blitZero(
 						$i{chunkBufferFieldName},
 						$i{buildFieldName},
-						endIndex
+						nextWriteIndex
 					));
 
-					disuseExpressions.push(macro $i{buildFieldName}[i] = $i{buildFieldName}[lastIndex]);
+					disuseExpressions.push(macro $i{chunkBufferFieldName}[i] = $i{chunkBufferFieldName}[nextWriteIndex]);
 
 					variables.push({
 						name: buildFieldName,
@@ -242,7 +248,7 @@ class Chunk {
 			final func = functions[i];
 			debug('Create iterator: ${func.name}');
 
-			final iterator = createIterator(func, variables);
+			final iterator = createIterator(func, variables, disuseExpressions);
 			iterators.push(iterator);
 			chunkFields.push(iterator.field);
 		}
@@ -353,33 +359,67 @@ class Chunk {
 
 	static function createIterator(
 		func: ChunkFunction,
-		variables: Array<ChunkVariable>
+		variables: Array<ChunkVariable>,
+		disuseExpressions: Array<Expr>
 	): ChunkMethod {
 		final pieces = generateMethodPieces(func.arguments, variables);
 		final externalArguments = pieces.externalArguments;
 
-		final loopBodyExpressions = pieces.declareLocalValue.concat([func.expression, macro ++i,]);
+		final initializeBeforeLoops = pieces.declareLocalVector.copy();
+		initializeBeforeLoops.push(macro final endReadIndex = this.endReadIndex);
+		initializeBeforeLoops.push(macro var nextWriteIndex = this.nextWriteIndex);
+		initializeBeforeLoops.push(macro var disuse: Bool);
+		initializeBeforeLoops.push(macro var i = 0);
 
-		final indexInitialization = macro var i = 0;
-		final loopStatement = macro while (i < endIndex) $b{loopBodyExpressions};
+		final initializeLoop = pieces.declareLocalValue.copy();
+		initializeLoop.push(macro disuse = false);
 
-		final wholeExpressions = pieces.declareLocalVector.concat([indexInitialization, loopStatement]);
+		final finalizeLoop: Array<Expr> = [];
+		finalizeLoop.push(macro ++i);
+		finalizeLoop.push(macro if (disuse) {
+			$b{disuseExpressions};
+			--nextWriteIndex;
+			disuse = false;
+		});
+
+		final finalizeAfterLoops: Array<Expr> = [];
+		finalizeAfterLoops.push(macro this.nextWriteIndex = nextWriteIndex);
+
+		final loopBodyExpressions = [
+			initializeLoop,
+			[func.expression],
+			finalizeLoop
+		].flatten();
+
+		final loopStatement = macro while (i < endReadIndex) $b{loopBodyExpressions};
+
+		final wholeExpressions = [
+			initializeBeforeLoops,
+			[loopStatement],
+			finalizeAfterLoops
+		].flatten();
 
 		final iterator: Function = {
-			args: externalArguments.concat([{ name: "endIndex", type: (macro:Int) }]),
+			args: externalArguments,
 			ret: null,
 			expr: macro $b{wholeExpressions}
 		};
 
 		// This will generate something like the below:
 		/*
-			function someIterator(externalArgs, endIndex: Int) {
+			function someIterator(externalArgs) {
 				declareLocalVector();
+				final endReadIndex = this.endReadIndex;
+				var disuse: Bool;
 				var i = 0;
-				while (i < endIndex) {
+				while (i < endReadIndex) {
 					declareLocalValue();
 					func();
 					++i;
+					if (disuse) {
+						disuseExpr();
+						disuse = false;
+					}
 				}
 			}
 		**/
@@ -394,21 +434,29 @@ class Chunk {
 		final pieces = generateMethodPieces(func.arguments, variables);
 		final externalArguments = pieces.externalArguments;
 
-		final wholeExpressions = pieces.declareLocalVector.concat(pieces.declareLocalValue)
-			.concat([func.expression]);
+		final expressions: Array<Expr> = [];
+		expressions.push(macro final i = this.nextWriteIndex);
+		expressions.pushFromArray(pieces.declareLocalVector);
+		expressions.pushFromArray(pieces.declareLocalValue); // Not sure if it is necessary
+		expressions.push(func.expression);
+		expressions.push(macro final nextWriteIndex = i + 1);
+		expressions.push(macro this.nextWriteIndex = nextWriteIndex);
+		expressions.push(macro return nextWriteIndex);
 
 		final iterator: Function = {
-			args: externalArguments.concat([{ name: "i", type: (macro:Int) }]),
-			ret: null,
-			expr: macro $b{wholeExpressions}
+			args: externalArguments,
+			ret: (macro:Int),
+			expr: macro $b{expressions}
 		};
 
 		// This will generate something like the below:
 		/*
-			function use(externalArgs, i: Int) {
+			function use(externalArgs) {
+				final i = this.nextWriteIndex;
 				declareLocalVector();
 				declareLocalValue();
 				func();
+				this.nextWriteIndex = i;
 			}
 		**/
 
