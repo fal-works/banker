@@ -16,8 +16,7 @@ import banker.aosoa.macro.MacroTypes;
 typedef ChunkVariable = {
 	name: String,
 	type: ComplexType,
-	vectorType: ComplexType,
-	isBuffered: Bool
+	vectorType: ComplexType
 };
 
 typedef ChunkFunction = {
@@ -118,8 +117,7 @@ class Chunk {
 	static function createConstructorExpression(
 		buildField: Field,
 		buildFieldName: String,
-		initialValue: Null<Expr>,
-		buffered: Bool
+		initialValue: Null<Expr>
 	): Null<Expr> {
 		final expressions: Array<Expr> = [];
 		final thisField = macro $p{["this", buildFieldName]};
@@ -135,10 +133,8 @@ class Chunk {
 			expressions.push(macro $thisField.populate($factory));
 		}
 
-		if (buffered) {
-			final thisBuffer = macro $p{["this", buildFieldName + "ChunkBuffer"]};
-			expressions.push(macro $thisBuffer = $thisField.ref.copyWritable());
-		}
+		final thisBuffer = macro $p{["this", buildFieldName + "ChunkBuffer"]};
+		expressions.push(macro $thisBuffer = $thisField.ref.copyWritable());
 
 		return macro $b{expressions};
 	}
@@ -200,15 +196,10 @@ class Chunk {
 						continue;
 					}
 
-					final buffered = !buildField.hasMetadata(":banker.noBuffer");
-					if (!buffered)
-						debug('  Found metadata: @:banker.noBuffer');
-
 					final constructorExpression = createConstructorExpression(
 						buildField,
 						buildFieldName,
-						initialValue,
-						buffered
+						initialValue
 					);
 
 					if (constructorExpression == null) {
@@ -222,25 +213,22 @@ class Chunk {
 					final chunkField = buildField.setVariableType(vectorType).addAccess(AFinal);
 					chunkFields.push(chunkField);
 
-					if (buffered) {
-						final chunkBufferFieldName = buildFieldName + "ChunkBuffer";
-						final chunkBufferField = chunkField.clone().setName(chunkBufferFieldName);
+					final chunkBufferFieldName = buildFieldName + "ChunkBuffer";
+					final chunkBufferField = chunkField.clone().setName(chunkBufferFieldName);
 
-						chunkFields.push(chunkBufferField);
-						synchronizeExpressions.push(macro banker.vector.VectorTools.blitZero(
-							$i{chunkBufferFieldName},
-							$i{buildFieldName},
-							endIndex
-						));
-					}
+					chunkFields.push(chunkBufferField);
+					synchronizeExpressions.push(macro banker.vector.VectorTools.blitZero(
+						$i{chunkBufferFieldName},
+						$i{buildFieldName},
+						endIndex
+					));
 
 					disuseExpressions.push(macro $i{buildFieldName}[i] = $i{buildFieldName}[lastIndex]);
 
 					variables.push({
 						name: buildFieldName,
 						type: varType,
-						vectorType: vectorType,
-						isBuffered: buffered
+						vectorType: vectorType
 					});
 
 					debug('  Converted to vector.');
