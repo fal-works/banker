@@ -202,4 +202,24 @@ class ArrayExtension {
 			!foundDifference;
 		}
 	}
+
+	/**
+		Pushes all elements in `other` to `this` array.
+	**/
+	public static inline function pushFromArray<T>(
+		_this: Array<T>,
+		other: Array<T>
+	): Void {
+		var writeIndex = _this.length;
+		var readIndex = 0;
+
+		final otherLength = other.length;
+		_this.resize(writeIndex + otherLength);
+
+		while (readIndex < otherLength) {
+			set(_this, writeIndex, get(other, readIndex));
+			++writeIndex;
+			++readIndex;
+		}
+	}
 }
