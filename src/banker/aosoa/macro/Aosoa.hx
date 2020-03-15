@@ -7,16 +7,16 @@ class Aosoa {
 		which consists of multiple chunk instances.
 	**/
 	public static function create(
+		aosoaClassName: String,
 		chunk: Chunk.ChunkDefinition,
 		chunkTypePath: TypePath,
-		classPosition: Position,
-		?constructorPosition: Position
-	): Fields {
-		debug("Start rebuilding fields.");
+		classPosition: Position
+	): TypeDefinition {
+		debug("Start to create Aosoa class.");
 
 		final chunkComplexType: ComplexType = TPath(chunkTypePath);
 
-		final aosoaClass = macro class {
+		final aosoaClass = macro class $aosoaClassName {
 			public final chunks: banker.vector.Vector<$chunkComplexType>;
 			public final chunkSize: Int;
 
@@ -57,11 +57,8 @@ class Aosoa {
 			}
 		}
 
-		aosoaClass.pos = classPosition;
-
 		final aosoaConstructor = aosoaClass.fields[5];
 		aosoaConstructor.doc = "Aosoa class.";
-		if (constructorPosition != null) aosoaConstructor.pos = constructorPosition;
 
 		final fields = aosoaClass.fields;
 
@@ -81,9 +78,9 @@ class Aosoa {
 			debug('  - ${useMethod.name}');
 		}
 
-		debug("  Rebuilt fields.");
+		debug("  Created Aosoa class.");
 
-		return fields;
+		return aosoaClass;
 	}
 
 	/**
@@ -93,7 +90,8 @@ class Aosoa {
 	static function createMethodField(
 		chunkField: Field,
 		functionBody: Expr,
-		externalArguments: Array<FunctionArg>
+		externalArguments: Array<FunctionArg>,
+		position: Position
 	): Field {
 		final builtFunction: Function = {
 			args: externalArguments,
@@ -104,7 +102,7 @@ class Aosoa {
 		final field: Field = {
 			name: chunkField.name,
 			kind: FFun(builtFunction),
-			pos: chunkField.pos,
+			pos: position,
 			doc: chunkField.doc,
 			access: [APublic]
 		};
@@ -140,7 +138,12 @@ class Aosoa {
 			}
 		};
 
-		return createMethodField(chunkField, functionBody, externalArguments);
+		return createMethodField(
+			chunkField,
+			functionBody,
+			externalArguments,
+			chunkIterator.position
+		);
 	}
 
 	/**
@@ -169,7 +172,12 @@ class Aosoa {
 			this.nextWriteChunkIndex = nextWriteChunkIndex;
 		};
 
-		return createMethodField(chunkField, functionBody, externalArguments);
+		return createMethodField(
+			chunkField,
+			functionBody,
+			externalArguments,
+			chunkUseMethod.position
+		);
 	}
 }
 #end

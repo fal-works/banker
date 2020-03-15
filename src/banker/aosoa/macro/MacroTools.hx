@@ -78,5 +78,34 @@ class MacroTools {
 			packages: packages
 		}
 	}
+
+	/**
+		Defines a type as a sub-type in the local module.
+		@return `path`: TypePath of the type. `pathString`: Dot-separated path of the type.
+	**/
+	public static function define(typeDefinition: TypeDefinition): DefinedType {
+		final localModule = MacroTools.getLocalModuleInfo();
+		typeDefinition.pack = localModule.packages;
+		MacroTools.defineSubType([typeDefinition]);
+
+		final subTypeName = typeDefinition.name;
+
+		return {
+			path: {
+				pack: localModule.packages,
+				name: localModule.name,
+				sub: subTypeName
+			},
+			pathString: '${localModule.path}.${subTypeName}'
+		};
+	}
 }
+
+/**
+	Information about a type defined in any module.
+**/
+typedef DefinedType = {
+	path: TypePath,
+	pathString: String
+};
 #end

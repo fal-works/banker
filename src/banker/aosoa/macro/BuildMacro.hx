@@ -19,27 +19,29 @@ class BuildMacro {
 			return null;
 		}
 
+		final localClassName = localClass.get().name;
+		final position = Context.currentPos();
+
 		final buildFields = Context.getBuildFields();
 		final chunk = Chunk.create(
 			buildFields,
-			localClass.get().name,
-			Context.currentPos()
+			localClassName,
+			position
 		);
 
-		final chunkType = Chunk.define(chunk.typeDefinition);
+		final chunkType = MacroTools.define(chunk.typeDefinition);
 		debug('Created Chunk class: ${chunkType.pathString}');
 
-		final buildConstructor = buildFields.find(FieldExtension.isNew);
-
-		final aosoaFields = Aosoa.create(
+		final aosoaClassName = localClassName + "Aosoa";
+		final aosoaClass = Aosoa.create(
+			aosoaClassName,
 			chunk,
 			chunkType.path,
-			Context.currentPos(),
-			if (buildConstructor != null) buildConstructor.pos else null
+			position
 		);
 
 		debug("End building.");
-		return aosoaFields;
+		return aosoaClass.fields;
 	}
 }
 #end

@@ -1,6 +1,8 @@
 package banker.aosoa.macro;
 
 #if macro
+import haxe.macro.Context;
+
 /**
 	Functions for static extension used in `banker.aosoa.macro`.
 **/
@@ -31,8 +33,11 @@ class FieldExtension {
 	/**
 		@return Shallow copy of `this`.
 	**/
-	public static function clone(_this: Field): Field
-		return Reflect.copy(_this);
+	public static function clone(_this: Field, preservePosition = false): Field {
+		final cloned = Reflect.copy(_this);
+		if (!preservePosition) cloned.pos = Context.currentPos();
+		return cloned;
+	}
 
 	/**
 		Overwrites `this.name`.
@@ -40,6 +45,15 @@ class FieldExtension {
 	**/
 	public static function setName(_this: Field, name: String): Field {
 		_this.name = name;
+		return _this;
+	}
+
+	/**
+		Overwrites `this.doc`.
+		@return `this` field.
+	**/
+	public static function setDoc(_this: Field, doc: Null<String>): Field {
+		_this.doc = doc;
 		return _this;
 	}
 

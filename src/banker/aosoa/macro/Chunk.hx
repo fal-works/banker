@@ -5,6 +5,7 @@ using Lambda;
 using haxe.EnumTools;
 using sneaker.macro.FieldExtension;
 using banker.array.ArrayExtension;
+using banker.type_extension.NullableExtension;
 using banker.aosoa.macro.FieldExtension;
 using banker.aosoa.macro.MacroExtension;
 
@@ -30,7 +31,8 @@ typedef ChunkFunction = {
 
 typedef ChunkMethod = {
 	field: Field,
-	externalArguments: Array<FunctionArg>
+	externalArguments: Array<FunctionArg>,
+	position: Position
 };
 
 /**
@@ -41,14 +43,6 @@ typedef ChunkDefinition = {
 	variables: Array<ChunkVariable>,
 	iterators: Array<ChunkMethod>,
 	useMethods: Array<ChunkMethod>
-};
-
-/**
-	Information about a Chunk class defined in any module.
-**/
-typedef ChunkType = {
-	path: TypePath,
-	pathString: String
 };
 
 class Chunk {
@@ -103,27 +97,6 @@ class Chunk {
 			variables: prepared.variables,
 			iterators: prepared.iterators,
 			useMethods: prepared.useMethods
-		};
-	}
-
-	/**
-		Defines a Chunk class as a sub-type in the local module.
-		@return `path`: TypePath of the class. `pathString`: Dot-separated path of the class.
-	**/
-	public static function define(chunkDefinition: TypeDefinition): ChunkType {
-		final localModule = MacroTools.getLocalModuleInfo();
-		chunkDefinition.pack = localModule.packages;
-		MacroTools.defineSubType([chunkDefinition]);
-
-		final subTypeName = chunkDefinition.name;
-
-		return {
-			path: {
-				pack: localModule.packages,
-				name: localModule.name,
-				sub: subTypeName
-			},
-			pathString: '${localModule.path}.${subTypeName}'
 		};
 	}
 
@@ -195,15 +168,26 @@ class Chunk {
 						continue;
 					}
 
+					final useEntity = buildField.hasMetadata(":banker.useEntity");
+
+					var documentation = buildField.doc;
+					if (documentation == null) {
+						documentation = if (useEntity)
+							'Finds an entity that is currently available and marks it as in-use.';
+						else
+							'Iterates all entities that are currently in use.';
+						documentation += '\n\nGenerated from function `$buildFieldName` in the original Structure class.';
+					}
+
 					final func:ChunkFunction = {
 						name: buildFieldName,
 						arguments: func.args,
 						expression: func.expr,
-						documentation: buildField.doc,
+						documentation: documentation,
 						position: buildField.pos
 					};
 
-					if (buildField.hasMetadata(":banker.useEntity")) {
+					if (useEntity) {
 						debug('  Found metadata: @:banker.useEntity');
 						useFunctions.push(func);
 						debug('  Registered as a function for using new entity.');
@@ -231,14 +215,21 @@ class Chunk {
 
 					constructorExpressions.push(constructorExpression);
 
+					var documentation = buildField.doc;
+					if (documentation == null)
+						documentation = 'Vector generated from variable `$buildFieldName` in the original Structure class.';
+
 					final vectorType = macro:banker.vector.WritableVector<$varType>;
-					final chunkField = buildField.setVariableType(vectorType).addAccess(AFinal);
+					final chunkField = buildField.clone(true)
+						.setDoc(documentation).setVariableType(vectorType).addAccess(AFinal);
 					chunkFields.push(chunkField);
 
 					final chunkBufferFieldName = buildFieldName + "ChunkBuffer";
-					final chunkBufferField = chunkField.clone().setName(chunkBufferFieldName);
-
+					final chunkBufferDocumentation = 'Vector for providing buffered WRITE access to `$buildFieldName`.';
+					final chunkBufferField = chunkField.clone()
+						.setName(chunkBufferFieldName).setDoc(chunkBufferDocumentation);
 					chunkFields.push(chunkBufferField);
+
 					synchronizeExpressions.push(macro banker.vector.VectorTools.blitZero(
 						$i{chunkBufferFieldName},
 						$i{buildFieldName},
@@ -461,7 +452,8 @@ class Chunk {
 
 		return {
 			field: createMethodField(originalFunction, iteratorFunction),
-			externalArguments: externalArguments
+			externalArguments: externalArguments,
+			position: originalFunction.position
 		};
 	}
 
@@ -509,7 +501,8 @@ class Chunk {
 
 		return {
 			field: createMethodField(originalFunction, useFunction),
-			externalArguments: externalArguments
+			externalArguments: externalArguments,
+			position: originalFunction.position
 		};
 	}
 }
