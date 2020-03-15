@@ -36,7 +36,7 @@ class BuildMacro {
 		final aosoaClass = Aosoa.create(
 			aosoaClassName,
 			chunk,
-			chunkType.path,
+			chunkType,
 			position
 		);
 

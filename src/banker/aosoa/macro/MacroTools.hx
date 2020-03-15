@@ -90,13 +90,16 @@ class MacroTools {
 
 			final subTypeName = typeDefinition.name;
 
-			final definedType = {
-				path: {
-					pack: localModule.packages,
-					name: localModule.name,
-					sub: subTypeName
-				},
-				pathString: '${localModule.path}.${subTypeName}'
+			final path: TypePath = {
+				pack: localModule.packages,
+				name: localModule.name,
+				sub: subTypeName
+			};
+
+			final definedType: DefinedType = {
+				path: path,
+				pathString: '${localModule.path}.${subTypeName}',
+				complex: TPath(path)
 			};
 			definedTypes.push(definedType);
 		}
@@ -104,12 +107,4 @@ class MacroTools {
 		return definedTypes;
 	}
 }
-
-/**
-	Information about a type defined in any module.
-**/
-typedef DefinedType = {
-	path: TypePath,
-	pathString: String
-};
 #end

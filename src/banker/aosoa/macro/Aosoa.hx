@@ -1,6 +1,8 @@
 package banker.aosoa.macro;
 
 #if macro
+import banker.aosoa.macro.MacroTypes.DefinedType;
+
 class Aosoa {
 	/**
 		Creates an Aosoa (Array of Structure of Arrays) class,
@@ -9,12 +11,13 @@ class Aosoa {
 	public static function create(
 		aosoaClassName: String,
 		chunk: Chunk.ChunkDefinition,
-		chunkTypePath: TypePath,
+		chunkType: DefinedType,
 		classPosition: Position
 	): TypeDefinition {
 		debug("Start to create Aosoa class.");
 
-		final chunkComplexType: ComplexType = TPath(chunkTypePath);
+		final chunkTypePath = chunkType.path;
+		final chunkComplexType = chunkType.complex;
 
 		final aosoaClass = macro class $aosoaClassName {
 			public final chunks: banker.vector.Vector<$chunkComplexType>;
