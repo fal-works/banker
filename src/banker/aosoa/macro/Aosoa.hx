@@ -60,8 +60,11 @@ class Aosoa {
 			}
 		}
 
+		aosoaClass.pos = classPosition;
+
 		final aosoaConstructor = aosoaClass.fields[5];
 		aosoaConstructor.doc = "Aosoa class.";
+		aosoaConstructor.pos = classPosition;
 
 		final fields = aosoaClass.fields;
 

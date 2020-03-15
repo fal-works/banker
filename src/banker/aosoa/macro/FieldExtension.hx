@@ -70,8 +70,8 @@ class FieldExtension {
 		Adds `access` to `this` field.
 		@return `this` field.
 	**/
-	public static function addAccess(_this: Field, access: Access): Field {
-		_this.access.push(access);
+	public static function setAccess(_this: Field, access: Array<Access>, preserve = true): Field {
+		_this.access = if (preserve) _this.access.concat(access) else access;
 		return _this;
 	}
 

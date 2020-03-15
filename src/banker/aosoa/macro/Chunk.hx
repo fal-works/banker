@@ -221,7 +221,7 @@ class Chunk {
 
 					final vectorType = macro:banker.vector.WritableVector<$varType>;
 					final chunkField = buildField.clone(true)
-						.setDoc(documentation).setVariableType(vectorType).addAccess(AFinal);
+						.setDoc(documentation).setVariableType(vectorType).setAccess([AFinal]);
 					chunkFields.push(chunkField);
 
 					final chunkBufferFieldName = buildFieldName + "ChunkBuffer";
@@ -303,6 +303,11 @@ class Chunk {
 			if (argument.argumentIsWriteIndex()) {
 				iArgumentIndex = k;
 				debug('  - i ... Found index for write access.');
+				continue;
+			}
+
+			if (argument.argumentIsDisuse()) {
+				debug('  - disuse ... Found special variable for disusing entity.');
 				continue;
 			}
 

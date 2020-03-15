@@ -33,6 +33,10 @@ class MacroExtension {
 	public static function argumentIsWriteIndex(argument: FunctionArg): Bool
 		return argument.name == "i" && unifyComplex(argument.type, intType);
 
+	public static function argumentIsDisuse(argument: FunctionArg): Bool
+		return argument.name == "disuse" && unifyComplex(argument.type, boolType);
+
 	static final intType: ComplexType = (macro:Int);
+	static final boolType: ComplexType = (macro:Bool);
 }
 #end

@@ -9,9 +9,11 @@ class Actor implements banker.aosoa.Structure {
 		println('$x, $y');
 	}
 
-	static function disuseIf20(x: Float, y: Float) {
+	static function disuseIf20(x: Float, y: Float, disuse: Bool) {
 		if (x == 20) disuse = true;
 	}
+
+	public function new() {}
 
 	@:banker.useEntity
 	static function useEmpty() {}
@@ -41,7 +43,7 @@ class Actor implements banker.aosoa.Structure {
 class AosoaTest {
 	static function basic() {
 		describe("This goes without error.");
-		final actorAosoa = new Actor(2, 3);
+		final actorAosoa = Actor.createAosoa(2, 3);
 		final firstChunk = actorAosoa.chunks[0];
 		final x = firstChunk.x[0];
 		final y = firstChunk.y[0];
@@ -53,7 +55,7 @@ class AosoaTest {
 
 	static function iterate() {
 		describe("This prints 5 lines of position infos.");
-		final actorAosoa = new Actor(2, 3);
+		final actorAosoa = Actor.createAosoa(2, 3);
 		for (i in 0...5) actorAosoa.useEmpty();
 		actorAosoa.synchronize();
 		actorAosoa.print();
@@ -63,7 +65,7 @@ class AosoaTest {
 
 	static function use() {
 		describe("This goes without error.");
-		final actorAosoa = new Actor(2, 3);
+		final actorAosoa = Actor.createAosoa(2, 3);
 		actorAosoa.use(10, 20);
 		final chunk = actorAosoa.chunks[0];
 		actorAosoa.synchronize();
@@ -77,7 +79,7 @@ class AosoaTest {
 
 	static function disuse() {
 		describe("This prints: 10, 40, 30, 50");
-		final actorAosoa = new Actor(4, 2);
+		final actorAosoa = Actor.createAosoa(4, 2);
 
 		actorAosoa.use(10, 10);
 		actorAosoa.use(20, 20); // will be removed
