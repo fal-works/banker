@@ -34,8 +34,14 @@ class FieldExtension {
 		@return Shallow copy of `this`.
 	**/
 	public static function clone(_this: Field, preservePosition = false): Field {
-		final cloned = Reflect.copy(_this);
-		if (!preservePosition) cloned.pos = Context.currentPos();
+		final cloned: Field = {
+			name: _this.name,
+			doc: _this.doc,
+			access: _this.access.copy(),
+			kind: _this.kind,
+			pos: if (!preservePosition) Reflect.copy(_this.pos) else Context.currentPos(),
+			meta: if (_this.meta != null) _this.meta.copy() else null
+		};
 		return cloned;
 	}
 
