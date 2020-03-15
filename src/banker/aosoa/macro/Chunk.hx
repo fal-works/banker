@@ -192,7 +192,7 @@ class Chunk {
 					}
 					else {
 						functions.push(func);
-						debug('  Registered as an chunk-iterator.');
+						debug('  Registered as a Chunk iterator.');
 					}
 				case FVar(varType, initialValue):
 					if (varType == null) {
@@ -257,7 +257,6 @@ class Chunk {
 			final iterator = createIterator(func, variables);
 			iterators.push(iterator);
 			chunkFields.push(iterator.field);
-			debug('  Created.');
 		}
 
 		final useMethods: Array<ChunkMethod> = [];
@@ -268,7 +267,6 @@ class Chunk {
 			final useMethod = createUse(func, variables);
 			useMethods.push(useMethod);
 			chunkFields.push(useMethod.field);
-			debug('  Created.');
 		}
 
 		return {
@@ -293,7 +291,7 @@ class Chunk {
 		final declareLocalValue: Array<Expr> = [];
 		final externalArguments: Array<FunctionArg> = [];
 
-		debug('Scanning arguments.');
+		debug('  Scanning arguments.');
 		for (k in 0...arguments.length) {
 			final argument = arguments[k];
 			final type = argument.type;
@@ -305,12 +303,12 @@ class Chunk {
 				if (variable.name != argument.name) continue;
 
 				if (variable.type.unifyComplex(argument.type)) {
-					debug('- ${argument.name} ... Found corresponding variable.');
+					debug('  - ${argument.name} ... Found corresponding variable.');
 					associated = true;
 					break;
 				}
 				if (variable.vectorType.unifyComplex(argument.type)) {
-					debug('- ${argument.name} ... Found corresponding vector.');
+					debug('  - ${argument.name} ... Found corresponding vector.');
 					associated = true;
 					isVector = true;
 					break;
@@ -318,7 +316,7 @@ class Chunk {
 			}
 
 			if (!associated) {
-				debug('- ${argument.name} ... No corresponding variable. Add to external arguments.');
+				debug('  - ${argument.name} ... No corresponding variable. Add to external arguments.');
 				externalArguments.push(argument);
 				continue;
 			}

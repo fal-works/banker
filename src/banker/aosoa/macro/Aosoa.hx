@@ -12,6 +12,8 @@ class Aosoa {
 		classPosition: Position,
 		?constructorPosition: Position
 	): Fields {
+		debug("Start rebuilding fields.");
+
 		final chunkComplexType: ComplexType = TPath(chunkTypePath);
 
 		final aosoaClass = macro class {
@@ -43,13 +45,23 @@ class Aosoa {
 
 		final fields = aosoaClass.fields;
 
+		debug('  Add iterator methods:');
 		final iterators = chunk.iterators;
-		for (i in 0...iterators.length)
-			fields.push(createIterater(iterators[i]));
+		for (i in 0...iterators.length) {
+			final iterator = createIterater(iterators[i]);
+			fields.push(iterator);
+			debug('  - ${iterator.name}');
+		}
 
+		debug('  Add use methods:');
 		final useMethods = chunk.useMethods;
-		for (i in 0...useMethods.length)
-			fields.push(createUseMethod(useMethods[i]));
+		for (i in 0...useMethods.length) {
+			final useMethod = createUseMethod(useMethods[i]);
+			fields.push(useMethod);
+			debug('  - ${useMethod.name}');
+		}
+
+		debug("  Rebuilt fields.");
 
 		return fields;
 	}
