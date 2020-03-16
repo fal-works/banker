@@ -34,9 +34,8 @@ class BuildMacro {
 		final chunkType = MacroTools.defineSubTypes([chunk.typeDefinition])[0];
 		debug('Created Chunk class: ${chunkType.pathString}');
 
-		final aosoaClassName = localClassName + "Aosoa";
 		final aosoaClass = Aosoa.create(
-			aosoaClassName,
+			localClassName,
 			chunk,
 			chunkType,
 			position
@@ -44,23 +43,9 @@ class BuildMacro {
 		final aosoaType = MacroTools.defineSubTypes([aosoaClass])[0];
 		debug('Created Aosoa class: ${aosoaType.pathString}');
 
-		final aosoaTypePath = aosoaType.path;
-		final createAosoaMethod: Field = {
-			name: "createAosoa",
-			kind: FFun({
-				args: [
-					{ name: "chunkSize", type: (macro:Int)},
-					{ name: "chunkCount", type: (macro:Int)}
-				],
-				ret: aosoaType.complex,
-				expr: macro return new $aosoaTypePath(chunkSize, chunkCount)
-			}),
-			access: [APublic, AStatic],
-			pos: position
-		};
+		final createAosoaMethod = Aosoa.createAosoaCreatorMethod(aosoaType, position);
 		buildFields.push(createAosoaMethod);
-
-		for (field in aosoaClass.fields) trace('${field.name}: ${field.pos}');
+		debug('Added method: $localClassName::createAosoa()');
 
 		debug("End building.");
 		return buildFields;

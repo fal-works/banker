@@ -58,9 +58,22 @@ class Chunk {
 
 		final chunkClassName = structureName + "Chunk";
 		final chunkClass: TypeDefinition = macro class $chunkClassName {
+			/**
+				The largest index of entities that are currently in use.
+				The chunk iterates until (but not including) this index when iterating entities.
+			**/
 			public var endReadIndex(default, null) = 0;
+
+			/**
+				The first index of entities that are currently not in use.
+				The chunk uses this index when using a new entity.
+			**/
 			public var nextWriteIndex(default, null) = 0;
 
+			/**
+				Table that maps the indices between the main vector and the WRITE-buffer vector.
+				The indices in the buffer vector may change when disusing any entity.
+			**/
 			final readWriteIndexMap: banker.vector.WritableVector<Int>;
 
 			public function new(
@@ -71,6 +84,9 @@ class Chunk {
 				this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
 			}
 
+			/**
+				Synchronizes all vectors and their corresponding buffer vectors.
+			**/
 			public function synchronize(
 				chunkSize: Int,
 				defaultReadWriteIndexMap: banker.vector.Vector<Int>
@@ -87,8 +103,9 @@ class Chunk {
 				return nextWriteIndex;
 			}
 		};
+
 		chunkClass.fields = chunkClass.fields.concat(prepared.chunkFields);
-		chunkClass.doc = 'Chunk (or SoA: Structure of Arrays) of `$structureName`.';
+		chunkClass.doc = 'Chunk (or SoA: Structure of Arrays) class generated from the original Structure class `$structureName`.';
 		chunkClass.pos = position;
 
 		return {

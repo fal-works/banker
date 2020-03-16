@@ -9,24 +9,49 @@ class Aosoa {
 		which consists of multiple chunk instances.
 	**/
 	public static function create(
-		aosoaClassName: String,
+		structureName: String,
 		chunk: Chunk.ChunkDefinition,
 		chunkType: DefinedType,
 		classPosition: Position
 	): TypeDefinition {
 		debug("Start to create Aosoa class.");
 
+		final aosoaClassName = structureName + "Aosoa";
+
 		final chunkTypePath = chunkType.path;
 		final chunkComplexType = chunkType.complex;
 
 		final aosoaClass = macro class $aosoaClassName {
+			/**
+				The chunks of which the Aosoa consists.
+			**/
 			public final chunks: banker.vector.Vector<$chunkComplexType>;
+
+			/**
+				The size of each chunk i.e. the length of each vector that a chunk contains.
+			**/
 			public final chunkSize: Int;
 
+			/**
+				Default values for `readWriteIndexMap` of the chunk class.
+			**/
 			final defaultReadWriteIndexMap: banker.vector.Vector<Int>;
+
+			/**
+				The largest index of chunks that have any entity currently in use.
+				The Aosoa iterates chunks until (but not including) this index.
+			**/
 			var endReadChunkIndex = 0;
+
+			/**
+				The smallest index of chunks that have any entity currently not in use.
+				The Aosoa starts at this index when searching an available chunk to use a new entity.
+			**/
 			var nextWriteChunkIndex = 0;
 
+			/**
+				Called from `createAosoa()` that is added to the original Structure class by the build macro.
+			**/
 			public function new(chunkSize: Int, chunkCount: Int) {
 				final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkSize) i]);
 
@@ -38,6 +63,9 @@ class Aosoa {
 				this.defaultReadWriteIndexMap = defaultReadWriteIndexMap;
 			}
 
+			/**
+				Synchronizes all chunks that have any entity in use.
+			**/
 			public function synchronize() {
 				final chunks = this.chunks;
 				final chunkCount = chunks.length;
@@ -53,7 +81,7 @@ class Aosoa {
 					);
 
 					if (endReadEntityIndex > 0) usedChunkMaxIndex = chunkIndex;
-					else break;
+					else break; // TODO: do not break?
 				}
 
 				this.endReadChunkIndex = usedChunkMaxIndex + 1;
@@ -61,6 +89,7 @@ class Aosoa {
 		}
 
 		aosoaClass.pos = classPosition;
+		aosoaClass.doc = 'Aosoa class generated from the original structure class `$structureName`.';
 
 		final fields = aosoaClass.fields;
 
@@ -83,6 +112,33 @@ class Aosoa {
 		debug("  Created Aosoa class.");
 
 		return aosoaClass;
+	}
+
+	public static function createAosoaCreatorMethod(aosoaType: DefinedType, position: Position): Field {
+		final aosoaTypePath = aosoaType.path;
+		final functionBody = macro return new $aosoaTypePath(chunkSize, chunkCount);
+		var documentation = 'Creates an AoSoA (Array of Structure of Arrays) instance.';
+		documentation += '\n\nAn Aosoa consists of multiple Chunks (or SoA: Structure of Arrays),';
+		documentation += '\nand each Chunk consists of vectors containing the data of entities.';
+		documentation += '\nThe total capacity of entities will be `chunkSize * chunkCount`.';
+		documentation += '\n@param chunkSize The capacity of each Chunk i.e. the length of each vector that a Chunk contains.';
+		documentation += '\n@param chunkCount The number of Chunks that the AoSoA contains.';
+
+		final createAosoaMethod: Field = {
+			name: "createAosoa",
+			kind: FFun({
+				args: [
+					{ name: "chunkSize", type: (macro:Int)},
+					{ name: "chunkCount", type: (macro:Int)}
+				],
+				ret: aosoaType.complex,
+				expr: functionBody
+			}),
+			access: [APublic, AStatic],
+			doc: documentation,
+			pos: position
+		};
+		return createAosoaMethod;
 	}
 
 	/**
