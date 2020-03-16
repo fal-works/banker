@@ -13,8 +13,7 @@ This library provides:
 (1) Strict distinction between Read-only and Writable.  
 (2) Uses `hl.NativeArray` on HashLink target.
 - Array-based List, Stack, Queue, Deque, Set, Map, ...  
-Internally based on the vector type above.  
-Also going to add other implementations.
+Internally based on the vector type above. Also going to add other implementations.
 - "Watermark" feature for profiling usage ratio of data collection objects.
 - Generate [AoSoA (Array of Structures of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA) from any user-defined class. (Experimental)
 - Some other small features like `Array` extensions or `ObjectPool` classes.
@@ -95,10 +94,9 @@ class Main {
 }
 ```
 
-`ObjectPool` can also be extended for your own purpose.
+`ObjectPool` can also be extended for your own purpose, like `SafeObjectPool` does.
 
-Also `SafeObjectPool` is derived from `ObjectPool`, so that it does  
-boundary checks and does not crash even if it is empty/full  
+`SafeObjectPool` does boundary checks and does not crash even if it is empty/full  
 (note that it requires additional memory allocation when trying to get from an empty pool).
 
 
@@ -135,8 +133,7 @@ See also:
 [Data-oriented design](https://en.wikipedia.org/wiki/Data-oriented_design)
 
 Caveats:  
-The main purpose is improving the performance, however I still don't know much  
-about low-level programming and I might be doing everything wrong!
+The main purpose is improving the performance, however I still don't know much about low-level programming and I might be doing everything wrong!
 
 ### Example
 
@@ -223,27 +220,22 @@ Actor.hx:26: { x: 13, y: 3 }
 
 An AoSoA consists of multiple Chunks (or SoA: Structure of Arrays).
 
-Each chunk has a fixed capacity and contains vector data that are converted  
-from the original `Structure` class, with the same variable names.
+Each chunk has a fixed capacity and contains vector data that are converted from the original `Structure` class, with the same variable names.
 
 Regarding the user-defined functions:
 
--	Any static function with `@:banker.useEntity` metadata is converted to a method  
-which finds a new available entity and sets initial values to it.
-- Any other static function is converted to an iterator method,  
-which iterates all entities that are currently in use.
+-	Any static function with `@:banker.useEntity` metadata is converted to a method which finds a new available entity and sets initial values to it.
+- Any other static function is converted to an iterator method, which iterates all entities that are currently in use.
 
 Regarding the function arguments:
 
-- Arguments that match any of the variable names are internally  
-provided in the AoSoA/Chunk so you don't need to pass them manually.
-- Define an argument with the original type (e.g. `x: Float`) to get READ access, or  
-with the vector type (`x: banker.vector.WritableVector<Float>`) for WRITE access.
-- If you need WRITE access, you also have to include a special argument `i: Int`  
-and use it as an index for writing to vectors.
-- For disusing (releasing) an entity, define a special argument `disuse: Bool` in  
-any iterator function, and write `disuse = true` under any condition you'd like.  
-This will release the entity the next time you call `synchronize()` (below).
+- Arguments that match any of the variable names are internally provided in the AoSoA/Chunk so you don't need to pass them manually.
+- Define an argument with the original type (e.g. `x: Float`) to get READ access.
+- Define an argument with the vector type (e.g. `x: banker.vector.WritableVector<Float>`) for WRITE access.
+- If you need WRITE access, you also have to include a special argument `i: Int`.  
+Then use it as an index for writing to vectors.
+- For disusing (releasing) an entity, define a special argument `disuse: Bool` in any iterator function.  
+Then write `disuse = true` under any condition. This will release the entity the next time you call `synchronize()` (below).
 
 Other:
 
@@ -256,9 +248,7 @@ The changes are buffered and are not reflected unless you call this.
 
 Classes in `container`/`linker`/`pool` packages use [ripper](https://github.com/fal-works/ripper) library.
 
-If you are using [completion server](https://haxe.org/manual/cr-completion-server.html),
-sometimes it might go wrong and raise odd errors due to the reusing of macro context.
-
+If you are using [completion server](https://haxe.org/manual/cr-completion-server.html), sometimes it might go wrong and raise odd errors due to the reusing of macro context.  
 In that case you may have to reboot it manually (if VSCode, `>Haxe: Restart Language Server`).
 
 
