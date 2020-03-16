@@ -6,28 +6,10 @@ using sneaker.format.StringExtension;
 import haxe.macro.Type;
 import haxe.macro.Expr;
 import haxe.macro.Context;
+import sneaker.macro.MacroCaster;
 import banker.aosoa.macro.MacroTypes;
 
 class MacroTools {
-	/**
-		@param param `Type.TypeParameter`
-		@return Enum `Expr.TypeParam` (instance `TPType`)
-	**/
-	public static function typeParameterToTypeParam(param: TypeParameter): TypeParam
-		return TPType(Context.toComplexType(param.t));
-
-	/**
-		@param `Type.Ref<ClassType>`
-		@return `Expr.TypePath`
-	**/
-	public static function typeRefToTypePath(typeRef: Ref<ClassType>): TypePath {
-		final type = typeRef.get();
-		return {
-			pack: type.pack,
-			name: type.name,
-			params: type.params.map(typeParameterToTypeParam)
-		}
-	}
 
 	/**
 		Define new imports in the current module in which the macro was called.
@@ -37,7 +19,7 @@ class MacroTools {
 			Context.getLocalModule(),
 			[],
 			Context.getLocalImports().concat(importExpressions),
-			Context.getLocalUsing().map(typeRefToTypePath)
+			Context.getLocalUsing().map(MacroCaster.typeRefToTypePath)
 		);
 	}
 
@@ -78,7 +60,7 @@ class MacroTools {
 			Context.getLocalModule(),
 			typeDefinitions,
 			Context.getLocalImports(),
-			Context.getLocalUsing().map(typeRefToTypePath)
+			Context.getLocalUsing().map(MacroCaster.typeRefToTypePath)
 		);
 
 		final definedTypes: Array<DefinedType> = [];
