@@ -250,6 +250,9 @@ Other:
 
 - Each AoSoA instance has a method `synchronize()`, which reflects use/disuse/other changes of entities.  
 The changes are buffered and are not reflected unless you call this.
+- Type hint is mandatory when declaring avariable in your `Structure` class.
+You also have to set an initializing value at the declaration, e.g. `var x: Float = 0`.
+Alternatively, add metadata `@:banker.factory(anyFactoryFunction)` to the variable to use the factory function instead of filling all entities with the same value.
 - Set the compiler flag `sneaker_macro_log_level` to 500 or more to show debug logs during the class generation.
 
 
