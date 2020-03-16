@@ -7,12 +7,22 @@ Data containers.
 
 ## Features
 
-- Fixed-length array (or `Vector`)
-- Array-based List, Stack, Queue, Deque, Set, Map, ...
+This library provides:
 
-- Internally uses assertion feature of [sneaker](https://github.com/fal-works/sneaker) library, which means:  
-(1) Boundary checks in debug build, and  
-(2) Unsafe, but efficient access in release build
+- Fixed-length array (or "vector"). Unlike the standard one,  
+(1) Strict distinction between Read-only and Writable.  
+(2) Uses `hl.NativeArray` on HashLink target.
+- Array-based List, Stack, Queue, Deque, Set, Map, ...  
+Internally based on the vector type above.  
+Also going to add other implementations.
+- (Experimental)  
+Generate [AoSoA (Array of Structure of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA) from any of user-defined classes.
+
+Internally uses assertion feature of [sneaker](https://github.com/fal-works/sneaker) library, which means:  
+
+- Boundary checks in debug build, and  
+- Unsafe, but efficient access in release build
+
 
 ## When to use
 
@@ -30,6 +40,7 @@ Suited for following situations:
 - All of this is nothing but reinventing the wheel!
 - Don't know much about other libraries/frameworks
 - Developed within a week and not yet very well tested
+
 
 ## Structure
 
@@ -69,6 +80,10 @@ which enables you to check and adjust the capacity of each data collection objec
 
 Instances are grouped by the name of `Tag` that is attached to each instance.  
 About the `Tag`s, see also the [sneaker](https://github.com/fal-works/sneaker) library which underlies this feature.
+
+### package: aosoa
+
+
 
 #### How to use
 
