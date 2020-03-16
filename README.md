@@ -17,7 +17,7 @@ Internally based on the vector type above.
 Also going to add other implementations.
 - "Watermark" feature for profiling usage ratio of data collection objects.
 - Generate [AoSoA (Array of Structures of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA) from any user-defined class. (Experimental)
-- Some other small features like `Array` extensions.
+- Some other small features like `Array` extensions or `ObjectPool` classes.
 
 Internally uses assertion feature of [sneaker](https://github.com/fal-works/sneaker) library, which means:  
 
@@ -47,7 +47,7 @@ Suited for following situations:
 
 Utility functions/extensions for the basic `Array` type.
 
-Might more efficient than the standard `Lambda`.
+Might be more efficient than the standard `Lambda`.
 
 ## package: vector
 
