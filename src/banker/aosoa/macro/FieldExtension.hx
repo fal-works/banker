@@ -29,11 +29,5 @@ class FieldExtension {
 
 		return null;
 	}
-
-	/**
-		@return `true` if `this.name == "new"`.
-	**/
-	public static function isNew(_this: Field): Bool
-		return _this.name == "new";
 }
 #end
