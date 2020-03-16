@@ -176,7 +176,6 @@ class Aosoa {
 
 		final externalArguments = chunkIterator.externalArguments;
 		final argumentExpressions = externalArguments.map(argument -> macro $i{argument.name});
-		argumentExpressions.pop();
 
 		final functionBody = macro {
 			final chunks = this.chunks;
