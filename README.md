@@ -67,11 +67,39 @@ Provides object pool classes:
 - `ObjectPool<T>`
 - `SafeObjectPool<T>`
 
+Say you have a class named `Actor`, an example would be:
+
+```haxe
+import banker.pool.ObjectPool;
+
+class Main {
+	static function main() {
+		final factory = () -> new Actor();
+		final pool = new ObjectPool<Actor>(10, factory);
+
+		final actorA = pool.get();
+		final actorB = pool.get();
+		// pool.size == 8
+
+		pool.put(actorA);
+		pool.put(actorB);
+		// pool.size == 10
+	}
+}
+```
+
+`ObjectPool` can also be extended for your own purpose.
+
+Also `SafeObjectPool` is derived from `ObjectPool`, so that it does  
+boundary checks and does not crash even if it is empty/full.
+
+
 ## package: watermark
 
 If the compiler flag `banker_watermark_enable` is set, "watermark" feature is activated.
 
-This is a simple profiling feature for all data collection objects (in `container` and `linker` packages) with limited capacity.
+This is a simple profiling feature for all data collection objects (in `container`, `linker` and `pool` packages)
+that have limited capacity.
 
 It automatically records the maximum usage (size to capacity ratio) per instance group,  
 which enables you to check and adjust the capacity of each data collection object.
@@ -104,12 +132,12 @@ about low-level programming and I might be doing everything wrong!
 
 ### Example
 
-Define a class (`GameObject` here, which has x/y position data).
+Define a class (`Actor` here, which has x/y position data).
 
 ```haxe
 import banker.vector.WritableVector as Vec;
 
-class GameObject implements banker.aosoa.Structure {
+class Actor implements banker.aosoa.Structure {
 	/**
 		This will append a method `use(initialX, initialY)` to the AoSoA class.
 	**/
@@ -147,7 +175,7 @@ class GameObject implements banker.aosoa.Structure {
 }
 ```
 
-Then you can create an AoSoA by `GameObject.createAosoa(chunkSize, chunkCount);`.
+Then you can create an AoSoA by `Actor.createAosoa(chunkSize, chunkCount);`.
 
 Now use it as below:
 
@@ -155,7 +183,7 @@ Now use it as below:
 class Main {
 	static function main() {
 		// (2 entities per Chunk) * (3 Chunks) = (max 6 entities)
-		final actors = GameObject.createAosoa(2, 3);
+		final actors = Actor.createAosoa(2, 3);
 
 		trace("Use 4 entities and print them.");
 		for (i in 0...4) actors.use(i, i); // set both x and y to i
