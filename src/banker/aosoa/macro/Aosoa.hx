@@ -109,8 +109,6 @@ class Aosoa {
 			debug('  - ${useMethod.name}');
 		}
 
-		debug("  Created Aosoa class.");
-
 		return aosoaClass;
 	}
 
