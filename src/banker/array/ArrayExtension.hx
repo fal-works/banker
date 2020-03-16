@@ -1,92 +1,101 @@
 package banker.array;
 
 class ArrayExtension {
-	public static inline function get<T>(array: Array<T>, index: Int): T {
+	/**
+		@return The element at `index`.
+	**/
+	public static inline function get<T>(_this: Array<T>, index: Int): T {
 		#if !macro
-		assert(index >= 0 && index < array.length, null, "Out of bound.");
+		assert(index >= 0 && index < _this.length, null, "Out of bound.");
 		#end
 
 		#if cpp
-		return cpp.NativeArray.unsafeGet(array, index);
+		return cpp.NativeArray.unsafeGet(_this, index);
 		#else
-		return array[index];
+		return _this[index];
 		#end
 	}
 
+	/**
+		Sets `value` at `index`.
+	**/
 	public static inline function set<T>(
-		array: Array<T>,
+		_this: Array<T>,
 		index: Int,
 		value: T
 	): Void {
 		#if !macro
-		assert(index >= 0 && index < array.length, null, "Out of bound.");
+		assert(index >= 0 && index < _this.length, null, "Out of bound.");
 		#end
 
 		#if cpp
-		cpp.NativeArray.unsafeSet(array, index, value);
+		cpp.NativeArray.unsafeSet(_this, index, value);
 		#else
-		array[index] = value;
+		_this[index] = value;
 		#end
 	}
 
-	public static inline function getLast<T>(array: Array<T>): T {
+	/**
+		@return The last element of the array.
+	**/
+	public static inline function getLast<T>(_this: Array<T>): T {
 		#if cpp
-		return cpp.NativeArray.unsafeGet(array, array.length - 1);
+		return cpp.NativeArray.unsafeGet(_this, _this.length - 1);
 		#else
-		return array[array.length - 1];
+		return _this[_this.length - 1];
 		#end
 	}
 
+	/**
+		Fills the array with `value` from `startIndex` to (but not including) `endIndex`.
+		@return The filled array.
+	**/
 	public static inline function fillIn<T>(
-		array: Array<T>,
+		_this: Array<T>,
 		value: T,
 		startIndex: Int,
 		endIndex: Int
 	): Array<T> {
 		#if !macro
-		assert(startIndex >= 0 && endIndex < array.length);
+		assert(startIndex >= 0 && endIndex < _this.length);
 		#end
 
 		var i = startIndex;
 		while (i < endIndex) {
-			set(array, i, value);
+			set(_this, i, value);
 			++i;
 		}
 
-		return array;
+		return _this;
 	}
 
-	public static inline function fill<T>(array: Array<T>, value: T): Array<T> {
-		return fillIn(array, value, 0, array.length);
+	/**
+		Fills the array with `value`.
+		@return The filled array.
+	**/
+	public static inline function fill<T>(_this: Array<T>, value: T): Array<T> {
+		return fillIn(_this, value, 0, _this.length);
 	}
 
 	/**
 		Copies elements from source to destination position within a same array.
-		@param   array
-		@param   sourcePosition
-		@param   destinationPosition
-		@param   rangeLength - Number of elements to copy.
-		@return  Array<T> - The given array.
 	**/
-	#if (!cpp && !banker_generic_disable)
-	@:generic
-	#end
-	public static #if cpp inline #end function blitInternal<T>(
-		array: Array<T>,
+	public static inline function blitInternal<T>(
+		_this: Array<T>,
 		sourcePosition: Int,
 		destinationPosition: Int,
 		rangeLength: Int
-	): Array<T> {
+	): Void {
 		#if !macro
-		assert(sourcePosition + rangeLength <= array.length);
-		assert(destinationPosition + rangeLength <= array.length);
+		assert(sourcePosition + rangeLength <= _this.length);
+		assert(destinationPosition + rangeLength <= _this.length);
 		#end
 
 		#if cpp
 		cpp.NativeArray.blit(
-			array,
+			_this,
 			destinationPosition,
-			array,
+			_this,
 			sourcePosition,
 			rangeLength
 		);
@@ -98,7 +107,7 @@ class ArrayExtension {
 			while (i > sourcePosition) {
 				--i;
 				--k;
-				array[k] = array[i];
+				_this[k] = _this[i];
 			}
 		} else if (sourcePosition > destinationPosition) {
 			var i = sourcePosition;
@@ -106,104 +115,62 @@ class ArrayExtension {
 			final endI = sourcePosition + rangeLength;
 
 			while (i < endI) {
-				array[k] = array[i];
+				_this[k] = _this[i];
 				++i;
 				++k;
 			}
 		}
 		#end
-
-		return array;
-	}
-
-	/**
-		@return The index of the first found element that is `element == value`.
-	**/
-	public static inline function indexOfMatching<T>(
-		array: Array<T>,
-		predicate: (element: T) -> Bool
-	): Int {
-		final len = array.length;
-		var index = -1;
-		var i = 0;
-		while (i < len) {
-			if (predicate(get(array, i))) {
-				index = i;
-				break;
-			}
-			++i;
-		}
-
-		return index;
 	}
 
 	/**
 		@return `true` if the array contains an element that is `element == value`.
 	**/
-	public static inline function has<T>(array: Array<T>, value: T): Bool
-		return array.indexOf(value, 0) >= 0;
-
-	/**
-		@return `true` if the array contains any element that matches `predicate`.
-	**/
-	public static inline function hasAny<T>(
-		array: Array<T>,
-		predicate: (element: T) -> Bool
-	): Bool {
-		return indexOfMatching(array, predicate) >= 0;
-	}
+	public static inline function has<T>(_this: Array<T>, value: T): Bool
+		return _this.indexOf(value, 0) >= 0;
 
 	/**
 		@return The first found element that is `element == value`.
 	**/
 	public static inline function find<T>(
-		array: Array<T>,
+		_this: Array<T>,
 		value: T,
 		defaultValue: T
 	): T {
-		final index = array.indexOf(value, 0);
-		return if (index >= 0) get(array, index) else defaultValue;
+		final index = _this.indexOf(value, 0);
+		return if (index >= 0) get(_this, index) else defaultValue;
 	}
 
 	/**
-		@return The first found element that matches `predicate`.
+		Swaps elements at `indexA` and `indexB`.
 	**/
-	public static inline function findFirst<T>(
-		array: Array<T>,
-		predicate: (element: T) -> Bool,
-		defaultValue: T
-	): T {
-		final index = indexOfMatching(array, predicate);
-		return if (index >= 0) get(array, index) else defaultValue;
-	}
-
 	public static inline function swap<T>(
-		array: Array<T>,
+		_this: Array<T>,
 		indexA: Int,
 		indexB: Int
 	): Void {
 		#if !macro
-		assert(indexA >= 0 && indexA < array.length);
-		assert(indexB >= 0 && indexB < array.length);
+		assert(indexA >= 0 && indexA < _this.length);
+		assert(indexB >= 0 && indexB < _this.length);
 		#end
 
-		var tmp = get(array, indexA);
-		set(array, indexA, get(array, indexB));
-		set(array, indexB, tmp);
+		var tmp = get(_this, indexA);
+		set(_this, indexA, get(_this, indexB));
+		set(_this, indexB, tmp);
 	}
 
 	/**
 		Compares two arrays with `==` operator.
 		@return `true` if all elements are equal (including the order).
 	**/
-	public static inline function equals<T>(array: Array<T>, otherArray: Array<T>): Bool {
-		final len = array.length;
+	public static inline function equals<T>(_this: Array<T>, other: Array<T>): Bool {
+		final len = _this.length;
 
-		return if (otherArray.length != len) false; else {
+		return if (other.length != len) false; else {
 			var foundDifference = false;
 
 			for (i in 0...len) {
-				if (get(array, i) == get(otherArray, i)) continue;
+				if (get(_this, i) == get(other, i)) continue;
 
 				foundDifference = true;
 				break;
@@ -218,17 +185,17 @@ class ArrayExtension {
 		@return `true` if all elements are equal (including the order).
 	**/
 	public static inline function compare<T>(
-		array: Array<T>,
-		otherArray: Array<T>,
-		compare: (a: T, b: T) -> Bool
+		_this: Array<T>,
+		other: Array<T>,
+		comparator: (a: T, b: T) -> Bool
 	): Bool {
-		final len = array.length;
+		final len = _this.length;
 
-		return if (otherArray.length != len) false; else {
+		return if (other.length != len) false; else {
 			var foundDifference = false;
 
 			for (i in 0...len) {
-				if (compare(get(array, i), get(otherArray, i))) continue;
+				if (comparator(get(_this, i), get(other, i))) continue;
 
 				foundDifference = true;
 				break;

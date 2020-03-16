@@ -3,9 +3,12 @@ package banker.array;
 using banker.array.ArrayExtension;
 
 /**
-	Static utility functions for `Array<T>`.
+	Static utility functions for `Array`.
 **/
 class ArrayTools {
+	/**
+		@return New array with length `size`.
+	**/
 	public static function allocate<T>(size: Int): Array<T> {
 		#if !macro
 		assert(size < 0, null, "Passed invalid size.");
@@ -56,7 +59,7 @@ class ArrayTools {
 	/**
 		Copies elements from source to destination beginning at index zero.
 	**/
-	public static inline function copyTo<T>(
+	public static inline function blitZero<T>(
 		source: Array<T>,
 		destination: Array<T>,
 		rangeLength: Int
