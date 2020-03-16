@@ -1,1 +1,4 @@
 # Default parameters for haxelib
+
+-lib sneaker
+-lib ripper
