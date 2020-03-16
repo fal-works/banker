@@ -183,7 +183,8 @@ class Chunk {
 						continue;
 					}
 
-					if (func.ret != null) {
+					final returnType = func.ret;
+					if (returnType != null && !returnType.unifyComplex(ComplexTypes.voidType)) {
 						debug('  Function with return value. Skipping.');
 						continue;
 					}
