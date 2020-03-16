@@ -3,15 +3,15 @@
 	"url": "https://github.com/fal-works/banker/",
 	"license": "MIT",
 	"tags": [],
-	"description": "Data containers.",
-	"version": "0.0.1",
+	"description": "Suite of GC-free data structures. What we need is efficiency!",
+	"version": "0.1.0",
 	"classPath": "src/",
 	"releasenote": "Initial release, everything may change in future.",
 	"contributors": [
 		"fal-works"
 	],
 	"dependencies": {
-		"sneaker": "0.5.0-alpha",
-		"ripper": "0.1.0"
+		"sneaker": "0.6.0",
+		"ripper": "0.2.0"
 	}
 }
