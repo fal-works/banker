@@ -1,9 +1,10 @@
 package banker.aosoa.macro;
 
 #if macro
-using Lambda;
+using banker.array.ArrayFunctionalExtension;
 
 import haxe.macro.Context;
+import sneaker.macro.FieldExtension;
 
 class BuildMacro {
 	/**
@@ -23,11 +24,11 @@ class BuildMacro {
 		final position = Context.currentPos();
 		final buildFields = Context.getBuildFields();
 
+		final buildFieldClones = buildFields.map(FieldExtension.clone);
+		buildFieldClones.forEach(field -> field.pos = position);
+
 		final chunk = Chunk.create(
-			buildFields.map(FieldExtension.clone).map(field -> {
-				field.pos = position;
-				field;
-			}),
+			buildFieldClones,
 			localClassName,
 			position
 		);
