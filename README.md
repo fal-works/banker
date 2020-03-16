@@ -16,7 +16,7 @@ This library provides:
 Internally based on the vector type above.  
 Also going to add other implementations.
 - (Experimental)  
-Generate [AoSoA (Array of Structure of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA) from any of user-defined classes.
+Generate [AoSoA (Array of Structures of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA) from any of user-defined classes.
 
 Internally uses assertion feature of [sneaker](https://github.com/fal-works/sneaker) library, which means:  
 
@@ -92,44 +92,44 @@ banker.watermark.Watermark.printData();
 ## package: aosoa
 
 First create your entity class, and implement `banker.aosoa.Structure`,  
-which enables you to create an [AoSoA (Array of Structure of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA).
+which enables you to use an [AoSoA (Array of Structures of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA)  
+generated from your original class.
+
+See also:  
+[Data-oriented design](https://en.wikipedia.org/wiki/Data-oriented_design)
+
+Caveats:  
+The main purpose is improving the performance, however I still don't know much  
+about low-level programming and I might be doing everything wrong!
 
 ### Example
 
-Define a class (`Actor` here, which has x/y position data).
+Define a class (`GameObject` here, which has x/y position data).
 
 ```haxe
 import banker.vector.WritableVector as Vec;
 
-class Actor implements banker.aosoa.Structure {
+class GameObject implements banker.aosoa.Structure {
 	/**
-		This will append a method `use(initialX, initialY)`
-		to the AoSoA class.
-		`x`, `y` and `i` are provided interanlly/automatically.
+		This will append a method `use(initialX, initialY)` to the AoSoA class.
 	**/
 	@:banker.useEntity
 	static function use(
-		x: Vec<Float>,
-		y: Vec<Float>,
-		initialX: Float,
-		initialY: Float,
-		i: Int
+		x: Vec<Float>, y: Vec<Float>, i: Int, initialX: Float, initialY: Float
 	): Void {
 		x[i] = initialX;
 		y[i] = initialY;
 	}
 
 	/**
-		This will append a method `print()` (without arguments)
-		to the AoSoA class.
+		This will append a method `print()` (without arguments) to the AoSoA.
 	**/
 	static function print(x: Float, y: Float): Void {
 		trace('{ x: $x, y: $y }');
 	}
 
 	/**
-		This will append a `moveHorizontal(dx)` to the AoSoA class.
-		Runs `x += dx` for each entity.
+		This will append `moveHorizontal(dx)`.
 	**/
 	static function moveHorizontal(
 		x: Vec<Float>,
@@ -147,15 +147,15 @@ class Actor implements banker.aosoa.Structure {
 }
 ```
 
-Then you can create an AoSoA by `Actor.createAosoa(chunkSize, chunkCount);`.
+Then you can create an AoSoA by `GameObject.createAosoa(chunkSize, chunkCount);`.
 
-Now use them as the below:
+Now use it as below:
 
 ```haxe
 class Main {
 	static function main() {
 		// (2 entities per Chunk) * (3 Chunks) = (max 6 entities)
-		final actors = Actor.createAosoa(2, 3);
+		final actors = GameObject.createAosoa(2, 3);
 
 		trace("Use 4 entities and print them.");
 		for (i in 0...4) actors.use(i, i); // set both x and y to i
@@ -164,18 +164,31 @@ class Main {
 
 		trace("Move all and print again.");
 		actors.moveHorizontal(10); // x += 10 for each
-		actors.synchronize(); // Sync again
+		actors.synchronize();
 		actors.print();
 	}
 }
+```
+
+```
+Main.hx:6: Use 4 entities and print them.
+Actor.hx:26: { x: 0, y: 0 }
+Actor.hx:26: { x: 1, y: 1 }
+Actor.hx:26: { x: 2, y: 2 }
+Actor.hx:26: { x: 3, y: 3 }
+Main.hx:11: Move all and print again.
+Actor.hx:26: { x: 10, y: 0 }
+Actor.hx:26: { x: 11, y: 1 }
+Actor.hx:26: { x: 12, y: 2 }
+Actor.hx:26: { x: 13, y: 3 }
 ```
 
 ### Details
 
 An AoSoA consists of multiple Chunks (or SoA: Structure of Arrays).
 
-Each chunk has a fixed capacity and contains vector type variables  
-that are converted from the original `Structure` class.
+Each chunk has a fixed capacity and contains vector data that are converted  
+from the original `Structure` class, with the same variable names.
 
 Regarding the user-defined functions:
 
@@ -186,7 +199,7 @@ which iterates all entities that are currently in use.
 
 Regarding the function arguments:
 
-- Arguments that match any of the original variable names are internally  
+- Arguments that match any of the variable names are internally  
 provided in the AoSoA/Chunk so you don't need to pass them manually.
 - Define an argument with the original type (e.g. `x: Float`) to get READ access, or  
 with the vector type (`x: banker.vector.WritableVector<Float>`) for WRITE access.
