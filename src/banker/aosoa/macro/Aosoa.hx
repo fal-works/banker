@@ -112,6 +112,9 @@ class Aosoa {
 		return aosoaClass;
 	}
 
+	/**
+		Creates a method field `createAosoa()` that creates an `aosoaType` instance.
+	**/
 	public static function createAosoaCreatorMethod(aosoaType: DefinedType, position: Position): Field {
 		final aosoaTypePath = aosoaType.path;
 		final functionBody = macro return new $aosoaTypePath(chunkSize, chunkCount);

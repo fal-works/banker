@@ -21,6 +21,9 @@ typedef ChunkVariable = {
 	vectorType: ComplexType
 };
 
+/**
+	Information about each function of entity.
+**/
 typedef ChunkFunction = {
 	name: String,
 	arguments: Array<FunctionArg>,
@@ -29,6 +32,10 @@ typedef ChunkFunction = {
 	position: Position
 }
 
+/**
+	Method field for Chunk class.
+	Generated from `ChunkFunction`.
+**/
 typedef ChunkMethod = {
 	field: Field,
 	externalArguments: Array<FunctionArg>
