@@ -53,19 +53,19 @@ Might more efficient than the standard `Lambda`.
 
 Fixed-length array.
 
-![class diagram of vector package](docs/vector.svg)
+![Class diagram. Visit GitHub repo for details.](docs/vector.svg)
 
 ## package: container
 
 Collection classes with 1 type parameter.
 
-![class diagram of container package](docs/container.svg)
+![Class diagram. Visit GitHub repo for details.](docs/container.svg)
 
 ## package: linker
 
 Collection classes with 2 type parameters.
 
-![class diagram of linker package](docs/linker.svg)
+![Class diagram. Visit GitHub repo for details.](docs/linker.svg)
 
 ## package: pool
 
@@ -247,9 +247,9 @@ This will release the entity the next time you call `synchronize()` (below).
 
 Other:
 
-- Each AoSoA instance has a method `synchronize()`, which reflects  
-use/disuse/other changes of entities.  
+- Each AoSoA instance has a method `synchronize()`, which reflects use/disuse/other changes of entities.  
 The changes are buffered and are not reflected unless you call this.
+- Set the compiler flag `sneaker_macro_log_level` to 500 or more to show debug logs during the class generation.
 
 
 ## Doesn't work?
@@ -264,10 +264,12 @@ In that case you may have to reboot it manually (if VSCode, `>Haxe: Restart Lang
 
 ## Compilation flags
 
-|flag|description|
-|---|---|
-|banker_watermark_enable|Enables watermark mode (see above).|
-|banker_generic_disable|Disables `@:generic` meta.|
+|library|flag|description|
+|---|---|---|
+|banker|banker_watermark_enable|Enables watermark mode (see above).|
+|banker|banker_generic_disable|Disables `@:generic` meta.|
+|sneaker|sneaker_macro_log_level|Threshold for filtering macro logs. 500 or more to show all, less than 300 to hide all.|
+|sneaker|sneaker_macro_message_level|Similar to above. See [sneaker](https://github.com/fal-works/sneaker) for more details.|
 
 
 ## Dependencies
