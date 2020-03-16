@@ -178,9 +178,13 @@ class Chunk {
 
 			switch buildField.kind {
 				case FFun(func):
-					// Must be static and have no return value
-					if (access == null || !access.has(AStatic) || func.ret != null) {
-						debug('  Skipping.');
+					if (access == null || !access.has(AStatic)) {
+						debug('  Function that is not static. Skipping.');
+						continue;
+					}
+
+					if (func.ret != null) {
+						debug('  Function with return value. Skipping.');
 						continue;
 					}
 
