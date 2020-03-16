@@ -1,17 +1,14 @@
 package banker.aosoa.macro;
 
 #if macro
-using Lambda;
-using haxe.EnumTools;
 using sneaker.macro.FieldExtension;
 using banker.array.ArrayExtension;
-using banker.type_extension.NullableExtension;
 using banker.aosoa.macro.FieldExtension;
 using banker.aosoa.macro.MacroExtension;
 
-import haxe.macro.Context;
 import sneaker.macro.ComplexTypes;
-import banker.aosoa.macro.MacroTypes;
+import sneaker.macro.Types;
+import sneaker.macro.MacroComparator.unifyComplex;
 
 /**
 	Information about each variable of entity.
@@ -192,7 +189,7 @@ class Chunk {
 					}
 
 					final returnType = func.ret;
-					if (returnType != null && !returnType.unifyComplex(ComplexTypes.voidType)) {
+					if (returnType != null && !unifyComplex(returnType, ComplexTypes.voidType)) {
 						debug('  Function with return value. Skipping.');
 						continue;
 					}
@@ -347,12 +344,12 @@ class Chunk {
 				final variable = variables[m];
 				if (variable.name != argument.name) continue;
 
-				if (variable.type.unifyComplex(argument.type)) {
+				if (unifyComplex(variable.type, argument.type)) {
 					debug('  - ${argument.name} ... Found corresponding variable.');
 					associated = true;
 					break;
 				}
-				if (variable.vectorType.unifyComplex(argument.type)) {
+				if (unifyComplex(variable.vectorType, argument.type)) {
 					debug('  - ${argument.name} ... Found corresponding vector.');
 					associated = true;
 					isVector = true;

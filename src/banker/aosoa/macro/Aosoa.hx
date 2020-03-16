@@ -1,7 +1,7 @@
 package banker.aosoa.macro;
 
 #if macro
-import banker.aosoa.macro.MacroTypes.DefinedType;
+import sneaker.macro.Types.DefinedType;
 
 class Aosoa {
 	/**

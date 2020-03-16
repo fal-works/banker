@@ -5,6 +5,8 @@ using banker.array.ArrayFunctionalExtension;
 
 import haxe.macro.Context;
 import sneaker.macro.FieldExtension;
+import sneaker.macro.ModuleTools;
+import sneaker.macro.Types.Fields;
 
 class BuildMacro {
 	/**
@@ -32,7 +34,7 @@ class BuildMacro {
 			localClassName,
 			position
 		);
-		final chunkType = MacroTools.defineSubTypes([chunk.typeDefinition])[0];
+		final chunkType = ModuleTools.defineSubTypes([chunk.typeDefinition])[0];
 		debug('Created Chunk class: ${chunkType.pathString}');
 
 		final aosoaClass = Aosoa.create(
@@ -41,7 +43,7 @@ class BuildMacro {
 			chunkType,
 			position
 		);
-		final aosoaType = MacroTools.defineSubTypes([aosoaClass])[0];
+		final aosoaType = ModuleTools.defineSubTypes([aosoaClass])[0];
 		debug('Created Aosoa class: ${aosoaType.pathString}');
 
 		final createAosoaMethod = Aosoa.createAosoaCreatorMethod(aosoaType, position);
