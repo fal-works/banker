@@ -42,6 +42,12 @@ Suited for following situations:
 - Developed within a week and not yet very well tested
 
 
+## package: array
+
+Utility functions/extensions for the basic `Array` type.
+
+Might be more efficient than the standard `Lambda`.
+
 ## package: vector
 
 Fixed-length array.
@@ -91,7 +97,8 @@ class Main {
 `ObjectPool` can also be extended for your own purpose.
 
 Also `SafeObjectPool` is derived from `ObjectPool`, so that it does  
-boundary checks and does not crash even if it is empty/full.
+boundary checks and does not crash even if it is empty/full  
+(note that it requires additional memory allocation when trying to get from an empty pool).
 
 
 ## package: watermark
@@ -242,6 +249,16 @@ Other:
 - Each AoSoA instance has a method `synchronize()`, which reflects  
 use/disuse/other changes of entities.  
 The changes are buffered and are not reflected unless you call this.
+
+
+## Doesn't work?
+
+Classes in `container`/`linker`/`pool` packages use [ripper](https://github.com/fal-works/ripper) library.
+
+If you are using [completion server](https://haxe.org/manual/cr-completion-server.html),
+sometimes it might go wrong and raise odd errors due to the reusing of macro context.
+
+In that case you may have to reboot it manually (if VSCode, `>Haxe: Restart Language Server`).
 
 
 ## Compilation flags
