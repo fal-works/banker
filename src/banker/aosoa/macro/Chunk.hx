@@ -10,6 +10,7 @@ using banker.aosoa.macro.FieldExtension;
 using banker.aosoa.macro.MacroExtension;
 
 import haxe.macro.Context;
+import sneaker.macro.ComplexTypes;
 import banker.aosoa.macro.MacroTypes;
 
 /**

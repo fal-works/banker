@@ -5,7 +5,7 @@ using haxe.macro.ComplexTypeTools;
 using haxe.macro.TypeTools;
 using banker.array.ArrayExtension;
 
-import banker.aosoa.macro.ComplexTypes.*;
+import sneaker.macro.ComplexTypes;
 
 class MacroExtension {
 	/**
@@ -43,12 +43,18 @@ class MacroExtension {
 		@return `true` if `argument` is the special argument `i`.
 	**/
 	public static function argumentIsWriteIndex(argument: FunctionArg): Bool
-		return argument.name == "i" && unifyComplex(argument.type, intType);
+		return argument.name == "i" && unifyComplex(
+			argument.type,
+			ComplexTypes.intType
+		);
 
 	/**
 		@return `true` if `argument` is the special argument `disuse`.
 	**/
 	public static function argumentIsDisuse(argument: FunctionArg): Bool
-		return argument.name == "disuse" && unifyComplex(argument.type, boolType);
+		return argument.name == "disuse" && unifyComplex(
+			argument.type,
+			ComplexTypes.boolType
+		);
 }
 #end
