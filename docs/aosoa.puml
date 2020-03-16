@@ -60,7 +60,7 @@ namespace after {
 
   note left of YourEntityChunk
   An iteration unit.
-  Basicaly you don't need
+  Basically you don't need
   to handle it directly
   end note
 
