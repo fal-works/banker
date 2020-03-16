@@ -24,7 +24,10 @@ class BuildMacro {
 		final buildFields = Context.getBuildFields();
 
 		final chunk = Chunk.create(
-			buildFields,
+			buildFields.map(FieldExtension.clone).map(field -> {
+				field.pos = position;
+				field;
+			}),
 			localClassName,
 			position
 		);
@@ -53,16 +56,11 @@ class BuildMacro {
 				expr: macro return new $aosoaTypePath(chunkSize, chunkCount)
 			}),
 			access: [APublic, AStatic],
-			pos: Context.currentPos()
+			pos: position
 		};
 		buildFields.push(createAosoaMethod);
 
-		sneaker.print.Printer.println("structure:");
-		for (field in buildFields) sneaker.print.Printer.println(field.name);
-		sneaker.print.Printer.println("chunk:");
-		for (field in chunk.typeDefinition.fields) sneaker.print.Printer.println(field.name);
-		sneaker.print.Printer.println("aosoa:");
-		for (field in aosoaClass.fields) sneaker.print.Printer.println(field.name);
+		for (field in aosoaClass.fields) trace('${field.name}: ${field.pos}');
 
 		debug("End building.");
 		return buildFields;

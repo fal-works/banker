@@ -62,10 +62,6 @@ class Aosoa {
 
 		aosoaClass.pos = classPosition;
 
-		final aosoaConstructor = aosoaClass.fields[5];
-		aosoaConstructor.doc = "Aosoa class.";
-		aosoaConstructor.pos = classPosition;
-
 		final fields = aosoaClass.fields;
 
 		debug('  Add iterator methods:');
@@ -96,8 +92,7 @@ class Aosoa {
 	static function createMethodField(
 		chunkField: Field,
 		functionBody: Expr,
-		externalArguments: Array<FunctionArg>,
-		position: Position
+		externalArguments: Array<FunctionArg>
 	): Field {
 		final builtFunction: Function = {
 			args: externalArguments,
@@ -108,7 +103,7 @@ class Aosoa {
 		final field: Field = {
 			name: chunkField.name,
 			kind: FFun(builtFunction),
-			pos: position,
+			pos: chunkField.pos,
 			doc: chunkField.doc,
 			access: [APublic]
 		};
@@ -147,8 +142,7 @@ class Aosoa {
 		return createMethodField(
 			chunkField,
 			functionBody,
-			externalArguments,
-			chunkIterator.position
+			externalArguments
 		);
 	}
 
@@ -181,8 +175,7 @@ class Aosoa {
 		return createMethodField(
 			chunkField,
 			functionBody,
-			externalArguments,
-			chunkUseMethod.position
+			externalArguments
 		);
 	}
 }

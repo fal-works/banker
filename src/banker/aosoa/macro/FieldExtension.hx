@@ -33,13 +33,13 @@ class FieldExtension {
 	/**
 		@return Shallow copy of `this`.
 	**/
-	public static function clone(_this: Field, preservePosition = false): Field {
+	public static function clone(_this: Field): Field {
 		final cloned: Field = {
 			name: _this.name,
 			doc: _this.doc,
 			access: _this.access.copy(),
 			kind: _this.kind,
-			pos: if (!preservePosition) Reflect.copy(_this.pos) else Context.currentPos(),
+			pos: Reflect.copy(_this.pos),
 			meta: if (_this.meta != null) _this.meta.copy() else null
 		};
 		return cloned;

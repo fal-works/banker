@@ -31,8 +31,7 @@ typedef ChunkFunction = {
 
 typedef ChunkMethod = {
 	field: Field,
-	externalArguments: Array<FunctionArg>,
-	position: Position
+	externalArguments: Array<FunctionArg>
 };
 
 /**
@@ -146,10 +145,10 @@ class Chunk {
 		final variables: Array<ChunkVariable> = [];
 		final functions: Array<ChunkFunction> = [];
 		final useFunctions: Array<ChunkFunction> = [];
-		var chunkFields: Array<Field> = [];
+		final chunkFields: Array<Field> = [];
 		final constructorExpressions: Array<Expr> = [];
-		final disuseExpressions: Array<Expr> = []; // not yet used
-		final synchronizeExpressions: Array<Expr> = []; // not yet used
+		final disuseExpressions: Array<Expr> = [];
+		final synchronizeExpressions: Array<Expr> = [];
 
 		for (i in 0...buildFields.length) {
 			final buildField = buildFields[i];
@@ -179,7 +178,7 @@ class Chunk {
 						documentation += '\n\nGenerated from function `$buildFieldName` in the original Structure class.';
 					}
 
-					final func:ChunkFunction = {
+					final chunkFunction:ChunkFunction = {
 						name: buildFieldName,
 						arguments: func.args.copy(),
 						expression: func.expr,
@@ -189,11 +188,11 @@ class Chunk {
 
 					if (useEntity) {
 						debug('  Found metadata: @:banker.useEntity');
-						useFunctions.push(func);
+						useFunctions.push(chunkFunction);
 						debug('  Registered as a function for using new entity.');
 					}
 					else {
-						functions.push(func);
+						functions.push(chunkFunction);
 						debug('  Registered as a Chunk iterator.');
 					}
 				case FVar(varType, initialValue):
@@ -220,8 +219,9 @@ class Chunk {
 						documentation = 'Vector generated from variable `$buildFieldName` in the original Structure class.';
 
 					final vectorType = macro:banker.vector.WritableVector<$varType>;
-					final chunkField = buildField.clone(true)
+					final chunkField = buildField.clone()
 						.setDoc(documentation).setVariableType(vectorType).setAccess([AFinal]);
+
 					chunkFields.push(chunkField);
 
 					final chunkBufferFieldName = buildFieldName + "ChunkBuffer";
@@ -373,7 +373,7 @@ class Chunk {
 		final field: Field = {
 			name: originalFunction.name,
 			kind: FFun(builtFunction),
-			pos: Context.currentPos(),
+			pos: originalFunction.position,
 			doc: originalFunction.documentation,
 			access: [APublic, AInline]
 		};
@@ -474,8 +474,7 @@ class Chunk {
 
 		return {
 			field: createMethodField(originalFunction, iteratorFunction),
-			externalArguments: externalArguments,
-			position: originalFunction.position
+			externalArguments: externalArguments
 		};
 	}
 
@@ -527,8 +526,7 @@ class Chunk {
 
 		return {
 			field: createMethodField(originalFunction, useFunction),
-			externalArguments: externalArguments,
-			position: originalFunction.position
+			externalArguments: externalArguments
 		};
 	}
 }
