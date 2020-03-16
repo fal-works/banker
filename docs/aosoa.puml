@@ -1,0 +1,95 @@
+@startuml aosoa
+
+' ---- (style) --------------------------------
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+' ---- (diagram) ------------------------------
+
+namespace before {
+  interface banker_aosoa_Structure
+  class YourEntity {
+    + move()
+    + use()
+  }
+  class Position
+  class Velocity
+
+  note left of YourEntity::move
+  Move just
+  one entity
+  end note
+
+  note left of YourEntity::use
+  Set
+  values
+  end note
+
+  banker_aosoa_Structure <|.. YourEntity
+  YourEntity "1    " o-- "1" Position
+  YourEntity "1 " o-- "1 " Velocity
+}
+
+namespace after {
+  class YourEntityChunk {
+  }
+
+  class YourEntityAosoa {
+    + move()
+    + use()
+    + synchronize()
+  }
+
+  note left of YourEntityChunk
+  An iteration unit.
+  Basicaly you don't need
+  to handle it directly
+  end note
+
+  note left of YourEntityAosoa::move
+  Move all entities
+  that are currently in use
+  end note
+
+  note left of YourEntityAosoa::use
+  Activate an entity
+  that is not in use
+  and set values
+  end note
+
+  note left of YourEntityAosoa::synchronize
+  Reflect any change
+  including use/disuse
+  end note
+
+
+  class Position
+  class Velocity
+
+  YourEntityAosoa "1 " *-- "n " YourEntityChunk
+  YourEntityChunk "1     " o-- "n " Position
+  YourEntityChunk "1 " o-- "n " Velocity
+}
+
+before.YourEntity -[hidden]right- after.YourEntityChunk
+before.banker_aosoa_Structure -[hidden]right- after.Position
+
+@enduml

@@ -135,6 +135,15 @@ See also:
 Caveats:  
 The main purpose is improving the performance, however I still don't know much about low-level programming and I might be doing everything wrong!
 
+### Overview
+
+Here `move()`/`use()` are user-defined functions;
+and `Position`/`Velocity` are user-defined values.
+
+You can define any variables and functions for your purpose.
+
+![Class diagram. Visit GitHub repo for details.](docs/aosoa.svg)
+
 ### Example
 
 Define a class (`Actor` here, which has x/y position data).
