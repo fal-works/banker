@@ -1,6 +1,6 @@
 # banker
 
-Data containers.
+Data strctures.
 
 **Requires Haxe 4** (tested with v4.0.5).
 
@@ -15,8 +15,9 @@ This library provides:
 - Array-based List, Stack, Queue, Deque, Set, Map, ...  
 Internally based on the vector type above.  
 Also going to add other implementations.
-- (Experimental)  
-Generate [AoSoA (Array of Structures of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA) from any of user-defined classes.
+- "Watermark" feature for profiling usage ratio of data collection objects.
+- Generate [AoSoA (Array of Structures of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA) from any user-defined class. (Experimental)
+- Some other small features like `Array` extensions.
 
 Internally uses assertion feature of [sneaker](https://github.com/fal-works/sneaker) library, which means:  
 
@@ -46,7 +47,7 @@ Suited for following situations:
 
 Utility functions/extensions for the basic `Array` type.
 
-Might be more efficient than the standard `Lambda`.
+Might more efficient than the standard `Lambda`.
 
 ## package: vector
 
