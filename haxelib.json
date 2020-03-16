@@ -6,12 +6,12 @@
 	"description": "Suite of GC-free data structures. What we need is efficiency!",
 	"version": "0.1.0",
 	"classPath": "src/",
-	"releasenote": "Initial release, everything may change in future.",
+	"releasenote": "Fix library dependency.",
 	"contributors": [
 		"fal-works"
 	],
 	"dependencies": {
 		"sneaker": "0.6.0",
-		"ripper": "0.2.0"
+		"ripper": "0.2.1"
 	}
 }
