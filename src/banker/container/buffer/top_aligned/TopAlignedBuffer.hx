@@ -58,6 +58,14 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		return vector.ref.joinIn(0, size, ", ");
 
 	/** @see banker.container.buffer.top_aligned.CloneExtension **/
+	public inline function export(): Vector<T>
+		return CloneExtension.export(this);
+
+	/** @see banker.container.buffer.top_aligned.CloneExtension **/
+	public inline function exportWritable(): WritableVector<T>
+		return CloneExtension.exportWritable(this);
+
+	/** @see banker.container.buffer.top_aligned.CloneExtension **/
 	public inline function cloneAsList(newCapacity = -1): ArrayList<T>
 		return CloneExtension.cloneAsList(this, newCapacity);
 

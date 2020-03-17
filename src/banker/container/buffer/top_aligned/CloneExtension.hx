@@ -4,6 +4,24 @@ import banker.container.ArrayList;
 
 class CloneExtension {
 	/**
+		@return Shallow copy of `this` as a `Vector`.
+	**/
+	public static inline function export<T>(
+		_this: TopAlignedBuffer<T>
+	): Vector<T> {
+		return _this.vector.ref.slice(0, _this.size);
+	}
+
+	/**
+		@return Shallow copy of `this` as a `WritableVector`.
+	**/
+	public static inline function exportWritable<T>(
+		_this: TopAlignedBuffer<T>
+	): WritableVector<T> {
+		return _this.vector.ref.sliceWritable(0, _this.size);
+	}
+
+	/**
 		Creates a copy.
 
 		- If `newCapacity` is negative,
