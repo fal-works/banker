@@ -15,6 +15,20 @@ class ConvertExtension {
 		return _this.valueVector.ref.slice(0, _this.size);
 	}
 
+	/** @see `banker.linker.interfaces.Convert` **/
+	public static inline function exportKeysWritable<K, V>(
+		_this: TopAlignedBuffer<K, V>
+	): WritableVector<K> {
+		return _this.keyVector.ref.sliceWritable(0, _this.size);
+	}
+
+	/** @see `banker.linker.interfaces.Convert` **/
+	public static inline function exportValuesWritable<K, V>(
+		_this: TopAlignedBuffer<K, V>
+	): WritableVector<V> {
+		return _this.valueVector.ref.sliceWritable(0, _this.size);
+	}
+
 	/**
 		Overwrites `destination` with:
 		- Same keys as `this`

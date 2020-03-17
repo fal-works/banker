@@ -50,6 +50,14 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	public inline function exportValues(): Vector<V>
 		return ConvertExtension.exportValues(this);
 
+	/** @see `banker.linker.interfaces.Convert` **/
+	public inline function exportKeysWritable(): WritableVector<K>
+		return ConvertExtension.exportKeysWritable(this);
+
+	/** @see `banker.linker.interfaces.Convert` **/
+	public inline function exportValuesWritable(): WritableVector<V>
+		return ConvertExtension.exportValuesWritable(this);
+
 	/** @see banker.linker.buffer.top_aligned.ConvertExtension **/
 	public inline function cloneAsMap(newCapacity = -1): ArrayMap<K, V>
 		return ConvertExtension.cloneAsMap(this, newCapacity);
