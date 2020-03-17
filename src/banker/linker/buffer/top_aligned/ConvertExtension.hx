@@ -42,7 +42,7 @@ class ConvertExtension {
 		convertValue: V->W
 	): Void {
 		final size = _this.size;
-		assert(size < destination.capacity);
+		assert(size <= destination.capacity);
 
 		final keys = _this.keyVector;
 		final values = _this.valueVector;
