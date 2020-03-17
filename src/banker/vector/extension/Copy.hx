@@ -132,4 +132,51 @@ class Copy {
 	): Array<T> {
 		return [for (i in startPosition...endPosition) _this[i]];
 	}
+
+	/**
+		Copies `this` and also deduplicates values.
+		O(n) complexity.
+		@return New vector with deduplicated values from `this`.
+	**/
+	public static inline function copyDeduplicated<T>(
+		_this: VectorReference<T>
+	): Vector<T> {
+		final length = _this.length;
+
+		return if (length == 0) copy(_this) else {
+			final newVector = new WritableVector(length);
+
+			newVector[0] = _this[0];
+			var newLength = 1;
+
+			for (i in 1...length) {
+				final value = _this[i];
+
+				var found = false;
+				for (k in 0...newLength) {
+					if (value != newVector[k]) continue;
+					found = true;
+					break;
+				}
+
+				if (found) continue;
+
+				newVector[newLength] = value;
+				++newLength;
+			}
+
+			slice(newVector, 0, newLength);
+		}
+	}
+
+		/**
+		Copies `this` and also deduplicates values.
+		O(n) complexity.
+		@return New vector with deduplicated values from `this`.
+	**/
+	public static inline function copyDeduplicatedWritable<T>(
+		_this: VectorReference<T>
+	): WritableVector<T> {
+		return copyDeduplicated(_this).writable();
+	}
 }
