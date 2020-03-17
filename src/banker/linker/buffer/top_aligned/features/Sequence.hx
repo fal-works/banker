@@ -3,6 +3,7 @@ package banker.linker.buffer.top_aligned.features;
 #if !banker_generic_disable
 @:generic
 #end
+@:ripper.verified
 class Sequence<K, V>
 	extends TopAlignedBuffer<K, V>
 	implements banker.linker.interfaces.Sequence<K, V>

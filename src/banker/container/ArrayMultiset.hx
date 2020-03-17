@@ -11,6 +11,7 @@ import banker.container.buffer.top_aligned.*; // Necessary for spirits
 #if !banker_generic_disable
 @:generic
 #end
+@:ripper.verified
 @:ripper.spirits(
 	buffer.top_aligned.features.Sequence,
 	buffer.top_aligned.features.Set,

@@ -30,10 +30,10 @@ class Main {
 		// TesterSettings.hidePassedResults = true;
 		// TesterSettings.showCallStack = true;
 
-		// test(basicTestCases);
-		// test(testCases);
-		// test(watermarkTestCases);
-		// test(poolTestCases);
+		test(basicTestCases);
+		test(testCases);
+		test(watermarkTestCases);
+		test(poolTestCases);
 		test(aosoaTestCases);
 	}
 }

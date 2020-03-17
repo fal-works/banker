@@ -3,6 +3,7 @@ package banker.linker.buffer.top_aligned.constraints;
 #if !banker_generic_disable
 @:generic
 #end
+@:ripper.verified
 class Unordered<K, V> extends TopAlignedBuffer<K, V> implements ripper.Spirit {
 	/**
 		@see `banker.linker.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`

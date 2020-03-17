@@ -8,6 +8,7 @@ import sneaker.tag.TaggedExtension;
 #if !banker_generic_disable
 @:generic
 #end
+@:ripper.verified
 @:using(sneaker.tag.TaggedExtension)
 class SafeObjectPool<T> extends ObjectPool<T> {
 	/**

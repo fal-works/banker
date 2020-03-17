@@ -3,6 +3,7 @@ package banker.container.buffer.ring.features;
 #if !banker_generic_disable
 @:generic
 #end
+@:ripper.verified
 class Deque<T>
 	extends RingBuffer<T>
 	implements banker.container.interfaces.Deque<T>

@@ -12,6 +12,7 @@ import banker.vector.*; // Necessary for spirits
 #if !banker_generic_disable
 @:generic
 #end
+@:ripper.verified
 @:ripper.spirits(banker.container.buffer.top_aligned.constraints.Unordered)
 @:ripper.spirits(banker.container.buffer.top_aligned.constraints.NotUnique)
 class ObjectPool<T> extends TopAlignedBuffer<T> implements ripper.Body {
