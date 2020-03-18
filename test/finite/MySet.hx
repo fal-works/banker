@@ -1,7 +1,5 @@
 package finite;
 
-import banker.container.FiniteKeysSet;
-
 enum abstract Abc(Int) {
 	/**
 		This is A.
@@ -12,5 +10,5 @@ enum abstract Abc(Int) {
 	final C;
 }
 
-@:banker.finiteKeys.enumAbstract(Abc)
-class MySet implements FiniteKeysSet {}
+@:build(banker.common.internal.finiteKeys.FiniteKeysCollection.build(Abc))
+class MySet {}

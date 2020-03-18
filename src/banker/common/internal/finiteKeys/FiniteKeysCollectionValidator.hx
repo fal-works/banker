@@ -20,11 +20,6 @@ class FiniteKeysCollectionValidator {
 		Log(Warn)
 	);
 
-	public static final catchEnumAbstractParameter = new ResultCatcher(
-		getEnumAbstractParameter,
-		Log(Warn)
-	);
-
 	public static final catchEnumAbstractType = new ResultCatcher(
 		getEnumAbstractType,
 		Log(Warn)
@@ -57,26 +52,6 @@ class FiniteKeysCollectionValidator {
 			Failed("Too many parameters in @:banker.finiteKeys.default metadata");
 
 		return Ok(Function(defaultValueFactories[0]));
-	};
-
-	static function getEnumAbstractParameter(
-		metaAccess: MetaAccess
-	): Result<Expr, String> {
-		if (!metaAccess.has(":banker.finiteKeys.enumAbstract"))
-			return Failed("Missing @:banker.finiteKeys.enumAbstract metadata");
-
-		final parameters = metaAccess.extractParameters(":banker.finiteKeys.enumAbstract");
-		final length = parameters.length;
-
-		if (length == 0) {
-			return Failed("Missing parameters in @:banker.finiteKeys.enumAbstract metadata");
-		}
-
-		if (length >= 2) {
-			return Failed("Too many parameters in @:banker.finiteKeys.enumAbstract metadata");
-		}
-
-		return Ok(parameters[0]);
 	};
 
 	static function getEnumAbstractType(

@@ -16,10 +16,9 @@ import banker.common.internal.finiteKeys.FiniteKeysCollectionValidator.*;
 **/
 class FiniteKeysCollection {
 	/**
-		Add fields to the class.
-		Fields are generated from instances of an enum abstract given by metadata.
+		Add fields to the class, generating from instances of `enumAbstractType`.
 	**/
-	public static macro function build(): Fields {
+	public static macro function build(enumAbstractType: Expr): Fields {
 		PositionStack.reset();
 
 		final localClassResult = catchLocalClass.run(null);
@@ -28,15 +27,11 @@ class FiniteKeysCollection {
 		final localClass = localClassResult.unwrap();
 		final metaAccess = localClass.meta;
 
-		debug("Resolving @:banker.finiteKeys.enumAbstract metadata.");
-		final enumAbstractParameter = catchEnumAbstractParameter.run(metaAccess);
-		if (enumAbstractParameter.failed) return null;
+		final enumAbstractTypeResolved = catchEnumAbstractType.run(enumAbstractType);
+		if (enumAbstractTypeResolved.failed) return null;
 
-		final enumAbstractType = catchEnumAbstractType.run(enumAbstractParameter.unwrap());
-		if (enumAbstractType.failed) return null;
-
-		debug("  Resolved: " + enumAbstractType.unwrap().name);
-		final instances = enumAbstractType.unwrap().getInstances();
+		debug("  Resolved: " + enumAbstractTypeResolved.unwrap().name);
+		final instances = enumAbstractTypeResolved.unwrap().getInstances();
 
 		var valueType: ComplexType;
 		var defaultValue: DefaultValue;
