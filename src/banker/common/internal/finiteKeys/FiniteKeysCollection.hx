@@ -63,7 +63,7 @@ class FiniteKeysCollection {
 			metaAccess.has(':banker.finiteKeys.final')
 		);
 		for (field in newFields) debug('  - ${field.name}');
-		if (!buildFields.hasAny(FieldExtension.isNew)) {
+		if (localClass.constructor == null) {
 			newFields.push(createConstructor());
 			debug('  - new');
 		}
