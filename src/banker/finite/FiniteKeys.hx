@@ -1,4 +1,4 @@
-package banker.common.internal.finiteKeys;
+package banker.finite;
 
 #if macro
 using sneaker.macro.MacroCaster;
@@ -9,12 +9,12 @@ using banker.array.ArrayFunctionalExtension;
 import sneaker.macro.MacroLogger.*;
 import sneaker.macro.FieldExtension;
 import sneaker.macro.PositionStack;
-import banker.common.internal.finiteKeys.FiniteKeysCollectionValidator.*;
+import banker.finite.FiniteKeysValidator.*;
 
 /**
 	Build macro for `FiniteKeysSet`.
 **/
-class FiniteKeysCollection {
+class FiniteKeys {
 	/**
 		Add fields to the class, generating from instances of `enumAbstractType`.
 	**/

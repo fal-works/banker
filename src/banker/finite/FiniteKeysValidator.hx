@@ -1,4 +1,4 @@
-package banker.common.internal.finiteKeys;
+package banker.finite;
 
 #if macro
 using haxe.macro.ExprTools;
@@ -9,7 +9,7 @@ import sneaker.macro.ContextTools;
 import sneaker.types.Result;
 import sneaker.trier.ResultCatcher;
 
-class FiniteKeysCollectionValidator {
+class FiniteKeysValidator {
 	public static final catchLocalClass = new ResultCatcher(
 		getLocalClass,
 		Log(Warn)

@@ -10,5 +10,5 @@ enum abstract Abc(Int) {
 	final C;
 }
 
-@:build(banker.common.internal.finiteKeys.FiniteKeysCollection.build(Abc))
+@:build(banker.finite.FiniteKeys.build(Abc))
 class MySet {}

@@ -1,4 +1,4 @@
-package banker.common.internal.finiteKeys;
+package banker.finite;
 
 #if macro
 enum KeyType {

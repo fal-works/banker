@@ -1,7 +1,7 @@
-package banker.common.internal.finiteKeys;
+package banker.finite;
 
 import haxe.macro.Expr;
 import haxe.macro.Context;
 import haxe.macro.Type;
-import banker.common.internal.finiteKeys.Types;
+import banker.finite.Types;
 import sneaker.macro.Types;
