@@ -8,7 +8,7 @@ enum KeyType {
 }
 
 enum DefaultValue {
-	Value(v: Expr);
-	Function(func: Expr);
+	Value(expression: Expr, type: ComplexType);
+	Function(expression: Expr, returnType: ComplexType);
 }
 #end

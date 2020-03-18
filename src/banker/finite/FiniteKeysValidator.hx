@@ -2,6 +2,7 @@ package banker.finite;
 
 #if macro
 using haxe.macro.ExprTools;
+using haxe.macro.TypeTools;
 using sneaker.macro.MetadataExtension;
 using sneaker.macro.MacroCaster;
 
@@ -25,6 +26,11 @@ class FiniteKeysValidator {
 		Log(Warn)
 	);
 
+	static final catchReturnType = new ResultCatcher(
+		getReturnType,
+		Log(Warn)
+	);
+
 	static function getLocalClass(_: Any) {
 		final localClassRef = Context.getLocalClass();
 
@@ -36,22 +42,36 @@ class FiniteKeysValidator {
 
 	static function getDefaultValue(metaAccess: MetaAccess): Result<DefaultValue, String> {
 		final defaultValues = metaAccess.extractParameters(":banker.finiteKeys.default");
+		final valuesLength = defaultValues.length;
 
-		if (defaultValues.length == 1)
-			return Ok(Value(defaultValues[0]));
+		if (valuesLength == 1) {
+			final expression = defaultValues[0];
+			final type = Context.typeof(expression).toComplexType();
+			debug("  Found default value.");
+			return Ok(Value(expression, type));
+		}
 
-		if (defaultValues.length > 1) return
-			Failed("Too many parameters in @:banker.finiteKeys.default metadata");
+		if (valuesLength > 1)
+			return Failed("Too many parameters in @:banker.finiteKeys.default metadata");
 
 		final defaultValueFactories = metaAccess.extractParameters(":banker.finiteKeys.defaultFactory");
+		final factoriesLength = defaultValueFactories.length;
 
-		if (defaultValueFactories.length == 0) return
-			Failed("Either @:banker.finiteKeys.default or @:banker.finiteKeys.defaultFactory is mandatory.");
+		if (factoriesLength == 1) {
+			final expression = defaultValueFactories[0];
+			final type = Context.typeof(expression).toComplexType();
+			final returnType = catchReturnType.run(type);
+			if (returnType.failed) return Failed("A function is required in @:banker.finiteKeys.defaultFactory metadata");
 
-		if (defaultValueFactories.length > 1) return
-			Failed("Too many parameters in @:banker.finiteKeys.default metadata");
+			debug("  Found factory function for setting default values.");
+			return Ok(Function(expression, returnType.unwrap()));
+		}
 
-		return Ok(Function(defaultValueFactories[0]));
+		if (factoriesLength > 1)
+			return Failed("Too many parameters in @:banker.finiteKeys.default metadata");
+
+		debug("  Default value not specified. Set false as default.");
+		return Ok(Value(macro false, (macro:Bool)));
 	};
 
 	static function getEnumAbstractType(
@@ -69,5 +89,14 @@ class FiniteKeysValidator {
 
 		return abstractType.toEnumAbstractType();
 	};
+
+	static function getReturnType(
+		complexType: ComplexType
+	): Result<ComplexType, String> {
+		return switch complexType {
+			case TFunction(_, returnType): Ok(returnType);
+			default: Failed("Not a function");
+		}
+	}
 }
 #end
