@@ -19,7 +19,9 @@ class FiniteKeysCollection {
 		Add fields to the class.
 		Fields are generated from instances of an enum abstract given by metadata.
 	**/
-	public static function build(): Fields {
+	public static macro function build(): Fields {
+		PositionStack.reset();
+
 		final localClassResult = catchLocalClass.run(null);
 		if (localClassResult.failed) return null;
 
@@ -109,7 +111,7 @@ class FiniteKeysCollection {
 				expr: macro null
 			}),
 			access: [APublic],
-			pos: PositionStack.calledPosition
+			pos: Context.currentPos()
 		};
 	}
 }

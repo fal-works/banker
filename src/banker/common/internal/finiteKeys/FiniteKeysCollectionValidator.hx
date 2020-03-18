@@ -68,11 +68,13 @@ class FiniteKeysCollectionValidator {
 		final parameters = metaAccess.extractParameters(":banker.finiteKeys.enumAbstract");
 		final length = parameters.length;
 
-		if (length == 0)
+		if (length == 0) {
 			return Failed("Missing parameters in @:banker.finiteKeys.enumAbstract metadata");
+		}
 
-		if (length >= 2)
+		if (length >= 2) {
 			return Failed("Too many parameters in @:banker.finiteKeys.enumAbstract metadata");
+		}
 
 		return Ok(parameters[0]);
 	};
