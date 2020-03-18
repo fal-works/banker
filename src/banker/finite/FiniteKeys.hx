@@ -11,14 +11,11 @@ import sneaker.macro.FieldExtension;
 import sneaker.macro.PositionStack;
 import banker.finite.FiniteKeysValidator.*;
 
-/**
-	Build macro for `FiniteKeysSet`.
-**/
 class FiniteKeys {
 	/**
 		Add fields to the class, generating from instances of `enumAbstractType`.
 	**/
-	public static macro function build(enumAbstractType: Expr): Fields {
+	public static macro function from(enumAbstractType: Expr): Fields {
 		PositionStack.reset();
 
 		final localClassResult = catchLocalClass.run(null);
