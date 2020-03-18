@@ -14,5 +14,5 @@ enum abstract Abc(Int) {
 class MySet {}
 
 @:build(banker.finite.FiniteKeys.from(Abc))
-@:banker.finiteKeys.default(0)
+@:banker.finite.default(0)
 class MyMap {}

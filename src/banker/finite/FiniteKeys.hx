@@ -42,7 +42,7 @@ class FiniteKeys {
 		final newFields = createFields(
 			instances,
 			defaultValue,
-			metaAccess.has(':banker.finiteKeys.final')
+			metaAccess.has(':banker.finite.final')
 		);
 		for (field in newFields) debug('  - ${field.name}');
 		if (localClass.constructor == null) {

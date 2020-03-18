@@ -41,7 +41,7 @@ class FiniteKeysValidator {
 	}
 
 	static function getDefaultValue(metaAccess: MetaAccess): Result<DefaultValue, String> {
-		final defaultValues = metaAccess.extractParameters(":banker.finiteKeys.default");
+		final defaultValues = metaAccess.extractParameters(":banker.finite.default");
 		final valuesLength = defaultValues.length;
 
 		if (valuesLength == 1) {
@@ -52,23 +52,23 @@ class FiniteKeysValidator {
 		}
 
 		if (valuesLength > 1)
-			return Failed("Too many parameters in @:banker.finiteKeys.default metadata");
+			return Failed("Too many parameters in @:banker.finite.default metadata");
 
-		final defaultValueFactories = metaAccess.extractParameters(":banker.finiteKeys.defaultFactory");
+		final defaultValueFactories = metaAccess.extractParameters(":banker.finite.defaultFactory");
 		final factoriesLength = defaultValueFactories.length;
 
 		if (factoriesLength == 1) {
 			final expression = defaultValueFactories[0];
 			final type = Context.typeof(expression).toComplexType();
 			final returnType = catchReturnType.run(type);
-			if (returnType.failed) return Failed("A function is required in @:banker.finiteKeys.defaultFactory metadata");
+			if (returnType.failed) return Failed("A function is required in @:banker.finite.defaultFactory metadata");
 
 			debug("  Found factory function for setting default values.");
 			return Ok(Function(expression, returnType.unwrap()));
 		}
 
 		if (factoriesLength > 1)
-			return Failed("Too many parameters in @:banker.finiteKeys.default metadata");
+			return Failed("Too many parameters in @:banker.finite.default metadata");
 
 		debug("  Default value not specified. Set false as default.");
 		return Ok(Value(macro false, (macro:Bool)));
