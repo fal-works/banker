@@ -29,24 +29,18 @@ class BuildMacro {
 		final buildFieldClones = buildFields.map(FieldExtension.clone);
 		buildFieldClones.forEach(field -> field.pos = position);
 
-		final chunk = Chunk.create(
-			buildFieldClones,
-			localClassName,
-			position
-		);
+		final chunk = Chunk.create(buildFieldClones, localClassName, position);
 		final chunkType = ModuleTools.defineSubTypes([chunk.typeDefinition])[0];
 		debug('Created Chunk class: ${chunkType.pathString}');
 
-		final aosoaClass = Aosoa.create(
-			localClassName,
-			chunk,
-			chunkType,
-			position
-		);
+		final aosoaClass = Aosoa.create(localClassName, chunk, chunkType, position);
 		final aosoaType = ModuleTools.defineSubTypes([aosoaClass])[0];
 		debug('Created Aosoa class: ${aosoaType.pathString}');
 
-		final createAosoaMethod = Aosoa.createAosoaCreatorMethod(aosoaType, position);
+		final createAosoaMethod = Aosoa.createAosoaCreatorMethod(
+			aosoaType,
+			position
+		);
 		buildFields.push(createAosoaMethod);
 		debug('Added method: $localClassName::createAosoa()');
 

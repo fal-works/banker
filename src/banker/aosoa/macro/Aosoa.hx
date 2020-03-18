@@ -115,7 +115,10 @@ class Aosoa {
 	/**
 		Creates a method field `createAosoa()` that creates an `aosoaType` instance.
 	**/
-	public static function createAosoaCreatorMethod(aosoaType: DefinedType, position: Position): Field {
+	public static function createAosoaCreatorMethod(
+		aosoaType: DefinedType,
+		position: Position
+	): Field {
 		final aosoaTypePath = aosoaType.path;
 		final functionBody = macro return new $aosoaTypePath(chunkSize, chunkCount);
 		var documentation = 'Creates an AoSoA (Array of Structure of Arrays) instance.';
@@ -129,8 +132,8 @@ class Aosoa {
 			name: "createAosoa",
 			kind: FFun({
 				args: [
-					{ name: "chunkSize", type: (macro:Int)},
-					{ name: "chunkCount", type: (macro:Int)}
+					{ name: "chunkSize", type: (macro:Int) },
+					{ name: "chunkCount", type: (macro:Int) }
 				],
 				ret: aosoaType.complex,
 				expr: functionBody
@@ -195,11 +198,7 @@ class Aosoa {
 			}
 		};
 
-		return createMethodField(
-			chunkField,
-			functionBody,
-			externalArguments
-		);
+		return createMethodField(chunkField, functionBody, externalArguments);
 	}
 
 	/**
@@ -228,11 +227,7 @@ class Aosoa {
 			this.nextWriteChunkIndex = nextWriteChunkIndex;
 		};
 
-		return createMethodField(
-			chunkField,
-			functionBody,
-			externalArguments
-		);
+		return createMethodField(chunkField, functionBody, externalArguments);
 	}
 }
 #end

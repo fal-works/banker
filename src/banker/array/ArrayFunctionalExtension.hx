@@ -62,10 +62,7 @@ class ArrayFunctionalExtension {
 		@param predicate Function that returns `true` if a given element meets the condition.
 		@return `true` if found.
 	**/
-	public static inline function hasAny<T>(
-		_this: Array<T>,
-		predicate: T->Bool
-	): Bool {
+	public static inline function hasAny<T>(_this: Array<T>, predicate: T->Bool): Bool {
 		final len = _this.length;
 		var found = false;
 		var i = 0;

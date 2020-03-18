@@ -8,9 +8,8 @@ class FiniteKeysTest {
 		set.A = true;
 		assert(set.A == true);
 	}
+
 	static final _basic = testCase(basic, Ok);
 
-	public static final all = testCaseGroup([
-		_basic
-	]);
+	public static final all = testCaseGroup([_basic]);
 }

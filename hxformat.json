@@ -44,6 +44,41 @@
 		}
 	},
 	"wrapping": {
+		"anonFunctionSignature": {
+			"defaultWrap": "noWrap",
+			"rules": [
+				{
+					"conditions": [
+						{
+							"cond": "itemCount >= n",
+							"value": 7
+						}
+					],
+					"type": "onePerLine",
+					"additionalIndent": 1
+				},
+				{
+					"conditions": [
+						{
+							"cond": "totalItemLength >= n",
+							"value": 60
+						}
+					],
+					"type": "onePerLine",
+					"additionalIndent": 1
+				},
+				{
+					"conditions": [
+						{
+							"cond": "lineLength >= n",
+							"value": 80
+						}
+					],
+					"type": "onePerLine",
+					"additionalIndent": 1
+				}
+			]
+		},
 		"arrayWrap": {
 			"defaultWrap": "onePerLine",
 			"rules": [
@@ -221,6 +256,38 @@
 						}
 					],
 					"type": "onePerLine"
+				}
+			]
+		},
+		"typeParameter": {
+			"defaultWrap": "noWrap",
+			"rules": [
+				{
+					"conditions": [
+						{
+							"cond": "itemCount <= n",
+							"value": 2
+						}
+					],
+					"type": "keep"
+				},
+				{
+					"conditions": [
+						{
+							"cond": "anyItemLength >= n",
+							"value": 50
+						}
+					],
+					"type": "fillLine"
+				},
+				{
+					"conditions": [
+						{
+							"cond": "totalItemLength >= n",
+							"value": 70
+						}
+					],
+					"type": "fillLine"
 				}
 			]
 		},

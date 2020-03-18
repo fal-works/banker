@@ -8,7 +8,11 @@ class Actor implements banker.aosoa.Structure {
 		println('$x, $y');
 	}
 
-	static function disuseIf20(x: Float, y: Float, disuse: Bool) {
+	static function disuseIf20(
+		x: Float,
+		y: Float,
+		disuse: Bool
+	) {
 		if (x == 20) disuse = true;
 	}
 

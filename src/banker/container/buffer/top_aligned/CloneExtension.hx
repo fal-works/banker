@@ -6,9 +6,7 @@ class CloneExtension {
 	/**
 		@return Shallow copy of `this` as a `Vector`.
 	**/
-	public static inline function export<T>(
-		_this: TopAlignedBuffer<T>
-	): Vector<T> {
+	public static inline function export<T>(_this: TopAlignedBuffer<T>): Vector<T> {
 		return _this.vector.ref.slice(0, _this.size);
 	}
 
