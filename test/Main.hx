@@ -24,16 +24,19 @@ class Main {
 
 	static final aosoaTestCases = pkg.AosoaTest.all;
 
+	static final otherCases = finite.FiniteKeysTest.all;
+
 	static function main() {
 		println("\n");
 
 		// TesterSettings.hidePassedResults = true;
 		// TesterSettings.showCallStack = true;
 
-		test(basicTestCases);
-		test(testCases);
-		test(watermarkTestCases);
-		test(poolTestCases);
-		test(aosoaTestCases);
+		// test(basicTestCases);
+		// test(testCases);
+		// test(watermarkTestCases);
+		// test(poolTestCases);
+		// test(aosoaTestCases);
+		test(otherCases);
 	}
 }
