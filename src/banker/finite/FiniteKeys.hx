@@ -14,7 +14,7 @@ class FiniteKeys {
 	/**
 		Add fields to the class, generating from instances of `enumAbstractType`.
 	**/
-	public static macro function from(enumAbstractType: Expr): Fields {
+	public static macro function from(enumAbstractTypeExpression: Expr): Fields {
 		PositionStack.reset();
 
 		final localClassResult = catchLocalClass.run(null);
@@ -24,11 +24,12 @@ class FiniteKeys {
 		final metaAccess = localClass.meta;
 
 		debug('Resolving enum abstract type.');
-		final enumAbstractTypeResolved = catchEnumAbstractType.run(enumAbstractType);
-		if (enumAbstractTypeResolved.failed) return null;
-		debug("  Resolved: " + enumAbstractTypeResolved.unwrap().name);
+		final enumAbstractTypeResult = catchEnumAbstractType.run(enumAbstractTypeExpression);
+		if (enumAbstractTypeResult.failed) return null;
+		final enumAbstractType = enumAbstractTypeResult.unwrap();
+		debug("  Resolved: " + enumAbstractType.name);
 
-		final instances = enumAbstractTypeResolved.unwrap().getInstances();
+		final instances = enumAbstractType.getInstances();
 
 		debug('Determine default value from metadata.');
 		final defaultValueResult = catchDefaultValue.run(metaAccess);
