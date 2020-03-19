@@ -4,7 +4,6 @@ import banker.common.MathTools.minInt;
 
 class VectorTools {
 	/**
-		Static version of `blit()`.
 		Copies `rangeLength` of elements from `source` (beginning at `sourcePosition`)
 		to `destination` (beginning at `destinationPosition`).
 	**/
