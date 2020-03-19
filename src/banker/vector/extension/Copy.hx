@@ -135,7 +135,7 @@ class Copy {
 
 	/**
 		Copies `this` and also deduplicates values.
-		O(n) complexity.
+		O(n^2) complexity (which is not very good).
 		@return New vector with deduplicated values from `this`.
 	**/
 	public static inline function copyDeduplicated<T>(
@@ -171,7 +171,7 @@ class Copy {
 
 	/**
 		Copies `this` and also deduplicates values.
-		O(n) complexity.
+		O(n^2) complexity (which is not very good).
 		@return New vector with deduplicated values from `this`.
 	**/
 	public static inline function copyDeduplicatedWritable<T>(
