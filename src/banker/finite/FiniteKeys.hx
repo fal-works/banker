@@ -38,12 +38,13 @@ class FiniteKeys {
 		debug('  Determined.');
 
 		final buildFields = Context.getBuildFields();
+		final valuesAreFinal = metaAccess.has('${MetadataName.finalValues}');
 
 		debug('Create fields.');
 		final newFields = createFields(
 			instances,
 			defaultValue,
-			metaAccess.has(':banker.finite.final')
+			valuesAreFinal
 		);
 		for (field in newFields) debug('  - ${field.name}');
 		if (localClass.constructor == null) {

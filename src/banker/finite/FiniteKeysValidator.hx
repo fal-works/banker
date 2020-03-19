@@ -37,40 +37,40 @@ class FiniteKeysValidator {
 		return if (localClassRef != null)
 			Ok(localClassRef.get());
 		else
-			Failed("Tried to process something that is not a class.");
+			Failed('Tried to process something that is not a class.');
 	}
 
 	static function getDefaultValue(metaAccess: MetaAccess): Result<DefaultValue, String> {
-		final defaultValues = metaAccess.extractParameters(":banker.finite.default");
+		final defaultValues = metaAccess.extractParameters('${MetadataName.defaultValue}');
 		final valuesLength = defaultValues.length;
 
 		if (valuesLength == 1) {
 			final expression = defaultValues[0];
 			final type = Context.typeof(expression).toComplexType();
-			debug("  Found default value.");
+			debug('  Found default value.');
 			return Ok(Value(expression, type));
 		}
 
 		if (valuesLength > 1)
-			return Failed("Too many parameters in @:banker.finite.default metadata");
+			return Failed('Too many parameters in @${MetadataName.defaultValue} metadata');
 
-		final defaultValueFactories = metaAccess.extractParameters(":banker.finite.defaultFactory");
+		final defaultValueFactories = metaAccess.extractParameters('${MetadataName.defaultFactory}');
 		final factoriesLength = defaultValueFactories.length;
 
 		if (factoriesLength == 1) {
 			final expression = defaultValueFactories[0];
 			final type = Context.typeof(expression).toComplexType();
 			final returnType = catchReturnType.run(type);
-			if (returnType.failed) return Failed("A function is required in @:banker.finite.defaultFactory metadata");
+			if (returnType.failed) return Failed('A function is required in @${MetadataName.defaultFactory} metadata');
 
-			debug("  Found factory function for setting default values.");
+			debug('  Found factory function for setting default values.');
 			return Ok(Function(expression, returnType.unwrap()));
 		}
 
 		if (factoriesLength > 1)
-			return Failed("Too many parameters in @:banker.finite.default metadata");
+			return Failed('Too many parameters in @${MetadataName.defaultValue} metadata');
 
-		debug("  Default value not specified. Set false as default.");
+		debug('  Default value not specified. Set false as default.');
 		return Ok(Value(macro false, (macro:Bool)));
 	};
 
@@ -78,7 +78,7 @@ class FiniteKeysValidator {
 		parameter: Expr
 	): Result<EnumAbstractType, String> {
 		final type = ContextTools.tryGetType(parameter.toString());
-		if (type == null) return Failed("Type not found");
+		if (type == null) return Failed('Type not found');
 
 		var abstractType: AbstractType;
 
@@ -95,7 +95,7 @@ class FiniteKeysValidator {
 	): Result<ComplexType, String> {
 		return switch complexType {
 			case TFunction(_, returnType): Ok(returnType);
-			default: Failed("Not a function");
+			default: Failed('Not a function');
 		}
 	}
 }
