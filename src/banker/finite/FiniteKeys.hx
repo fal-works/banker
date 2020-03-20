@@ -31,10 +31,10 @@ class FiniteKeys {
 
 		final instances = enumAbstractType.getInstances();
 
-		debug('Determine default value from metadata.');
-		final defaultValueResult = catchDefaultValue.run(metaAccess);
-		if (defaultValueResult.failed) return null;
-		final defaultValue = defaultValueResult.unwrap();
+		debug('Determine initial values from metadata.');
+		final initialValueResult = catchInitialValue.run(metaAccess);
+		if (initialValueResult.failed) return null;
+		final initialValue = initialValueResult.unwrap();
 		debug('  Determined.');
 
 		final buildFields = Context.getBuildFields();
@@ -43,7 +43,7 @@ class FiniteKeys {
 		debug('Create fields.');
 		final newFields = createFields(
 			instances,
-			defaultValue,
+			initialValue,
 			valuesAreFinal
 		);
 		for (field in newFields) debug('  - ${field.name}');
@@ -58,13 +58,13 @@ class FiniteKeys {
 
 	static function createFields(
 		instances: Array<ClassField>,
-		defaultValue: DefaultValue,
+		initialValue: InitialValue,
 		valuesAreFinal: Bool
 	): Fields {
 		final fieldAccess = [APublic];
 		if (valuesAreFinal) fieldAccess.push(AFinal);
 
-		return switch defaultValue {
+		return switch initialValue {
 			case Value(value, type):
 				final fieldType:FieldType = FVar(type, value);
 				instances.map(function(instance): Field return {

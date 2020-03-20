@@ -16,8 +16,8 @@ class FiniteKeysValidator {
 		Log(Warn)
 	);
 
-	public static final catchDefaultValue = new ResultCatcher(
-		getDefaultValue,
+	public static final catchInitialValue = new ResultCatcher(
+		getInitialValue,
 		Log(Warn)
 	);
 
@@ -40,37 +40,37 @@ class FiniteKeysValidator {
 			Failed('Tried to process something that is not a class.');
 	}
 
-	static function getDefaultValue(metaAccess: MetaAccess): Result<DefaultValue, String> {
-		final defaultValues = metaAccess.extractParameters('${MetadataName.defaultValue}');
-		final valuesLength = defaultValues.length;
+	static function getInitialValue(metaAccess: MetaAccess): Result<InitialValue, String> {
+		final initialValues = metaAccess.extractParameters('${MetadataName.initialValue}');
+		final valuesLength = initialValues.length;
 
 		if (valuesLength == 1) {
-			final expression = defaultValues[0];
+			final expression = initialValues[0];
 			final type = Context.typeof(expression).toComplexType();
-			debug('  Found default value.');
+			debug('  Found initial value.');
 			return Ok(Value(expression, type));
 		}
 
 		if (valuesLength > 1)
-			return Failed('Too many parameters in @${MetadataName.defaultValue} metadata');
+			return Failed('Too many parameters in @${MetadataName.initialValue} metadata');
 
-		final defaultValueFactories = metaAccess.extractParameters('${MetadataName.defaultFactory}');
-		final factoriesLength = defaultValueFactories.length;
+		final initialValueFactories = metaAccess.extractParameters('${MetadataName.initialFactory}');
+		final factoriesLength = initialValueFactories.length;
 
 		if (factoriesLength == 1) {
-			final expression = defaultValueFactories[0];
+			final expression = initialValueFactories[0];
 			final type = Context.typeof(expression).toComplexType();
 			final returnType = catchReturnType.run(type);
-			if (returnType.failed) return Failed('A function is required in @${MetadataName.defaultFactory} metadata');
+			if (returnType.failed) return Failed('A function is required in @${MetadataName.initialFactory} metadata');
 
-			debug('  Found factory function for setting default values.');
+			debug('  Found factory function for setting initial values.');
 			return Ok(Function(expression, returnType.unwrap()));
 		}
 
 		if (factoriesLength > 1)
-			return Failed('Too many parameters in @${MetadataName.defaultValue} metadata');
+			return Failed('Too many parameters in @${MetadataName.initialValue} metadata');
 
-		debug('  Default value not specified. Set false as default.');
+		debug('  Initial values not specified. Set false as initial value.');
 		return Ok(Value(macro false, (macro:Bool)));
 	};
 

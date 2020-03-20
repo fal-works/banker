@@ -7,7 +7,7 @@ enum KeyType {
 	TooMany;
 }
 
-enum DefaultValue {
+enum InitialValue {
 	Value(expression: Expr, type: ComplexType);
 	Function(expression: Expr, returnType: ComplexType);
 }
