@@ -60,4 +60,14 @@ class MapExtension {
 			false;
 		}
 	}
+
+	/**
+		@return `K->V` function.
+	**/
+	public static inline function toFunction<K, V>(
+		_this: Map<K, V>,
+		defaultValue: V
+	): (key: K) -> V {
+		return key -> getOr(_this, key, defaultValue);
+	}
 }
