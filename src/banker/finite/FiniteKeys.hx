@@ -42,6 +42,7 @@ class FiniteKeys {
 
 		debug('Create fields.');
 		final newFields = createFields(
+			enumAbstractType,
 			instances,
 			initialValue,
 			valuesAreFinal
@@ -57,6 +58,7 @@ class FiniteKeys {
 	}
 
 	static function createFields(
+		enumAbstractType: EnumAbstractType,
 		instances: Array<ClassField>,
 		initialValue: InitialValue,
 		valuesAreFinal: Bool
@@ -76,11 +78,15 @@ class FiniteKeys {
 				});
 			case Function(factory, returnType):
 				instances.map(function(instance): Field return {
-					name: instance.name,
-					kind: FVar(returnType, macro factory()),
-					pos: instance.pos,
-					access: fieldAccess,
-					doc: instance.doc
+					final name = instance.name;
+					final keyTypeName = macro $i{enumAbstractType.name};
+					return {
+						name: name,
+						kind: FVar(returnType, macro $factory($keyTypeName.$name)),
+						pos: instance.pos,
+						access: fieldAccess,
+						doc: instance.doc
+					};
 				});
 		}
 	}

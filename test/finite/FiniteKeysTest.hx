@@ -21,5 +21,15 @@ class FiniteKeysTest {
 
 	static final _myMap = testCase(myMap, Ok);
 
-	public static final all = testCaseGroup([_myMap]);
+	static function mapWithFactory() {
+		describe("It goes without error.");
+		final myMap = new MySet.MyMap2();
+		assert(myMap.A == 1);
+		assert(myMap.B == 2);
+		assert(myMap.C == 2);
+	}
+
+	static final _mapWithFactory = testCase(mapWithFactory, Ok);
+
+	public static final all = testCaseGroup([_set, _myMap, _mapWithFactory]);
 }

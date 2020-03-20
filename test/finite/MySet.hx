@@ -16,3 +16,7 @@ class MySet {}
 @:banker.finite.initialValue(0)
 @:build(banker.finite.FiniteKeys.from(Abc))
 class MyMap {}
+
+@:banker.finite.initialFactory((key: Abc) -> switch key { case A: 1; default: 2; })
+@:build(banker.finite.FiniteKeys.from(Abc))
+class MyMap2 {}
