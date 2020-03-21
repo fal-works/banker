@@ -37,9 +37,22 @@ class FiniteKeysTest {
 
 	static final _mapWithFactory = testCase(mapWithFactory, Ok);
 
+	static function getterSetter() {
+		describe("It goes without error.");
+		final myMap = new MySet.MyMap2();
+		final getA = myMap.getter(A);
+		assert(getA() == 1);
+		final setB = myMap.setter(B);
+		setB(3);
+		assert(myMap.B == 3);
+	}
+
+	static final _getterSetter = testCase(getterSetter, Ok);
+
 	public static final all = testCaseGroup([
 		_set,
 		_myMap,
-		_mapWithFactory
+		_mapWithFactory,
+		_getterSetter
 	]);
 }

@@ -48,19 +48,17 @@ class FiniteKeys {
 			FiniteKeysMap.createReadOnlyFields(
 				instances,
 				fieldConverter,
-				enumAbstractTypeExpression,
-				"get"
+				enumAbstractTypeExpression
 			);
 		else
 			FiniteKeysMap.createWritableFields(
 				instances,
 				fieldConverter,
-				enumAbstractTypeExpression,
-				"get",
-				"set"
+				enumAbstractTypeExpression
 			);
 
 		for (field in newFields) debug('  - ${field.name}');
+
 		if (localClass.constructor == null) {
 			newFields.push(FiniteKeysField.createConstructor());
 			debug('  - new');

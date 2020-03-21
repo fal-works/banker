@@ -2,28 +2,28 @@ package banker.finite;
 
 #if macro
 using sneaker.format.StringExtension;
+using sneaker.macro.FieldExtension;
 
 import haxe.macro.Expr;
 import banker.array.ArrayTools;
+import banker.finite.FiniteKeysCollection.*;
 
 class FiniteKeysMap {
 	public static function createReadOnlyFields(
 		instances: Array<ClassField>,
 		fieldConverter: ClassField->Field,
-		keyType: Expr,
-		getterName: String
+		keyType: Expr
 	): Fields {
-		final newFields = ArrayTools.allocate(instances.length * 2 + 1);
-		var writeIndex = 0;
+		final newFields = ArrayTools.allocate(instances.length * 2 + 2);
+		var i = 0;
 
 		for (instance in instances) {
-			newFields[writeIndex] = fieldConverter(instance);
-			++writeIndex;
-			newFields[writeIndex] = createGet(instance, getterName);
-			++writeIndex;
+			newFields[i++] = fieldConverter(instance);
+			newFields[i++] = createGet(instance);
 		}
 
-		newFields[writeIndex] = createGeneralGet(instances, keyType, getterName);
+		newFields[i++] = createSwitchGet(instances, keyType);
+		newFields[i] = createSwitchGetter(instances, keyType);
 
 		return newFields;
 	}
@@ -31,127 +31,80 @@ class FiniteKeysMap {
 	public static function createWritableFields(
 		instances: Array<ClassField>,
 		fieldConverter: ClassField->Field,
-		keyType: Expr,
-		getterName: String,
-		setterName: String
+		keyType: Expr
 	): Fields {
-		final newFields = ArrayTools.allocate(instances.length * 3 + 1);
-		var writeIndex = 0;
+		final newFields = ArrayTools.allocate(instances.length * 3 + 4);
+		var i = 0;
 
 		for (instance in instances) {
-			newFields[writeIndex] = fieldConverter(instance);
-			++writeIndex;
-			newFields[writeIndex] = createGet(instance, getterName);
-			++writeIndex;
-			newFields[writeIndex] = createSet(instance, setterName);
-			++writeIndex;
+			newFields[i++] = fieldConverter(instance);
+			newFields[i++] = createGet(instance);
+			newFields[i++] = createSet(instance);
 		}
 
-		newFields[writeIndex] = createGeneralGet(instances, keyType, getterName);
-		++writeIndex;
-		newFields[writeIndex] = createGeneralSet(instances, keyType, setterName);
+		newFields[i++] = createSwitchGet(instances, keyType);
+		newFields[i++] = createSwitchGetter(instances, keyType);
+		newFields[i++] = createSwitchSet(instances, keyType);
+		newFields[i] = createSwitchSetter(instances, keyType);
 
 		return newFields;
 	}
 
-	static function createGet(instance: ClassField, prefix: String): Field {
-		final name = instance.name.camelToPascal();
-		return {
-			name: '$prefix$name',
-			kind: FFun({
-				args: [],
-				ret: null,
-				expr: macro return this.$name
-			}),
-			pos: instance.pos,
-			access: [APublic, AInline]
-		}
-	}
+	static final getMethodName = "get";
+	static final getterMethodName = "getter";
+	static final setMethodName = "set";
+	static final setterMethodName = "setter";
 
-	static function createGeneralGet(
-		instances: Array<ClassField>,
-		keyType: Expr,
-		methodName: String
-	): Field {
-		final cases: Array<Case> = [for (instance in instances) {
-			final name = instance.name;
-			{
-				values: [macro $keyType.$name],
-				expr: macro this.$name
-			};
-		}];
-		final switchExpression: Expr = {
-			expr: ESwitch(macro key, cases, null),
-			pos: Context.currentPos()
-		};
-		final fieldType: FieldType = FFun({
-			args: [{
-				name: "key",
-				type: null
-			}],
-			ret: null,
-			expr: macro return $switchExpression
-		});
+	static final noArgs: Array<String> = [];
+	static final keyArgs = ["key"];
+	static final valueArgs = ["value"];
+	static final keyValueArgs = ["key", "value"];
 
-		return {
-			name: methodName,
-			kind: fieldType,
-			pos: Context.currentPos(),
-			access: [APublic, AInline]
-		};
-	}
+	static final createGetExpression = (name: String) -> macro this.$name;
+	static final createGetterExpression = (name: String) -> macro() -> this.$name;
+	static final createSetExpression = (name: String) -> macro this.$name = value;
+	static final createSetterExpression = (name: String) -> macro value -> this.$name = value;
 
-	static function createSet(instance: ClassField, prefix: String): Field {
-		final name = instance.name.camelToPascal();
-		return {
-			name: '$prefix$name',
-			kind: FFun({
-				args: [{
-					name: "value",
-					type: null
-				}],
-				ret: null,
-				expr: macro return this.$name = value
-			}),
-			pos: instance.pos,
-			access: [APublic, AInline]
-		}
-	}
+	static function createGet(instance: ClassField): Field
+		return createIndividual(instance, getMethodName, noArgs, createGetExpression);
 
-	static function createGeneralSet(
-		instances: Array<ClassField>,
-		keyType: Expr,
-		methodName: String
-	): Field {
-		final cases: Array<Case> = [for (instance in instances) {
-			final name = instance.name;
-			{
-				values: [macro $keyType.$name],
-				expr: macro this.$name = value
-			};
-		}];
-		final switchExpression: Expr = {
-			expr: ESwitch(macro key, cases, null),
-			pos: Context.currentPos()
-		};
-		final fieldType: FieldType = FFun({
-			args: [{
-				name: "key",
-				type: null
-			}, {
-				name: "value",
-				type: null
-			}],
-			ret: null,
-			expr: macro return $switchExpression
-		});
+	static function createSet(instance: ClassField): Field
+		return createIndividual(instance, setMethodName, valueArgs, createSetExpression);
 
-		return {
-			name: methodName,
-			kind: fieldType,
-			pos: Context.currentPos(),
-			access: [APublic, AInline]
-		};
-	}
+	static function createSwitchGet(instances: Array<ClassField>, keyType: Expr)
+		return createSwitch(
+			instances,
+			keyType,
+			getMethodName,
+			keyArgs,
+			createGetExpression
+		);
+
+	static function createSwitchGetter(instances: Array<ClassField>, keyType: Expr)
+		return createSwitch(
+			instances,
+			keyType,
+			getterMethodName,
+			keyArgs,
+			createGetterExpression
+		);
+
+	static function createSwitchSet(instances: Array<ClassField>, keyType: Expr)
+		return createSwitch(
+			instances,
+			keyType,
+			setMethodName,
+			keyValueArgs,
+			createSetExpression
+		);
+
+	static function createSwitchSetter(instances: Array<ClassField>, keyType: Expr)
+		return createSwitch(
+			instances,
+			keyType,
+			setterMethodName,
+			keyArgs,
+			createSetterExpression
+		);
 }
 #end
