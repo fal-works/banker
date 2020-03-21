@@ -50,7 +50,11 @@ class FiniteKeys {
 			enumAbstractTypeExpression
 		);
 
-		final newFields = createFieldsWithGetters(instances, fieldConverter);
+		final newFields = if (valuesAreFinal)
+			createFieldsWithGetter(instances, fieldConverter);
+		else
+			createFieldsWithGetterSetter(instances, fieldConverter);
+
 		for (field in newFields) debug('  - ${field.name}');
 		if (localClass.constructor == null) {
 			newFields.push(createConstructor());
@@ -107,7 +111,24 @@ class FiniteKeys {
 		}
 	}
 
-	static function createFieldsWithGetters(
+	static function createSetter(instance: ClassField): Field {
+		final name = instance.name;
+		return {
+			name: 'set$name',
+			kind: FFun({
+				args: [{
+					name: "value",
+					type: null
+				}],
+				ret: null,
+				expr: macro return this.$name = value
+			}),
+			pos: instance.pos,
+			access: [APublic, AInline]
+		}
+	}
+
+	static function createFieldsWithGetter(
 		instances: Array<ClassField>,
 		fieldConverter: ClassField->Field
 	): Fields {
@@ -119,7 +140,23 @@ class FiniteKeys {
 			newFields[writeIndex] = createGetter(instance);
 			++writeIndex;
 		}
+		return newFields;
+	}
 
+	static function createFieldsWithGetterSetter(
+		instances: Array<ClassField>,
+		fieldConverter: ClassField->Field
+	): Fields {
+		final newFields = ArrayTools.allocate(instances.length * 3);
+		var writeIndex = 0;
+		for (instance in instances) {
+			newFields[writeIndex] = fieldConverter(instance);
+			++writeIndex;
+			newFields[writeIndex] = createGetter(instance);
+			++writeIndex;
+			newFields[writeIndex] = createSetter(instance);
+			++writeIndex;
+		}
 		return newFields;
 	}
 
