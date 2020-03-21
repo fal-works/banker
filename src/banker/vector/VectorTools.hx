@@ -91,7 +91,13 @@ class VectorTools {
 		startIndex: Int,
 		endIndex: Int
 	): Vector<V> {
-		return zipInWritable(vectorA, vectorB, zipper, startIndex, endIndex).nonWritable();
+		return zipInWritable(
+			vectorA,
+			vectorB,
+			zipper,
+			startIndex,
+			endIndex
+		).nonWritable();
 	}
 
 	/**
@@ -102,7 +108,13 @@ class VectorTools {
 		vectorB: VectorReference<U>,
 		zipper: (elementA: T, elementB: U) -> V
 	): Vector<V> {
-		return zipIn(vectorA, vectorB, zipper, 0, minInt(vectorA.length, vectorB.length));
+		return zipIn(
+			vectorA,
+			vectorB,
+			zipper,
+			0,
+			minInt(vectorA.length, vectorB.length)
+		);
 	}
 
 	/**
@@ -113,6 +125,12 @@ class VectorTools {
 		vectorB: VectorReference<U>,
 		zipper: (elementA: T, elementB: U) -> V
 	): WritableVector<V> {
-		return zipInWritable(vectorA, vectorB, zipper, 0, minInt(vectorA.length, vectorB.length));
+		return zipInWritable(
+			vectorA,
+			vectorB,
+			zipper,
+			0,
+			minInt(vectorA.length, vectorB.length)
+		);
 	}
 }

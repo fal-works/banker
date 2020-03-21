@@ -37,5 +37,9 @@ class FiniteKeysTest {
 
 	static final _mapWithFactory = testCase(mapWithFactory, Ok);
 
-	public static final all = testCaseGroup([_set, _myMap, _mapWithFactory]);
+	public static final all = testCaseGroup([
+		_set,
+		_myMap,
+		_mapWithFactory
+	]);
 }
