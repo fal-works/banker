@@ -1,6 +1,7 @@
 package banker.finite;
 
 #if macro
+using Lambda;
 using sneaker.macro.MacroCaster;
 using sneaker.macro.FieldExtension;
 using sneaker.macro.EnumAbstractExtension;
@@ -9,6 +10,7 @@ using banker.array.ArrayFunctionalExtension;
 import sneaker.macro.FieldExtension;
 import sneaker.macro.PositionStack;
 import sneaker.macro.ContextTools.getLocalClass;
+import banker.array.ArrayTools;
 import banker.finite.FiniteKeysValidator.*;
 
 class FiniteKeys {
@@ -48,7 +50,7 @@ class FiniteKeys {
 			enumAbstractTypeExpression
 		);
 
-		final newFields = createFields(instances, fieldConverter);
+		final newFields = createFieldsWithGetters(instances, fieldConverter);
 		for (field in newFields) debug('  - ${field.name}');
 		if (localClass.constructor == null) {
 			newFields.push(createConstructor());
@@ -91,11 +93,34 @@ class FiniteKeys {
 		}
 	}
 
-	static function createFields(
+	static function createGetter(instance: ClassField): Field {
+		final name = instance.name;
+		return {
+			name: 'get$name',
+			kind: FFun({
+				args: [],
+				ret: null,
+				expr: macro return this.$name
+			}),
+			pos: instance.pos,
+			access: [APublic, AInline]
+		}
+	}
+
+	static function createFieldsWithGetters(
 		instances: Array<ClassField>,
 		fieldConverter: ClassField->Field
 	): Fields {
-		return instances.map(fieldConverter);
+		final newFields = ArrayTools.allocate(instances.length * 2);
+		var writeIndex = 0;
+		for (instance in instances) {
+			newFields[writeIndex] = fieldConverter(instance);
+			++writeIndex;
+			newFields[writeIndex] = createGetter(instance);
+			++writeIndex;
+		}
+
+		return newFields;
 	}
 
 	static function createConstructor(): Field {
