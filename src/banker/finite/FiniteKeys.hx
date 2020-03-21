@@ -42,12 +42,13 @@ class FiniteKeys {
 		final valuesAreFinal = metaAccess.has('${MetadataName.finalValues}');
 
 		debug('Create fields.');
-		final newFields = createFields(
-			enumAbstractType,
-			instances,
+		final fieldConverter = getFieldConverter(
 			initialValue,
-			valuesAreFinal
+			valuesAreFinal,
+			enumAbstractTypeExpression
 		);
+
+		final newFields = createFields(instances, fieldConverter);
 		for (field in newFields) debug('  - ${field.name}');
 		if (localClass.constructor == null) {
 			newFields.push(createConstructor());
@@ -58,38 +59,43 @@ class FiniteKeys {
 		return buildFields.concat(newFields);
 	}
 
-	static function createFields(
-		enumAbstractType: EnumAbstractType,
-		instances: Array<ClassField>,
+	static function getFieldConverter(
 		initialValue: InitialValue,
-		valuesAreFinal: Bool
-	): Fields {
+		valuesAreFinal: Bool,
+		keyType: Expr
+	): ClassField->Field {
 		final fieldAccess = [APublic];
 		if (valuesAreFinal) fieldAccess.push(AFinal);
 
 		return switch initialValue {
 			case Value(value, type):
 				final fieldType:FieldType = FVar(type, value);
-				instances.map(function(instance): Field return {
+				function(instance): Field return {
 					name: instance.name,
 					kind: fieldType,
 					pos: instance.pos,
 					access: fieldAccess,
 					doc: instance.doc
-				});
+				}
 			case Function(functionName, returnType):
-				instances.map(function(instance): Field return {
+				function(instance): Field return {
 					final name = instance.name;
-					final keyTypeName = macro $i{enumAbstractType.name};
 					return {
 						name: name,
-						kind: FVar(returnType, macro $i{functionName}($keyTypeName.$name)),
+						kind: FVar(returnType, macro $i{functionName}($keyType.$name)),
 						pos: instance.pos,
 						access: fieldAccess,
 						doc: instance.doc
 					};
-				});
+				}
 		}
+	}
+
+	static function createFields(
+		instances: Array<ClassField>,
+		fieldConverter: ClassField->Field
+	): Fields {
+		return instances.map(fieldConverter);
 	}
 
 	static function createConstructor(): Field {
