@@ -65,6 +65,9 @@ class FiniteKeysMap {
 	static final createSetExpression = (name: String) -> macro this.$name = value;
 	static final createSetterExpression = (name: String) -> macro value -> this.$name = value;
 
+	static final getterDocumentation = 'Creates a function that gets the value for `key`.';
+	static final setterDocumentation = 'Creates a function that sets the value for `key`.';
+
 	static function createGet(instance: ClassField): Field
 		return createIndividual(instance, getMethodName, noArgs, createGetExpression);
 
@@ -87,7 +90,7 @@ class FiniteKeysMap {
 			getterMethodName,
 			keyArgs,
 			createGetterExpression
-		);
+		).setDoc(getterDocumentation);
 
 	static function createSwitchSet(instances: Array<ClassField>, keyType: Expr)
 		return createSwitch(
@@ -105,6 +108,6 @@ class FiniteKeysMap {
 			setterMethodName,
 			keyArgs,
 			createSetterExpression
-		);
+		).setDoc(setterDocumentation);
 }
 #end
