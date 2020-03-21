@@ -7,7 +7,7 @@ import haxe.macro.Expr;
 import banker.array.ArrayTools;
 
 class FiniteKeysMap {
-	public static function createFieldsWithGetter(
+	public static function createReadOnlyFields(
 		instances: Array<ClassField>,
 		fieldConverter: ClassField->Field,
 		keyType: Expr,
@@ -19,16 +19,16 @@ class FiniteKeysMap {
 		for (instance in instances) {
 			newFields[writeIndex] = fieldConverter(instance);
 			++writeIndex;
-			newFields[writeIndex] = createGetter(instance, getterName);
+			newFields[writeIndex] = createGet(instance, getterName);
 			++writeIndex;
 		}
 
-		newFields[writeIndex] = createGeneralGetter(instances, keyType, getterName);
+		newFields[writeIndex] = createGeneralGet(instances, keyType, getterName);
 
 		return newFields;
 	}
 
-	public static function createFieldsWithGetterSetter(
+	public static function createWritableFields(
 		instances: Array<ClassField>,
 		fieldConverter: ClassField->Field,
 		keyType: Expr,
@@ -41,20 +41,20 @@ class FiniteKeysMap {
 		for (instance in instances) {
 			newFields[writeIndex] = fieldConverter(instance);
 			++writeIndex;
-			newFields[writeIndex] = createGetter(instance, getterName);
+			newFields[writeIndex] = createGet(instance, getterName);
 			++writeIndex;
-			newFields[writeIndex] = createSetter(instance, setterName);
+			newFields[writeIndex] = createSet(instance, setterName);
 			++writeIndex;
 		}
 
-		newFields[writeIndex] = createGeneralGetter(instances, keyType, getterName);
+		newFields[writeIndex] = createGeneralGet(instances, keyType, getterName);
 		++writeIndex;
-		newFields[writeIndex] = createGeneralSetter(instances, keyType, setterName);
+		newFields[writeIndex] = createGeneralSet(instances, keyType, setterName);
 
 		return newFields;
 	}
 
-	static function createGetter(instance: ClassField, prefix: String): Field {
+	static function createGet(instance: ClassField, prefix: String): Field {
 		final name = instance.name.camelToPascal();
 		return {
 			name: '$prefix$name',
@@ -68,7 +68,7 @@ class FiniteKeysMap {
 		}
 	}
 
-	static function createGeneralGetter(
+	static function createGeneralGet(
 		instances: Array<ClassField>,
 		keyType: Expr,
 		methodName: String
@@ -101,7 +101,7 @@ class FiniteKeysMap {
 		};
 	}
 
-	static function createSetter(instance: ClassField, prefix: String): Field {
+	static function createSet(instance: ClassField, prefix: String): Field {
 		final name = instance.name.camelToPascal();
 		return {
 			name: '$prefix$name',
@@ -118,7 +118,7 @@ class FiniteKeysMap {
 		}
 	}
 
-	static function createGeneralSetter(
+	static function createGeneralSet(
 		instances: Array<ClassField>,
 		keyType: Expr,
 		methodName: String

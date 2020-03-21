@@ -45,14 +45,14 @@ class FiniteKeys {
 		);
 
 		final newFields = if (valuesAreFinal)
-			FiniteKeysMap.createFieldsWithGetter(
+			FiniteKeysMap.createReadOnlyFields(
 				instances,
 				fieldConverter,
 				enumAbstractTypeExpression,
 				"get"
 			);
 		else
-			FiniteKeysMap.createFieldsWithGetterSetter(
+			FiniteKeysMap.createWritableFields(
 				instances,
 				fieldConverter,
 				enumAbstractTypeExpression,
