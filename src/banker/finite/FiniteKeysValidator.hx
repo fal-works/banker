@@ -5,6 +5,7 @@ using haxe.macro.ExprTools;
 using haxe.macro.TypeTools;
 using sneaker.macro.MetadataExtension;
 using sneaker.macro.MacroCaster;
+using sneaker.macro.MacroComparator;
 
 import sneaker.macro.ContextTools;
 import sneaker.types.Result;
@@ -26,11 +27,6 @@ class FiniteKeysValidator {
 		Log(Warn)
 	);
 
-	static final catchReturnType = new ResultCatcher(
-		getReturnType,
-		Log(Warn)
-	);
-
 	static function getLocalClass(_: Any) {
 		final localClassRef = Context.getLocalClass();
 
@@ -40,7 +36,10 @@ class FiniteKeysValidator {
 			Failed('Tried to process something that is not a class.');
 	}
 
-	static function getInitialValue(metaAccess: MetaAccess): Result<InitialValue, String> {
+	static function getInitialValue(args: { metaAccess: MetaAccess, enumAbstractType: EnumAbstractType }): Result<InitialValue, String> {
+		final metaAccess = args.metaAccess;
+		final enumAbstractType = args.enumAbstractType;
+
 		final initialValues = metaAccess.extractParameters('${MetadataName.initialValue}');
 		final valuesLength = initialValues.length;
 
@@ -60,11 +59,20 @@ class FiniteKeysValidator {
 		if (factoriesLength == 1) {
 			final expression = initialValueFactories[0];
 			final type = Context.typeof(expression).toComplexType();
-			final returnType = catchReturnType.run(type);
-			if (returnType.failed) return Failed('A function is required in @${MetadataName.initialFactory} metadata');
 
-			debug('  Found factory function for setting initial values.');
-			return Ok(Function(expression, returnType.unwrap()));
+			return switch type {
+				case TFunction(arguments, returnType):
+					switch (arguments.length) {
+						case 0:
+							Failed('Missing argument of type ${${enumAbstractType.name}}');
+						case 1:
+							debug('  Found factory function for setting initial values.');
+							return Ok(Function(expression, returnType));
+						default:
+							Failed('Too many arguments');
+					}
+				default: Failed('Not a function');
+			}
 		}
 
 		if (factoriesLength > 1)
@@ -89,14 +97,5 @@ class FiniteKeysValidator {
 
 		return abstractType.toEnumAbstractType();
 	};
-
-	static function getReturnType(
-		complexType: ComplexType
-	): Result<ComplexType, String> {
-		return switch complexType {
-			case TFunction(_, returnType): Ok(returnType);
-			default: Failed('Not a function');
-		}
-	}
 }
 #end

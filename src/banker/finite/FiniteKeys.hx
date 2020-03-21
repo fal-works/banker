@@ -32,7 +32,10 @@ class FiniteKeys {
 		final instances = enumAbstractType.getInstances();
 
 		debug('Determine initial values from metadata.');
-		final initialValueResult = catchInitialValue.run(metaAccess);
+		final initialValueResult = catchInitialValue.run({
+			metaAccess: metaAccess,
+			enumAbstractType: enumAbstractType
+		});
 		if (initialValueResult.failed) return null;
 		final initialValue = initialValueResult.unwrap();
 		debug('  Determined.');
