@@ -1,6 +1,8 @@
 package banker.finite;
 
 #if macro
+using sneaker.format.StringExtension;
+
 import haxe.macro.Expr;
 import banker.array.ArrayTools;
 
@@ -53,7 +55,7 @@ class FiniteKeysMap {
 	}
 
 	static function createGetter(instance: ClassField, prefix: String): Field {
-		final name = instance.name;
+		final name = instance.name.camelToPascal();
 		return {
 			name: '$prefix$name',
 			kind: FFun({
@@ -100,7 +102,7 @@ class FiniteKeysMap {
 	}
 
 	static function createSetter(instance: ClassField, prefix: String): Field {
-		final name = instance.name;
+		final name = instance.name.camelToPascal();
 		return {
 			name: '$prefix$name',
 			kind: FFun({
