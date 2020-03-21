@@ -58,6 +58,13 @@ class ArrayFunctionalExtension {
 	}
 
 	/**
+		Checks if the array contains one or more elements that are equal to `element`.
+		@return `true` if found.
+	**/
+	public static inline function has<T>(_this: Array<T>, element: T): Bool
+		return _this.indexOf(element) > 0;
+
+	/**
 		Checks if the array contains one or more elements that match to `predicate`.
 		@param predicate Function that returns `true` if a given element meets the condition.
 		@return `true` if found.
@@ -87,17 +94,21 @@ class ArrayFunctionalExtension {
 		predicate: T->Bool,
 		defaultValue: T
 	): Null<T> {
-		var element = defaultValue;
+		var found = defaultValue;
 
 		final len = _this.length;
 		var i = 0;
+		var element: T;
 		while (i < len) {
 			element = get(_this, i);
-			if (predicate(element)) break;
+			if (predicate(element)) {
+				found = element;
+				break;
+			}
 			++i;
 		}
 
-		return element;
+		return found;
 	}
 
 	/**
