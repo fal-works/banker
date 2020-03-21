@@ -17,26 +17,26 @@ class FiniteKeys {
 	public static macro function from(enumAbstractTypeExpression: Expr): Fields {
 		PositionStack.reset();
 
-		final localClassResult = catchLocalClass.run(null);
-		if (localClassResult.failed) return null;
+		final localClassResult = getLocalClass();
+		if (localClassResult.isFailedWarn()) return null;
 
 		final localClass = localClassResult.unwrap();
 		final metaAccess = localClass.meta;
 
 		debug('Resolving enum abstract type.');
-		final enumAbstractTypeResult = catchEnumAbstractType.run(enumAbstractTypeExpression);
-		if (enumAbstractTypeResult.failed) return null;
+		final enumAbstractTypeResult = getEnumAbstractType(enumAbstractTypeExpression);
+		if (enumAbstractTypeResult.isFailedWarn()) return null;
 		final enumAbstractType = enumAbstractTypeResult.unwrap();
 		debug("  Resolved: " + enumAbstractType.name);
 
 		final instances = enumAbstractType.getInstances();
 
 		debug('Determine initial values from metadata.');
-		final initialValueResult = catchInitialValue.run({
+		final initialValueResult = getInitialValue({
 			metaAccess: metaAccess,
 			enumAbstractType: enumAbstractType
 		});
-		if (initialValueResult.failed) return null;
+		if (initialValueResult.isFailedWarn()) return null;
 		final initialValue = initialValueResult.unwrap();
 		debug('  Determined.');
 

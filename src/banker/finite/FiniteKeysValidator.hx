@@ -5,38 +5,26 @@ using haxe.macro.ExprTools;
 using haxe.macro.TypeTools;
 using sneaker.macro.MetadataExtension;
 using sneaker.macro.MacroCaster;
-using sneaker.macro.MacroComparator;
 
 import sneaker.macro.ContextTools;
-import sneaker.types.Result;
-import sneaker.trier.ResultCatcher;
+import sneaker.macro.MacroResult;
 
 class FiniteKeysValidator {
-	public static final catchLocalClass = new ResultCatcher(
-		getLocalClass,
-		Log(Warn)
-	);
-
-	public static final catchInitialValue = new ResultCatcher(
-		getInitialValue,
-		Log(Warn)
-	);
-
-	public static final catchEnumAbstractType = new ResultCatcher(
-		getEnumAbstractType,
-		Log(Warn)
-	);
-
-	static function getLocalClass(_: Any) {
+	public static function getLocalClass(): MacroResult<ClassType> {
 		final localClassRef = Context.getLocalClass();
 
 		return if (localClassRef != null)
 			Ok(localClassRef.get());
 		else
-			Failed('Tried to process something that is not a class.');
+			Failed(
+				'Tried to process something that is not a class.',
+				Context.currentPos()
+			);
 	}
 
-	static function getInitialValue(args: { metaAccess: MetaAccess, enumAbstractType: EnumAbstractType }): Result<InitialValue, String> {
+	public static function getInitialValue(
+		args: { metaAccess: MetaAccess, enumAbstractType: EnumAbstractType }
+	): MacroResult<InitialValue> {
 		final metaAccess = args.metaAccess;
 		final enumAbstractType = args.enumAbstractType;
 
@@ -51,51 +39,63 @@ class FiniteKeysValidator {
 		}
 
 		if (valuesLength > 1)
-			return Failed('Too many parameters in @${MetadataName.initialValue} metadata');
+			return Failed(
+				'Too many parameters in @${MetadataName.initialValue} metadata',
+				initialValues[0].pos
+			);
 
-		final initialValueFactories = metaAccess.extractParameters('${MetadataName.initialFactory}');
-		final factoriesLength = initialValueFactories.length;
+		final factories = metaAccess.extractParameters('${MetadataName.initialFactory}');
+		final factoriesLength = factories.length;
 
 		if (factoriesLength == 1) {
-			final expression = initialValueFactories[0];
+			final expression = factories[0];
 			final type = Context.typeof(expression).toComplexType();
 
 			return switch type {
 				case TFunction(arguments, returnType):
 					switch (arguments.length) {
 						case 0:
-							Failed('Missing argument of type ${${enumAbstractType.name}}');
+							Failed(
+								'Missing argument of type ${${enumAbstractType.name}}',
+								expression.pos
+							);
 						case 1:
 							debug('  Found factory function for setting initial values.');
 							return Ok(Function(expression, returnType));
 						default:
-							Failed('Too many arguments');
+							Failed('Too many arguments', expression.pos);
 					}
-				default: Failed('Not a function');
+				default: Failed('Not a function', expression.pos);
 			}
 		}
 
 		if (factoriesLength > 1)
-			return Failed('Too many parameters in @${MetadataName.initialValue} metadata');
+			return Failed(
+				'Too many parameters in @${MetadataName.initialValue} metadata',
+				factories[0].pos
+			);
 
 		debug('  Initial values not specified. Set false as initial value.');
 		return Ok(Value(macro false, (macro:Bool)));
 	};
 
-	static function getEnumAbstractType(
+	public static function getEnumAbstractType(
 		parameter: Expr
-	): Result<EnumAbstractType, String> {
+	): MacroResult<EnumAbstractType> {
 		final type = ContextTools.tryGetType(parameter.toString());
-		if (type == null) return Failed('Type not found');
+		if (type == null) return Failed('Type not found', parameter.pos);
 
 		var abstractType: AbstractType;
 
 		switch (type.toAbstractType()) {
 			case Ok(v): abstractType = v;
-			case Failed(message): return Failed(message);
+			case Failed(message): return Failed(message, parameter.pos);
 		}
 
-		return abstractType.toEnumAbstractType();
+		return switch (abstractType.toEnumAbstractType()) {
+			case Ok(v): Ok(v);
+			case Failed(message): Failed(message, parameter.pos);
+		}
 	};
 }
 #end
