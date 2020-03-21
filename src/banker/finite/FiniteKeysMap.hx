@@ -8,7 +8,14 @@ import haxe.macro.Expr;
 import banker.array.ArrayTools;
 import banker.finite.FiniteKeysCollection.*;
 
+/**
+	Functions for creating fields of a finite keys map.
+**/
 class FiniteKeysMap {
+	/**
+		Create fields for a finite keys map. Should be called if the values are `final`.
+		@return Variables and read-access methods.
+	**/
 	public static function createReadOnlyFields(
 		instances: Array<ClassField>,
 		fieldConverter: ClassField->Field,
@@ -28,6 +35,10 @@ class FiniteKeysMap {
 		return newFields;
 	}
 
+	/**
+		Create fields for a finite keys map. Should be called if the values are not `final`.
+		@return Variables, read-access methods and write-access methods.
+	**/
 	public static function createWritableFields(
 		instances: Array<ClassField>,
 		fieldConverter: ClassField->Field,

@@ -8,6 +8,9 @@ using banker.array.ArrayFunctionalExtension;
 import sneaker.macro.ContextTools;
 import sneaker.macro.MacroResult;
 
+/**
+	Functions for validation in `FiniteKeys` macro.
+**/
 class FiniteKeysValidator {
 	/**
 		Tries to resolve `typeExpression` as `EnumAbstractType`.

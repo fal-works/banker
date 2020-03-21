@@ -5,6 +5,9 @@ using sneaker.format.StringExtension;
 
 import haxe.macro.Expr;
 
+/**
+	Functions for creating get/set methods.
+**/
 class FiniteKeysCollection {
 	/**
 		@return Getter field for specific `instance`.

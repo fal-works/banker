@@ -1,7 +1,13 @@
 package banker.finite;
 
 #if macro
+/**
+	Common functions for `FiniteKeys` macro.
+**/
 class FiniteKeysField {
+	/**
+		@return Function that converts an enum abstract instance to an initialized variable field.
+	**/
 	public static function getFieldConverter(
 		initialValue: InitialValue,
 		valuesAreFinal: Bool,
@@ -34,6 +40,9 @@ class FiniteKeysField {
 		}
 	}
 
+	/**
+		@return An empty public function field with name "new".
+	**/
 	public static function createConstructor(): Field {
 		return {
 			name: "new",
