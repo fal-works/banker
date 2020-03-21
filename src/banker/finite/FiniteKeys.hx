@@ -8,6 +8,7 @@ using banker.array.ArrayFunctionalExtension;
 
 import sneaker.macro.FieldExtension;
 import sneaker.macro.PositionStack;
+import sneaker.macro.ContextTools.getLocalClass;
 import banker.finite.FiniteKeysValidator.*;
 
 class FiniteKeys {
@@ -29,18 +30,15 @@ class FiniteKeys {
 		final enumAbstractType = enumAbstractTypeResult.unwrap();
 		debug("  Resolved: " + enumAbstractType.name);
 
+		final buildFields = Context.getBuildFields();
 		final instances = enumAbstractType.getInstances();
 
 		debug('Determine initial values from metadata.');
-		final initialValueResult = getInitialValue({
-			metaAccess: metaAccess,
-			enumAbstractType: enumAbstractType
-		});
+		final initialValueResult = getInitialValue(buildFields, enumAbstractType);
 		if (initialValueResult.isFailedWarn()) return null;
 		final initialValue = initialValueResult.unwrap();
 		debug('  Determined.');
 
-		final buildFields = Context.getBuildFields();
 		final valuesAreFinal = metaAccess.has('${MetadataName.finalValues}');
 
 		debug('Create fields.');
@@ -79,13 +77,13 @@ class FiniteKeys {
 					access: fieldAccess,
 					doc: instance.doc
 				});
-			case Function(factory, returnType):
+			case Function(functionName, returnType):
 				instances.map(function(instance): Field return {
 					final name = instance.name;
 					final keyTypeName = macro $i{enumAbstractType.name};
 					return {
 						name: name,
-						kind: FVar(returnType, macro $factory($keyTypeName.$name)),
+						kind: FVar(returnType, macro $i{functionName}($keyTypeName.$name)),
 						pos: instance.pos,
 						access: fieldAccess,
 						doc: instance.doc

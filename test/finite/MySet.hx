@@ -13,10 +13,17 @@ enum abstract Abc(Int) {
 @:build(banker.finite.FiniteKeys.from(Abc))
 class MySet {}
 
-@:banker.finite.initialValue(0)
 @:build(banker.finite.FiniteKeys.from(Abc))
-class MyMap {}
+class MyMap {
+	static final initialValue = 0;
+}
 
-@:banker.finite.initialFactory((key: Abc) -> switch key { case A: 1; default: 2; })
 @:build(banker.finite.FiniteKeys.from(Abc))
-class MyMap2 {}
+class MyMap2 {
+	static function initialValue(key: Abc): Int {
+		return switch key {
+			case A: 1;
+			default: 2;
+		};
+	}
+}

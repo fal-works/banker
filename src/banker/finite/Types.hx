@@ -8,7 +8,7 @@ enum KeyType {
 }
 
 enum InitialValue {
-	Value(expression: Expr, type: ComplexType);
-	Function(expression: Expr, returnType: ComplexType);
+	Value(expression: Expr, ?type: ComplexType);
+	Function(name: String, ?returnType: ComplexType);
 }
 #end
