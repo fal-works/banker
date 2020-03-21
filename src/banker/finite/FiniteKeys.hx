@@ -1,16 +1,10 @@
 package banker.finite;
 
 #if macro
-using Lambda;
-using sneaker.macro.MacroCaster;
-using sneaker.macro.FieldExtension;
 using sneaker.macro.EnumAbstractExtension;
-using banker.array.ArrayFunctionalExtension;
 
-import sneaker.macro.FieldExtension;
 import sneaker.macro.PositionStack;
 import sneaker.macro.ContextTools.getLocalClass;
-import banker.array.ArrayTools;
 import banker.finite.FiniteKeysValidator.*;
 
 class FiniteKeys {
@@ -44,133 +38,25 @@ class FiniteKeys {
 		final valuesAreFinal = metaAccess.has('${MetadataName.finalValues}');
 
 		debug('Create fields.');
-		final fieldConverter = getFieldConverter(
+		final fieldConverter = FiniteKeysField.getFieldConverter(
 			initialValue,
 			valuesAreFinal,
 			enumAbstractTypeExpression
 		);
 
 		final newFields = if (valuesAreFinal)
-			createFieldsWithGetter(instances, fieldConverter);
+			FiniteKeysField.createFieldsWithGetter(instances, fieldConverter);
 		else
-			createFieldsWithGetterSetter(instances, fieldConverter);
+			FiniteKeysField.createFieldsWithGetterSetter(instances, fieldConverter);
 
 		for (field in newFields) debug('  - ${field.name}');
 		if (localClass.constructor == null) {
-			newFields.push(createConstructor());
+			newFields.push(FiniteKeysField.createConstructor());
 			debug('  - new');
 		}
 		debug('  Created.');
 
 		return buildFields.concat(newFields);
-	}
-
-	static function getFieldConverter(
-		initialValue: InitialValue,
-		valuesAreFinal: Bool,
-		keyType: Expr
-	): ClassField->Field {
-		final fieldAccess = [APublic];
-		if (valuesAreFinal) fieldAccess.push(AFinal);
-
-		return switch initialValue {
-			case Value(value, type):
-				final fieldType:FieldType = FVar(type, value);
-				function(instance): Field return {
-					name: instance.name,
-					kind: fieldType,
-					pos: instance.pos,
-					access: fieldAccess,
-					doc: instance.doc
-				}
-			case Function(functionName, returnType):
-				function(instance): Field return {
-					final name = instance.name;
-					return {
-						name: name,
-						kind: FVar(returnType, macro $i{functionName}($keyType.$name)),
-						pos: instance.pos,
-						access: fieldAccess,
-						doc: instance.doc
-					};
-				}
-		}
-	}
-
-	static function createGetter(instance: ClassField): Field {
-		final name = instance.name;
-		return {
-			name: 'get$name',
-			kind: FFun({
-				args: [],
-				ret: null,
-				expr: macro return this.$name
-			}),
-			pos: instance.pos,
-			access: [APublic, AInline]
-		}
-	}
-
-	static function createSetter(instance: ClassField): Field {
-		final name = instance.name;
-		return {
-			name: 'set$name',
-			kind: FFun({
-				args: [{
-					name: "value",
-					type: null
-				}],
-				ret: null,
-				expr: macro return this.$name = value
-			}),
-			pos: instance.pos,
-			access: [APublic, AInline]
-		}
-	}
-
-	static function createFieldsWithGetter(
-		instances: Array<ClassField>,
-		fieldConverter: ClassField->Field
-	): Fields {
-		final newFields = ArrayTools.allocate(instances.length * 2);
-		var writeIndex = 0;
-		for (instance in instances) {
-			newFields[writeIndex] = fieldConverter(instance);
-			++writeIndex;
-			newFields[writeIndex] = createGetter(instance);
-			++writeIndex;
-		}
-		return newFields;
-	}
-
-	static function createFieldsWithGetterSetter(
-		instances: Array<ClassField>,
-		fieldConverter: ClassField->Field
-	): Fields {
-		final newFields = ArrayTools.allocate(instances.length * 3);
-		var writeIndex = 0;
-		for (instance in instances) {
-			newFields[writeIndex] = fieldConverter(instance);
-			++writeIndex;
-			newFields[writeIndex] = createGetter(instance);
-			++writeIndex;
-			newFields[writeIndex] = createSetter(instance);
-			++writeIndex;
-		}
-		return newFields;
-	}
-
-	static function createConstructor(): Field {
-		return {
-			name: "new",
-			kind: FFun({
-				args: [],
-				ret: null,
-				expr: macro null
-			}),
-			access: [APublic],
-			pos: Context.currentPos()
-		};
 	}
 }
 #end
