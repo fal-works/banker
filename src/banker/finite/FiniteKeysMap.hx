@@ -8,7 +8,8 @@ class FiniteKeysMap {
 	public static function createFieldsWithGetter(
 		instances: Array<ClassField>,
 		fieldConverter: ClassField->Field,
-		keyType: Expr
+		keyType: Expr,
+		getterName: String
 	): Fields {
 		final newFields = ArrayTools.allocate(instances.length * 2 + 1);
 		var writeIndex = 0;
@@ -16,11 +17,11 @@ class FiniteKeysMap {
 		for (instance in instances) {
 			newFields[writeIndex] = fieldConverter(instance);
 			++writeIndex;
-			newFields[writeIndex] = createGetter(instance);
+			newFields[writeIndex] = createGetter(instance, getterName);
 			++writeIndex;
 		}
 
-		newFields[writeIndex] = createGeneralGetter(instances, keyType);
+		newFields[writeIndex] = createGeneralGetter(instances, keyType, getterName);
 
 		return newFields;
 	}
@@ -28,7 +29,9 @@ class FiniteKeysMap {
 	public static function createFieldsWithGetterSetter(
 		instances: Array<ClassField>,
 		fieldConverter: ClassField->Field,
-		keyType: Expr
+		keyType: Expr,
+		getterName: String,
+		setterName: String
 	): Fields {
 		final newFields = ArrayTools.allocate(instances.length * 3 + 1);
 		var writeIndex = 0;
@@ -36,23 +39,23 @@ class FiniteKeysMap {
 		for (instance in instances) {
 			newFields[writeIndex] = fieldConverter(instance);
 			++writeIndex;
-			newFields[writeIndex] = createGetter(instance);
+			newFields[writeIndex] = createGetter(instance, getterName);
 			++writeIndex;
-			newFields[writeIndex] = createSetter(instance);
+			newFields[writeIndex] = createSetter(instance, setterName);
 			++writeIndex;
 		}
 
-		newFields[writeIndex] = createGeneralGetter(instances, keyType);
+		newFields[writeIndex] = createGeneralGetter(instances, keyType, getterName);
 		++writeIndex;
-		newFields[writeIndex] = createGeneralSetter(instances,keyType);
+		newFields[writeIndex] = createGeneralSetter(instances, keyType, setterName);
 
 		return newFields;
 	}
 
-	static function createGetter(instance: ClassField): Field {
+	static function createGetter(instance: ClassField, prefix: String): Field {
 		final name = instance.name;
 		return {
-			name: 'get$name',
+			name: '$prefix$name',
 			kind: FFun({
 				args: [],
 				ret: null,
@@ -63,16 +66,18 @@ class FiniteKeysMap {
 		}
 	}
 
-	static function createGeneralGetter(instances: Array<ClassField>, keyType: Expr): Field {
-		final cases: Array<Case> = [
-			for (instance in instances) {
-				final name = instance.name;
-				{
-					values: [macro $keyType.$name],
-					expr: macro this.$name
-				};
-			}
-		];
+	static function createGeneralGetter(
+		instances: Array<ClassField>,
+		keyType: Expr,
+		methodName: String
+	): Field {
+		final cases: Array<Case> = [for (instance in instances) {
+			final name = instance.name;
+			{
+				values: [macro $keyType.$name],
+				expr: macro this.$name
+			};
+		}];
 		final switchExpression: Expr = {
 			expr: ESwitch(macro key, cases, null),
 			pos: Context.currentPos()
@@ -87,17 +92,17 @@ class FiniteKeysMap {
 		});
 
 		return {
-			name: "get",
+			name: methodName,
 			kind: fieldType,
 			pos: Context.currentPos(),
 			access: [APublic, AInline]
 		};
 	}
 
-	static function createSetter(instance: ClassField): Field {
+	static function createSetter(instance: ClassField, prefix: String): Field {
 		final name = instance.name;
 		return {
-			name: 'set$name',
+			name: '$prefix$name',
 			kind: FFun({
 				args: [{
 					name: "value",
@@ -111,16 +116,18 @@ class FiniteKeysMap {
 		}
 	}
 
-	static function createGeneralSetter(instances: Array<ClassField>, keyType: Expr): Field {
-		final cases: Array<Case> = [
-			for (instance in instances) {
-				final name = instance.name;
-				{
-					values: [macro $keyType.$name],
-					expr: macro this.$name = value
-				};
-			}
-		];
+	static function createGeneralSetter(
+		instances: Array<ClassField>,
+		keyType: Expr,
+		methodName: String
+	): Field {
+		final cases: Array<Case> = [for (instance in instances) {
+			final name = instance.name;
+			{
+				values: [macro $keyType.$name],
+				expr: macro this.$name = value
+			};
+		}];
 		final switchExpression: Expr = {
 			expr: ESwitch(macro key, cases, null),
 			pos: Context.currentPos()
@@ -138,7 +145,7 @@ class FiniteKeysMap {
 		});
 
 		return {
-			name: "set",
+			name: methodName,
 			kind: fieldType,
 			pos: Context.currentPos(),
 			access: [APublic, AInline]

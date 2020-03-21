@@ -45,9 +45,20 @@ class FiniteKeys {
 		);
 
 		final newFields = if (valuesAreFinal)
-			FiniteKeysMap.createFieldsWithGetter(instances, fieldConverter, enumAbstractTypeExpression);
+			FiniteKeysMap.createFieldsWithGetter(
+				instances,
+				fieldConverter,
+				enumAbstractTypeExpression,
+				"get"
+			);
 		else
-			FiniteKeysMap.createFieldsWithGetterSetter(instances, fieldConverter, enumAbstractTypeExpression);
+			FiniteKeysMap.createFieldsWithGetterSetter(
+				instances,
+				fieldConverter,
+				enumAbstractTypeExpression,
+				"get",
+				"set"
+			);
 
 		for (field in newFields) debug('  - ${field.name}');
 		if (localClass.constructor == null) {
