@@ -17,6 +17,12 @@ class FiniteKeysTest {
 		assert(myMap.A == 0);
 		myMap.A = 1;
 		assert(myMap.A == 1);
+
+		final a = myMap.get(A);
+		assert(a == 1);
+
+		myMap.set(B, 2);
+		assert(myMap.B == 2);
 	}
 
 	static final _myMap = testCase(myMap, Ok);
