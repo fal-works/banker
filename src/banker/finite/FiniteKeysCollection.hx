@@ -4,6 +4,7 @@ package banker.finite;
 using sneaker.format.StringExtension;
 
 import haxe.macro.Expr;
+import haxe.macro.TypeTools;
 import banker.array.ArrayTools;
 
 /**
@@ -72,22 +73,34 @@ class FiniteKeysCollection {
 	/**
 		@return Function field `forEach(key, value)`.
 	**/
+	@:access(haxe.macro.TypeTools)
 	public static function createForEach(
 		instances: Array<ClassField>,
-		keyType: Expr
+		keyTypeExpression: Expr,
+		keyType: EnumAbstractType,
+		valueType: ComplexType
 	): Field {
 		final expressions: Array<Expr> = ArrayTools.allocate(instances.length);
 		var i = 0;
 
+		final keyTypePath = TypeTools.toTypePath(keyType, []);
+		final callbackType: ComplexType = TFunction([
+			TNamed("key", TPath(keyTypePath)),
+			TNamed("value", valueType)
+		], (macro:Void));
+
 		final fieldType: FieldType = FFun({
-			args: [{ name: "callback", type: null }],
+			args: [{
+				name: "callback",
+				type: callbackType
+			}],
 			ret: (macro:Void),
 			expr: macro $b{expressions}
 		});
 
 		for (instance in instances) {
 			final name = instance.name;
-			final key = macro $keyType.$name;
+			final key = macro $keyTypeExpression.$name;
 			expressions[i++] = macro callback($key, this.$name);
 		}
 

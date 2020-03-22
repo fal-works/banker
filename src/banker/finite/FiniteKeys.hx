@@ -59,6 +59,15 @@ class FiniteKeys {
 
 		for (field in newFields) debug('  - ${field.name}');
 
+		final forEachField = FiniteKeysCollection.createForEach(
+			instances,
+			enumAbstractTypeExpression,
+			enumAbstractType,
+			initialValue.type
+		);
+		newFields.push(forEachField);
+		debug('  - ${forEachField.name}');
+
 		if (localClass.constructor == null) {
 			newFields.push(FiniteKeysField.createConstructor());
 			debug('  - new');
