@@ -16,6 +16,7 @@ This library provides:
 Internally based on the vector type above. Also going to add other implementations.
 - "Watermark" feature for profiling usage ratio of data collection objects.
 - Generate [AoSoA (Array of Structures of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA) from any user-defined class. (Experimental)
+- `FiniteKeys` macro, which generates a map-like class from any enum abstract type. (Experimental)
 - Some other small features like `Array` extensions or `ObjectPool` classes.
 
 Internally uses assertion feature of [sneaker](https://github.com/fal-works/sneaker) library, which means:  
