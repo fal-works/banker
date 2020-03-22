@@ -10,8 +10,10 @@ import banker.finite.FiniteKeysValidator.*;
 class FiniteKeys {
 	/**
 		Add fields to the class, generating from instances of `enumAbstractType`.
+
+		@param keyTypeExpression Any enum abstract type.
 	**/
-	public static macro function from(enumAbstractTypeExpression: Expr): Fields {
+	public static macro function from(keyTypeExpression: Expr): Fields {
 		PositionStack.reset();
 
 		final localClassResult = getLocalClass();
@@ -21,7 +23,7 @@ class FiniteKeys {
 		final metaAccess = localClass.meta;
 
 		debug('Resolving enum abstract type.');
-		final enumAbstractTypeResult = getEnumAbstractType(enumAbstractTypeExpression);
+		final enumAbstractTypeResult = getEnumAbstractType(keyTypeExpression);
 		if (enumAbstractTypeResult.isFailedWarn()) return null;
 		final enumAbstractType = enumAbstractTypeResult.unwrap();
 		debug("  Resolved: " + enumAbstractType.name);
@@ -30,7 +32,7 @@ class FiniteKeys {
 		final instances = enumAbstractType.getInstances();
 
 		debug('Determine initial values from metadata.');
-		final initialValueResult = getInitialValue(buildFields, enumAbstractType);
+		final initialValueResult = getInitialValue(buildFields, enumAbstractType.name);
 		if (initialValueResult.isFailedWarn()) return null;
 		final initialValue = initialValueResult.unwrap();
 		debug('  Determined.');
@@ -41,28 +43,29 @@ class FiniteKeys {
 		final fieldConverter = FiniteKeysField.getFieldConverter(
 			initialValue,
 			valuesAreFinal,
-			enumAbstractTypeExpression
+			keyTypeExpression
 		);
 
 		final newFields = if (valuesAreFinal)
 			FiniteKeysMap.createReadOnlyFields(
 				instances,
 				fieldConverter,
-				enumAbstractTypeExpression
+				keyTypeExpression
 			);
 		else
 			FiniteKeysMap.createWritableFields(
 				instances,
 				fieldConverter,
-				enumAbstractTypeExpression
+				keyTypeExpression
 			);
 
 		for (field in newFields) debug('  - ${field.name}');
 
+		final keyComplexType = enumAbstractType.toComplexType2();
 		final forEachField = FiniteKeysCollection.createForEach(
 			instances,
-			enumAbstractTypeExpression,
-			enumAbstractType,
+			keyTypeExpression,
+			keyComplexType,
 			initialValue.type
 		);
 		newFields.push(forEachField);

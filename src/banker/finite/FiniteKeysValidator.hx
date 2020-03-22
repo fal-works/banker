@@ -37,7 +37,7 @@ class FiniteKeysValidator {
 	**/
 	public static function getInitialValue(
 		buildFields: Fields,
-		enumAbstractType: EnumAbstractType
+		keyTypeName: String
 	): MacroResult<InitialValue> {
 		final initialValueField = buildFields.findFirst(
 			fieldIsInitialValue,
@@ -72,7 +72,7 @@ class FiniteKeysValidator {
 				return switch (func.args.length) {
 					case 0:
 						Failed(
-							'Missing argument of type ${enumAbstractType.name}',
+							'Missing argument of type $keyTypeName',
 							position
 						);
 					case 1:

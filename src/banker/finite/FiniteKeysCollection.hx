@@ -77,15 +77,14 @@ class FiniteKeysCollection {
 	public static function createForEach(
 		instances: Array<ClassField>,
 		keyTypeExpression: Expr,
-		keyType: EnumAbstractType,
+		keyType: ComplexType,
 		valueType: ComplexType
 	): Field {
 		final expressions: Array<Expr> = ArrayTools.allocate(instances.length);
 		var i = 0;
 
-		final keyTypePath = TypeTools.toTypePath(keyType, []);
 		final callbackType: ComplexType = TFunction([
-			TNamed("key", TPath(keyTypePath)),
+			TNamed("key", keyType),
 			TNamed("value", valueType)
 		], (macro:Void));
 
