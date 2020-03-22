@@ -16,6 +16,7 @@ class FiniteKeys {
 	**/
 	public static macro function from(keyTypeExpression: Expr): Fields {
 		PositionStack.reset();
+		debug('Start to build.');
 
 		final localClassResult = getLocalClass();
 		if (localClassResult.isFailedWarn()) return null;
@@ -42,8 +43,14 @@ class FiniteKeys {
 		debug('  Determined.');
 
 		final valuesAreFinal = metaAccess.has('${MetadataName.finalValues}');
+		if (valuesAreFinal) {
+			debug('Found metadata: @${MetadataName.finalValues}');
+			debug('Create read-only fields.');
+		} else {
+			debug('Metadata not specified: @${MetadataName.finalValues}');
+			debug('Create writable fields.');
+		}
 
-		debug('Create fields.');
 		final fieldConverter = FiniteKeysField.getFieldConverter(
 			initialValue,
 			valuesAreFinal,
@@ -78,6 +85,7 @@ class FiniteKeys {
 		for (field in newFields) debug('  - ${field.name}');
 		debug('  Created.');
 
+		debug('End building.');
 		return buildFields.concat(newFields);
 	}
 }
