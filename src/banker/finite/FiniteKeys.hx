@@ -16,39 +16,43 @@ class FiniteKeys {
 	**/
 	public static macro function from(keyTypeExpression: Expr): Fields {
 		PositionStack.reset();
-		debug('Start to build.');
 
 		final localClassResult = getLocalClass();
 		if (localClassResult.isFailedWarn()) return null;
-
 		final localClass = localClassResult.unwrap();
+
+		setVerificationState(localClass);
+		if (notVerified) debug('Start to build.');
+
 		final metaAccess = localClass.meta;
 
-		debug('Resolving enum abstract type.');
+		if (notVerified) debug('Resolving enum abstract type.');
 		final enumAbstractTypeResult = getEnumAbstractType(keyTypeExpression);
 		if (enumAbstractTypeResult.isFailedWarn()) return null;
 		final enumAbstractType = enumAbstractTypeResult.unwrap();
-		debug("  Resolved: " + enumAbstractType.name);
+		if (notVerified) debug("  Resolved: " + enumAbstractType.name);
 
 		final buildFields = Context.getBuildFields();
 		final instances = enumAbstractType.getInstances();
 
-		debug('Determine initial values from metadata.');
+		if (notVerified) debug('Determine initial values from metadata.');
 		final initialValueResult = getInitialValue(
 			buildFields,
 			enumAbstractType.name
 		);
 		if (initialValueResult.isFailedWarn()) return null;
 		final initialValue = initialValueResult.unwrap();
-		debug('  Determined.');
+		if (notVerified) debug('  Determined.');
 
 		final valuesAreFinal = metaAccess.has('${MetadataName.finalValues}');
-		if (valuesAreFinal) {
-			debug('Found metadata: @${MetadataName.finalValues}');
-			debug('Create read-only fields.');
-		} else {
-			debug('Metadata not specified: @${MetadataName.finalValues}');
-			debug('Create writable fields.');
+		if (notVerified) {
+			if (valuesAreFinal) {
+				debug('Found metadata: @${MetadataName.finalValues}');
+				debug('Create read-only fields.');
+			} else {
+				debug('Metadata not specified: @${MetadataName.finalValues}');
+				debug('Create writable fields.');
+			}
 		}
 
 		final fieldConverter = FiniteKeysField.getFieldConverter(
@@ -82,10 +86,12 @@ class FiniteKeys {
 		if (localClass.constructor == null)
 			newFields.push(FiniteKeysField.createConstructor());
 
-		for (field in newFields) debug('  - ${field.name}');
-		debug('  Created.');
+		if (notVerified) {
+			for (field in newFields) debug('  - ${field.name}');
+			debug('  Created.');
+			debug('End building.');
+		}
 
-		debug('End building.');
 		return buildFields.concat(newFields);
 	}
 }

@@ -10,14 +10,17 @@ enum abstract Abc(Int) {
 	final C;
 }
 
+// @:banker.verified
 @:build(banker.finite.FiniteKeys.from(Abc))
 class MySet {}
 
+// @:banker.verified
 @:build(banker.finite.FiniteKeys.from(Abc))
 class MyMap {
 	static final initialValue: Int = 0;
 }
 
+// @:banker.verified
 @:build(banker.finite.FiniteKeys.from(Abc))
 class MyMap2 {
 	static function initialValue(key: Abc): Int {

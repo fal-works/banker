@@ -46,7 +46,7 @@ class FiniteKeysValidator {
 		);
 
 		if (initialValueField == dummyField) {
-			debug('  Initial values not specified. Set false as initial value.');
+			if (notVerified) debug('  Initial values not specified. Set false as initial value.');
 			return Ok({ kind: Value(macro false), type: (macro:Bool) });
 		}
 
@@ -54,14 +54,14 @@ class FiniteKeysValidator {
 
 		switch (initialValueField.kind) {
 			case FVar(type, expression):
-				debug('  Found a variable.');
+				if (notVerified) debug('  Found a variable.');
 				return if (type == null)
 					Failed('Explicit type is required', position);
 				else
 					Ok({ kind: Value(expression), type: type });
 
 			case FFun(func):
-				debug('  Found a factory function.');
+				if (notVerified) debug('  Found a factory function.');
 
 				final returnType = func.ret;
 				if (returnType == null)

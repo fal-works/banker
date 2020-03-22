@@ -4,7 +4,8 @@ package banker.finite;
 import haxe.macro.Expr;
 import haxe.macro.Context;
 import haxe.macro.Type;
-import banker.finite.Types;
 import sneaker.macro.Types;
 import sneaker.macro.MacroLogger.*;
+import banker.common.internal.MacroContext.*;
+import banker.finite.Types;
 #end
