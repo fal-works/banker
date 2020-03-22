@@ -254,6 +254,86 @@ The changes are buffered and are not reflected unless you call this.
 You also have to set an initializing value at the declaration, e.g. `var x: Float = 0`.
 Alternatively, add metadata `@:banker.factory(anyFactoryFunction)` to the variable to use the factory function instead of filling all entities with the same value.
 - Set the compiler flag `sneaker_macro_log_level` to 500 or more to show debug logs during the class generation.
+- By adding metadata `@:banker.verified` to your `Structure` class, you can suppress debug logs for that class individually, without changing the whole log level.
+
+
+## package: finite
+
+Provides a build macro for creating a map-like class from an enum abstract type.
+
+Say you have an enum abstract like this:
+
+```haxe
+enum abstract MyEnumAbstract(Int) {
+	final A;
+	final B;
+	final C;
+}
+```
+
+You can create a class with build macro `banker.finite.FiniteKeys.from()`,
+where all enum values are converted to a variable with any specified type.
+
+### Creating a set
+
+Without providing any initial value, each variable has `Bool` type, initialized with `false`.
+
+```haxe
+@:build(banker.finite.FiniteKeys.from(MyEnumAbstract))
+class MySet {}
+```
+
+```haxe
+final mySet = new MySet();
+trace(mySet.A); // false
+mySet.A = true;
+trace(mySet.A); // true
+```
+
+### Creating a map
+
+You can specify an initial value with any type by adding a variable that is either:
+
+- named `initialValue`, or
+- added `@:banker.finite.initialValue` metadata.
+
+```haxe
+@:build(banker.finite.FiniteKeys.from(Abc))
+class MyMap {
+	static final initialValue: Int = 0;
+}
+```
+
+You can also specify a function, which will be treated as a factory function for initializing each variable.
+
+```haxe
+@:build(banker.finite.FiniteKeys.from(Abc))
+class MyMap2 {
+	static function initialValue(key: Abc): Int {
+		return switch key {
+			case A: 1;
+			case B: 2;
+			case C: 3;
+		};
+	}
+}
+```
+
+The class will also have some methods such as `get(key)`, `set(key, value)` and `forEach(callback)`.
+
+### Make read-only
+
+By adding `@:banker.finite.final` metadata to the class,
+
+- All generated variables will be declared as `final`, and
+- The class will not have setter methods.
+
+### Debug log
+
+Similar to the `aosoa` package,
+
+- Set the compiler flag `sneaker_macro_log_level` to 500 or more to show debug logs during the generation.
+- You can suppress debug logs without changing the whole log level by adding `@:banker.verified` metadata to your class.
 
 
 ## Doesn't work?
