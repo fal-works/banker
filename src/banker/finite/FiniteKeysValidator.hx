@@ -7,6 +7,7 @@ using banker.array.ArrayFunctionalExtension;
 
 import sneaker.macro.ContextTools;
 import sneaker.macro.MacroResult;
+import sneaker.macro.EnumAbstractType;
 
 /**
 	Functions for validation in `FiniteKeys` macro.

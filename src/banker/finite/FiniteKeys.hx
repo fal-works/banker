@@ -1,11 +1,11 @@
 package banker.finite;
 
 #if macro
-using sneaker.macro.EnumAbstractExtension;
 using banker.array.ArrayExtension;
 
 import sneaker.macro.PositionStack;
 import sneaker.macro.ContextTools.getLocalClass;
+import sneaker.macro.EnumAbstractType;
 import banker.finite.FiniteKeysValidator.*;
 
 class FiniteKeys {
