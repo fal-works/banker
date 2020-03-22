@@ -46,22 +46,28 @@ class FiniteKeysValidator {
 
 		if (initialValueField == dummyField) {
 			debug('  Initial values not specified. Set false as initial value.');
-			return Ok(Value(macro false, (macro:Bool)));
+			return Ok({ kind: Value(macro false), type: (macro:Bool) });
 		}
+
+		final position = initialValueField.pos;
 
 		switch (initialValueField.kind) {
 			case FVar(type, expression):
 				debug('  Found a variable.');
-				return Ok(Value(expression, type));
+				return if (type == null)
+					Failed('Explicit type is required', position);
+				else
+					Ok({ kind: Value(expression), type: type });
 
 			case FFun(func):
 				debug('  Found a factory function.');
-				final position = initialValueField.pos;
-				final expression = func.expr;
-				if (expression == null) return Failed(
-					'Missing function body',
-					position
-				);
+
+				final returnType = func.ret;
+				if (returnType == null)
+					return Failed('Explicit return type is required', position);
+
+				if (func.expr == null)
+					return Failed('Missing function body', position);
 
 				return switch (func.args.length) {
 					case 0:
@@ -70,7 +76,7 @@ class FiniteKeysValidator {
 							position
 						);
 					case 1:
-						Ok(Function(initialValueField.name, func.ret));
+						Ok({ kind: Function(initialValueField.name), type: returnType });
 					default:
 						Failed('Too many arguments', position);
 				}

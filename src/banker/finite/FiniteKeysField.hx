@@ -16,9 +16,9 @@ class FiniteKeysField {
 		final fieldAccess: Array<Access> = [APublic];
 		if (valuesAreFinal) fieldAccess.push(AFinal);
 
-		return switch initialValue {
-			case Value(value, type):
-				final fieldType:FieldType = FVar(type, value);
+		return switch (initialValue.kind) {
+			case Value(value):
+				final fieldType:FieldType = FVar(initialValue.type, value);
 				function(instance): Field return {
 					name: instance.name,
 					kind: fieldType,
@@ -26,12 +26,15 @@ class FiniteKeysField {
 					access: fieldAccess,
 					doc: instance.doc
 				}
-			case Function(functionName, returnType):
+			case Function(functionName):
 				function(instance): Field return {
 					final name = instance.name;
 					return {
 						name: name,
-						kind: FVar(returnType, macro $i{functionName}($keyType.$name)),
+						kind: FVar(
+							initialValue.type,
+							macro $i{functionName}($keyType.$name)
+						),
 						pos: instance.pos,
 						access: fieldAccess,
 						doc: instance.doc

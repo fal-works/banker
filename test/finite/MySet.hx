@@ -15,7 +15,7 @@ class MySet {}
 
 @:build(banker.finite.FiniteKeys.from(Abc))
 class MyMap {
-	static final initialValue = 0;
+	static final initialValue: Int = 0;
 }
 
 @:build(banker.finite.FiniteKeys.from(Abc))
