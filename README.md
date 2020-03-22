@@ -1,23 +1,52 @@
 # banker
 
-Data strctures.
+Data structures.
 
-**Requires Haxe 4** (tested with v4.0.5).
+**Requires Haxe 4** (developed with v4.0.5).
 
 
 ## Features
 
-This library provides:
+### Vector
 
-- Fixed-length array (or "vector"). Unlike the standard one,  
-(1) Strict distinction between Read-only and Writable.  
-(2) Uses `hl.NativeArray` on HashLink target.
-- Array-based List, Stack, Queue, Deque, Set, Map, ...  
-Internally based on the vector type above. Also going to add other implementations.
-- "Watermark" feature for profiling usage ratio of data collection objects.
-- Generate [AoSoA (Array of Structures of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA) from any user-defined class. (Experimental)
-- `FiniteKeys` macro, which generates a map-like class from any enum abstract type. (Experimental)
-- Some other small features like `Array` extensions or `ObjectPool` classes.
+Fixed-length array. Unlike the standard `haxe.ds.Vector`,
+
+- Read-only type and Writable type are strictly separated.
+- Uses `hl.NativeArray` on HashLink target.
+
+### Data collection classes
+
+Internally based on the vector type above.
+
+- Stack / List
+- Queue / Deque
+- Set / Map
+- ...
+
+No allocation/GC by adding/removing/iterating elements.
+
+### "Watermark" feature
+
+For profiling usage ratio of data collection objects.
+
+### AoSoA generator
+
+Generates [AoSoA (Array of Structures of Arrays)](https://en.wikipedia.org/wiki/AoS_and_SoA) from any user-defined class.
+
+### "FiniteKeys" generator
+
+Generates a map-like class from any user-defined enum abstract type.
+
+### Other
+
+Some other small features like `Array` extensions or `ObjectPool` classes.
+
+### Overall
+
+Unlike the general data containers,
+
+- No automatic expanding (simply crashes if it's full)
+- No iterators (because they have overheads and invoke GC)
 
 Internally uses assertion feature of [sneaker](https://github.com/fal-works/sneaker) library, which means:  
 
@@ -36,12 +65,13 @@ Suited for following situations:
 - Need to eliminate (or reduce, at least) Garbage Collection pauses
 - Reducing overhead is more important than time complexity
 
-## Downsides
+## Caveats
 
 - All of this is nothing but reinventing the wheel!
 - Don't know much about other libraries/frameworks
 - Developed within a few weeks and not yet very well tested
 
+---
 
 ## package: array
 
@@ -143,7 +173,7 @@ and `Position`/`Velocity` are user-defined values.
 
 You can define any variables and functions for your purpose.
 
-![Class diagram. Visit GitHub repo for details.](docs/aosoa.svg)
+![Class diagram. Visit the GitHub repo for details.](docs/aosoa.svg)
 
 ### Example
 
