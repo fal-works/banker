@@ -1,15 +1,5 @@
 package finite;
 
-enum abstract Abc(Int) {
-	/**
-		This is A.
-	**/
-	final A;
-
-	final B;
-	final C;
-}
-
 // @:banker.verified
 @:build(banker.finite.FiniteKeys.from(Abc))
 class MySet {}
@@ -22,7 +12,7 @@ class MyMap {
 
 // @:banker.verified
 @:build(banker.finite.FiniteKeys.from(Abc))
-class MyMap2 {
+class MyMap2 implements banker.finite.interfaces.FiniteKeysMap<finite.Abc, Int> {
 	static function initialValue(key: Abc): Int {
 		return switch key {
 			case A: 1;

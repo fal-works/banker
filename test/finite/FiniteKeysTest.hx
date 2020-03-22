@@ -59,11 +59,19 @@ class FiniteKeysTest {
 
 	static final _forEach = testCase(forEach, Ok);
 
+	static function interfaceTest() {
+		describe("It's OK if it compiles.");
+		final myMap: banker.finite.interfaces.FiniteKeysMap<finite.Abc, Int> = new MySet.MyMap2();
+	}
+
+	static final _interfaceTest = testCase(interfaceTest, Ok);
+
 	public static final all = testCaseGroup([
 		_set,
 		_myMap,
 		_mapWithFactory,
 		_getterSetter,
-		_forEach
+		_forEach,
+		_interfaceTest
 	]);
 }

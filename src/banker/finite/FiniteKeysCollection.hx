@@ -14,7 +14,7 @@ class FiniteKeysCollection {
 	public static function createIndividual(
 		instance: ClassField,
 		prefix: String,
-		argumentNames: Array<String>,
+		arguments: Array<FunctionArg>,
 		createReturnValueExpression: (name: String) -> Expr
 	): Field {
 		final name = instance.name.camelToPascal();
@@ -23,7 +23,7 @@ class FiniteKeysCollection {
 		return {
 			name: '$prefix$name',
 			kind: FFun({
-				args: argumentNames.map(createArgument),
+				args: arguments,
 				ret: null,
 				expr: macro return $returnValue
 			}),
@@ -39,8 +39,9 @@ class FiniteKeysCollection {
 		instances: Array<ClassField>,
 		keyType: Expr,
 		methodName: String,
-		argumentNames: Array<String>,
-		createCaseExpression: (name: String) -> Expr
+		arguments: Array<FunctionArg>,
+		createCaseExpression: (name: String) -> Expr,
+		returnType: ComplexType
 	): Field {
 		final cases: Array<Case> = [for (instance in instances) {
 			final name = instance.name;
@@ -54,8 +55,8 @@ class FiniteKeysCollection {
 			pos: Context.currentPos()
 		};
 		final fieldType: FieldType = FFun({
-			args: argumentNames.map(createArgument),
-			ret: null,
+			args: arguments,
+			ret: returnType,
 			expr: macro return $switchExpression
 		});
 
@@ -66,8 +67,5 @@ class FiniteKeysCollection {
 			access: [APublic, AInline]
 		};
 	}
-
-	static function createArgument(name: String): FunctionArg
-		return { name: name, type: null };
 }
 #end

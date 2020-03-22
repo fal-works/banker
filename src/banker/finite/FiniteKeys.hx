@@ -1,6 +1,8 @@
 package banker.finite;
 
 #if macro
+using haxe.macro.TypeTools;
+using haxe.macro.ComplexTypeTools;
 using banker.array.ArrayExtension;
 
 import sneaker.macro.PositionStack;
@@ -44,6 +46,9 @@ class FiniteKeys {
 		final initialValue = initialValueResult.unwrap();
 		if (notVerified) debug('  Determined.');
 
+		final keyComplexType = enumAbstractType.toComplexType2();
+		final valueComplexType = initialValue.type;
+
 		final valuesAreFinal = metaAccess.has('${MetadataName.finalValues}');
 		if (notVerified) {
 			if (valuesAreFinal) {
@@ -65,21 +70,24 @@ class FiniteKeys {
 			FiniteKeysMap.createReadOnlyFields(
 				instances,
 				fieldConverter,
-				keyTypeExpression
+				keyTypeExpression,
+				keyComplexType,
+				valueComplexType
 			);
 		else
 			FiniteKeysMap.createWritableFields(
 				instances,
 				fieldConverter,
-				keyTypeExpression
+				keyTypeExpression,
+				keyComplexType,
+				valueComplexType
 			);
 
-		final keyComplexType = enumAbstractType.toComplexType2();
 		final sequenceFields = FiniteKeysSequence.createSequenceMethods(
 			instances,
 			keyTypeExpression,
 			keyComplexType,
-			initialValue.type
+			valueComplexType
 		);
 		newFields.pushFromArray(sequenceFields);
 
@@ -92,7 +100,21 @@ class FiniteKeys {
 			debug('End building.');
 		}
 
+		localClass.interfaces.push({
+			t: finiteKeysMapInterface,
+			params: [enumAbstractType.type, valueComplexType.toType()]
+		});
+
 		return buildFields.concat(newFields);
+	}
+
+	static final finiteKeysMapInterface: Ref<ClassType> = {
+		final interfaceString = "banker.finite.interfaces.FiniteKeysMap";
+		final interfaceType = Context.getType(interfaceString).getClass();
+		{
+			get: function(): ClassType return interfaceType,
+			toString: function(): String return interfaceString
+		};
 	}
 }
 #end
