@@ -3,16 +3,13 @@ package banker.finite;
 #if macro
 using sneaker.format.StringExtension;
 
-import haxe.macro.Expr;
-import haxe.macro.TypeTools;
-import banker.array.ArrayTools;
-
 /**
 	Functions for creating get/set methods.
 **/
 class FiniteKeysCollection {
 	/**
-		@return Getter field for specific `instance`.
+		(Currently not used)
+		@return Function field for specific `instance`.
 	**/
 	public static function createIndividual(
 		instance: ClassField,

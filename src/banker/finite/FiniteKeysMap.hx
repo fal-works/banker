@@ -1,10 +1,8 @@
 package banker.finite;
 
 #if macro
-using sneaker.format.StringExtension;
 using sneaker.macro.extensions.FieldExtension;
 
-import haxe.macro.Expr;
 import banker.array.ArrayTools;
 import banker.finite.FiniteKeysCollection.*;
 
@@ -21,12 +19,11 @@ class FiniteKeysMap {
 		fieldConverter: ClassField->Field,
 		keyType: Expr
 	): Fields {
-		final newFields = ArrayTools.allocate(instances.length * 2 + 2);
+		final newFields = ArrayTools.allocate(instances.length + 2);
 		var i = 0;
 
 		for (instance in instances) {
 			newFields[i++] = fieldConverter(instance);
-			newFields[i++] = createGet(instance);
 		}
 
 		newFields[i++] = createSwitchGet(instances, keyType);
@@ -44,13 +41,11 @@ class FiniteKeysMap {
 		fieldConverter: ClassField->Field,
 		keyType: Expr
 	): Fields {
-		final newFields = ArrayTools.allocate(instances.length * 3 + 4);
+		final newFields = ArrayTools.allocate(instances.length + 4);
 		var i = 0;
 
 		for (instance in instances) {
 			newFields[i++] = fieldConverter(instance);
-			newFields[i++] = createGet(instance);
-			newFields[i++] = createSet(instance);
 		}
 
 		newFields[i++] = createSwitchGet(instances, keyType);
@@ -86,22 +81,6 @@ class FiniteKeysMap {
 
 	static final getterDocumentation = 'Creates a function that gets the value for `key`.';
 	static final setterDocumentation = 'Creates a function that sets the value for `key`.';
-
-	static function createGet(instance: ClassField): Field
-		return createIndividual(
-			instance,
-			getMethodName,
-			noArgs,
-			createGetExpression
-		);
-
-	static function createSet(instance: ClassField): Field
-		return createIndividual(
-			instance,
-			setMethodName,
-			valueArgs,
-			createSetExpression
-		);
 
 	static function createSwitchGet(instances: Array<ClassField>, keyType: Expr)
 		return createSwitch(
