@@ -73,20 +73,38 @@ class FiniteKeysCollection {
 	/**
 		@return Function field `forEach(callback: (K, V) -> Void)`.
 	**/
-	@:access(haxe.macro.TypeTools)
 	public static function createForEach(
 		instances: Array<ClassField>,
 		keyTypeExpression: Expr,
 		keyType: ComplexType,
 		valueType: ComplexType
 	): Field {
-		final expressions: Array<Expr> = ArrayTools.allocate(instances.length);
-		var i = 0;
+		return createFunctional(
+			instances,
+			keyTypeExpression,
+			forEachMethodName,
+			forEachCallbackType(keyType, valueType),
+			forEachRunCallback
+		);
+	}
 
-		final callbackType: ComplexType = TFunction([
-			TNamed("key", keyType),
-			TNamed("value", valueType)
-		], (macro:Void));
+	static function createArgument(name: String): FunctionArg
+		return { name: name, type: null };
+
+	@:access(haxe.macro.TypeTools)
+	static function createFunctional(
+		instances: Array<ClassField>,
+		keyTypeExpression: Expr,
+		methodName: String,
+		callbackType: ComplexType,
+		createCallback: (keyExpression: Expr, keyName: String) -> Expr
+	): Field {
+		final expressions: Array<Expr> = ArrayTools.allocate(instances.length);
+		for (i in 0...instances.length) {
+			final name = instances[i].name;
+			final key = macro $keyTypeExpression.$name;
+			expressions[i] = createCallback(key, name);
+		}
 
 		final fieldType: FieldType = FFun({
 			args: [{
@@ -97,21 +115,27 @@ class FiniteKeysCollection {
 			expr: macro $b{expressions}
 		});
 
-		for (instance in instances) {
-			final name = instance.name;
-			final key = macro $keyTypeExpression.$name;
-			expressions[i++] = macro callback($key, this.$name);
-		}
-
 		return {
-			name: "forEach",
+			name: methodName,
 			kind: fieldType,
 			pos: Context.currentPos(),
 			access: [APublic, AInline]
 		};
 	}
 
-	static function createArgument(name: String): FunctionArg
-		return { name: name, type: null };
+	static final forEachMethodName = "forEach";
+
+	static function forEachCallbackType(
+		keyType: ComplexType,
+		valueType: ComplexType
+	): ComplexType {
+		return TFunction(
+			[TNamed("key", keyType), TNamed("value", valueType)],
+			(macro:Void)
+		);
+	}
+
+	static function forEachRunCallback(keyExpression: Expr, keyName: String)
+		return macro callback($keyExpression, this.$keyName);
 }
 #end
