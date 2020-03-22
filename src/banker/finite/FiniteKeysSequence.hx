@@ -24,24 +24,6 @@ class FiniteKeysSequence {
 	}
 
 	/**
-		@return Function field `forEach(callback: (K, V) -> Void)`.
-	**/
-	static function createForEach(
-		instances: Array<ClassField>,
-		keyTypeExpression: Expr,
-		keyType: ComplexType,
-		valueType: ComplexType
-	): Field {
-		return createFunctional(
-			instances,
-			keyTypeExpression,
-			forEachMethodName,
-			forEachCallbackType(keyType, valueType),
-			forEachRunCallback
-		);
-	}
-
-	/**
 		@return Function field `forEachKey(callback: K -> Void)`.
 	**/
 	static function createForEachKey(
@@ -56,6 +38,42 @@ class FiniteKeysSequence {
 			forEachKeyMethodName,
 			forEachKeyCallbackType(keyType, valueType),
 			forEachKeyRunCallback
+		);
+	}
+
+	/**
+		@return Function field `forEachValue(callback: V -> Void)`.
+	**/
+	static function createForEachValue(
+		instances: Array<ClassField>,
+		keyTypeExpression: Expr,
+		keyType: ComplexType,
+		valueType: ComplexType
+	): Field {
+		return createFunctional(
+			instances,
+			keyTypeExpression,
+			forEachValueMethodName,
+			forEachValueCallbackType(keyType, valueType),
+			forEachValueRunCallback
+		);
+	}
+
+	/**
+		@return Function field `forEach(callback: (K, V) -> Void)`.
+	**/
+	static function createForEach(
+		instances: Array<ClassField>,
+		keyTypeExpression: Expr,
+		keyType: ComplexType,
+		valueType: ComplexType
+	): Field {
+		return createFunctional(
+			instances,
+			keyTypeExpression,
+			forEachMethodName,
+			forEachCallbackType(keyType, valueType),
+			forEachRunCallback
 		);
 	}
 
@@ -91,18 +109,10 @@ class FiniteKeysSequence {
 		};
 	}
 
-	static final forEachMethodName = "forEach";
 	static final forEachKeyMethodName = "forEachKey";
+	static final forEachValueMethodName = "forEachValue";
+	static final forEachMethodName = "forEach";
 
-	static function forEachCallbackType(
-		keyType: ComplexType,
-		valueType: ComplexType
-	): ComplexType {
-		return TFunction(
-			[TNamed("key", keyType), TNamed("value", valueType)],
-			(macro:Void)
-		);
-	}
 	static function forEachKeyCallbackType(
 		keyType: ComplexType,
 		valueType: ComplexType
@@ -112,11 +122,32 @@ class FiniteKeysSequence {
 			(macro:Void)
 		);
 	}
-
-	static function forEachRunCallback(keyExpression: Expr, keyName: String)
-		return macro callback($keyExpression, this.$keyName);
+	static function forEachValueCallbackType(
+		keyType: ComplexType,
+		valueType: ComplexType
+	): ComplexType {
+		return TFunction(
+			[TNamed("value", valueType)],
+			(macro:Void)
+		);
+	}
+	static function forEachCallbackType(
+		keyType: ComplexType,
+		valueType: ComplexType
+	): ComplexType {
+		return TFunction(
+			[TNamed("key", keyType), TNamed("value", valueType)],
+			(macro:Void)
+		);
+	}
 
 	static function forEachKeyRunCallback(keyExpression: Expr, keyName: String)
 		return macro callback($keyExpression);
+
+	static function forEachValueRunCallback(keyExpression: Expr, keyName: String)
+		return macro callback(this.$keyName);
+
+	static function forEachRunCallback(keyExpression: Expr, keyName: String)
+		return macro callback($keyExpression, this.$keyName);
 }
 #end
