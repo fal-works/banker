@@ -117,20 +117,16 @@ class FiniteKeysSequence {
 		keyType: ComplexType,
 		valueType: ComplexType
 	): ComplexType {
-		return TFunction(
-			[TNamed("key", keyType)],
-			(macro:Void)
-		);
+		return TFunction([TNamed("key", keyType)], (macro:Void));
 	}
+
 	static function forEachValueCallbackType(
 		keyType: ComplexType,
 		valueType: ComplexType
 	): ComplexType {
-		return TFunction(
-			[TNamed("value", valueType)],
-			(macro:Void)
-		);
+		return TFunction([TNamed("value", valueType)], (macro:Void));
 	}
+
 	static function forEachCallbackType(
 		keyType: ComplexType,
 		valueType: ComplexType

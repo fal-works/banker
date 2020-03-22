@@ -71,19 +71,37 @@ class FiniteKeysMap {
 	static final valueArgs = ["value"];
 	static final keyValueArgs = ["key", "value"];
 
-	static final createGetExpression = (name: String) -> macro this.$name;
-	static final createGetterExpression = (name: String) -> macro() -> this.$name;
-	static final createSetExpression = (name: String) -> macro this.$name = value;
-	static final createSetterExpression = (name: String) -> macro value -> this.$name = value;
+	static function createGetExpression(name: String): Expr {
+		return macro this.$name;
+	}
+	static function createGetterExpression(name: String): Expr {
+		return macro() -> this.$name;
+	}
+	static function createSetExpression(name: String): Expr {
+		return macro this.$name = value;
+	}
+	static function createSetterExpression(name: String): Expr {
+		return macro value -> this.$name = value;
+	}
 
 	static final getterDocumentation = 'Creates a function that gets the value for `key`.';
 	static final setterDocumentation = 'Creates a function that sets the value for `key`.';
 
 	static function createGet(instance: ClassField): Field
-		return createIndividual(instance, getMethodName, noArgs, createGetExpression);
+		return createIndividual(
+			instance,
+			getMethodName,
+			noArgs,
+			createGetExpression
+		);
 
 	static function createSet(instance: ClassField): Field
-		return createIndividual(instance, setMethodName, valueArgs, createSetExpression);
+		return createIndividual(
+			instance,
+			setMethodName,
+			valueArgs,
+			createSetExpression
+		);
 
 	static function createSwitchGet(instances: Array<ClassField>, keyType: Expr)
 		return createSwitch(

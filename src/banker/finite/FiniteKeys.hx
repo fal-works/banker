@@ -33,7 +33,10 @@ class FiniteKeys {
 		final instances = enumAbstractType.getInstances();
 
 		debug('Determine initial values from metadata.');
-		final initialValueResult = getInitialValue(buildFields, enumAbstractType.name);
+		final initialValueResult = getInitialValue(
+			buildFields,
+			enumAbstractType.name
+		);
 		if (initialValueResult.isFailedWarn()) return null;
 		final initialValue = initialValueResult.unwrap();
 		debug('  Determined.');
@@ -59,7 +62,6 @@ class FiniteKeys {
 				fieldConverter,
 				keyTypeExpression
 			);
-
 
 		final keyComplexType = enumAbstractType.toComplexType2();
 		final sequenceFields = FiniteKeysSequence.createSequenceMethods(

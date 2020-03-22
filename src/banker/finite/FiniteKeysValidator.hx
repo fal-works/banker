@@ -71,10 +71,7 @@ class FiniteKeysValidator {
 
 				return switch (func.args.length) {
 					case 0:
-						Failed(
-							'Missing argument of type $keyTypeName',
-							position
-						);
+						Failed('Missing argument of type $keyTypeName', position);
 					case 1:
 						Ok({ kind: Function(initialValueField.name), type: returnType });
 					default:
