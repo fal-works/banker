@@ -19,6 +19,7 @@ class FiniteKeysSequence {
 	): Fields {
 		return [
 			createForEachKey(instances, keyTypeExpression, keyType, valueType),
+			createForEachValue(instances, keyTypeExpression, keyType, valueType),
 			createForEach(instances, keyTypeExpression, keyType, valueType)
 		];
 	}
