@@ -14,7 +14,7 @@ class Aosoa {
 		chunkType: DefinedType,
 		classPosition: Position
 	): TypeDefinition {
-		debug("Start to create Aosoa class.");
+		if (notVerified) debug("Start to create Aosoa class.");
 
 		final aosoaClassName = structureName + "Aosoa";
 
@@ -93,20 +93,20 @@ class Aosoa {
 
 		final fields = aosoaClass.fields;
 
-		debug('  Add iterator methods:');
+		if (notVerified) debug('  Add iterator methods:');
 		final iterators = chunk.iterators;
 		for (i in 0...iterators.length) {
 			final iterator = createIterater(iterators[i]);
 			fields.push(iterator);
-			debug('  - ${iterator.name}');
+			if (notVerified) debug('  - ${iterator.name}');
 		}
 
-		debug('  Add use methods:');
+		if (notVerified) debug('  Add use methods:');
 		final useMethods = chunk.useMethods;
 		for (i in 0...useMethods.length) {
 			final useMethod = createUseMethod(useMethods[i]);
 			fields.push(useMethod);
-			debug('  - ${useMethod.name}');
+			if (notVerified) debug('  - ${useMethod.name}');
 		}
 
 		return aosoaClass;

@@ -2,6 +2,7 @@ package pkg;
 
 import banker.vector.WritableVector as Vec;
 
+// @:banker.verified
 class Actor implements banker.aosoa.Structure {
 	/** Prints position of all entities. **/
 	static function print(x: Float, y: Float) {

@@ -175,7 +175,7 @@ class Chunk {
 		for (i in 0...buildFields.length) {
 			final buildField = buildFields[i];
 			final buildFieldName = buildField.name;
-			debug('Found field: ${buildFieldName}');
+			if (notVerified) debug('Found field: ${buildFieldName}');
 
 			final access = buildField.access;
 
@@ -184,7 +184,7 @@ class Chunk {
 			switch buildField.kind {
 				case FFun(func):
 					if (access == null || !access.has(AStatic)) {
-						debug('  Function that is not static. Skipping.');
+						if (notVerified) debug('  Function that is not static. Skipping.');
 						continue;
 					}
 
@@ -193,7 +193,7 @@ class Chunk {
 						returnType,
 						ComplexTypes.voidType
 					)) {
-						debug('  Function with return value. Skipping.');
+						if (notVerified) debug('  Function with return value. Skipping.');
 						continue;
 					}
 
@@ -217,14 +217,18 @@ class Chunk {
 					};
 
 					if (useEntity) {
-						debug('  Found metadata: @:banker.useEntity');
 						useFunctions.push(chunkFunction);
-						debug('  Registered as a function for using new entity.');
+
+						if (notVerified) {
+							debug('  Found metadata: @:banker.useEntity');
+							debug('  Registered as a function for using new entity.');
+						}
 					}
 					else {
 						functions.push(chunkFunction);
-						debug('  Registered as a Chunk iterator.');
+						if (notVerified) debug('  Registered as a Chunk iterator.');
 					}
+
 				case FVar(varType, initialValue):
 					if (varType == null) {
 						warn('Type must be explicitly declared: ${buildFieldName}');
@@ -274,16 +278,17 @@ class Chunk {
 						vectorType: vectorType
 					});
 
-					debug('  Converted to vector.');
+					if (notVerified) debug('  Converted to vector.');
+
 				default:
-					warn('Found field that is not a variable: ${buildFieldName}');
+					if (notVerified) warn('Found field that is not a variable: ${buildFieldName}');
 			}
 		}
 
 		final iterators: Array<ChunkMethod> = [];
 		for (i in 0...functions.length) {
 			final func = functions[i];
-			debug('Create iterator: ${func.name}');
+			if (notVerified) debug('Create iterator: ${func.name}');
 
 			final iterator = createIterator(func, variables, disuseExpressions);
 			iterators.push(iterator);
@@ -293,7 +298,7 @@ class Chunk {
 		final useMethods: Array<ChunkMethod> = [];
 		for (i in 0...useFunctions.length) {
 			final func = useFunctions[i];
-			debug('Create use method: ${func.name}');
+			if (notVerified) debug('Create use method: ${func.name}');
 
 			final useMethod = createUse(func, variables);
 			useMethods.push(useMethod);
@@ -325,19 +330,19 @@ class Chunk {
 		var iArgumentIndex = -1;
 		var needsWriteAccess = false;
 
-		debug('  Scanning arguments.');
+		if (notVerified) debug('  Scanning arguments.');
 		for (k in 0...arguments.length) {
 			final argument = arguments[k];
 			final type = argument.type;
 
 			if (argument.argumentIsWriteIndex()) {
 				iArgumentIndex = k;
-				debug('  - i ... Found index for write access.');
+				if (notVerified) debug('  - i ... Found index for write access.');
 				continue;
 			}
 
 			if (argument.argumentIsDisuse()) {
-				debug('  - disuse ... Found special variable for disusing entity.');
+				if (notVerified) debug('  - disuse ... Found special variable for disusing entity.');
 				continue;
 			}
 
@@ -348,12 +353,12 @@ class Chunk {
 				if (variable.name != argument.name) continue;
 
 				if (unifyComplex(variable.type, argument.type)) {
-					debug('  - ${argument.name} ... Found corresponding variable.');
+					if (notVerified) debug('  - ${argument.name} ... Found corresponding variable.');
 					associated = true;
 					break;
 				}
 				if (unifyComplex(variable.vectorType, argument.type)) {
-					debug('  - ${argument.name} ... Found corresponding vector.');
+					if (notVerified) debug('  - ${argument.name} ... Found corresponding vector.');
 					associated = true;
 					isVector = true;
 					needsWriteAccess = true;
@@ -362,7 +367,9 @@ class Chunk {
 			}
 
 			if (!associated) {
-				debug('  - ${argument.name} ... No corresponding variable. Add to external arguments.');
+				if (notVerified)
+					debug('  - ${argument.name} ... No corresponding variable. Add to external arguments.');
+
 				externalArguments.push(argument);
 				continue;
 			}

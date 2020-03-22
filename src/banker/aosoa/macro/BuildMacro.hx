@@ -15,11 +15,12 @@ class BuildMacro {
 		Rebuilds the class as an AoSoA (Array of Structure of Arrays).
 	**/
 	public static function build(): Fields {
-		debug("Start to build.");
-
 		final localClassResult = ContextTools.getLocalClass();
 		if (localClassResult.isFailedWarn()) return null;
 		final localClass = localClassResult.unwrap();
+
+		setVerificationState(localClass);
+		if (notVerified) debug("Start to build.");
 
 		final localClassName = localClass.name;
 		final position = Context.currentPos();
@@ -30,20 +31,23 @@ class BuildMacro {
 
 		final chunk = Chunk.create(buildFieldClones, localClassName, position);
 		final chunkType = ModuleTools.defineSubTypes([chunk.typeDefinition])[0];
-		debug('Created Chunk class: ${chunkType.pathString}');
+		if (notVerified) debug('Created Chunk class: ${chunkType.pathString}');
 
 		final aosoaClass = Aosoa.create(localClassName, chunk, chunkType, position);
 		final aosoaType = ModuleTools.defineSubTypes([aosoaClass])[0];
-		debug('Created Aosoa class: ${aosoaType.pathString}');
+		if (notVerified) debug('Created Aosoa class: ${aosoaType.pathString}');
 
 		final createAosoaMethod = Aosoa.createAosoaCreatorMethod(
 			aosoaType,
 			position
 		);
 		buildFields.push(createAosoaMethod);
-		debug('Added method: $localClassName::createAosoa()');
 
-		debug("End building.");
+		if (notVerified) {
+			debug('Added method: $localClassName::createAosoa()');
+			debug("End building.");
+		}
+
 		return buildFields;
 	}
 }
