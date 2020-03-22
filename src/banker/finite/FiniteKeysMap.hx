@@ -21,7 +21,7 @@ class FiniteKeysMap {
 		fieldConverter: ClassField->Field,
 		keyType: Expr
 	): Fields {
-		final newFields = ArrayTools.allocate(instances.length * 2 + 2);
+		final newFields = ArrayTools.allocate(instances.length * 2 + 3);
 		var i = 0;
 
 		for (instance in instances) {
@@ -30,7 +30,9 @@ class FiniteKeysMap {
 		}
 
 		newFields[i++] = createSwitchGet(instances, keyType);
-		newFields[i] = createSwitchGetter(instances, keyType);
+		newFields[i++] = createSwitchGetter(instances, keyType);
+
+		newFields[i] = createForEach(instances, keyType);
 
 		return newFields;
 	}
@@ -44,7 +46,7 @@ class FiniteKeysMap {
 		fieldConverter: ClassField->Field,
 		keyType: Expr
 	): Fields {
-		final newFields = ArrayTools.allocate(instances.length * 3 + 4);
+		final newFields = ArrayTools.allocate(instances.length * 3 + 5);
 		var i = 0;
 
 		for (instance in instances) {
@@ -56,7 +58,9 @@ class FiniteKeysMap {
 		newFields[i++] = createSwitchGet(instances, keyType);
 		newFields[i++] = createSwitchGetter(instances, keyType);
 		newFields[i++] = createSwitchSet(instances, keyType);
-		newFields[i] = createSwitchSetter(instances, keyType);
+		newFields[i++] = createSwitchSetter(instances, keyType);
+
+		newFields[i] = createForEach(instances, keyType);
 
 		return newFields;
 	}

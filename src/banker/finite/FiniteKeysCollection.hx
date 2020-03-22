@@ -4,6 +4,7 @@ package banker.finite;
 using sneaker.format.StringExtension;
 
 import haxe.macro.Expr;
+import banker.array.ArrayTools;
 
 /**
 	Functions for creating get/set methods.
@@ -62,6 +63,36 @@ class FiniteKeysCollection {
 
 		return {
 			name: methodName,
+			kind: fieldType,
+			pos: Context.currentPos(),
+			access: [APublic, AInline]
+		};
+	}
+
+	/**
+		@return Function field `forEach(key, value)`.
+	**/
+	public static function createForEach(
+		instances: Array<ClassField>,
+		keyType: Expr
+	): Field {
+		final expressions: Array<Expr> = ArrayTools.allocate(instances.length);
+		var i = 0;
+
+		final fieldType: FieldType = FFun({
+			args: [{ name: "callback", type: null }],
+			ret: (macro:Void),
+			expr: macro $b{expressions}
+		});
+
+		for (instance in instances) {
+			final name = instance.name;
+			final key = macro $keyType.$name;
+			expressions[i++] = macro callback($key, this.$name);
+		}
+
+		return {
+			name: "forEach",
 			kind: fieldType,
 			pos: Context.currentPos(),
 			access: [APublic, AInline]

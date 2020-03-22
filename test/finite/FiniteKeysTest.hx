@@ -49,10 +49,21 @@ class FiniteKeysTest {
 
 	static final _getterSetter = testCase(getterSetter, Ok);
 
+	static function forEach() {
+		describe("It goes without error.");
+		final myMap = new MySet.MyMap2();
+		var sum = 0;
+		myMap.forEach((key, value) -> sum += value);
+		assert(sum == 5);
+	}
+
+	static final _forEach = testCase(forEach, Ok);
+
 	public static final all = testCaseGroup([
 		_set,
 		_myMap,
 		_mapWithFactory,
-		_getterSetter
+		_getterSetter,
+		_forEach
 	]);
 }
