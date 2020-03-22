@@ -62,7 +62,7 @@ class FiniteKeys {
 		for (field in newFields) debug('  - ${field.name}');
 
 		final keyComplexType = enumAbstractType.toComplexType2();
-		final forEachField = FiniteKeysCollection.createForEach(
+		final forEachField = FiniteKeysSequence.createForEach(
 			instances,
 			keyTypeExpression,
 			keyComplexType,
