@@ -71,7 +71,7 @@ class FiniteKeysCollection {
 	}
 
 	/**
-		@return Function field `forEach(key, value)`.
+		@return Function field `forEach(callback: (K, V) -> Void)`.
 	**/
 	@:access(haxe.macro.TypeTools)
 	public static function createForEach(
