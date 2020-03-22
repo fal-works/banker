@@ -9,9 +9,24 @@ import banker.array.ArrayTools;
 **/
 class FiniteKeysSequence {
 	/**
+		@return Fields of iterating functions.
+	**/
+	public static function createSequenceMethods(
+		instances: Array<ClassField>,
+		keyTypeExpression: Expr,
+		keyType: ComplexType,
+		valueType: ComplexType
+	): Fields {
+		return [
+			createForEachKey(instances, keyTypeExpression, keyType, valueType),
+			createForEach(instances, keyTypeExpression, keyType, valueType)
+		];
+	}
+
+	/**
 		@return Function field `forEach(callback: (K, V) -> Void)`.
 	**/
-	public static function createForEach(
+	static function createForEach(
 		instances: Array<ClassField>,
 		keyTypeExpression: Expr,
 		keyType: ComplexType,
@@ -23,6 +38,24 @@ class FiniteKeysSequence {
 			forEachMethodName,
 			forEachCallbackType(keyType, valueType),
 			forEachRunCallback
+		);
+	}
+
+	/**
+		@return Function field `forEachKey(callback: K -> Void)`.
+	**/
+	static function createForEachKey(
+		instances: Array<ClassField>,
+		keyTypeExpression: Expr,
+		keyType: ComplexType,
+		valueType: ComplexType
+	): Field {
+		return createFunctional(
+			instances,
+			keyTypeExpression,
+			forEachKeyMethodName,
+			forEachKeyCallbackType(keyType, valueType),
+			forEachKeyRunCallback
 		);
 	}
 
@@ -59,6 +92,7 @@ class FiniteKeysSequence {
 	}
 
 	static final forEachMethodName = "forEach";
+	static final forEachKeyMethodName = "forEachKey";
 
 	static function forEachCallbackType(
 		keyType: ComplexType,
@@ -69,8 +103,20 @@ class FiniteKeysSequence {
 			(macro:Void)
 		);
 	}
+	static function forEachKeyCallbackType(
+		keyType: ComplexType,
+		valueType: ComplexType
+	): ComplexType {
+		return TFunction(
+			[TNamed("key", keyType)],
+			(macro:Void)
+		);
+	}
 
 	static function forEachRunCallback(keyExpression: Expr, keyName: String)
 		return macro callback($keyExpression, this.$keyName);
+
+	static function forEachKeyRunCallback(keyExpression: Expr, keyName: String)
+		return macro callback($keyExpression);
 }
 #end

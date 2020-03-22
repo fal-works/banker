@@ -2,6 +2,7 @@ package banker.finite;
 
 #if macro
 using sneaker.macro.EnumAbstractExtension;
+using banker.array.ArrayExtension;
 
 import sneaker.macro.PositionStack;
 import sneaker.macro.ContextTools.getLocalClass;
@@ -59,22 +60,20 @@ class FiniteKeys {
 				keyTypeExpression
 			);
 
-		for (field in newFields) debug('  - ${field.name}');
 
 		final keyComplexType = enumAbstractType.toComplexType2();
-		final forEachField = FiniteKeysSequence.createForEach(
+		final sequenceFields = FiniteKeysSequence.createSequenceMethods(
 			instances,
 			keyTypeExpression,
 			keyComplexType,
 			initialValue.type
 		);
-		newFields.push(forEachField);
-		debug('  - ${forEachField.name}');
+		newFields.pushFromArray(sequenceFields);
 
-		if (localClass.constructor == null) {
+		if (localClass.constructor == null)
 			newFields.push(FiniteKeysField.createConstructor());
-			debug('  - new');
-		}
+
+		for (field in newFields) debug('  - ${field.name}');
 		debug('  Created.');
 
 		return buildFields.concat(newFields);
