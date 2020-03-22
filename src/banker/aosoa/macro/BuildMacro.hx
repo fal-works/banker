@@ -4,6 +4,7 @@ package banker.aosoa.macro;
 using banker.array.ArrayFunctionalExtension;
 
 import haxe.macro.Context;
+import sneaker.macro.ContextTools;
 import sneaker.macro.ModuleTools;
 import sneaker.macro.Types.Fields;
 import sneaker.macro.extensions.FieldExtension;
@@ -16,13 +17,11 @@ class BuildMacro {
 	public static function build(): Fields {
 		debug("Start to build.");
 
-		final localClass = Context.getLocalClass();
-		if (localClass == null) {
-			warn("Could not determine in which class the macro was called.");
-			return null;
-		}
+		final localClassResult = ContextTools.getLocalClass();
+		if (localClassResult.isFailedWarn()) return null;
+		final localClass = localClassResult.unwrap();
 
-		final localClassName = localClass.get().name;
+		final localClassName = localClass.name;
 		final position = Context.currentPos();
 		final buildFields = Context.getBuildFields();
 
