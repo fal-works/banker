@@ -4,9 +4,9 @@ package banker.aosoa.macro;
 using banker.array.ArrayFunctionalExtension;
 
 import haxe.macro.Context;
-import sneaker.macro.FieldExtension;
 import sneaker.macro.ModuleTools;
 import sneaker.macro.Types.Fields;
+import sneaker.macro.extensions.FieldExtension;
 
 class BuildMacro {
 	/**

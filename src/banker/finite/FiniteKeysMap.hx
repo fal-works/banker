@@ -2,7 +2,7 @@ package banker.finite;
 
 #if macro
 using sneaker.format.StringExtension;
-using sneaker.macro.FieldExtension;
+using sneaker.macro.extensions.FieldExtension;
 
 import haxe.macro.Expr;
 import banker.array.ArrayTools;
