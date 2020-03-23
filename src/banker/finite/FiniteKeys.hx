@@ -6,12 +6,13 @@ using haxe.macro.ComplexTypeTools;
 using banker.array.ArrayExtension;
 
 import sneaker.macro.PositionStack;
-import sneaker.macro.ContextTools.getLocalClass;
+import sneaker.macro.ContextTools;
 import sneaker.macro.EnumAbstractType;
 import banker.finite.FiniteKeysValidator.*;
 
 class FiniteKeys {
 	/**
+		Entry point of the build macro.
 		Add fields to the class, generating from instances of `enumAbstractType`.
 
 		@param keyTypeExpression Any enum abstract type.
@@ -19,23 +20,22 @@ class FiniteKeys {
 	public static macro function from(keyTypeExpression: Expr): Fields {
 		PositionStack.reset();
 
-		final localClassResult = getLocalClass();
+		final localClassResult = ContextTools.getLocalClass();
 		if (localClassResult.isFailedWarn()) return null;
 		final localClass = localClassResult.unwrap();
 
 		setVerificationState(localClass);
-		if (notVerified) debug('Start to build.');
 
-		final metaAccess = localClass.meta;
-
-		if (notVerified) debug('Resolving enum abstract type.');
+		if (notVerified) {
+			debug('Start to build.');
+			debug('Resolving enum abstract type.');
+		}
 		final enumAbstractTypeResult = getEnumAbstractType(keyTypeExpression);
 		if (enumAbstractTypeResult.isFailedWarn()) return null;
 		final enumAbstractType = enumAbstractTypeResult.unwrap();
 		if (notVerified) debug("  Resolved: " + enumAbstractType.name);
 
 		final buildFields = Context.getBuildFields();
-		final instances = enumAbstractType.getInstances();
 
 		if (notVerified) debug('Determine initial values from metadata.');
 		final initialValueResult = getInitialValue(
@@ -58,7 +58,33 @@ class FiniteKeys {
 			}
 		};
 
+		final valuesAreFinal = checkFinal(localClass.meta);
+		final instances = enumAbstractType.getInstances();
+
+		final newFields = createNewFields(
+			localClass,
+			valuesAreFinal,
+			instances,
+			initialValue,
+			keyValueTypes
+		);
+
+		localClass.interfaces.push({
+			t: finiteKeysMapInterface,
+			params: [keyValueTypes.key.type, keyValueTypes.value.type]
+		});
+
+		if (notVerified) debug('End building.');
+
+		return buildFields.concat(newFields);
+	}
+
+	/**
+		@return `true` if the class has "final" metadata.
+	**/
+	static function checkFinal(metaAccess: MetaAccess): Bool {
 		final valuesAreFinal = metaAccess.has('${MetadataName.finalValues}');
+
 		if (notVerified) {
 			if (valuesAreFinal) {
 				debug('Found metadata: @${MetadataName.finalValues}');
@@ -69,51 +95,67 @@ class FiniteKeys {
 			}
 		}
 
+		return valuesAreFinal;
+	}
+
+	/**
+		Creates the fields below:
+		- Constructor (if absent)
+		- Variables that correspond to enum abstract values
+		- Map methods
+		- Sequence methods
+	**/
+	static function createNewFields(
+		localClass: ClassType,
+		valuesAreFinal: Bool,
+		instances: Array<ClassField>,
+		initialValue: InitialValue,
+		keyValueTypes: KeyValueTypes
+	): Fields {
 		final fieldConverter = FiniteKeysField.getFieldConverter(
 			initialValue,
 			valuesAreFinal,
 			keyValueTypes
 		);
+		final variables = instances.map(fieldConverter);
 
-		final newFields = if (valuesAreFinal)
+		final mapMethods = if (valuesAreFinal)
 			FiniteKeysMap.createReadOnlyFields(
 				instances,
-				fieldConverter,
 				keyValueTypes
 			);
 		else
 			FiniteKeysMap.createWritableFields(
 				instances,
-				fieldConverter,
 				keyValueTypes
 			);
 
-		final sequenceFields = FiniteKeysSequence.createSequenceMethods(
+		final sequenceMethods = FiniteKeysSequence.createSequenceMethods(
 			instances,
 			keyValueTypes
 		);
-		newFields.pushFromArray(sequenceFields);
 
-		if (localClass.constructor == null)
-			newFields.push(FiniteKeysField.createConstructor());
+		final constructor = if (localClass.constructor == null)
+			[FiniteKeysField.createConstructor()];
+		else [];
+
+		final newFields = [constructor, variables, mapMethods, sequenceMethods].flatten();
 
 		if (notVerified) {
 			for (field in newFields) debug('  - ${field.name}');
 			debug('  Created.');
-			debug('End building.');
 		}
 
-		localClass.interfaces.push({
-			t: finiteKeysMapInterface,
-			params: [keyValueTypes.key.type, keyValueTypes.value.type]
-		});
-
-		return buildFields.concat(newFields);
+		return newFields;
 	}
 
+	/**
+		Interface that the generated map class will implement.
+	**/
 	static final finiteKeysMapInterface: Ref<ClassType> = {
 		final interfaceString = "banker.finite.interfaces.FiniteKeysMap";
-		final interfaceType = Context.getType(interfaceString).getClass();
+		final type = ContextTools.tryGetType(interfaceString);
+		final interfaceType = type.getClass();
 		{
 			get: function(): ClassType return interfaceType,
 			toString: function(): String return interfaceString

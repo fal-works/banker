@@ -16,20 +16,12 @@ class FiniteKeysMap {
 	**/
 	public static function createReadOnlyFields(
 		instances: Array<ClassField>,
-		fieldConverter: ClassField->Field,
 		keyValueTypes: KeyValueTypes
 	): Fields {
-		final newFields = ArrayTools.allocate(instances.length + 2);
-		var i = 0;
-
-		for (instance in instances) {
-			newFields[i++] = fieldConverter(instance);
-		}
-
-		newFields[i++] = createSwitchGet(instances, keyValueTypes);
-		newFields[i++] = createSwitchGetter(instances, keyValueTypes);
-
-		return newFields;
+		return [
+			createSwitchGet(instances, keyValueTypes),
+			createSwitchGetter(instances, keyValueTypes)
+		];
 	}
 
 	/**
@@ -38,22 +30,14 @@ class FiniteKeysMap {
 	**/
 	public static function createWritableFields(
 		instances: Array<ClassField>,
-		fieldConverter: ClassField->Field,
 		keyValueTypes: KeyValueTypes
 	): Fields {
-		final newFields = ArrayTools.allocate(instances.length + 4);
-		var i = 0;
-
-		for (instance in instances) {
-			newFields[i++] = fieldConverter(instance);
-		}
-
-		newFields[i++] = createSwitchGet(instances, keyValueTypes);
-		newFields[i++] = createSwitchGetter(instances, keyValueTypes);
-		newFields[i++] = createSwitchSet(instances, keyValueTypes);
-		newFields[i++] = createSwitchSetter(instances, keyValueTypes);
-
-		return newFields;
+		return [
+			createSwitchGet(instances, keyValueTypes),
+			createSwitchGetter(instances, keyValueTypes),
+			createSwitchSet(instances, keyValueTypes),
+			createSwitchSetter(instances, keyValueTypes)
+		];
 	}
 
 	static final getMethodName = "get";
