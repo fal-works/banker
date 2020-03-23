@@ -69,11 +69,6 @@ class FiniteKeys {
 			keyValueTypes
 		);
 
-		localClass.interfaces.push({
-			t: finiteKeysMapInterface,
-			params: [keyValueTypes.key.type, keyValueTypes.value.type]
-		});
-
 		if (notVerified) debug('End building.');
 
 		return buildFields.concat(newFields);
@@ -147,19 +142,6 @@ class FiniteKeys {
 		}
 
 		return newFields;
-	}
-
-	/**
-		Interface that the generated map class will implement.
-	**/
-	static final finiteKeysMapInterface: Ref<ClassType> = {
-		final interfaceString = "banker.finite.interfaces.FiniteKeysMap";
-		final type = ContextTools.tryGetType(interfaceString);
-		final interfaceType = type.getClass();
-		{
-			get: function(): ClassType return interfaceType,
-			toString: function(): String return interfaceString
-		};
 	}
 }
 #end
