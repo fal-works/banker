@@ -37,12 +37,14 @@ class FiniteKeysCollection {
 	**/
 	public static function createSwitch(
 		instances: Array<ClassField>,
-		keyType: Expr,
+		keyValueTypes: KeyValueTypes,
 		methodName: String,
 		arguments: Array<FunctionArg>,
 		createCaseExpression: (name: String) -> Expr,
 		returnType: ComplexType
 	): Field {
+		final keyType = keyValueTypes.key.expression;
+
 		final cases: Array<Case> = [for (instance in instances) {
 			final name = instance.name;
 			{

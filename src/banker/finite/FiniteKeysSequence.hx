@@ -13,14 +13,12 @@ class FiniteKeysSequence {
 	**/
 	public static function createSequenceMethods(
 		instances: Array<ClassField>,
-		keyTypeExpression: Expr,
-		keyType: ComplexType,
-		valueType: ComplexType
+		keyValueTypes: KeyValueTypes
 	): Fields {
 		return [
-			createForEachKey(instances, keyTypeExpression, keyType, valueType),
-			createForEachValue(instances, keyTypeExpression, keyType, valueType),
-			createForEach(instances, keyTypeExpression, keyType, valueType)
+			createForEachKey(instances, keyValueTypes),
+			createForEachValue(instances, keyValueTypes),
+			createForEach(instances, keyValueTypes)
 		];
 	}
 
@@ -29,15 +27,13 @@ class FiniteKeysSequence {
 	**/
 	static function createForEachKey(
 		instances: Array<ClassField>,
-		keyTypeExpression: Expr,
-		keyType: ComplexType,
-		valueType: ComplexType
+		keyValueTypes: KeyValueTypes
 	): Field {
 		return createFunctional(
 			instances,
-			keyTypeExpression,
+			keyValueTypes,
 			forEachKeyMethodName,
-			forEachKeyCallbackType(keyType, valueType),
+			forEachKeyCallbackType(keyValueTypes),
 			forEachKeyRunCallback
 		);
 	}
@@ -47,15 +43,13 @@ class FiniteKeysSequence {
 	**/
 	static function createForEachValue(
 		instances: Array<ClassField>,
-		keyTypeExpression: Expr,
-		keyType: ComplexType,
-		valueType: ComplexType
+		keyValueTypes: KeyValueTypes
 	): Field {
 		return createFunctional(
 			instances,
-			keyTypeExpression,
+			keyValueTypes,
 			forEachValueMethodName,
-			forEachValueCallbackType(keyType, valueType),
+			forEachValueCallbackType(keyValueTypes),
 			forEachValueRunCallback
 		);
 	}
@@ -65,15 +59,13 @@ class FiniteKeysSequence {
 	**/
 	static function createForEach(
 		instances: Array<ClassField>,
-		keyTypeExpression: Expr,
-		keyType: ComplexType,
-		valueType: ComplexType
+		keyValueTypes: KeyValueTypes
 	): Field {
 		return createFunctional(
 			instances,
-			keyTypeExpression,
+			keyValueTypes,
 			forEachMethodName,
-			forEachCallbackType(keyType, valueType),
+			forEachCallbackType(keyValueTypes),
 			forEachRunCallback
 		);
 	}
@@ -81,11 +73,12 @@ class FiniteKeysSequence {
 	@:access(haxe.macro.TypeTools)
 	static function createFunctional(
 		instances: Array<ClassField>,
-		keyTypeExpression: Expr,
+		keyValueTypes: KeyValueTypes,
 		methodName: String,
 		callbackType: ComplexType,
 		createCallback: (keyExpression: Expr, keyName: String) -> Expr
 	): Field {
+		final keyTypeExpression = keyValueTypes.key.expression;
 		final expressions: Array<Expr> = ArrayTools.allocate(instances.length);
 		for (i in 0...instances.length) {
 			final name = instances[i].name;
@@ -115,25 +108,22 @@ class FiniteKeysSequence {
 	static final forEachMethodName = "forEach";
 
 	static function forEachKeyCallbackType(
-		keyType: ComplexType,
-		valueType: ComplexType
+		keyValueTypes: KeyValueTypes
 	): ComplexType {
-		return TFunction([TNamed("key", keyType)], (macro:Void));
+		return TFunction([TNamed("key", keyValueTypes.key.complex)], (macro:Void));
 	}
 
 	static function forEachValueCallbackType(
-		keyType: ComplexType,
-		valueType: ComplexType
+		keyValueTypes: KeyValueTypes
 	): ComplexType {
-		return TFunction([TNamed("value", valueType)], (macro:Void));
+		return TFunction([TNamed("value", keyValueTypes.value.complex)], (macro:Void));
 	}
 
 	static function forEachCallbackType(
-		keyType: ComplexType,
-		valueType: ComplexType
+		keyValueTypes: KeyValueTypes
 	): ComplexType {
 		return TFunction(
-			[TNamed("key", keyType), TNamed("value", valueType)],
+			[TNamed("key", keyValueTypes.key.complex), TNamed("value", keyValueTypes.value.complex)],
 			(macro:Void)
 		);
 	}

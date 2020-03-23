@@ -46,8 +46,17 @@ class FiniteKeys {
 		final initialValue = initialValueResult.unwrap();
 		if (notVerified) debug('  Determined.');
 
-		final keyComplexType = enumAbstractType.toComplexType2();
-		final valueComplexType = initialValue.type;
+		final keyValueTypes: KeyValueTypes = {
+			key: {
+				expression: keyTypeExpression,
+				type: enumAbstractType.type,
+				complex: enumAbstractType.toComplexType2()
+			},
+			value: {
+				type: initialValue.type.toType(),
+				complex: initialValue.type
+			}
+		};
 
 		final valuesAreFinal = metaAccess.has('${MetadataName.finalValues}');
 		if (notVerified) {
@@ -63,31 +72,25 @@ class FiniteKeys {
 		final fieldConverter = FiniteKeysField.getFieldConverter(
 			initialValue,
 			valuesAreFinal,
-			keyTypeExpression
+			keyValueTypes
 		);
 
 		final newFields = if (valuesAreFinal)
 			FiniteKeysMap.createReadOnlyFields(
 				instances,
 				fieldConverter,
-				keyTypeExpression,
-				keyComplexType,
-				valueComplexType
+				keyValueTypes
 			);
 		else
 			FiniteKeysMap.createWritableFields(
 				instances,
 				fieldConverter,
-				keyTypeExpression,
-				keyComplexType,
-				valueComplexType
+				keyValueTypes
 			);
 
 		final sequenceFields = FiniteKeysSequence.createSequenceMethods(
 			instances,
-			keyTypeExpression,
-			keyComplexType,
-			valueComplexType
+			keyValueTypes
 		);
 		newFields.pushFromArray(sequenceFields);
 
@@ -102,7 +105,7 @@ class FiniteKeys {
 
 		localClass.interfaces.push({
 			t: finiteKeysMapInterface,
-			params: [enumAbstractType.type, valueComplexType.toType()]
+			params: [keyValueTypes.key.type, keyValueTypes.value.type]
 		});
 
 		return buildFields.concat(newFields);

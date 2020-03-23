@@ -17,4 +17,19 @@ enum InitialValueKind {
 	Value(expression: Expr, ?type: ComplexType);
 	Function(name: String, ?returnType: ComplexType);
 }
+
+/**
+	Types of key and value for the building class.
+**/
+typedef KeyValueTypes = {
+	key: {
+		expression: Expr,
+		type: Type,
+		complex: ComplexType
+	},
+	value: {
+		type: Type,
+		complex: ComplexType
+	}
+}
 #end

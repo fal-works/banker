@@ -11,10 +11,12 @@ class FiniteKeysField {
 	public static function getFieldConverter(
 		initialValue: InitialValue,
 		valuesAreFinal: Bool,
-		keyType: Expr
+		keyValueTypes: KeyValueTypes
 	): ClassField->Field {
 		final fieldAccess: Array<Access> = [APublic];
 		if (valuesAreFinal) fieldAccess.push(AFinal);
+
+		final keyType = keyValueTypes.key.expression;
 
 		return switch (initialValue.kind) {
 			case Value(value):
