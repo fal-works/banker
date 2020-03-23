@@ -26,7 +26,7 @@ class LinkerBuilder {
 		@param capacity Max number of key-value pairs that can be contained.
 		@return New `ArrayOrderedMap` instance created from `map`.
 	**/
-	public static function orderedArrayMapFromStandardMap<K, V>(
+	public static function arrayOrderedMapFromStandardMap<K, V>(
 		map: haxe.ds.Map<K, V>,
 		capacity: Int
 	) {
