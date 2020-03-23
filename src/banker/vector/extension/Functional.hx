@@ -111,7 +111,7 @@ class Functional {
 		_this: VectorReference<T>,
 		callback: T->S
 	): WritableVector<S> {
-		return WritableVector.fromData(_this.data.map(callback));
+		return _this.data.map(callback);
 	}
 
 	/**

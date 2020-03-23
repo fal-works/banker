@@ -7,7 +7,7 @@ class Copy {
 		@return Shallow copy of `this`.
 	**/
 	public static inline function copy<T>(_this: VectorReference<T>): Vector<T> {
-		return Vector.fromData(_this.data.copy());
+		return _this.data.copy();
 	}
 
 	/**
@@ -16,7 +16,7 @@ class Copy {
 	public static inline function copyWritable<T>(
 		_this: VectorReference<T>
 	): WritableVector<T> {
-		return WritableVector.fromData(_this.data.copy());
+		return _this.data.copy();
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Copy {
 		position: Int,
 		length: Int
 	): Vector<T> {
-		return Vector.fromData(_this.data.sub(position, length));
+		return _this.data.sub(position, length);
 	}
 
 	/** @see `subVector()` **/
@@ -67,7 +67,7 @@ class Copy {
 		position: Int,
 		length: Int
 	): WritableVector<T> {
-		return WritableVector.fromData(_this.data.sub(position, length));
+		return _this.data.sub(position, length);
 	}
 
 	/** @see `concat()` **/
@@ -105,10 +105,10 @@ class Copy {
 		startPosition: Int,
 		endPosition: Int
 	): Vector<T> {
-		return Vector.fromData(_this.data.sub(
+		return _this.data.sub(
 			startPosition,
 			endPosition - startPosition
-		));
+		);
 	}
 
 	/** @see `Copy.slice()` **/

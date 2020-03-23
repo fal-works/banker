@@ -1,4 +1,4 @@
-package banker.vector;
+package banker.vector.internal;
 
 /**
 	The body of `RawVector<T>`.

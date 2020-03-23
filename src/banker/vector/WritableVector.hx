@@ -1,5 +1,7 @@
 package banker.vector;
 
+import banker.vector.internal.RawVector;
+
 /**
 	Fixed-length writable array.
 **/
@@ -11,18 +13,12 @@ package banker.vector;
 	banker.vector.extension.writable.Functional
 ) // @formatter:on
 @:allow(banker.vector)
-abstract WritableVector<T>(RawVector<T>) {
+abstract WritableVector<T>(RawVector<T>) from RawVector<T> {
 	/**
 		@return Shallow copy of `array` as `WritableVector<T>`.
 	**/
 	public static inline function fromArrayCopy<T>(array: Array<T>): WritableVector<T>
-		return fromData(RawVector.fromArrayCopy(array));
-
-	/**
-		Casts `data` from `RawVector<T>` to `WritableVector<T>`. For internal use.
-	**/
-	static inline function fromData<T>(data: RawVector<T>): WritableVector<T>
-		return cast data;
+		return RawVector.fromArrayCopy(array);
 
 	public var ref(get, never): VectorReference<T>;
 
@@ -46,5 +42,5 @@ abstract WritableVector<T>(RawVector<T>) {
 		return this;
 
 	inline function nonWritable(): Vector<T>
-		return Vector.fromData(this);
+		return this;
 }

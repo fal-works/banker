@@ -1,16 +1,18 @@
 package banker.vector;
 
+import banker.vector.internal.RawVector;
+
 /**
 	Fixed-length non-writable array.
 **/
 @:forward(length, toArray)
 @:allow(banker.vector)
-abstract Vector<T>(RawVector<T>) {
+abstract Vector<T>(RawVector<T>) from RawVector<T> {
 	/**
 		@return Shallow copy of `array` as `Vector<T>`.
 	**/
 	public static inline function fromArrayCopy<T>(array: Array<T>): Vector<T>
-		return fromData(RawVector.fromArrayCopy(array));
+		return RawVector.fromArrayCopy(array);
 
 	/**
 		Creates a vector filled with the given value.
@@ -27,12 +29,6 @@ abstract Vector<T>(RawVector<T>) {
 	): Vector<T>
 		return new WritableVector<T>(length).populate(factory).nonWritable();
 
-	/**
-		Casts `data` from `RawVector<T>` to `Vector<T>`. For internal use.
-	**/
-	static inline function fromData<T>(data: RawVector<T>): Vector<T>
-		return cast data;
-
 	public var ref(get, never): VectorReference<T>;
 
 	inline function get_ref(): VectorReference<T>
@@ -45,5 +41,5 @@ abstract Vector<T>(RawVector<T>) {
 		return this;
 
 	inline function writable(): WritableVector<T>
-		return WritableVector.fromData(this);
+		return this;
 }
