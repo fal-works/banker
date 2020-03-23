@@ -142,6 +142,36 @@ class ArrayFunctionalExtension {
 	}
 
 	/**
+		Removes the first occurrence of the element.
+		@param predicate Function that returns `true` if a given element meets the condition.
+		@return First element that matches to `predicate`. `defaultValue` if not found.
+	**/
+	public static inline function removeFirst<T>(
+		_this: Array<T>,
+		predicate: T->Bool,
+		defaultValue: T
+	): T {
+		var foundIndex = -1;
+
+		final len = _this.length;
+		var i = 0;
+		var element: T;
+		while (i < len) {
+			element = get(_this, i);
+			if (predicate(element)) {
+				foundIndex = i;
+				break;
+			}
+			++i;
+		}
+
+		return if (foundIndex >= 0)
+			removeAt(_this, foundIndex)
+		else
+			defaultValue;
+	}
+
+	/**
 		Runs `processCallback` for each occurrence of the matching element.
 		@param predicate Function that returns `true` if a given element meets the condition.
 		@param processCallback Function to run for the found elements.
