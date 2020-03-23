@@ -239,4 +239,28 @@ class ArrayExtension {
 
 		return removed;
 	}
+
+	/**
+		Concatenates all arrays.
+		@return New array.
+	**/
+	public static inline function flatten<T>(arrays: Array<Array<T>>): Array<T> {
+		final arrayCount = arrays.length;
+		var elementCount = 0;
+		for (i in 0...arrayCount) elementCount += arrays[i].length;
+
+		final newArray = ArrayTools.allocate(elementCount);
+		var i = 0;
+
+		for (k in 0...arrayCount) {
+			final array = arrays[k];
+
+			for (m in 0...array.length) {
+				newArray[i] = array[m];
+				++i;
+			}
+		}
+
+		return newArray;
+	}
 }
