@@ -20,7 +20,7 @@ class FiniteKeysField {
 
 		return switch (initialValue.kind) {
 			case Value(value):
-				final fieldType:FieldType = FVar(initialValue.type, value);
+				final fieldType:FieldType = FVar(initialValue.type, null);
 				function(instance): Field return {
 					name: instance.name,
 					kind: fieldType,
@@ -35,7 +35,7 @@ class FiniteKeysField {
 						name: name,
 						kind: FVar(
 							initialValue.type,
-							macro $i{functionName}($keyType.$name)
+							null
 						),
 						pos: instance.pos,
 						access: fieldAccess,
@@ -48,13 +48,36 @@ class FiniteKeysField {
 	/**
 		@return An empty public function field with name "new".
 	**/
-	public static function createConstructor(): Field {
+	public static function createConstructor(
+		existingExpression: Null<Expr>,
+		instances: Array<ClassField>,
+		initialValue: InitialValue,
+		keyValueTypes: KeyValueTypes
+	): Field {
+		final expressions: Array<Expr> = [];
+		if (existingExpression != null) expressions.push(existingExpression);
+
+		final keyType = keyValueTypes.key.expression;
+
+		switch (initialValue.kind) {
+			case Value(valueExpression):
+				for (instance in instances) {
+					final name = instance.name;
+					expressions.push(macro this.$name = $valueExpression);
+				}
+			case Function(functionName):
+				for (instance in instances) {
+					final name = instance.name;
+					expressions.push(macro this.$name = $i{functionName}($keyType.$name));
+				}
+		}
+
 		return {
 			name: "new",
 			kind: FFun({
 				args: [],
 				ret: null,
-				expr: macro null
+				expr: macro $b{expressions}
 			}),
 			access: [APublic],
 			pos: Context.currentPos()
