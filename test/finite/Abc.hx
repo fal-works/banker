@@ -1,6 +1,6 @@
 package finite;
 
-enum abstract Abc(Int) {
+enum abstract Abc(Int) to Int {
 	/**
 		This is A.
 	**/

@@ -68,12 +68,28 @@ class FiniteKeysTest {
 
 	static final _interfaceTest = testCase(interfaceTest, Ok);
 
+	static function export() {
+		describe("It goes without error.");
+		final myMap = new MySet.MyMap2();
+
+		final keys = myMap.exportKeys();
+		println(keys);
+		assert(Std.string(keys) == "[0, 1, 2]");
+
+		final values = myMap.exportValues();
+		println(values);
+		assert(Std.string(values) == "[1, 2, 2]");
+	}
+
+	static final _export = testCase(export, Ok);
+
 	public static final all = testCaseGroup([
 		_set,
 		_myMap,
 		_mapWithFactory,
 		_getterSetter,
 		_forEach,
-		_interfaceTest
+		_interfaceTest,
+		_export
 	]);
 }

@@ -140,6 +140,8 @@ class FiniteKeys {
 			keyValueTypes
 		);
 
+		final copyMethods = FiniteKeysCopy.createCopyMethods(instanceNames, keyValueTypes);
+
 		final newConstructor = [FiniteKeysField.createConstructor(
 			constructor,
 			instanceNames,
@@ -151,7 +153,8 @@ class FiniteKeys {
 			newConstructor,
 			variables,
 			mapMethods,
-			sequenceMethods
+			sequenceMethods,
+			copyMethods
 		].flatten();
 
 		if (notVerified) {
