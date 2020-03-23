@@ -62,6 +62,8 @@ class FiniteKeysTest {
 	static function interfaceTest() {
 		describe("It's OK if it compiles.");
 		final myMap: banker.finite.interfaces.FiniteKeysMap<finite.Abc, Int> = new MySet.MyMap2();
+		final a = myMap.get(A);
+		assert(a == 1);
 	}
 
 	static final _interfaceTest = testCase(interfaceTest, Ok);
