@@ -93,7 +93,7 @@ class ArrayFunctionalExtension {
 		_this: Array<T>,
 		predicate: T->Bool,
 		defaultValue: T
-	): Null<T> {
+	): T {
 		var found = defaultValue;
 
 		final len = _this.length;
