@@ -36,7 +36,7 @@ class FiniteKeysCollection {
 		@return Function field using `switch` with a given key.
 	**/
 	public static function createSwitch(
-		instances: Array<ClassField>,
+		instanceNames: Array<String>,
 		keyValueTypes: KeyValueTypes,
 		methodName: String,
 		arguments: Array<FunctionArg>,
@@ -45,8 +45,7 @@ class FiniteKeysCollection {
 	): Field {
 		final keyType = keyValueTypes.key.expression;
 
-		final cases: Array<Case> = [for (instance in instances) {
-			final name = instance.name;
+		final cases: Array<Case> = [for (name in instanceNames) {
 			{
 				values: [macro $keyType.$name],
 				expr: createCaseExpression(name)

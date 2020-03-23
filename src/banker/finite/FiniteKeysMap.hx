@@ -15,12 +15,12 @@ class FiniteKeysMap {
 		@return Variables and read-access methods.
 	**/
 	public static function createReadOnlyFields(
-		instances: Array<ClassField>,
+		instanceNames: Array<String>,
 		keyValueTypes: KeyValueTypes
 	): Fields {
 		return [
-			createSwitchGet(instances, keyValueTypes),
-			createSwitchGetter(instances, keyValueTypes)
+			createSwitchGet(instanceNames, keyValueTypes),
+			createSwitchGetter(instanceNames, keyValueTypes)
 		];
 	}
 
@@ -29,14 +29,14 @@ class FiniteKeysMap {
 		@return Variables, read-access methods and write-access methods.
 	**/
 	public static function createWritableFields(
-		instances: Array<ClassField>,
+		instanceNames: Array<String>,
 		keyValueTypes: KeyValueTypes
 	): Fields {
 		return [
-			createSwitchGet(instances, keyValueTypes),
-			createSwitchGetter(instances, keyValueTypes),
-			createSwitchSet(instances, keyValueTypes),
-			createSwitchSetter(instances, keyValueTypes)
+			createSwitchGet(instanceNames, keyValueTypes),
+			createSwitchGetter(instanceNames, keyValueTypes),
+			createSwitchSet(instanceNames, keyValueTypes),
+			createSwitchSetter(instanceNames, keyValueTypes)
 		];
 	}
 
@@ -70,11 +70,11 @@ class FiniteKeysMap {
 	static final getterDocumentation = 'Creates a function that gets the value for `key`.';
 	static final setterDocumentation = 'Creates a function that sets the value for `key`.';
 
-	static function createSwitchGet(instances: Array<ClassField>, keyValueTypes: KeyValueTypes) {
+	static function createSwitchGet(instanceNames: Array<String>, keyValueTypes: KeyValueTypes) {
 		final returnType = keyValueTypes.value.complex;
 
 		return createSwitch(
-			instances,
+			instanceNames,
 			keyValueTypes,
 			getMethodName,
 			keyArgs(keyValueTypes),
@@ -83,12 +83,12 @@ class FiniteKeysMap {
 		);
 	}
 
-	static function createSwitchGetter(instances: Array<ClassField>, keyValueTypes: KeyValueTypes) {
+	static function createSwitchGetter(instanceNames: Array<String>, keyValueTypes: KeyValueTypes) {
 		final valueType = keyValueTypes.value.complex;
 		final returnType = macro: () -> $valueType;
 
 		return createSwitch(
-			instances,
+			instanceNames,
 			keyValueTypes,
 			getterMethodName,
 			keyArgs(keyValueTypes),
@@ -97,11 +97,11 @@ class FiniteKeysMap {
 		).setDoc(getterDocumentation);
 	}
 
-	static function createSwitchSet(instances: Array<ClassField>, keyValueTypes: KeyValueTypes) {
+	static function createSwitchSet(instanceNames: Array<String>, keyValueTypes: KeyValueTypes) {
 		final returnType = keyValueTypes.value.complex;
 
 		return createSwitch(
-			instances,
+			instanceNames,
 			keyValueTypes,
 			setMethodName,
 			keyValueArgs(keyValueTypes),
@@ -110,12 +110,12 @@ class FiniteKeysMap {
 		);
 	}
 
-	static function createSwitchSetter(instances: Array<ClassField>, keyValueTypes: KeyValueTypes) {
+	static function createSwitchSetter(instanceNames: Array<String>, keyValueTypes: KeyValueTypes) {
 		final valueType = keyValueTypes.value.complex;
 		final returnType = macro: (value: $valueType) -> Void;
 
 		return createSwitch(
-			instances,
+			instanceNames,
 			keyValueTypes,
 			setterMethodName,
 			keyArgs(keyValueTypes),

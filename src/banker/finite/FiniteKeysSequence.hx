@@ -12,13 +12,13 @@ class FiniteKeysSequence {
 		@return Fields of iterating functions.
 	**/
 	public static function createSequenceMethods(
-		instances: Array<ClassField>,
+		instanceNames: Array<String>,
 		keyValueTypes: KeyValueTypes
 	): Fields {
 		return [
-			createForEachKey(instances, keyValueTypes),
-			createForEachValue(instances, keyValueTypes),
-			createForEach(instances, keyValueTypes)
+			createForEachKey(instanceNames, keyValueTypes),
+			createForEachValue(instanceNames, keyValueTypes),
+			createForEach(instanceNames, keyValueTypes)
 		];
 	}
 
@@ -26,11 +26,11 @@ class FiniteKeysSequence {
 		@return Function field `forEachKey(callback: K -> Void)`.
 	**/
 	static function createForEachKey(
-		instances: Array<ClassField>,
+		instanceNames: Array<String>,
 		keyValueTypes: KeyValueTypes
 	): Field {
 		return createFunctional(
-			instances,
+			instanceNames,
 			keyValueTypes,
 			forEachKeyMethodName,
 			forEachKeyCallbackType(keyValueTypes),
@@ -42,11 +42,11 @@ class FiniteKeysSequence {
 		@return Function field `forEachValue(callback: V -> Void)`.
 	**/
 	static function createForEachValue(
-		instances: Array<ClassField>,
+		instanceNames: Array<String>,
 		keyValueTypes: KeyValueTypes
 	): Field {
 		return createFunctional(
-			instances,
+			instanceNames,
 			keyValueTypes,
 			forEachValueMethodName,
 			forEachValueCallbackType(keyValueTypes),
@@ -58,11 +58,11 @@ class FiniteKeysSequence {
 		@return Function field `forEach(callback: (K, V) -> Void)`.
 	**/
 	static function createForEach(
-		instances: Array<ClassField>,
+		instanceNames: Array<String>,
 		keyValueTypes: KeyValueTypes
 	): Field {
 		return createFunctional(
-			instances,
+			instanceNames,
 			keyValueTypes,
 			forEachMethodName,
 			forEachCallbackType(keyValueTypes),
@@ -72,16 +72,16 @@ class FiniteKeysSequence {
 
 	@:access(haxe.macro.TypeTools)
 	static function createFunctional(
-		instances: Array<ClassField>,
+		instanceNames: Array<String>,
 		keyValueTypes: KeyValueTypes,
 		methodName: String,
 		callbackType: ComplexType,
 		createCallback: (keyExpression: Expr, keyName: String) -> Expr
 	): Field {
 		final keyTypeExpression = keyValueTypes.key.expression;
-		final expressions: Array<Expr> = ArrayTools.allocate(instances.length);
-		for (i in 0...instances.length) {
-			final name = instances[i].name;
+		final expressions: Array<Expr> = ArrayTools.allocate(instanceNames.length);
+		for (i in 0...instanceNames.length) {
+			final name = instanceNames[i];
 			final key = macro $keyTypeExpression.$name;
 			expressions[i] = createCallback(key, name);
 		}

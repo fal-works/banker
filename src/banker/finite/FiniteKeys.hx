@@ -15,7 +15,7 @@ import banker.finite.FiniteKeysValidator.*;
 class FiniteKeys {
 	/**
 		Entry point of the build macro.
-		Add fields to the class, generating from instances of `enumAbstractType`.
+		Add fields to the class, generating from values of `enumAbstractType`.
 
 		@param keyTypeExpression Any enum abstract type.
 	**/
@@ -130,19 +130,21 @@ class FiniteKeys {
 		);
 		final variables = instances.map(fieldConverter);
 
+		final instanceNames = instances.map(getInstanceName);
+
 		final mapMethods = if (valuesAreFinal)
-			FiniteKeysMap.createReadOnlyFields(instances, keyValueTypes);
+			FiniteKeysMap.createReadOnlyFields(instanceNames, keyValueTypes);
 		else
-			FiniteKeysMap.createWritableFields(instances, keyValueTypes);
+			FiniteKeysMap.createWritableFields(instanceNames, keyValueTypes);
 
 		final sequenceMethods = FiniteKeysSequence.createSequenceMethods(
-			instances,
+			instanceNames,
 			keyValueTypes
 		);
 
 		final constructor = [FiniteKeysField.createConstructor(
 			constructorExpression,
-			instances,
+			instanceNames,
 			initialValue,
 			keyValueTypes
 		)];
@@ -161,5 +163,7 @@ class FiniteKeys {
 
 		return newFields;
 	}
+
+	static final getInstanceName = (instance: ClassField) -> instance.name;
 }
 #end

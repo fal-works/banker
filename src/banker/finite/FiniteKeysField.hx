@@ -50,7 +50,7 @@ class FiniteKeysField {
 	**/
 	public static function createConstructor(
 		existingExpression: Null<Expr>,
-		instances: Array<ClassField>,
+		instanceNames: Array<String>,
 		initialValue: InitialValue,
 		keyValueTypes: KeyValueTypes
 	): Field {
@@ -61,15 +61,11 @@ class FiniteKeysField {
 
 		switch (initialValue.kind) {
 			case Value(valueExpression):
-				for (instance in instances) {
-					final name = instance.name;
+				for (name in instanceNames)
 					expressions.push(macro this.$name = $valueExpression);
-				}
 			case Function(functionName):
-				for (instance in instances) {
-					final name = instance.name;
+				for (name in instanceNames)
 					expressions.push(macro this.$name = $i{functionName}($keyType.$name));
-				}
 		}
 
 		return {
