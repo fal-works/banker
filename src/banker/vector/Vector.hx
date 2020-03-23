@@ -29,6 +29,9 @@ abstract Vector<T>(RawVector<T>) from RawVector<T> {
 	): Vector<T>
 		return new WritableVector<T>(length).populate(factory).nonWritable();
 
+	/**
+		`VectorReference` representation of `this`.
+	**/
 	public var ref(get, never): VectorReference<T>;
 
 	inline function get_ref(): VectorReference<T>

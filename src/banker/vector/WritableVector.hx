@@ -20,6 +20,9 @@ abstract WritableVector<T>(RawVector<T>) from RawVector<T> {
 	public static inline function fromArrayCopy<T>(array: Array<T>): WritableVector<T>
 		return RawVector.fromArrayCopy(array);
 
+	/**
+	 `VectorReference` representation of `this`.
+	**/
 	public var ref(get, never): VectorReference<T>;
 
 	inline function get_ref(): VectorReference<T>
