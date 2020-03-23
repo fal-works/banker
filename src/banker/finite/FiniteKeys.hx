@@ -63,11 +63,14 @@ class FiniteKeys {
 		final valuesAreFinal = checkFinal(localClass.meta);
 		final instances = enumAbstractType.getInstances();
 
-		final constructor = buildFields.removeFirst(FieldExtension.isNew, nullField);
-		final constructorExpression: Null<Expr> = switch (constructor.kind) {
-				case FFun(func): func.expr;
-				default: null;
-			};
+		final constructorField = buildFields.removeFirst(
+			FieldExtension.isNew,
+			FiniteKeysField.nullField
+		);
+		final constructor = switch (constructorField.kind) {
+			case FFun(func): func;
+			default: FiniteKeysField.nullFunction;
+		}
 
 		final newFields = createNewFields(
 			localClass,
@@ -75,7 +78,7 @@ class FiniteKeys {
 			instances,
 			initialValue,
 			keyValueTypes,
-			constructorExpression
+			constructor
 		);
 
 		if (notVerified) debug('End building.');
@@ -83,11 +86,6 @@ class FiniteKeys {
 		return buildFields.concat(newFields);
 	}
 
-	static final nullField: Field = {
-		name: "",
-		kind: FVar(null, null),
-		pos: Context.currentPos()
-	};
 
 	/**
 		@return `true` if the class has "final" metadata.
@@ -121,7 +119,7 @@ class FiniteKeys {
 		instances: Array<ClassField>,
 		initialValue: InitialValue,
 		keyValueTypes: KeyValueTypes,
-		constructorExpression: Null<Expr>
+		constructor: Function
 	): Fields {
 		final fieldConverter = FiniteKeysField.getFieldConverter(
 			initialValue,
@@ -142,15 +140,15 @@ class FiniteKeys {
 			keyValueTypes
 		);
 
-		final constructor = [FiniteKeysField.createConstructor(
-			constructorExpression,
+		final newConstructor = [FiniteKeysField.createConstructor(
+			constructor,
 			instanceNames,
 			initialValue,
 			keyValueTypes
 		)];
 
 		final newFields = [
-			constructor,
+			newConstructor,
 			variables,
 			mapMethods,
 			sequenceMethods
