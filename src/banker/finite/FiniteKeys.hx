@@ -142,15 +142,20 @@ class FiniteKeys {
 
 		final copyMethods = FiniteKeysCopy.createCopyMethods(instanceNames, keyValueTypes);
 
-		final newConstructor = [FiniteKeysField.createConstructor(
-			constructor,
-			instanceNames,
-			initialValue,
-			keyValueTypes
-		)];
+		final basicFields = [
+			FiniteKeysField.createConstructor(
+				constructor,
+				instanceNames,
+				initialValue,
+				keyValueTypes
+			),
+			FiniteKeysField.createEntryCount(
+				instances.length
+			)
+		];
 
 		final newFields = [
-			newConstructor,
+			basicFields,
 			variables,
 			mapMethods,
 			sequenceMethods,

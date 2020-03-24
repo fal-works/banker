@@ -98,5 +98,18 @@ class FiniteKeysField {
 			pos: Context.currentPos()
 		};
 	}
+
+	/**
+		@return A static variable `entryCount`,
+		of which value is the number of enum abstract instances.
+	**/
+	public static function createEntryCount(instanceCount: Int): Field {
+		return {
+			name: "entryCount",
+			kind: FVar((macro: Int), macro $v{instanceCount}),
+			access: [APublic, AInline, AFinal, AStatic],
+			pos: Context.currentPos()
+		};
+	}
 }
 #end
