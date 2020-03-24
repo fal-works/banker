@@ -19,16 +19,6 @@ interface FiniteKeysMap<K, V> {
 	function getter(key: K): () -> V;
 
 	/**
-		Sets `value` for `key`.
-	**/
-	function set(key: K, value: V): V;
-
-	/**
-		Creates a function that sets the value for `key`.
-	**/
-	function setter(key: K): (value: V) -> Void;
-
-	/**
 		Creates a vector from all keys of `this`.
 	**/
 	function exportKeys(): Vector<K>;
@@ -37,4 +27,8 @@ interface FiniteKeysMap<K, V> {
 		Creates a vector from all values of `this`.
 	**/
 	function exportValues(): Vector<V>;
+
+	function forEachKey(callback: (key: K) -> Void): Void;
+	function forEachValue(callback: (value: V) -> Void): Void;
+	function forEach(callback: (key: K, value: V) -> Void): Void;
 }
