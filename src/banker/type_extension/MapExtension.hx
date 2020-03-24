@@ -85,4 +85,16 @@ class MapExtension {
 
 		return newMap;
 	}
+
+	/**
+		Counts keys of `this`. Internally uses `keys()` iterator.
+		@return The number of keys.
+	**/
+	public static inline function countKeys<K, V>(
+		_this: Map<K, V>
+	): Int {
+		var i = 0;
+		for (key in _this.keys()) ++i;
+		return i;
+	}
 }
