@@ -39,7 +39,7 @@ class ConvertExtension {
 	public static inline function copyWithMappedValues<K, V, W>(
 		_this: TopAlignedBuffer<K, V>,
 		destination: TopAlignedBuffer<K, W>,
-		convertValue: V->W
+		convertValue: (key: K, value: V) -> W
 	): Void {
 		final size = _this.size;
 		assert(size <= destination.capacity);
@@ -51,8 +51,9 @@ class ConvertExtension {
 
 		var i = 0;
 		while (i < size) {
-			newKeys[i] = keys[i];
-			newValues[i] = convertValue(values[i]);
+			final key = keys[i];
+			newKeys[i] = key;
+			newValues[i] = convertValue(key, values[i]);
 			++i;
 		}
 

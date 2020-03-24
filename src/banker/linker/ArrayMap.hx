@@ -34,7 +34,7 @@ class ArrayMap<K, V>
 	}
 
 	/** @see `banker.linker.interfaces.Convert` **/
-	public inline function mapValues<W>(convertValue: V->W): ArrayMap<K, W> {
+	public inline function mapValues<W>(convertValue: (key: K, value: V) -> W): ArrayMap<K, W> {
 		final newMap = new ArrayMap<K, W>(this.capacity);
 		ConvertExtension.copyWithMappedValues(this, newMap, convertValue);
 

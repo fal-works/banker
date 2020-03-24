@@ -16,5 +16,5 @@ interface Convert<K, V> {
 		- Same keys as `this`
 		- Converted values from `this`
 	**/
-	function mapValues<W>(convertValue: V->W): Convert<K, W>;
+	function mapValues<W>(convertValue: (key: K, value: V) -> W): Convert<K, W>;
 }
