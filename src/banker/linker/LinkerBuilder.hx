@@ -14,7 +14,7 @@ class LinkerBuilder {
 	public static function arrayMapFromStandardMap<K, V>(
 		map: StdMap<K, V>,
 		capacity: Int
-	) {
+	): ArrayMap<K, V> {
 		final length = if (capacity >= 0) capacity else map.countKeys();
 		final arrayMap = new ArrayMap<K, V>(length);
 		blitFromMapToBuffer(map, arrayMap);
@@ -29,7 +29,7 @@ class LinkerBuilder {
 	public static function arrayOrderedMapFromStandardMap<K, V>(
 		map: StdMap<K, V>,
 		capacity: Int
-	) {
+	): ArrayOrderedMap<K, V> {
 		final length = if (capacity >= 0) capacity else map.countKeys();
 		final arrayMap = new ArrayOrderedMap<K, V>(length);
 		blitFromMapToBuffer(map, arrayMap);
