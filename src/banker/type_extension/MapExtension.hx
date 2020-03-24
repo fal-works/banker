@@ -72,18 +72,18 @@ class MapExtension {
 	}
 
 	/**
+		@param out The target map to set new entries.
 		@return New map with converted values.
 	**/
 	public static inline function mapValues<K, V, W>(
 		_this: Map<K, V>,
+		out: Map<K, W>,
 		convert: (value: V) -> W
 	): Map<K, W> {
-		final newMap = new Map<K, W>();
-
 		for (key => value in _this)
-			newMap.set(key, convert(value));
+			out.set(key, convert(value));
 
-		return newMap;
+		return out;
 	}
 
 	/**
