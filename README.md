@@ -329,7 +329,7 @@ You can specify an initial value with any type by adding a variable that is eith
 - added `@:banker.finite.initialValue` metadata.
 
 ```haxe
-@:build(banker.finite.FiniteKeys.from(Abc))
+@:build(banker.finite.FiniteKeys.from(MyEnumAbstract))
 class MyMap {
 	static final initialValue: Int = 0;
 }
@@ -338,9 +338,9 @@ class MyMap {
 You can also specify a function, which will be treated as a factory function for initializing each variable.
 
 ```haxe
-@:build(banker.finite.FiniteKeys.from(Abc))
+@:build(banker.finite.FiniteKeys.from(MyEnumAbstract))
 class MyMap2 {
-	static function initialValue(key: Abc): Int {
+	static function initialValue(key: MyEnumAbstract): Int {
 		return switch key {
 			case A: 1;
 			case B: 2;
