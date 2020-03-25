@@ -39,4 +39,7 @@ class Actor implements banker.aosoa.Structure {
 	/** Y position. **/
 	@:banker.factory(Math.random)
 	var y: Float;
+
+	@:banker.hidden
+	var hidden: Int = 0;
 }

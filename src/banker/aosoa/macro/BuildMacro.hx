@@ -27,7 +27,7 @@ class BuildMacro {
 		final buildFields = Context.getBuildFields();
 
 		final buildFieldClones = buildFields.map(FieldExtension.clone);
-		buildFieldClones.forEach(field -> field.pos = position);
+		// buildFieldClones.forEach(field -> field.pos = position);
 
 		final chunk = Chunk.create(buildFieldClones, localClassName, position);
 		final chunkType = ModuleTools.defineSubTypes([chunk.typeDefinition])[0];
