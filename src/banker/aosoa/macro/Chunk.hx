@@ -134,7 +134,7 @@ class Chunk {
 		buildField: Field,
 		buildFieldName: String,
 		initialValue: Null<Expr>
-	): Null<Expr> {
+	): MacroResult<Expr> {
 		final expressions: Array<Expr> = [];
 		final thisField = macro $p{["this", buildFieldName]};
 
@@ -144,7 +144,12 @@ class Chunk {
 			expressions.push(macro $thisField.fill($initialValue));
 		} else {
 			final factory = buildField.getFactory();
-			if (factory == null) return null;
+			if (factory == null) {
+				return Failed(
+					"Field must be initialized or have @:banker.factory metadata.",
+					buildField.pos
+				);
+			}
 
 			expressions.push(macro $thisField.populate($factory));
 		}
@@ -152,7 +157,7 @@ class Chunk {
 		final thisBuffer = macro $p{["this", buildFieldName + "ChunkBuffer"]};
 		expressions.push(macro $thisBuffer = $thisField.ref.copyWritable());
 
-		return macro $b{expressions};
+		return Ok(macro $b{expressions});
 	}
 
 	/**
@@ -231,7 +236,10 @@ class Chunk {
 
 				case FVar(varType, initialValue):
 					if (varType == null) {
-						warn('Type must be explicitly declared: ${buildFieldName}');
+						warn(
+							'Type must be explicitly declared: ${buildFieldName}',
+							buildField.pos
+						);
 						continue;
 					}
 
@@ -240,13 +248,8 @@ class Chunk {
 						buildFieldName,
 						initialValue
 					);
-
-					if (constructorExpression == null) {
-						warn("Field must be initialized or have @:banker.factory metadata.");
-						break;
-					}
-
-					constructorExpressions.push(constructorExpression);
+					if (constructorExpression.isFailedWarn()) break;
+					constructorExpressions.push(constructorExpression.unwrap());
 
 					var documentation = buildField.doc;
 					if (documentation == null)
@@ -281,7 +284,10 @@ class Chunk {
 					if (notVerified) debug('  Converted to vector.');
 
 				default:
-					if (notVerified) warn('Found field that is not a variable: ${buildFieldName}');
+					warn(
+						'Found field that is not a variable: ${buildFieldName}',
+						buildField.pos
+					);
 			}
 		}
 
@@ -322,7 +328,8 @@ class Chunk {
 	static function generateMethodPieces(
 		methodName: String,
 		arguments: Array<FunctionArg>,
-		variables: Array<ChunkVariable>
+		variables: Array<ChunkVariable>,
+		position: Position
 	) {
 		final declareLocalVector: Array<Expr> = [];
 		final declareLocalValue: Array<Expr> = [];
@@ -390,7 +397,10 @@ class Chunk {
 		}
 
 		if (iArgumentIndex == -1 && needsWriteAccess)
-			warn('Found vector argument but missing argument `i: Int` in function $methodName().');
+			warn(
+				'Found vector argument but missing argument `i: Int` in function $methodName().',
+				position
+			);
 
 		return {
 			declareLocalValue: declareLocalValue,
@@ -429,7 +439,8 @@ class Chunk {
 		final pieces = generateMethodPieces(
 			originalFunction.name,
 			originalFunction.arguments,
-			variables
+			variables,
+			originalFunction.position
 		);
 		final externalArguments = pieces.externalArguments;
 
@@ -525,7 +536,8 @@ class Chunk {
 		final pieces = generateMethodPieces(
 			originalFunction.name,
 			originalFunction.arguments,
-			variables
+			variables,
+			originalFunction.position
 		);
 		final externalArguments = pieces.externalArguments;
 
