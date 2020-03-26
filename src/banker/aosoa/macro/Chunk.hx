@@ -184,7 +184,10 @@ class Chunk {
 
 			final access = buildField.access;
 
-			// TODO: metadata @:preserve
+			if (buildField.hasMetadata(":banker.hidden")) {
+				if (notVerified) debug('  Found metadata: @:banker.hidden ... Skipping.');
+				continue;
+			}
 
 			switch buildField.kind {
 				case FFun(func):
@@ -273,7 +276,14 @@ class Chunk {
 						nextWriteIndex
 					));
 
-					disuseExpressions.push(macro $i{chunkBufferFieldName}[i] = $i{chunkBufferFieldName}[nextWriteIndex]);
+					final swap = buildField.hasMetadata(":banker.swap");
+					if (notVerified && swap) debug("Found metadata @:banker.swap ... Swap buffer elements when disusing.");
+
+					final disuseExpression = if (swap)
+						macro $i{chunkBufferFieldName}.swap(i, nextWriteIndex);
+					else
+						macro $i{chunkBufferFieldName}[i] = $i{chunkBufferFieldName}[nextWriteIndex];
+					disuseExpressions.push(disuseExpression);
 
 					variables.push({
 						name: buildFieldName,
@@ -388,11 +398,10 @@ class Chunk {
 				final writeVectorName = componentName + "ChunkBuffer";
 				declareLocalVector.push(macro final $componentName = this.$writeVectorName);
 			} else {
-				// provide READ access to the current value via $componentName
-				final localVectorName = componentName + "ChunkVector";
-				final readVectorName = componentName;
-				declareLocalVector.push(macro final $localVectorName = this.$readVectorName);
-				declareLocalValue.push(macro final $componentName = $i{localVectorName}[i]);
+				// provide READ access to the buffer via $componentName
+				final writeVectorName = componentName + "ChunkBuffer";
+				declareLocalVector.push(macro final $writeVectorName = this.$writeVectorName);
+				declareLocalValue.push(macro final $componentName = $i{writeVectorName}[i]);
 			}
 		}
 
@@ -458,13 +467,13 @@ class Chunk {
 		initializeLoop.pushFromArray(pieces.declareLocalValue);
 
 		final finalizeLoop: Array<Expr> = [];
-		finalizeLoop.push(macro ++readIndex);
 		finalizeLoop.push(macro if (disuse) {
 			--nextWriteIndex;
 			$b{disuseExpressions};
-			readWriteIndexMap[nextWriteIndex] = readIndex;
+			readWriteIndexMap.swap(i, nextWriteIndex);
 			disuse = false;
 		});
+		finalizeLoop.push(macro ++readIndex);
 
 		final finalizeAfterLoops: Array<Expr> = [];
 		finalizeAfterLoops.push(macro this.nextWriteIndex = nextWriteIndex);
@@ -492,8 +501,9 @@ class Chunk {
 		/*
 			function someIterator(externalArgs) {
 				declareLocalVector();
-				final endReadIndex = this.endReadIndex;
+
 				final readWriteIndexMap = this.readWriteIndexMap;
+				final endReadIndex = this.endReadIndex;
 				var readIndex = 0;
 				var nextWriteIndex = this.nextWriteIndex
 				var disuse = false;
@@ -505,13 +515,14 @@ class Chunk {
 
 					originalFunction();
 
-					++readIndex;
 					if (disuse) {
 						--nextWriteIndex;
 						disuseExpr();
-						readWriteIndexMap[nextWriteIndex] = readIndex;
+						readWriteIndexMap.swap(i, nextWriteIndex);
 						disuse = false;
 					}
+
+					++readIndex;
 				}
 
 				this.nextWriteIndex = nextWriteIndex
