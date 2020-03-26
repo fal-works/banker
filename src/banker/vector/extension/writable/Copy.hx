@@ -20,4 +20,22 @@ class Copy {
 			rangeLength
 		);
 	}
+
+	/**
+		Swaps elements at `indexA` and `indexB`.
+	**/
+	public static inline function swap<T>(
+		_this: WritableVector<T>,
+		indexA: Int,
+		indexB: Int
+	): Void {
+		#if !macro
+		assert(indexA >= 0 && indexA < _this.length);
+		assert(indexB >= 0 && indexB < _this.length);
+		#end
+
+		final tmp = _this[indexA];
+		_this[indexA] = _this[indexB];
+		_this[indexB] = tmp;
+	}
 }
