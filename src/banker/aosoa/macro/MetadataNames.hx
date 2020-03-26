@@ -5,4 +5,5 @@ class MetadataNames {
 	public static final factory = ":banker.factory";
 	public static final hidden = ":banker.hidden";
 	public static final swap = ":banker.swap";
+	public static final chunkLevel = ":banker.chunkLevel";
 }

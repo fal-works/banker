@@ -109,9 +109,11 @@ class Chunk {
 			}
 		};
 
-		chunkClass.fields = chunkClass.fields.concat(prepared.chunkFields);
 		chunkClass.doc = 'Chunk (or SoA: Structure of Arrays) class generated from the original Structure class `$structureName`.';
 		chunkClass.pos = position;
+
+		final fields = chunkClass.fields;
+		fields.pushFromArray(prepared.chunkFields);
 
 		return {
 			typeDefinition: chunkClass,
@@ -165,7 +167,7 @@ class Chunk {
 
 		@return
 		`variables`: Variables of each entity in the chunk.
-		`chunkFields`: Fields of the chunk, each of which is a vector type variable.
+		`chunkFields`: Fields of the chunk.
 		`constructorExpressions`: Expression list to be reified in the chunk constructor.
 	**/
 	static function prepare(buildFields: Array<Field>) {
@@ -187,6 +189,13 @@ class Chunk {
 			if (buildField.hasMetadata(MetadataNames.hidden)) {
 				if (notVerified) debug('  Found metadata: ${MetadataNames.hidden} ... Skipping.');
 				continue;
+			}
+
+			if (buildField.hasMetadata(MetadataNames.chunkLevel)) {
+				if (notVerified)
+					debug('  Found metadata: ${MetadataNames.chunkLevel} ... Preserve as a chunk-level field.');
+
+				chunkFields.push(buildField);
 			}
 
 			switch buildField.kind {
