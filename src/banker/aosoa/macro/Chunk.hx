@@ -146,7 +146,7 @@ class Chunk {
 			final factory = buildField.getFactory();
 			if (factory == null) {
 				return Failed(
-					"Field must be initialized or have @:banker.factory metadata.",
+					'Field must be initialized or have @${MetadataNames.factory} metadata.',
 					buildField.pos
 				);
 			}
@@ -184,8 +184,8 @@ class Chunk {
 
 			final access = buildField.access;
 
-			if (buildField.hasMetadata(":banker.hidden")) {
-				if (notVerified) debug('  Found metadata: @:banker.hidden ... Skipping.');
+			if (buildField.hasMetadata(MetadataNames.hidden)) {
+				if (notVerified) debug('  Found metadata: ${MetadataNames.hidden} ... Skipping.');
 				continue;
 			}
 
@@ -205,7 +205,7 @@ class Chunk {
 						continue;
 					}
 
-					final useEntity = buildField.hasMetadata(":banker.useEntity");
+					final useEntity = buildField.hasMetadata(MetadataNames.useEntity);
 
 					var documentation = buildField.doc;
 					if (documentation == null) {
@@ -228,7 +228,7 @@ class Chunk {
 						useFunctions.push(chunkFunction);
 
 						if (notVerified) {
-							debug('  Found metadata: @:banker.useEntity');
+							debug('  Found metadata: @${MetadataNames.useEntity}');
 							debug('  Registered as a function for using new entity.');
 						}
 					}
@@ -276,8 +276,8 @@ class Chunk {
 						nextWriteIndex
 					));
 
-					final swap = buildField.hasMetadata(":banker.swap");
-					if (notVerified && swap) debug("Found metadata @:banker.swap ... Swap buffer elements when disusing.");
+					final swap = buildField.hasMetadata(MetadataNames.swap);
+					if (notVerified && swap) debug('Found metadata @${MetadataNames.swap} ... Swap buffer elements when disusing.');
 
 					final disuseExpression = if (swap)
 						macro $i{chunkBufferFieldName}.swap(i, nextWriteIndex);

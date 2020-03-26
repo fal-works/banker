@@ -7,8 +7,6 @@ import haxe.macro.Context;
 	Functions for static extension used in `banker.aosoa.macro`.
 **/
 class FieldExtension {
-	static final factoryMetadataName = ":banker.factory";
-
 	/**
 		@return The first found parameter of "@:banker.factory" metadata.
 	**/
@@ -18,7 +16,7 @@ class FieldExtension {
 
 		for (i in 0...metadataArray.length) {
 			final metadata = metadataArray[i];
-			if (metadata.name != factoryMetadataName) continue;
+			if (metadata.name != MetadataNames.factory) continue;
 
 			final parameters = metadata.params;
 			if (parameters == null) continue;
