@@ -220,7 +220,7 @@ class Actor implements banker.aosoa.Structure {
 }
 ```
 
-Then you can create an AoSoA by `Actor.createAosoa(chunkSize, chunkCount);`.
+Then you can create an AoSoA by `Actor.createAosoa(chunkCapacity, chunkCount);`.
 
 Now use it as below:
 

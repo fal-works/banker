@@ -28,9 +28,9 @@ class Aosoa {
 			public final chunks: banker.vector.Vector<$chunkComplexType>;
 
 			/**
-				The size of each chunk i.e. the length of each vector that a chunk contains.
+				The capacity of each chunk i.e. the length of each vector that a chunk contains.
 			**/
-			public final chunkSize: Int;
+			public final chunkCapacity: Int;
 
 			/**
 				Default values for `readWriteIndexMap` of the chunk class.
@@ -52,14 +52,14 @@ class Aosoa {
 			/**
 				Called from `createAosoa()` that is added to the original Structure class by the build macro.
 			**/
-			public function new(chunkSize: Int, chunkCount: Int) {
-				final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkSize) i]);
+			public function new(chunkCapacity: Int, chunkCount: Int) {
+				final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkCapacity) i]);
 
 				this.chunks = banker.vector.Vector.createPopulated(
 					chunkCount,
-					() -> new $chunkTypePath(chunkSize, defaultReadWriteIndexMap)
+					() -> new $chunkTypePath(chunkCapacity, defaultReadWriteIndexMap)
 				);
-				this.chunkSize = chunkSize;
+				this.chunkCapacity = chunkCapacity;
 				this.defaultReadWriteIndexMap = defaultReadWriteIndexMap;
 			}
 
@@ -69,14 +69,14 @@ class Aosoa {
 			public function synchronize() {
 				final chunks = this.chunks;
 				final chunkCount = chunks.length;
-				final chunkSize = this.chunkSize;
+				final chunkCapacity = this.chunkCapacity;
 				final defaultReadWriteIndexMap = this.defaultReadWriteIndexMap;
 				var usedChunkMaxIndex = 0;
-				var endReadEntityIndex = chunkSize;
+				var endReadEntityIndex = chunkCapacity;
 
 				for (chunkIndex in 0...chunkCount) {
 					endReadEntityIndex = chunks[chunkIndex].synchronize(
-						chunkSize,
+						chunkCapacity,
 						defaultReadWriteIndexMap
 					);
 
@@ -120,19 +120,19 @@ class Aosoa {
 		position: Position
 	): Field {
 		final aosoaTypePath = aosoaType.path;
-		final functionBody = macro return new $aosoaTypePath(chunkSize, chunkCount);
+		final functionBody = macro return new $aosoaTypePath(chunkCapacity, chunkCount);
 		var documentation = 'Creates an AoSoA (Array of Structure of Arrays) instance.';
 		documentation += '\n\nAn Aosoa consists of multiple Chunks (or SoA: Structure of Arrays),';
 		documentation += '\nand each Chunk consists of vectors containing the data of entities.';
-		documentation += '\nThe total capacity of entities will be `chunkSize * chunkCount`.';
-		documentation += '\n@param chunkSize The capacity of each Chunk i.e. the length of each vector that a Chunk contains.';
+		documentation += '\nThe total capacity of entities will be `chunkCapacity * chunkCount`.';
+		documentation += '\n@param chunkCapacity The capacity of each Chunk i.e. the length of each vector that a Chunk contains.';
 		documentation += '\n@param chunkCount The number of Chunks that the AoSoA contains.';
 
 		final createAosoaMethod: Field = {
 			name: "createAosoa",
 			kind: FFun({
 				args: [
-					{ name: "chunkSize", type: (macro:Int) },
+					{ name: "chunkCapacity", type: (macro:Int) },
 					{ name: "chunkCount", type: (macro:Int) }
 				],
 				ret: aosoaType.complex,
@@ -183,7 +183,7 @@ class Aosoa {
 
 		final functionBody = macro {
 			final chunks = this.chunks;
-			final chunkSize = this.chunkSize;
+			final chunkCapacity = this.chunkCapacity;
 			final endReadChunkIndex = this.endReadChunkIndex;
 			var i = 0;
 
@@ -191,7 +191,7 @@ class Aosoa {
 				final chunk = chunks[i];
 				final nextWriteIndex = chunk.$methodName($a{argumentExpressions});
 
-				if (nextWriteIndex < chunkSize && i < this.nextWriteChunkIndex)
+				if (nextWriteIndex < chunkCapacity && i < this.nextWriteChunkIndex)
 					this.nextWriteChunkIndex = i;
 
 				++i;
@@ -213,11 +213,11 @@ class Aosoa {
 
 		final functionBody = macro {
 			final chunks = this.chunks;
-			final chunkSize = this.chunkSize;
+			final chunkCapacity = this.chunkCapacity;
 
 			var nextWriteChunkIndex = this.nextWriteChunkIndex;
 			var chunk = chunks[nextWriteChunkIndex];
-			while (chunk.nextWriteIndex == chunkSize) {
+			while (chunk.nextWriteIndex == chunkCapacity) {
 				++nextWriteChunkIndex;
 				chunk = chunks[nextWriteChunkIndex];
 			}

@@ -9,7 +9,7 @@ package banker.aosoa;
 	- The class implementing `Structure` will consist of multiple "Chunk"s.
 	- The following fields are added.
 		- `chunks`: Vector of "Chunk"s of which the whole AoSoA consists.
-		- `chunkSize`: Number of elements that a Chunk contains.
+		- `chunkCapacity`: Number of elements that a Chunk contains.
 		- `iterate()`: Iterates all entities.
 **/
 @:autoBuild(banker.aosoa.macro.BuildMacro.build())

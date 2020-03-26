@@ -82,7 +82,7 @@ class Chunk {
 			final readWriteIndexMap: banker.vector.WritableVector<Int>;
 
 			public function new(
-				chunkSize: Int,
+				chunkCapacity: Int,
 				defaultReadWriteIndexMap: banker.vector.Vector<Int>
 			) {
 				$b{prepared.constructorExpressions};
@@ -93,7 +93,7 @@ class Chunk {
 				Synchronizes all vectors and their corresponding buffer vectors.
 			**/
 			public function synchronize(
-				chunkSize: Int,
+				chunkCapacity: Int,
 				defaultReadWriteIndexMap: banker.vector.Vector<Int>
 			): Int {
 				final nextWriteIndex = this.nextWriteIndex;
@@ -101,7 +101,7 @@ class Chunk {
 				banker.vector.VectorTools.blitZero(
 					defaultReadWriteIndexMap,
 					this.readWriteIndexMap,
-					chunkSize
+					chunkCapacity
 				);
 
 				this.endReadIndex = nextWriteIndex;
@@ -125,7 +125,7 @@ class Chunk {
 		According to the definition and metadata of `buildField`,
 		Creates an initializing expression for the corresponding vector field.
 
-		Variable `chunkSize: Int` must be declared prior to this expression.
+		Variable `chunkCapacity: Int` must be declared prior to this expression.
 
 		@param initialValue Obtained from `buildField.kind`.
 		@return Expression to be run in `new()`. `null` if the input is invalid.
@@ -138,7 +138,7 @@ class Chunk {
 		final expressions: Array<Expr> = [];
 		final thisField = macro $p{["this", buildFieldName]};
 
-		expressions.push(macro $thisField = new banker.vector.WritableVector(chunkSize));
+		expressions.push(macro $thisField = new banker.vector.WritableVector(chunkCapacity));
 
 		if (initialValue != null) {
 			expressions.push(macro $thisField.fill($initialValue));
