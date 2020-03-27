@@ -95,7 +95,7 @@ class Chunk {
 	**/
 	static function prepare(chunkClassName: String, buildFields: Array<Field>) {
 		final variables: Array<ChunkVariable> = [];
-		final functions: Array<ChunkFunction> = [];
+		final iteratorFunctions: Array<ChunkFunction> = [];
 		final useFunctions: Array<ChunkFunction> = [];
 		final chunkFields: Array<Field> = [];
 		final constructorExpressions: Array<Expr> = [];
@@ -121,12 +121,14 @@ class Chunk {
 			if (hasChunkLevelMetadata) {
 				if (notVerified)
 					debug('  Found metadata: ${MetadataNames.chunkLevel} ... Preserve as a chunk-level field.');
-				chunkFields.push(buildField);
 			}
 
 			switch buildField.kind {
 				case FFun(func):
-					if (hasChunkLevelMetadata) continue;
+					if (hasChunkLevelMetadata) {
+						chunkFields.push(buildField);
+						continue;
+					}
 
 					if (!isStatic) {
 						// TODO: Check if non-static functions can be accepted as well
@@ -134,66 +136,49 @@ class Chunk {
 						continue;
 					}
 
-					final returnType = func.ret;
-					if (returnType != null && !unifyComplex(
-						returnType,
-						ComplexTypes.voidType
-					)) {
+					if (!func.ret.isNullOrVoid()) {
 						if (notVerified) debug('  Function with return value. Skipping.');
 						continue;
 					}
 
-					final useEntity = buildField.hasMetadata(MetadataNames.useEntity);
+					final chunkMethodKind = getChunkMethodKind(buildField);
+					final chunkFunction = createChunkFunction(
+						buildField,
+						func,
+						chunkMethodKind
+					);
 
-					var documentation = buildField.doc;
-					if (documentation == null) {
-						documentation = if (useEntity)
-							'Finds an entity that is currently available and marks it as in-use.';
-						else
-							'Iterates all entities that are currently in use.';
-						documentation += '\n\nGenerated from function `$buildFieldName` in the original Structure class.';
+					switch chunkMethodKind {
+						case UseEntity:
+							useFunctions.push(chunkFunction);
+							if (notVerified) {
+								debug('  Found metadata: @${MetadataNames.useEntity}');
+								debug('  Registered as a function for using new entity.');
+							}
+						case Iterate:
+							iteratorFunctions.push(chunkFunction);
+							if (notVerified) debug('  Registered as a Chunk iterator.');
 					}
 
-					final chunkFunction:ChunkFunction = {
-						name: buildFieldName,
-						arguments: func.args.copy(),
-						expression: func.expr,
-						documentation: documentation,
-						position: buildField.pos
-					};
-
-					if (useEntity) {
-						useFunctions.push(chunkFunction);
-
-						if (notVerified) {
-							debug('  Found metadata: @${MetadataNames.useEntity}');
-							debug('  Registered as a function for using new entity.');
-						}
-					}
-					else {
-						functions.push(chunkFunction);
-						if (notVerified) debug('  Registered as a Chunk iterator.');
-					}
-
-				case FVar(varType, initialValue):
+				case FVar(variableType, initialValue):
 					var isChunkLevel = hasChunkLevelMetadata;
 					if (!isChunkLevel && isStatic) {
 						debug('  Found a static variable. Preserve as a chunk-level field.');
-						chunkFields.push(buildField);
 						isChunkLevel = true;
 					}
 					if (isChunkLevel) {
+						chunkFields.push(buildField);
 						chunkLevelVariableFields.push({
 							field: buildField,
-							type: varType,
+							type: variableType,
 							expression: initialValue
 						});
 						continue;
 					}
 
-					if (varType == null) {
+					if (variableType == null) {
 						warn(
-							'Type must be explicitly declared: ${buildFieldName}',
+							'Type must be explicitly declared: $buildFieldName',
 							buildField.pos
 						);
 						continue;
@@ -207,11 +192,9 @@ class Chunk {
 					if (constructorExpression.isFailedWarn()) break;
 					constructorExpressions.push(constructorExpression.unwrap());
 
-					var documentation = buildField.doc;
-					if (documentation == null)
-						documentation = 'Vector generated from variable `$buildFieldName` in the original Structure class.';
+					final documentation = createChunkVectorDocumentation(buildField);
 
-					final vectorType = macro:banker.vector.WritableVector<$varType>;
+					final vectorType = macro:banker.vector.WritableVector<$variableType>;
 					final chunkField = buildField.clone()
 						.setDoc(documentation).setVariableType(vectorType).setAccess([AFinal]);
 
@@ -231,7 +214,7 @@ class Chunk {
 
 					final swap = buildField.hasMetadata(MetadataNames.swap);
 					if (notVerified && swap)
-						debug('Found metadata @${MetadataNames.swap} ... Swap buffer elements when disusing.');
+						debug('  Found metadata @${MetadataNames.swap} ... Swap buffer elements when disusing.');
 
 					final disuseExpression = if (swap)
 						macro $i{chunkBufferFieldName}.swap(i, nextWriteIndex);
@@ -241,7 +224,7 @@ class Chunk {
 
 					variables.push({
 						name: buildFieldName,
-						type: varType,
+						type: variableType,
 						vectorType: vectorType
 					});
 
@@ -256,8 +239,8 @@ class Chunk {
 		}
 
 		final iterators: Array<ChunkMethod> = [];
-		for (i in 0...functions.length) {
-			final func = functions[i];
+		for (i in 0...iteratorFunctions.length) {
+			final func = iteratorFunctions[i];
 			if (notVerified) debug('Create iterator: ${func.name}');
 
 			final iterator = createIterator(
@@ -295,6 +278,13 @@ class Chunk {
 			iterators: iterators,
 			useMethods: useMethods
 		};
+	}
+
+	static function createChunkVectorDocumentation(buildField: Field): String {
+		return if (buildField.doc != null)
+			buildField.doc;
+		else
+			'Vector generated from variable `${buildField.name}` in the original Structure class.';
 	}
 }
 #end

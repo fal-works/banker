@@ -61,4 +61,9 @@ enum ArgumentKind {
 	Write;
 	ChunkLevel(isStatic: Bool, isFinal: Bool);
 }
+
+enum ChunkMethodKind {
+	UseEntity;
+	Iterate;
+}
 #end

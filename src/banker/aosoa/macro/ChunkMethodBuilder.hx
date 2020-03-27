@@ -1,6 +1,7 @@
 package banker.aosoa.macro;
 
 #if macro
+using sneaker.macro.extensions.FieldExtension;
 using banker.array.ArrayExtension;
 using banker.aosoa.macro.FieldExtension;
 using banker.aosoa.macro.MacroExtension;
@@ -47,164 +48,27 @@ class ChunkMethodBuilder {
 		return Ok(macro $b{expressions});
 	}
 
-	/**
-		Tells what kind `argument` is. Used in `generateMethodPieces()`.
-	**/
-	public static function getArgumentKind(
-		argument: FunctionArg,
-		variables: Array<ChunkVariable>,
-		chunkLevelVariableFields: Array<VariableField>
-	): ArgumentKind {
-		if (argument.argumentIsWriteIndex())
-			return WriteIndex;
-
-		if (argument.argumentIsDisuse())
-			return Disuse;
-
-		final argumentName = argument.name;
-		final argumentType = argument.type;
-
-		for (m in 0...variables.length) {
-			final variable = variables[m];
-			if (variable.name != argumentName) continue;
-
-			if (unifyComplex(variable.type, argumentType))
-				return Read;
-
-			if (unifyComplex(variable.vectorType, argumentType))
-				return Write;
-		}
-
-		for (m in 0...chunkLevelVariableFields.length) {
-			final variable = chunkLevelVariableFields[m];
-			final field = variable.field;
-			if (field.name != argumentName) continue;
-			if (!unifyComplex(variable.type, argumentType)) continue;
-			final access = field.access;
-			final isStatic = access != null && access.has(AStatic);
-			final isFinal = access != null && access.has(AFinal);
-			return ChunkLevel(isStatic, isFinal);
-		}
-
-		return External;
+	public static function getChunkMethodKind(buildField: Field): ChunkMethodKind {
+		return if (buildField.hasMetadata(MetadataNames.useEntity))
+			UseEntity
+		else
+			Iterate;
 	}
 
-	static function getArgumentKindDebugMessage(argumentKind: ArgumentKind): String {
-		return switch argumentKind {
-			case WriteIndex: "Found index for write access.";
-			case Disuse: "Found special variable for disusing entity.";
-			case Read: "Found corresponding variable.";
-			case Write: "Found corresponding vector.";
-			case ChunkLevel(isStatic, isFinal):
-				'Found corresponding chunk-level ${isStatic ? "static " : ""}${isFinal ? "final " : ""}variable.';
-			case External: "No corresponding variable. Add to external arguments.";
-		}
-	}
-
-	/**
-		Generates expression pieces for creating iterate/use method from an user-defined function.
-	**/
-	static function generateMethodPieces(
-		chunkClassName: String,
-		methodName: String,
-		arguments: Array<FunctionArg>,
-		variables: Array<ChunkVariable>,
-		chunkLevelVariableFields: Array<VariableField>,
-		position: Position
-	) {
-		final declareLocalBeforeLoop: Array<Expr> = [];
-		final declareLocalInsideLoop: Array<Expr> = [];
-		final saveLocalAfterLoop: Array<Expr> = [];
-		final externalArguments: Array<FunctionArg> = [];
-		var needsWriteAccess = false;
-		var hasWriteIndex = false;
-
-		if (notVerified) debug('  Scanning arguments.');
-		for (k in 0...arguments.length) {
-			final argument = arguments[k];
-			final argumentKind = getArgumentKind(
-				argument,
-				variables,
-				chunkLevelVariableFields
-			);
-
-			final argumentName = argument.name;
-			if (notVerified)
-				debug('  - $argumentName ... ${getArgumentKindDebugMessage(argumentKind)}');
-
-			switch argumentKind {
-				case WriteIndex:
-					hasWriteIndex = true;
-					continue;
-
-				case Disuse:
-					continue;
-
-				case Read:
-					// provide READ access to the buffer via $argumentName
-					final writeVectorName = argumentName + "ChunkBuffer";
-					declareLocalBeforeLoop.push(macro final $writeVectorName = this.$writeVectorName);
-					declareLocalInsideLoop.push(macro final $argumentName = $i{writeVectorName}[i]);
-
-				case Write:
-					// provide WRITE access to the buffer via $argumentName
-					final writeVectorName = argumentName + "ChunkBuffer";
-					declareLocalBeforeLoop.push(macro final $argumentName = this.$writeVectorName);
-					needsWriteAccess = true;
-
-				case ChunkLevel(isStatic, isFinal):
-					if (isStatic) {
-						if (isFinal) {
-							declareLocalBeforeLoop.push(macro final $argumentName = $i{chunkClassName}.$argumentName);
-						} else {
-							declareLocalBeforeLoop.push(macro var $argumentName = $i{chunkClassName}.$argumentName);
-							saveLocalAfterLoop.push(macro $i{chunkClassName}.$argumentName = $i{argumentName});
-						}
-					} else {
-						if (isFinal) {
-							declareLocalBeforeLoop.push(macro final $argumentName = this.$argumentName);
-						} else {
-							declareLocalBeforeLoop.push(macro var $argumentName = this.$argumentName);
-							saveLocalAfterLoop.push(macro this.$argumentName = $i{argumentName});
-						}
-					}
-
-				case External:
-					externalArguments.push(argument);
-			}
-		}
-
-		if (needsWriteAccess && !hasWriteIndex)
-			warn(
-				'Found vector argument but missing argument `i: Int` in function $methodName().',
-				position
-			);
+	public static function createChunkFunction(
+		buildField: Field,
+		func: Function,
+		kind: ChunkMethodKind
+	): ChunkFunction {
+		final documentation = createMethodDocumentation(buildField, kind);
 
 		return {
-			declareLocalInsideLoop: declareLocalInsideLoop,
-			declareLocalBeforeLoop: declareLocalBeforeLoop,
-			saveLocalAfterLoop: saveLocalAfterLoop,
-			externalArguments: externalArguments
+			name: buildField.name,
+			arguments: func.args.copy(),
+			expression: func.expr,
+			documentation: documentation,
+			position: buildField.pos
 		};
-	}
-
-	/**
-		Creates field from given information.
-		Used in `createIterator()` and `createUseMethod()`.
-	**/
-	static function createMethodField(
-		originalFunction: ChunkFunction,
-		builtFunction: Function
-	): Field {
-		final field: Field = {
-			name: originalFunction.name,
-			kind: FFun(builtFunction),
-			pos: originalFunction.position,
-			doc: originalFunction.documentation,
-			access: [APublic, AInline]
-		};
-
-		return field;
 	}
 
 	/**
@@ -372,6 +236,182 @@ class ChunkMethodBuilder {
 			field: createMethodField(originalFunction, useFunction),
 			externalArguments: externalArguments
 		};
+	}
+
+	/**
+		Tells what kind `argument` is. Used in `generateMethodPieces()`.
+	**/
+	public static function getArgumentKind(
+		argument: FunctionArg,
+		variables: Array<ChunkVariable>,
+		chunkLevelVariableFields: Array<VariableField>
+	): ArgumentKind {
+		if (argument.argumentIsWriteIndex())
+			return WriteIndex;
+
+		if (argument.argumentIsDisuse())
+			return Disuse;
+
+		final argumentName = argument.name;
+		final argumentType = argument.type;
+
+		for (m in 0...variables.length) {
+			final variable = variables[m];
+			if (variable.name != argumentName) continue;
+
+			if (unifyComplex(variable.type, argumentType))
+				return Read;
+
+			if (unifyComplex(variable.vectorType, argumentType))
+				return Write;
+		}
+
+		for (m in 0...chunkLevelVariableFields.length) {
+			final variable = chunkLevelVariableFields[m];
+			final field = variable.field;
+			if (field.name != argumentName) continue;
+			if (!unifyComplex(variable.type, argumentType)) continue;
+			final access = field.access;
+			final isStatic = access != null && access.has(AStatic);
+			final isFinal = access != null && access.has(AFinal);
+			return ChunkLevel(isStatic, isFinal);
+		}
+
+		return External;
+	}
+
+	static function getArgumentKindDebugMessage(argumentKind: ArgumentKind): String {
+		return switch argumentKind {
+			case WriteIndex: "Found index for write access.";
+			case Disuse: "Found special variable for disusing entity.";
+			case Read: "Found corresponding variable.";
+			case Write: "Found corresponding vector.";
+			case ChunkLevel(isStatic, isFinal):
+				'Found corresponding chunk-level ${isStatic ? "static " : ""}${isFinal ? "final " : ""}variable.';
+			case External: "No corresponding variable. Add to external arguments.";
+		}
+	}
+
+	/**
+		Generates expression pieces for creating iterate/use method from an user-defined function.
+	**/
+	static function generateMethodPieces(
+		chunkClassName: String,
+		methodName: String,
+		arguments: Array<FunctionArg>,
+		variables: Array<ChunkVariable>,
+		chunkLevelVariableFields: Array<VariableField>,
+		position: Position
+	) {
+		final declareLocalBeforeLoop: Array<Expr> = [];
+		final declareLocalInsideLoop: Array<Expr> = [];
+		final saveLocalAfterLoop: Array<Expr> = [];
+		final externalArguments: Array<FunctionArg> = [];
+		var needsWriteAccess = false;
+		var hasWriteIndex = false;
+
+		if (notVerified) debug('  Scanning arguments.');
+		for (k in 0...arguments.length) {
+			final argument = arguments[k];
+			final argumentKind = getArgumentKind(
+				argument,
+				variables,
+				chunkLevelVariableFields
+			);
+
+			final argumentName = argument.name;
+			if (notVerified)
+				debug('  - $argumentName ... ${getArgumentKindDebugMessage(argumentKind)}');
+
+			switch argumentKind {
+				case WriteIndex:
+					hasWriteIndex = true;
+					continue;
+
+				case Disuse:
+					continue;
+
+				case Read:
+					// provide READ access to the buffer via $argumentName
+					final writeVectorName = argumentName + "ChunkBuffer";
+					declareLocalBeforeLoop.push(macro final $writeVectorName = this.$writeVectorName);
+					declareLocalInsideLoop.push(macro final $argumentName = $i{writeVectorName}[i]);
+
+				case Write:
+					// provide WRITE access to the buffer via $argumentName
+					final writeVectorName = argumentName + "ChunkBuffer";
+					declareLocalBeforeLoop.push(macro final $argumentName = this.$writeVectorName);
+					needsWriteAccess = true;
+
+				case ChunkLevel(isStatic, isFinal):
+					if (isStatic) {
+						if (isFinal) {
+							declareLocalBeforeLoop.push(macro final $argumentName = $i{chunkClassName}.$argumentName);
+						} else {
+							declareLocalBeforeLoop.push(macro var $argumentName = $i{chunkClassName}.$argumentName);
+							saveLocalAfterLoop.push(macro $i{chunkClassName}.$argumentName = $i{argumentName});
+						}
+					} else {
+						if (isFinal) {
+							declareLocalBeforeLoop.push(macro final $argumentName = this.$argumentName);
+						} else {
+							declareLocalBeforeLoop.push(macro var $argumentName = this.$argumentName);
+							saveLocalAfterLoop.push(macro this.$argumentName = $i{argumentName});
+						}
+					}
+
+				case External:
+					externalArguments.push(argument);
+			}
+		}
+
+		if (needsWriteAccess && !hasWriteIndex)
+			warn(
+				'Found vector argument but missing argument `i: Int` in function $methodName().',
+				position
+			);
+
+		return {
+			declareLocalInsideLoop: declareLocalInsideLoop,
+			declareLocalBeforeLoop: declareLocalBeforeLoop,
+			saveLocalAfterLoop: saveLocalAfterLoop,
+			externalArguments: externalArguments
+		};
+	}
+
+	/**
+		Creates field from given information.
+		Used in `createIterator()` and `createUseMethod()`.
+	**/
+	static function createMethodField(
+		originalFunction: ChunkFunction,
+		builtFunction: Function
+	): Field {
+		final field: Field = {
+			name: originalFunction.name,
+			kind: FFun(builtFunction),
+			pos: originalFunction.position,
+			doc: originalFunction.documentation,
+			access: [APublic, AInline]
+		};
+
+		return field;
+	}
+
+	static function createMethodDocumentation(
+		buildField: Field,
+		kind: ChunkMethodKind
+	): String {
+		if (buildField.doc != null) return buildField.doc;
+
+		final fieldName = buildField.name;
+		var documentation = switch kind {
+			case UseEntity: 'Finds an entity that is currently available and marks it as in-use.';
+			case Iterate: 'Iterates all entities that are currently in use.';
+		}
+		documentation += '\n\nGenerated from function `$fieldName` in the original Structure class.';
+
+		return documentation;
 	}
 }
 #end
