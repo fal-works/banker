@@ -86,7 +86,6 @@ class FiniteKeys {
 		return buildFields.concat(newFields);
 	}
 
-
 	/**
 		@return `true` if the class has "final" metadata.
 	**/
@@ -140,7 +139,10 @@ class FiniteKeys {
 			keyValueTypes
 		);
 
-		final copyMethods = FiniteKeysCopy.createCopyMethods(instanceNames, keyValueTypes);
+		final copyMethods = FiniteKeysCopy.createCopyMethods(
+			instanceNames,
+			keyValueTypes
+		);
 
 		final basicFields = [
 			FiniteKeysField.createConstructor(
@@ -149,9 +151,7 @@ class FiniteKeys {
 				initialValue,
 				keyValueTypes
 			),
-			FiniteKeysField.createEntryCount(
-				instances.length
-			)
+			FiniteKeysField.createEntryCount(instances.length)
 		];
 
 		final newFields = [

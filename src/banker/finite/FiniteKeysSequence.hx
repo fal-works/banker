@@ -107,25 +107,22 @@ class FiniteKeysSequence {
 	static final forEachValueMethodName = "forEachValue";
 	static final forEachMethodName = "forEach";
 
-	static function forEachKeyCallbackType(
-		keyValueTypes: KeyValueTypes
-	): ComplexType {
+	static function forEachKeyCallbackType(keyValueTypes: KeyValueTypes): ComplexType {
 		return TFunction([TNamed("key", keyValueTypes.key.complex)], (macro:Void));
 	}
 
-	static function forEachValueCallbackType(
-		keyValueTypes: KeyValueTypes
-	): ComplexType {
-		return TFunction([TNamed("value", keyValueTypes.value.complex)], (macro:Void));
-	}
-
-	static function forEachCallbackType(
-		keyValueTypes: KeyValueTypes
-	): ComplexType {
+	static function forEachValueCallbackType(keyValueTypes: KeyValueTypes): ComplexType {
 		return TFunction(
-			[TNamed("key", keyValueTypes.key.complex), TNamed("value", keyValueTypes.value.complex)],
+			[TNamed("value", keyValueTypes.value.complex)],
 			(macro:Void)
 		);
+	}
+
+	static function forEachCallbackType(keyValueTypes: KeyValueTypes): ComplexType {
+		return TFunction([
+			TNamed("key", keyValueTypes.key.complex),
+			TNamed("value", keyValueTypes.value.complex)
+		], (macro:Void));
 	}
 
 	static function forEachKeyRunCallback(keyExpression: Expr, keyName: String)

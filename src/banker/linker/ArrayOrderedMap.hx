@@ -34,7 +34,9 @@ class ArrayOrderedMap<K, V>
 	}
 
 	/** @see `banker.linker.interfaces.Convert` **/
-	public inline function mapValues<W>(convertValue: (key: K, value: V) -> W): ArrayOrderedMap<K, W> {
+	public inline function mapValues<W>(
+		convertValue: (key: K, value: V) -> W
+	): ArrayOrderedMap<K, W> {
 		final newMap = new ArrayOrderedMap<K, W>(this.capacity);
 		ConvertExtension.copyWithMappedValues(this, newMap, convertValue);
 

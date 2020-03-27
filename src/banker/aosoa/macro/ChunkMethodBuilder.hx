@@ -55,7 +55,6 @@ class ChunkMethodBuilder {
 		variables: Array<ChunkVariable>,
 		chunkLevelVariableFields: Array<VariableField>
 	): ArgumentKind {
-
 		if (argument.argumentIsWriteIndex())
 			return WriteIndex;
 
@@ -123,7 +122,11 @@ class ChunkMethodBuilder {
 		if (notVerified) debug('  Scanning arguments.');
 		for (k in 0...arguments.length) {
 			final argument = arguments[k];
-			final argumentKind = getArgumentKind(argument, variables, chunkLevelVariableFields);
+			final argumentKind = getArgumentKind(
+				argument,
+				variables,
+				chunkLevelVariableFields
+			);
 
 			final argumentName = argument.name;
 			if (notVerified)

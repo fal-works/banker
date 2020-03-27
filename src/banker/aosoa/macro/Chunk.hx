@@ -129,7 +129,7 @@ class Chunk {
 					if (hasChunkLevelMetadata) continue;
 
 					if (!isStatic) {
-						//TODO: Check if non-static functions can be accepted as well
+						// TODO: Check if non-static functions can be accepted as well
 						if (notVerified) debug('  Function that is not static. Skipping.');
 						continue;
 					}
@@ -183,9 +183,11 @@ class Chunk {
 						isChunkLevel = true;
 					}
 					if (isChunkLevel) {
-						chunkLevelVariableFields.push(
-							{ field: buildField, type: varType, expression: initialValue }
-						);
+						chunkLevelVariableFields.push({
+							field: buildField,
+							type: varType,
+							expression: initialValue
+						});
 						continue;
 					}
 
@@ -228,7 +230,8 @@ class Chunk {
 					));
 
 					final swap = buildField.hasMetadata(MetadataNames.swap);
-					if (notVerified && swap) debug('Found metadata @${MetadataNames.swap} ... Swap buffer elements when disusing.');
+					if (notVerified && swap)
+						debug('Found metadata @${MetadataNames.swap} ... Swap buffer elements when disusing.');
 
 					final disuseExpression = if (swap)
 						macro $i{chunkBufferFieldName}.swap(i, nextWriteIndex);
@@ -257,7 +260,13 @@ class Chunk {
 			final func = functions[i];
 			if (notVerified) debug('Create iterator: ${func.name}');
 
-			final iterator = createIterator(chunkClassName, func, variables, chunkLevelVariableFields, disuseExpressions);
+			final iterator = createIterator(
+				chunkClassName,
+				func,
+				variables,
+				chunkLevelVariableFields,
+				disuseExpressions
+			);
 			iterators.push(iterator);
 			chunkFields.push(iterator.field);
 		}
@@ -267,7 +276,12 @@ class Chunk {
 			final func = useFunctions[i];
 			if (notVerified) debug('Create use method: ${func.name}');
 
-			final useMethod = createUse(chunkClassName, func, variables, chunkLevelVariableFields);
+			final useMethod = createUse(
+				chunkClassName,
+				func,
+				variables,
+				chunkLevelVariableFields
+			);
 			useMethods.push(useMethod);
 			chunkFields.push(useMethod.field);
 		}

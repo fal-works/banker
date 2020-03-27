@@ -105,10 +105,7 @@ class Copy {
 		startPosition: Int,
 		endPosition: Int
 	): Vector<T> {
-		return _this.data.sub(
-			startPosition,
-			endPosition - startPosition
-		);
+		return _this.data.sub(startPosition, endPosition - startPosition);
 	}
 
 	/** @see `Copy.slice()` **/

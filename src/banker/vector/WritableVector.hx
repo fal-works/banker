@@ -21,7 +21,7 @@ abstract WritableVector<T>(RawVector<T>) from RawVector<T> {
 		return RawVector.fromArrayCopy(array);
 
 	/**
-	 `VectorReference` representation of `this`.
+		`VectorReference` representation of `this`.
 	**/
 	public var ref(get, never): VectorReference<T>;
 

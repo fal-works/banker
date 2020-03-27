@@ -46,7 +46,8 @@ class FiniteKeysValidator {
 		);
 
 		if (initialValueField == dummyField) {
-			if (notVerified) debug('  Initial values not specified. Set false as initial value.');
+			if (notVerified)
+				debug('  Initial values not specified. Set false as initial value.');
 			return Ok({ kind: Value(macro false), type: (macro:Bool) });
 		}
 

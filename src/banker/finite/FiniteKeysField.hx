@@ -51,10 +51,7 @@ class FiniteKeysField {
 					final name = instance.name;
 					return {
 						name: name,
-						kind: FVar(
-							initialValue.type,
-							null
-						),
+						kind: FVar(initialValue.type, null),
 						pos: instance.pos,
 						access: fieldAccess,
 						doc: instance.doc
@@ -106,8 +103,13 @@ class FiniteKeysField {
 	public static function createEntryCount(instanceCount: Int): Field {
 		return {
 			name: "entryCount",
-			kind: FVar((macro: Int), macro $v{instanceCount}),
-			access: [APublic, AInline, AFinal, AStatic],
+			kind: FVar((macro:Int), macro $v{instanceCount}),
+			access: [
+				APublic,
+				AInline,
+				AFinal,
+				AStatic
+			],
 			pos: Context.currentPos()
 		};
 	}

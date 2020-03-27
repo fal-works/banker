@@ -23,13 +23,10 @@ enum InitialValueKind {
 **/
 typedef KeyValueTypes = {
 	key: {
-		expression: Expr,
-		type: Type,
-		complex: ComplexType
+		expression: Expr, type: Type, complex: ComplexType
 	},
 	value: {
-		type: Type,
-		complex: ComplexType
+		type: Type, complex: ComplexType
 	}
 }
 #end
