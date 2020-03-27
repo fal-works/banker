@@ -4,6 +4,17 @@ import banker.vector.WritableVector as Vec;
 
 // @:banker.verified
 class Actor implements banker.aosoa.Structure {
+	public static var staticInt: Int = 0;
+
+	static function sequenceNumbers(staticInt: Int) {
+		println(staticInt);
+		++staticInt;
+	}
+
+	@:banker.chunkLevel
+	public function resetStaticInt()
+		staticInt = 0;
+
 	/** Prints position of all entities. **/
 	static function print(x: Float, y: Float) {
 		println('$x, $y');

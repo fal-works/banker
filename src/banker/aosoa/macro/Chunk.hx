@@ -58,10 +58,10 @@ class Chunk {
 		structureName: String,
 		position: Position
 	): ChunkDefinition {
-		final prepared = prepare(buildFields);
+		final chunkClassName = structureName + "Chunk";
+		final prepared = prepare(chunkClassName, buildFields);
 		final variables = prepared.variables;
 
-		final chunkClassName = structureName + "Chunk";
 		final chunkClass: TypeDefinition = macro class $chunkClassName {
 			/**
 				The largest index of entities that are currently in use.
@@ -170,7 +170,7 @@ class Chunk {
 		`chunkFields`: Fields of the chunk.
 		`constructorExpressions`: Expression list to be reified in the chunk constructor.
 	**/
-	static function prepare(buildFields: Array<Field>) {
+	static function prepare(chunkClassName: String, buildFields: Array<Field>) {
 		final variables: Array<ChunkVariable> = [];
 		final functions: Array<ChunkFunction> = [];
 		final useFunctions: Array<ChunkFunction> = [];
@@ -178,6 +178,7 @@ class Chunk {
 		final constructorExpressions: Array<Expr> = [];
 		final disuseExpressions: Array<Expr> = [];
 		final synchronizeExpressions: Array<Expr> = [];
+		final chunkLevelVariableFields: Array<VariableField> = [];
 
 		for (i in 0...buildFields.length) {
 			final buildField = buildFields[i];
@@ -191,16 +192,21 @@ class Chunk {
 				continue;
 			}
 
-			if (buildField.hasMetadata(MetadataNames.chunkLevel)) {
+			final isStatic = access != null && access.has(AStatic);
+			final hasChunkLevelMetadata = buildField.hasMetadata(MetadataNames.chunkLevel);
+
+			if (hasChunkLevelMetadata) {
 				if (notVerified)
 					debug('  Found metadata: ${MetadataNames.chunkLevel} ... Preserve as a chunk-level field.');
-
 				chunkFields.push(buildField);
 			}
 
 			switch buildField.kind {
 				case FFun(func):
-					if (access == null || !access.has(AStatic)) {
+					if (hasChunkLevelMetadata) continue;
+
+					if (!isStatic) {
+						//TODO: Check if non-static functions can be accepted as well
 						if (notVerified) debug('  Function that is not static. Skipping.');
 						continue;
 					}
@@ -247,6 +253,19 @@ class Chunk {
 					}
 
 				case FVar(varType, initialValue):
+					var isChunkLevel = hasChunkLevelMetadata;
+					if (!isChunkLevel && isStatic) {
+						debug('  Found a static variable. Preserve as a chunk-level field.');
+						chunkFields.push(buildField);
+						isChunkLevel = true;
+					}
+					if (isChunkLevel) {
+						chunkLevelVariableFields.push(
+							{ field: buildField, type: varType, expression: initialValue }
+						);
+						continue;
+					}
+
 					if (varType == null) {
 						warn(
 							'Type must be explicitly declared: ${buildFieldName}',
@@ -315,7 +334,7 @@ class Chunk {
 			final func = functions[i];
 			if (notVerified) debug('Create iterator: ${func.name}');
 
-			final iterator = createIterator(func, variables, disuseExpressions);
+			final iterator = createIterator(chunkClassName, func, variables, chunkLevelVariableFields, disuseExpressions);
 			iterators.push(iterator);
 			chunkFields.push(iterator.field);
 		}
@@ -325,7 +344,7 @@ class Chunk {
 			final func = useFunctions[i];
 			if (notVerified) debug('Create use method: ${func.name}');
 
-			final useMethod = createUse(func, variables);
+			final useMethod = createUse(chunkClassName, func, variables, chunkLevelVariableFields);
 			useMethods.push(useMethod);
 			chunkFields.push(useMethod.field);
 		}
@@ -342,87 +361,139 @@ class Chunk {
 	}
 
 	/**
+		Tells what kind `argument` is. Used in `generateMethodPieces()`.
+	**/
+	static function getArgumentKind(
+		argument: FunctionArg,
+		variables: Array<ChunkVariable>,
+		chunkLevelVariableFields: Array<VariableField>
+	): ArgumentKind {
+
+		if (argument.argumentIsWriteIndex())
+			return WriteIndex;
+
+		if (argument.argumentIsDisuse())
+			return Disuse;
+
+		final argumentName = argument.name;
+		final argumentType = argument.type;
+
+		for (m in 0...variables.length) {
+			final variable = variables[m];
+			if (variable.name != argumentName) continue;
+
+			if (unifyComplex(variable.type, argumentType))
+				return Read;
+
+			if (unifyComplex(variable.vectorType, argumentType))
+				return Write;
+		}
+
+		for (m in 0...chunkLevelVariableFields.length) {
+			final variable = chunkLevelVariableFields[m];
+			final field = variable.field;
+			if (field.name != argumentName) continue;
+			if (!unifyComplex(variable.type, argumentType)) continue;
+			final access = field.access;
+			final isStatic = access != null && access.has(AStatic);
+			final isFinal = access != null && access.has(AFinal);
+			return ChunkLevel(isStatic, isFinal);
+		}
+
+		return External;
+	}
+
+	static function getArgumentKindDebugMessage(argumentKind: ArgumentKind): String {
+		return switch argumentKind {
+			case WriteIndex: "Found index for write access.";
+			case Disuse: "Found special variable for disusing entity.";
+			case Read: "Found corresponding variable.";
+			case Write: "Found corresponding vector.";
+			case ChunkLevel(isStatic, isFinal):
+				'Found corresponding chunk-level ${isStatic ? "static " : ""}${isFinal ? "final " : ""}variable.';
+			case External: "No corresponding variable. Add to external arguments.";
+		}
+	}
+
+	/**
 		Generates expression pieces for creating iterate/use method from an user-defined function.
 	**/
 	static function generateMethodPieces(
+		chunkClassName: String,
 		methodName: String,
 		arguments: Array<FunctionArg>,
 		variables: Array<ChunkVariable>,
+		chunkLevelVariableFields: Array<VariableField>,
 		position: Position
 	) {
-		final declareLocalVector: Array<Expr> = [];
-		final declareLocalValue: Array<Expr> = [];
+		final declareLocalBeforeLoop: Array<Expr> = [];
+		final declareLocalInsideLoop: Array<Expr> = [];
+		final saveLocalAfterLoop: Array<Expr> = [];
 		final externalArguments: Array<FunctionArg> = [];
-		var iArgumentIndex = -1;
 		var needsWriteAccess = false;
+		var hasWriteIndex = false;
 
 		if (notVerified) debug('  Scanning arguments.');
 		for (k in 0...arguments.length) {
 			final argument = arguments[k];
-			final type = argument.type;
+			final argumentKind = getArgumentKind(argument, variables, chunkLevelVariableFields);
 
-			if (argument.argumentIsWriteIndex()) {
-				iArgumentIndex = k;
-				if (notVerified) debug('  - i ... Found index for write access.');
-				continue;
-			}
+			final argumentName = argument.name;
+			if (notVerified)
+				debug('  - $argumentName ... ${getArgumentKindDebugMessage(argumentKind)}');
 
-			if (argument.argumentIsDisuse()) {
-				if (notVerified) debug('  - disuse ... Found special variable for disusing entity.');
-				continue;
-			}
+			switch argumentKind {
+				case WriteIndex:
+					hasWriteIndex = true;
+					continue;
 
-			var isVector = false;
-			var associated = false;
-			for (m in 0...variables.length) {
-				final variable = variables[m];
-				if (variable.name != argument.name) continue;
+				case Disuse:
+					continue;
 
-				if (unifyComplex(variable.type, argument.type)) {
-					if (notVerified) debug('  - ${argument.name} ... Found corresponding variable.');
-					associated = true;
-					break;
-				}
-				if (unifyComplex(variable.vectorType, argument.type)) {
-					if (notVerified) debug('  - ${argument.name} ... Found corresponding vector.');
-					associated = true;
-					isVector = true;
+				case Read:
+					// provide READ access to the buffer via $argumentName
+					final writeVectorName = argumentName + "ChunkBuffer";
+					declareLocalBeforeLoop.push(macro final $writeVectorName = this.$writeVectorName);
+					declareLocalInsideLoop.push(macro final $argumentName = $i{writeVectorName}[i]);
+
+				case Write:
+					// provide WRITE access to the buffer via $argumentName
+					final writeVectorName = argumentName + "ChunkBuffer";
+					declareLocalBeforeLoop.push(macro final $argumentName = this.$writeVectorName);
 					needsWriteAccess = true;
-					break;
-				}
-			}
 
-			if (!associated) {
-				if (notVerified)
-					debug('  - ${argument.name} ... No corresponding variable. Add to external arguments.');
+				case ChunkLevel(isStatic, isFinal):
+					if (isStatic) {
+						if (isFinal) {
+							declareLocalBeforeLoop.push(macro final $argumentName = $i{chunkClassName}.$argumentName);
+						} else {
+							declareLocalBeforeLoop.push(macro var $argumentName = $i{chunkClassName}.$argumentName);
+							saveLocalAfterLoop.push(macro $i{chunkClassName}.$argumentName = $i{argumentName});
+						}
+					} else {
+						if (isFinal) {
+							declareLocalBeforeLoop.push(macro final $argumentName = this.$argumentName);
+						} else {
+							declareLocalBeforeLoop.push(macro var $argumentName = this.$argumentName);
+							saveLocalAfterLoop.push(macro this.$argumentName = $i{argumentName});
+						}
+					}
 
-				externalArguments.push(argument);
-				continue;
-			}
-
-			final componentName = argument.name;
-
-			if (isVector) {
-				// provide WRITE access to the buffer via $componentName
-				final writeVectorName = componentName + "ChunkBuffer";
-				declareLocalVector.push(macro final $componentName = this.$writeVectorName);
-			} else {
-				// provide READ access to the buffer via $componentName
-				final writeVectorName = componentName + "ChunkBuffer";
-				declareLocalVector.push(macro final $writeVectorName = this.$writeVectorName);
-				declareLocalValue.push(macro final $componentName = $i{writeVectorName}[i]);
+				case External:
+					externalArguments.push(argument);
 			}
 		}
 
-		if (iArgumentIndex == -1 && needsWriteAccess)
+		if (needsWriteAccess && !hasWriteIndex)
 			warn(
 				'Found vector argument but missing argument `i: Int` in function $methodName().',
 				position
 			);
 
 		return {
-			declareLocalValue: declareLocalValue,
-			declareLocalVector: declareLocalVector,
+			declareLocalInsideLoop: declareLocalInsideLoop,
+			declareLocalBeforeLoop: declareLocalBeforeLoop,
+			saveLocalAfterLoop: saveLocalAfterLoop,
 			externalArguments: externalArguments
 		};
 	}
@@ -450,20 +521,24 @@ class Chunk {
 		Creates method for iterating over the chunk.
 	**/
 	static function createIterator(
+		chunkClassName: String,
 		originalFunction: ChunkFunction,
 		variables: Array<ChunkVariable>,
+		chunkLevelVariableFields: Array<VariableField>,
 		disuseExpressions: Array<Expr>
 	): ChunkMethod {
 		final pieces = generateMethodPieces(
+			chunkClassName,
 			originalFunction.name,
 			originalFunction.arguments,
 			variables,
+			chunkLevelVariableFields,
 			originalFunction.position
 		);
 		final externalArguments = pieces.externalArguments;
 
 		final initializeBeforeLoops: Array<Expr> = [];
-		initializeBeforeLoops.pushFromArray(pieces.declareLocalVector);
+		initializeBeforeLoops.pushFromArray(pieces.declareLocalBeforeLoop);
 		initializeBeforeLoops.push(macro final readWriteIndexMap = this.readWriteIndexMap);
 		initializeBeforeLoops.push(macro final endReadIndex = this.endReadIndex);
 		initializeBeforeLoops.push(macro var readIndex = 0);
@@ -473,7 +548,7 @@ class Chunk {
 
 		final initializeLoop: Array<Expr> = [];
 		initializeLoop.push(macro i = readWriteIndexMap[readIndex]);
-		initializeLoop.pushFromArray(pieces.declareLocalValue);
+		initializeLoop.pushFromArray(pieces.declareLocalInsideLoop);
 
 		final finalizeLoop: Array<Expr> = [];
 		finalizeLoop.push(macro if (disuse) {
@@ -486,6 +561,7 @@ class Chunk {
 
 		final finalizeAfterLoops: Array<Expr> = [];
 		finalizeAfterLoops.push(macro this.nextWriteIndex = nextWriteIndex);
+		finalizeAfterLoops.pushFromArray(pieces.saveLocalAfterLoop);
 
 		final loopBodyExpressions: Array<Expr> = [];
 		loopBodyExpressions.pushFromArray(initializeLoop);
@@ -509,7 +585,7 @@ class Chunk {
 		// This will generate something like the below:
 		/*
 			function someIterator(externalArgs) {
-				declareLocalVector();
+				declareLocalBeforeLoop();
 
 				final readWriteIndexMap = this.readWriteIndexMap;
 				final endReadIndex = this.endReadIndex;
@@ -520,7 +596,7 @@ class Chunk {
 
 				while (readIndex < endReadIndex) {
 					i = readWriteIndexMap[readIndex]; // write index
-					declareLocalValue();
+					declareLocalInsideLoop();
 
 					originalFunction();
 
@@ -535,6 +611,7 @@ class Chunk {
 				}
 
 				this.nextWriteIndex = nextWriteIndex
+				saveLocalAfterLoop();
 
 				return nextWriteIndex;
 			}
@@ -550,26 +627,32 @@ class Chunk {
 		Creates method for using new entity in the chunk.
 	**/
 	static function createUse(
+		chunkClassName: String,
 		originalFunction: ChunkFunction,
-		variables: Array<ChunkVariable>
+		variables: Array<ChunkVariable>,
+		chunkLevelVariableFields: Array<VariableField>
 	): ChunkMethod {
 		final pieces = generateMethodPieces(
+			chunkClassName,
 			originalFunction.name,
 			originalFunction.arguments,
 			variables,
+			chunkLevelVariableFields,
 			originalFunction.position
 		);
 		final externalArguments = pieces.externalArguments;
 
 		final expressions: Array<Expr> = [];
 		expressions.push(macro final i = this.nextWriteIndex);
-		expressions.pushFromArray(pieces.declareLocalVector);
-		expressions.pushFromArray(pieces.declareLocalValue); // Not sure if it is necessary
+		expressions.pushFromArray(pieces.declareLocalBeforeLoop);
+		expressions.pushFromArray(pieces.declareLocalInsideLoop); // Not sure if it is necessary
 
 		expressions.push(originalFunction.expression);
 
 		expressions.push(macro final nextIndex = i + 1);
 		expressions.push(macro this.nextWriteIndex = nextIndex);
+		expressions.pushFromArray(pieces.saveLocalAfterLoop);
+
 		expressions.push(macro return nextIndex);
 
 		final useFunction: Function = {
@@ -582,13 +665,15 @@ class Chunk {
 		/*
 			function use(externalArgs) {
 				final i = this.nextWriteIndex;
-				declareLocalVector();
-				declareLocalValue();
+				declareLocalBeforeLoop();
+				declareLocalInsideLoop();
 
 				originalFunction();
 
 				final nextIndex = i + 1;
 				this.nextWriteIndex = nextIndex;
+				saveLocalAfterLoop();
+
 				return nextIndex;
 			}
 		**/
@@ -598,5 +683,14 @@ class Chunk {
 			externalArguments: externalArguments
 		};
 	}
+}
+
+enum ArgumentKind {
+	External;
+	WriteIndex;
+	Disuse;
+	Read;
+	Write;
+	ChunkLevel(isStatic: Bool, isFinal: Bool);
 }
 #end
