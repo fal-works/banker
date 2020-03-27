@@ -178,48 +178,29 @@ class Chunk {
 
 					final constructorExpression = createConstructorExpression(
 						buildField,
-						buildFieldName,
 						initialValue,
 						metaMap
 					);
 					if (constructorExpression.isFailedWarn()) break;
 					constructorExpressions.push(constructorExpression.unwrap());
 
-					final documentation = createChunkVectorDocumentation(buildField);
-
-					final vectorType = macro:banker.vector.WritableVector<$variableType>;
-					final chunkField = buildField.clone()
-						.setDoc(documentation).setVariableType(vectorType).setAccess([AFinal]);
-
+					final chunkVariable = createChunkVariable(buildField, variableType);
+					variables.push(chunkVariable.data);
+					final chunkField = chunkVariable.field;
 					chunkFields.push(chunkField);
 
-					final chunkBufferFieldName = buildFieldName + "ChunkBuffer";
-					final chunkBufferDocumentation = 'Vector for providing buffered WRITE access to `$buildFieldName`.';
-					final chunkBufferField = chunkField.clone()
-						.setName(chunkBufferFieldName).setDoc(chunkBufferDocumentation);
+					final chunkBufferField = createChunkBufferField(chunkField);
 					chunkFields.push(chunkBufferField);
 
-					synchronizeExpressions.push(macro banker.vector.VectorTools.blitZero(
-						$i{chunkBufferFieldName},
-						$i{buildFieldName},
-						nextWriteIndex
+					synchronizeExpressions.push(createSynchronizeExpression(
+						buildFieldName,
+						chunkBufferField.name
 					));
 
 					final swap = metaMap.swap;
 					if (notVerified && swap)
 						debug('  Found metadata @${MetadataNames.swap} ... Swap buffer elements when disusing.');
-
-					final disuseExpression = if (swap)
-						macro $i{chunkBufferFieldName}.swap(i, nextWriteIndex);
-					else
-						macro $i{chunkBufferFieldName}[i] = $i{chunkBufferFieldName}[nextWriteIndex];
-					disuseExpressions.push(disuseExpression);
-
-					variables.push({
-						name: buildFieldName,
-						type: variableType,
-						vectorType: vectorType
-					});
+					disuseExpressions.push(createDisuseExpression(chunkBufferField.name, swap));
 
 					if (notVerified) debug('  Converted to vector.');
 
@@ -299,11 +280,52 @@ class Chunk {
 		};
 	}
 
-	static function createChunkVectorDocumentation(buildField: Field): String {
-		return if (buildField.doc != null)
+	static function createChunkVariable(
+		buildField:Field,
+		variableType: ComplexType
+	): { field: Field, data: ChunkVariable } {
+		final documentation = if (buildField.doc != null)
 			buildField.doc;
 		else
 			'Vector generated from variable `${buildField.name}` in the original Structure class.';
+
+		final vectorType = macro:banker.vector.WritableVector<$variableType>;
+
+		final field = buildField.clone()
+			.setDoc(documentation).setVariableType(vectorType).setAccess([AFinal]);
+
+		return {
+			field: field,
+			data: {
+				name: buildField.name,
+				type: variableType,
+				vectorType: vectorType
+			}
+		}
+	}
+
+	static function createChunkBufferField(chunkField: Field): Field {
+		final originalName = chunkField.name;
+		final bufferName = originalName + "ChunkBuffer";
+		final chunkBufferDocumentation = 'Vector for providing buffered WRITE access to `$originalName`.';
+
+		return chunkField.clone()
+			.setName(bufferName).setDoc(chunkBufferDocumentation);
+	}
+
+	static function createDisuseExpression(chunkBufferFieldName: String, swap: Bool): Expr {
+		return if (swap)
+			macro $i{chunkBufferFieldName}.swap(i, nextWriteIndex);
+		else
+			macro $i{chunkBufferFieldName}[i] = $i{chunkBufferFieldName}[nextWriteIndex];
+	}
+
+	static function createSynchronizeExpression(fieldName: String, bufferName: String) {
+		return macro banker.vector.VectorTools.blitZero(
+			$i{bufferName},
+			$i{fieldName},
+			nextWriteIndex
+		);
 	}
 }
 #end

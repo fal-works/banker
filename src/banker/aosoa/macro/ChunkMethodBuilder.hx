@@ -20,10 +20,11 @@ class ChunkMethodBuilder {
 	**/
 	public static function createConstructorExpression(
 		buildField: Field,
-		buildFieldName: String,
 		initialValue: Null<Expr>,
 		metaMap: MetadataMap
 	): MacroResult<Expr> {
+		final buildFieldName = buildField.name;
+
 		final expressions: Array<Expr> = [];
 		final thisField = macro $p{["this", buildFieldName]};
 
