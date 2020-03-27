@@ -9,47 +9,6 @@ using banker.aosoa.macro.MacroExtension;
 import sneaker.macro.MacroComparator.unifyComplex;
 
 class ChunkMethodBuilder {
-	/**
-		According to the definition and metadata of `buildField`,
-		Creates an initializing expression for the corresponding vector field.
-
-		Variable `chunkCapacity: Int` must be declared prior to this expression.
-
-		@param initialValue Obtained from `buildField.kind`.
-		@return Expression to be run in `new()`. `null` if the input is invalid.
-	**/
-	public static function createConstructorExpression(
-		buildField: Field,
-		initialValue: Null<Expr>,
-		metaMap: MetadataMap
-	): MacroResult<Expr> {
-		final buildFieldName = buildField.name;
-
-		final expressions: Array<Expr> = [];
-		final thisField = macro $p{["this", buildFieldName]};
-
-		expressions.push(macro $thisField = new banker.vector.WritableVector(chunkCapacity));
-
-		if (initialValue != null) {
-			expressions.push(macro $thisField.fill($initialValue));
-		} else {
-			switch (metaMap.factory) {
-				case None:
-					return Failed(
-						'Field must be initialized or have @${MetadataNames.factory} metadata.',
-						buildField.pos
-					);
-				case Some(factoryExpression):
-					expressions.push(macro $thisField.populate($factoryExpression));
-			}
-		}
-
-		final thisBuffer = macro $p{["this", buildFieldName + "ChunkBuffer"]};
-		expressions.push(macro $thisBuffer = $thisField.ref.copyWritable());
-
-		return Ok(macro $b{expressions});
-	}
-
 	public static function getChunkMethodKind(metaMap: MetadataMap): ChunkMethodKind
 		return if (metaMap.useEntity) UseEntity else Iterate;
 

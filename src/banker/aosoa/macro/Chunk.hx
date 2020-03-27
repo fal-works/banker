@@ -10,6 +10,7 @@ import sneaker.macro.ComplexTypes;
 import sneaker.macro.Types;
 import sneaker.macro.MacroComparator.unifyComplex;
 import banker.aosoa.macro.ChunkMethodBuilder.*;
+import banker.aosoa.macro.ChunkVariableBuilder.*;
 
 class Chunk {
 	/**
@@ -176,31 +177,20 @@ class Chunk {
 						continue;
 					}
 
-					final constructorExpression = createConstructorExpression(
+					final processed = processBuildFieldVariable(
 						buildField,
+						variableType,
 						initialValue,
 						metaMap
 					);
-					if (constructorExpression.isFailedWarn()) break;
-					constructorExpressions.push(constructorExpression.unwrap());
 
-					final chunkVariable = createChunkVariable(buildField, variableType);
-					variables.push(chunkVariable.data);
-					final chunkField = chunkVariable.field;
-					chunkFields.push(chunkField);
+					variables.push(processed.variable);
+					chunkFields.pushFromArray(processed.chunkFields);
 
-					final chunkBufferField = createChunkBufferField(chunkField);
-					chunkFields.push(chunkBufferField);
-
-					synchronizeExpressions.push(createSynchronizeExpression(
-						buildFieldName,
-						chunkBufferField.name
-					));
-
-					final swap = metaMap.swap;
-					if (notVerified && swap)
-						debug('  Found metadata @${MetadataNames.swap} ... Swap buffer elements when disusing.');
-					disuseExpressions.push(createDisuseExpression(chunkBufferField.name, swap));
+					final expressions = processed.expressions;
+					constructorExpressions.push(expressions.constructor);
+					synchronizeExpressions.push(expressions.synchronize);
+					disuseExpressions.push(expressions.disuse);
 
 					if (notVerified) debug('  Converted to vector.');
 
@@ -278,54 +268,6 @@ class Chunk {
 			iterators: iterators,
 			useMethods: useMethods
 		};
-	}
-
-	static function createChunkVariable(
-		buildField:Field,
-		variableType: ComplexType
-	): { field: Field, data: ChunkVariable } {
-		final documentation = if (buildField.doc != null)
-			buildField.doc;
-		else
-			'Vector generated from variable `${buildField.name}` in the original Structure class.';
-
-		final vectorType = macro:banker.vector.WritableVector<$variableType>;
-
-		final field = buildField.clone()
-			.setDoc(documentation).setVariableType(vectorType).setAccess([AFinal]);
-
-		return {
-			field: field,
-			data: {
-				name: buildField.name,
-				type: variableType,
-				vectorType: vectorType
-			}
-		}
-	}
-
-	static function createChunkBufferField(chunkField: Field): Field {
-		final originalName = chunkField.name;
-		final bufferName = originalName + "ChunkBuffer";
-		final chunkBufferDocumentation = 'Vector for providing buffered WRITE access to `$originalName`.';
-
-		return chunkField.clone()
-			.setName(bufferName).setDoc(chunkBufferDocumentation);
-	}
-
-	static function createDisuseExpression(chunkBufferFieldName: String, swap: Bool): Expr {
-		return if (swap)
-			macro $i{chunkBufferFieldName}.swap(i, nextWriteIndex);
-		else
-			macro $i{chunkBufferFieldName}[i] = $i{chunkBufferFieldName}[nextWriteIndex];
-	}
-
-	static function createSynchronizeExpression(fieldName: String, bufferName: String) {
-		return macro banker.vector.VectorTools.blitZero(
-			$i{bufferName},
-			$i{fieldName},
-			nextWriteIndex
-		);
 	}
 }
 #end
