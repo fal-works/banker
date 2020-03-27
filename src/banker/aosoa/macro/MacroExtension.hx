@@ -26,5 +26,15 @@ class MacroExtension {
 			argument.type,
 			ComplexTypes.boolType
 		);
+
+	/**
+		@return `true` if `type` is `null` or unifies `Void`.
+	**/
+	public static function isNullOrVoid(type: Null<ComplexType>): Bool {
+		return type == null || MacroComparator.unifyComplex(
+			type,
+			ComplexTypes.voidType
+		);
+	}
 }
 #end
