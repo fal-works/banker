@@ -10,7 +10,7 @@ class Aosoa {
 	**/
 	public static function create(
 		structureName: String,
-		chunk: Chunk.ChunkDefinition,
+		chunk: ChunkDefinition,
 		chunkType: DefinedType,
 		classPosition: Position
 	): TypeDefinition {
@@ -174,7 +174,7 @@ class Aosoa {
 	/**
 		Creates method for iterating over the entire Aosoa.
 	**/
-	static function createIterater(chunkIterator: Chunk.ChunkMethod): Field {
+	static function createIterater(chunkIterator: ChunkMethod): Field {
 		final chunkField = chunkIterator.field;
 		final methodName = chunkField.name;
 
@@ -204,7 +204,7 @@ class Aosoa {
 	/**
 		Creates method for using new entity in the Aosoa.
 	**/
-	static function createUseMethod(chunkUseMethod: Chunk.ChunkMethod): Field {
+	static function createUseMethod(chunkUseMethod: ChunkMethod): Field {
 		final chunkField = chunkUseMethod.field;
 		final methodName = chunkField.name;
 
