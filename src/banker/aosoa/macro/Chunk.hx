@@ -85,15 +85,7 @@ class Chunk {
 		};
 	}
 
-	/**
-		Prepares the chunk class to be created.
-
-		@return
-		`variables`: Variables of each entity in the chunk.
-		`chunkFields`: Fields of the chunk.
-		`constructorExpressions`: Expression list to be reified in the chunk constructor.
-	**/
-	static function prepare(chunkClassName: String, buildFields: Array<Field>) {
+	static function scanBuildFields(buildFields: Fields) {
 		final variables: Array<ChunkVariable> = [];
 		final iteratorFunctions: Array<ChunkFunction> = [];
 		final useFunctions: Array<ChunkFunction> = [];
@@ -103,20 +95,20 @@ class Chunk {
 		final synchronizeExpressions: Array<Expr> = [];
 		final chunkLevelVariableFields: Array<VariableField> = [];
 
-		for (i in 0...buildFields.length) {
-			final buildField = buildFields[i];
+		for (buildField in buildFields) {
 			final buildFieldName = buildField.name;
 			if (notVerified) debug('Found field: ${buildFieldName}');
 
-			final access = buildField.access;
+			final metaMap = buildField.createMetadataMap();
 
-			if (buildField.hasMetadata(MetadataNames.hidden)) {
+			if (metaMap.hidden) {
 				if (notVerified) debug('  Found metadata: ${MetadataNames.hidden} ... Skipping.');
 				continue;
 			}
 
+			final access = buildField.access;
 			final isStatic = access != null && access.has(AStatic);
-			final hasChunkLevelMetadata = buildField.hasMetadata(MetadataNames.chunkLevel);
+			final hasChunkLevelMetadata = metaMap.chunkLevel;
 
 			if (hasChunkLevelMetadata) {
 				if (notVerified)
@@ -141,7 +133,7 @@ class Chunk {
 						continue;
 					}
 
-					final chunkMethodKind = getChunkMethodKind(buildField);
+					final chunkMethodKind = getChunkMethodKind(metaMap);
 					final chunkFunction = createChunkFunction(
 						buildField,
 						func,
@@ -187,7 +179,8 @@ class Chunk {
 					final constructorExpression = createConstructorExpression(
 						buildField,
 						buildFieldName,
-						initialValue
+						initialValue,
+						metaMap
 					);
 					if (constructorExpression.isFailedWarn()) break;
 					constructorExpressions.push(constructorExpression.unwrap());
@@ -212,7 +205,7 @@ class Chunk {
 						nextWriteIndex
 					));
 
-					final swap = buildField.hasMetadata(MetadataNames.swap);
+					final swap = metaMap.swap;
 					if (notVerified && swap)
 						debug('  Found metadata @${MetadataNames.swap} ... Swap buffer elements when disusing.');
 
@@ -238,9 +231,36 @@ class Chunk {
 			}
 		}
 
+		return {
+			variables: variables,
+			iteratorFunctions: iteratorFunctions,
+			useFunctions: useFunctions,
+			chunkFields: chunkFields,
+			constructorExpressions: constructorExpressions,
+			disuseExpressions: disuseExpressions,
+			synchronizeExpressions: synchronizeExpressions,
+			chunkLevelVariableFields: chunkLevelVariableFields
+		}
+	}
+
+	/**
+		Prepares the chunk class to be created.
+
+		@return
+		`variables`: Variables of each entity in the chunk.
+		`chunkFields`: Fields of the chunk.
+		`constructorExpressions`: Expression list to be reified in the chunk constructor.
+	**/
+	static function prepare(chunkClassName: String, buildFields: Array<Field>) {
+		final scanned = scanBuildFields(buildFields);
+
+		final variables = scanned.variables;
+		final chunkFields = scanned.chunkFields;
+		final disuseExpressions = scanned.disuseExpressions;
+		final chunkLevelVariableFields = scanned.chunkLevelVariableFields;
+
 		final iterators: Array<ChunkMethod> = [];
-		for (i in 0...iteratorFunctions.length) {
-			final func = iteratorFunctions[i];
+		for (func in scanned.iteratorFunctions) {
 			if (notVerified) debug('Create iterator: ${func.name}');
 
 			final iterator = createIterator(
@@ -255,8 +275,7 @@ class Chunk {
 		}
 
 		final useMethods: Array<ChunkMethod> = [];
-		for (i in 0...useFunctions.length) {
-			final func = useFunctions[i];
+		for (func in scanned.useFunctions) {
 			if (notVerified) debug('Create use method: ${func.name}');
 
 			final useMethod = createUse(
@@ -272,9 +291,9 @@ class Chunk {
 		return {
 			variables: variables,
 			chunkFields: chunkFields,
-			constructorExpressions: constructorExpressions,
+			constructorExpressions: scanned.constructorExpressions,
 			disuseExpressions: disuseExpressions,
-			synchronizeExpressions: synchronizeExpressions,
+			synchronizeExpressions: scanned.synchronizeExpressions,
 			iterators: iterators,
 			useMethods: useMethods
 		};

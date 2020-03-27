@@ -1,7 +1,16 @@
 package banker.aosoa.macro;
 
 #if macro
+import haxe.ds.Option;
 import haxe.macro.Expr;
+
+typedef MetadataMap = {
+	useEntity: Bool,
+	factory: Option<Expr>,
+	hidden: Bool,
+	swap: Bool,
+	chunkLevel: Bool
+}
 
 typedef FunctionField = {
 	field: Field,

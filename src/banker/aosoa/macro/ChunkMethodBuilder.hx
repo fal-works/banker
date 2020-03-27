@@ -21,7 +21,8 @@ class ChunkMethodBuilder {
 	public static function createConstructorExpression(
 		buildField: Field,
 		buildFieldName: String,
-		initialValue: Null<Expr>
+		initialValue: Null<Expr>,
+		metaMap: MetadataMap
 	): MacroResult<Expr> {
 		final expressions: Array<Expr> = [];
 		final thisField = macro $p{["this", buildFieldName]};
@@ -31,15 +32,15 @@ class ChunkMethodBuilder {
 		if (initialValue != null) {
 			expressions.push(macro $thisField.fill($initialValue));
 		} else {
-			final factory = buildField.getFactory();
-			if (factory == null) {
-				return Failed(
-					'Field must be initialized or have @${MetadataNames.factory} metadata.',
-					buildField.pos
-				);
+			switch (metaMap.factory) {
+				case None:
+					return Failed(
+						'Field must be initialized or have @${MetadataNames.factory} metadata.',
+						buildField.pos
+					);
+				case Some(factoryExpression):
+					expressions.push(macro $thisField.populate($factoryExpression));
 			}
-
-			expressions.push(macro $thisField.populate($factory));
 		}
 
 		final thisBuffer = macro $p{["this", buildFieldName + "ChunkBuffer"]};
@@ -48,12 +49,8 @@ class ChunkMethodBuilder {
 		return Ok(macro $b{expressions});
 	}
 
-	public static function getChunkMethodKind(buildField: Field): ChunkMethodKind {
-		return if (buildField.hasMetadata(MetadataNames.useEntity))
-			UseEntity
-		else
-			Iterate;
-	}
+	public static function getChunkMethodKind(metaMap: MetadataMap): ChunkMethodKind
+		return if (metaMap.useEntity) UseEntity else Iterate;
 
 	public static function createChunkFunction(
 		buildField: Field,
