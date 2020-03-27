@@ -9,7 +9,8 @@ typedef MetadataMap = {
 	factory: Option<Expr>,
 	hidden: Bool,
 	swap: Bool,
-	chunkLevel: Bool
+	chunkLevel: Bool,
+	onSynchronize: Bool
 }
 
 typedef FunctionField = {

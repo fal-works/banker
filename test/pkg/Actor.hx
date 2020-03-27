@@ -11,9 +11,10 @@ class Actor implements banker.aosoa.Structure {
 		++staticInt;
 	}
 
-	@:banker.chunkLevel
-	public function resetStaticInt()
+	function onSynchronize() {
 		staticInt = 0;
+		println("synchronize chunk.");
+	}
 
 	/** Prints position of all entities. **/
 	static function print(x: Float, y: Float) {

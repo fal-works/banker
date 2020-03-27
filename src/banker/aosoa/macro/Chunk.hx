@@ -59,6 +59,8 @@ class Chunk {
 				chunkCapacity: Int,
 				defaultReadWriteIndexMap: banker.vector.Vector<Int>
 			): Int {
+				$b{prepared.onSynchronizeExpressions};
+
 				final nextWriteIndex = this.nextWriteIndex;
 				$b{prepared.synchronizeExpressions};
 				banker.vector.VectorTools.blitZero(
@@ -94,6 +96,7 @@ class Chunk {
 		final constructorExpressions: Array<Expr> = [];
 		final disuseExpressions: Array<Expr> = [];
 		final synchronizeExpressions: Array<Expr> = [];
+		final onSynchronizeExpressions: Array<Expr> = [];
 		final chunkLevelVariableFields: Array<VariableField> = [];
 
 		for (buildField in buildFields) {
@@ -118,7 +121,21 @@ class Chunk {
 
 			switch buildField.kind {
 				case FFun(func):
-					if (hasChunkLevelMetadata) {
+					final onSynchronize = metaMap.onSynchronize || buildFieldName == "onSynchronize";
+					if (onSynchronize) {
+						if (notVerified) {
+							if (metaMap.onSynchronize)
+								debug('  Found metadata: ${MetadataNames.onSynchronize} ... Preserve as a chunk-level sync function.');
+							else
+								debug('  Found field onSynchronize ... Preserve as a chunk-level sync function.');
+						}
+
+						final expression = createOnSynchronizeExpression(buildField, func);
+						if (expression.isFailedWarn()) continue;
+						onSynchronizeExpressions.push(expression.unwrap());
+					}
+
+					if (hasChunkLevelMetadata || onSynchronize) {
 						chunkFields.push(buildField);
 						continue;
 					}
@@ -210,6 +227,7 @@ class Chunk {
 			constructorExpressions: constructorExpressions,
 			disuseExpressions: disuseExpressions,
 			synchronizeExpressions: synchronizeExpressions,
+			onSynchronizeExpressions: onSynchronizeExpressions,
 			chunkLevelVariableFields: chunkLevelVariableFields
 		}
 	}
@@ -265,6 +283,7 @@ class Chunk {
 			constructorExpressions: scanned.constructorExpressions,
 			disuseExpressions: disuseExpressions,
 			synchronizeExpressions: scanned.synchronizeExpressions,
+			onSynchronizeExpressions: scanned.onSynchronizeExpressions,
 			iterators: iterators,
 			useMethods: useMethods
 		};

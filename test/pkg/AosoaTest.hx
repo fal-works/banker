@@ -60,15 +60,11 @@ class AosoaTest {
 	static final _disuse = testCase(disuse, Visual);
 
 	static function chunkLevel() {
-		describe("This prints sequence numbers. Then passes the assertion.");
+		describe("This prints sequence numbers.");
 		final actorAosoa = Actor.createAosoa(3, 2);
 		for (i in 0...6) actorAosoa.useEmpty();
 		actorAosoa.synchronize();
 		actorAosoa.sequenceNumbers();
-
-		actorAosoa.chunks[0].resetStaticInt();
-		final currentStaticInt = Actor.ActorChunk.staticInt;
-		assert(currentStaticInt == 0);
 	}
 
 	static final _chunkLevel = testCase(chunkLevel, Visual);

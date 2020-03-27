@@ -237,6 +237,18 @@ class ChunkMethodBuilder {
 		return External;
 	}
 
+	public static function createOnSynchronizeExpression(
+		originalField: Field,
+		func: Function
+	): MacroResult<Expr> {
+		if (func.args.length > 0)
+			return Failed("onSynchronize method cannot have arguments", originalField.pos);
+
+		final name = originalField.name;
+
+		return Ok(macro $i{name}());
+	}
+
 	static function getArgumentKindDebugMessage(argumentKind: ArgumentKind): String {
 		return switch argumentKind {
 			case WriteIndex: "Found index for write access.";

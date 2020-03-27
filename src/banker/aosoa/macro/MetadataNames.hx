@@ -6,4 +6,5 @@ class MetadataNames {
 	public static final hidden = ":banker.hidden";
 	public static final swap = ":banker.swap";
 	public static final chunkLevel = ":banker.chunkLevel";
+	public static final onSynchronize = ":banker.onSynchronize";
 }

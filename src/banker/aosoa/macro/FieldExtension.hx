@@ -13,7 +13,8 @@ class FieldExtension {
 			factory: None,
 			hidden: false,
 			swap: false,
-			chunkLevel: false
+			chunkLevel: false,
+			onSynchronize: false
 		};
 
 		final metadataArray = _this.meta;
@@ -30,6 +31,8 @@ class FieldExtension {
 					map.swap = true;
 				case MetadataNames.chunkLevel:
 					map.chunkLevel = true;
+				case MetadataNames.onSynchronize:
+					map.onSynchronize = true;
 				case MetadataNames.factory:
 					if (map.factory != None) {
 						warn("Cannot add multiple factory functions", metadata.pos);
