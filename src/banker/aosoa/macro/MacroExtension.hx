@@ -22,7 +22,7 @@ class MacroExtension {
 		@return `true` if `argument` is the special argument `disuse`.
 	**/
 	public static function argumentIsDisuse(argument: FunctionArg): Bool
-		return argument.name == "disuse" && MacroComparator.unifyComplex(
+		return argument.name == "disuse" && argument.type != null && MacroComparator.unifyComplex(
 			argument.type,
 			ComplexTypes.boolType
 		);

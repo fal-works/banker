@@ -116,7 +116,7 @@ class Chunk {
 
 			if (hasChunkLevelMetadata) {
 				if (notVerified)
-					debug('  Found metadata: ${MetadataNames.chunkLevel} ... Preserve as a chunk-level field.');
+					debug('  Found metadata: @${MetadataNames.chunkLevel} ... Preserve as a chunk-level field.');
 			}
 
 			switch buildField.kind {
@@ -175,8 +175,19 @@ class Chunk {
 					if (!isChunkLevel && isStatic) {
 						debug('  Found a static variable. Preserve as a chunk-level field.');
 						isChunkLevel = true;
+					} else {
+						switch (createChunkLevelConstructorExpression(
+							buildFieldName,
+							metaMap
+						)) {
+							case None:
+							case Some(expression):
+								debug('  Found metadata: @${MetadataNames.chunkLevelFactory}');
+								constructorExpressions.push(expression);
+						}
 					}
 					if (isChunkLevel) {
+						if (metaMap.chunkLevelFinal) buildField.access.push(AFinal);
 						chunkFields.push(buildField);
 						chunkLevelVariableFields.push({
 							field: buildField,

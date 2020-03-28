@@ -10,6 +10,8 @@ typedef MetadataMap = {
 	hidden: Bool,
 	swap: Bool,
 	chunkLevel: Bool,
+	chunkLevelFinal: Bool,
+	chunkLevelFactory: Option<Expr>,
 	onSynchronize: Bool
 }
 

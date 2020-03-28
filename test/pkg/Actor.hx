@@ -6,6 +6,10 @@ import banker.vector.WritableVector as Vec;
 class Actor implements banker.aosoa.Structure {
 	public static var staticInt: Int = 0;
 
+	@:banker.chunkLevelFinal
+	@:banker.chunkLevelFactory((chunkCapacity: Int) -> chunkCapacity)
+	var chunkLevelFloat: Float;
+
 	static function sequenceNumbers(staticInt: Int) {
 		println(staticInt);
 		++staticInt;

@@ -3,6 +3,8 @@ package banker.aosoa.macro;
 #if macro
 using sneaker.macro.extensions.FieldExtension;
 
+import haxe.ds.Option;
+
 class ChunkVariableBuilder {
 	/**
 		Generates fields and corresponding expressions from `buildField`.
@@ -42,6 +44,22 @@ class ChunkVariableBuilder {
 				synchronize: synchronize,
 				disuse: disuse
 			}
+		}
+	}
+
+	/**
+		Creates an initializing expression for including in `new()`.
+		Should not be used for static variables.
+	**/
+	public static function createChunkLevelConstructorExpression(
+		variableFieldName: String,
+		metaMap: MetadataMap
+	): Option<Expr> {
+		return switch (metaMap.chunkLevelFactory) {
+			case None:
+				None;
+			case Some(expression):
+				Some(macro this.$variableFieldName = $expression(chunkCapacity));
 		}
 	}
 
