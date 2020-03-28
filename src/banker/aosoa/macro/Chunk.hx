@@ -171,6 +171,14 @@ class Chunk {
 					}
 
 				case FVar(variableType, initialValue):
+					if (variableType == null) {
+						warn(
+							'Type must be explicitly declared: $buildFieldName',
+							buildField.pos
+						);
+						continue;
+					}
+
 					var isChunkLevel = hasChunkLevelMetadata;
 					if (!isChunkLevel && isStatic) {
 						debug('  Found a static variable. Preserve as a chunk-level field.');
@@ -194,14 +202,6 @@ class Chunk {
 							type: variableType,
 							expression: initialValue
 						});
-						continue;
-					}
-
-					if (variableType == null) {
-						warn(
-							'Type must be explicitly declared: $buildFieldName',
-							buildField.pos
-						);
 						continue;
 					}
 
