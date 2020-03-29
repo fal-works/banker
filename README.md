@@ -258,18 +258,18 @@ Actor.hx:26: { x: 13, y: 3 }
 
 ### Details
 
-About "Chunk"s:
+#### About "Chunk"s
 
 - An AoSoA consists of multiple Chunks (or SoA: Structure of Arrays).
 - Each chunk has a fixed capacity and contains vector data that are converted from the original `Structure` class with the same variable names.
 
-Regarding the user-defined functions:
+#### User-defined functions
 
 -	Any static `Void` function with `@:banker.useEntity` metadata is converted to a method which finds a new available entity and sets initial values.
 - Any other static `Void` function is converted to an iterator method, which iterates all entities that are currently in use.
 - You should not write `return` explicitly in these functions as the expressions are simply copied into `while` loops.
 
-Regarding the function arguments:
+#### User-defined function arguments
 
 - Arguments that match any of the variable names are internally provided in the AoSoA/Chunk so you don't need to pass them manually.
 - Define an argument with the original type (e.g. `x: Float`) to get READ access.
@@ -280,30 +280,30 @@ Then use it as an index for writing to vectors.
 Then write `disuse = true` under any condition. This will release the entity the next time you call `synchronize()` (below).
 - You can also include any chunk-level variable (see below) in arguments. This automatically declares local variables before the loop and saves the change (if not `final`) after the loop, so that you don't need to manually access `this.myChunkLevelVariable`.
 
-Synchronization:
+#### Synchronization
 
 - Each AoSoA instance has a method `synchronize()`, which reflects use/disuse/other changes of entities.  
 The changes are buffered and are not reflected unless you call this.
 - If you have a function named `onSynchronize()` or having metadata `@:banker.onSynchronize`, it is automatically called for each Chunk before the synchronization when `synchronize()` is called.
 
-Initializing variables:
+#### Initializing variables
 
 - Type hint is mandatory when declaring variables in your `Structure` class.
 You also have to set an initializing value at the declaration, e.g. `var x: Float = 0`.
 Alternatively, add metadata `@:banker.factory(anyFactoryFunction)` to the variable to use the factory function instead of filling all entities with the same value.
 
-Chunk-level fields:
+#### Chunk-level fields
 
 - If a field has `@:banker.chunkLevel` metadata, it will be copied to the Chunk class without converting to vectors or iterators (written above).
 - Static variables are automatically considered as chunk-level.
 - By adding metadata `@:banker.chunkLevelFactory` you can specify a factory function `(chunkCapacity: Int) -> ?` for a chunk-level variable. In that case `@:banker.chunkLevel` metadata can be omitted.
 
-Debug:
+#### Debug
 
 - Set the compiler flag `sneaker_macro_log_level` to 500 or more to show debug logs during the class generation.
 - By adding metadata `@:banker.verified` to your `Structure` class, you can suppress debug logs for that class individually, without changing the whole log level.
 
-List of metadata:
+#### List of metadata
 
 |Metadata|Category|Description|
 |---|---|---|
