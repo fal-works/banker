@@ -69,11 +69,20 @@ class AosoaTest {
 
 	static final _chunkLevel = testCase(chunkLevel, Visual);
 
+	static function aosoaFrom() {
+		describe("It's OK if this compiles.");
+		final aosoa = new AlternativeAosoa(1, 1);
+		println(aosoa);
+	}
+
+	static final _aosoaFrom = testCase(aosoaFrom, Ok);
+
 	public static final all = testCaseGroup([
 		_basic,
 		_iterate,
 		_use,
 		_disuse,
-		_chunkLevel
+		_chunkLevel,
+		_aosoaFrom
 	]);
 }
