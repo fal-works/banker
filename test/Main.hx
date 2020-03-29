@@ -36,7 +36,7 @@ class Main {
 		// test(testCases);
 		// test(watermarkTestCases);
 		// test(poolTestCases);
-		// test(aosoaTestCases);
-		test(otherCases);
+		test(aosoaTestCases);
+		// test(otherCases);
 	}
 }
