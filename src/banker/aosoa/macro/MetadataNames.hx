@@ -9,4 +9,7 @@ class MetadataNames {
 	public static final chunkLevelFinal = ":banker.chunkLevelFinal";
 	public static final chunkLevelFactory = ":banker.chunkLevelFactory";
 	public static final onSynchronize = ":banker.onSynchronize";
+
+	// class-level
+	public static final doNotDefineAosoa = ":banker.doNotDefineAosoa";
 }

@@ -315,6 +315,7 @@ Alternatively, add metadata `@:banker.factory(anyFactoryFunction)` to the variab
 |@:banker.chunkLevelFinal|variable|Mark as a chunk-level `final` variable|
 |@:banker.chunkLevelFactory|variable|Specifies function `(chunkCapacity: Int) -> ?` for initializing a chunk-level variable|
 |@:banker.onSynchronize|method|Mark as a chunk-level method that is automatically called before `synchronize()`|
+|@:banker.doNotDefineAosoa|class|Prevents defining a new AoSoA class and adding `createAosoa()` to the `Structure` class.|
 |@:banker.verified|class|Mark as verified|
 
 

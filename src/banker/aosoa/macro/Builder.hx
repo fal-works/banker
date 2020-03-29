@@ -44,8 +44,16 @@ class Builder {
 
 		final aosoaClass = Aosoa.create(localClassName, chunk, chunkType, position);
 		aosoaFieldsMap.set(localClassRef.toString(), aosoaClass.fields);
+		if (notVerified) debug('Registered AoSoA fields.');
+
+		if (localClass.meta.has(MetadataNames.doNotDefineAosoa)) {
+			debug('Found metadata: @${MetadataNames.doNotDefineAosoa}');
+			debug('End building.');
+			return null;
+		}
+
 		final aosoaType = ModuleTools.defineSubTypes([aosoaClass])[0];
-		if (notVerified) debug('Created Aosoa class: ${aosoaType.pathString}');
+		if (notVerified) debug('Defined AoSoA class: ${aosoaType.pathString}');
 
 		final createAosoaMethod = Aosoa.createAosoaCreatorMethod(
 			aosoaType,
