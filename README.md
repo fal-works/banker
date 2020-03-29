@@ -258,13 +258,14 @@ Actor.hx:26: { x: 13, y: 3 }
 
 ### Details
 
-An AoSoA consists of multiple Chunks (or SoA: Structure of Arrays).
+About "Chunk"s:
 
-Each chunk has a fixed capacity and contains vector data that are converted from the original `Structure` class, with the same variable names.
+- An AoSoA consists of multiple Chunks (or SoA: Structure of Arrays).
+- Each chunk has a fixed capacity and contains vector data that are converted from the original `Structure` class with the same variable names.
 
 Regarding the user-defined functions:
 
--	Any static `Void` function with `@:banker.useEntity` metadata is converted to a method which finds a new available entity and sets initial values to it.
+-	Any static `Void` function with `@:banker.useEntity` metadata is converted to a method which finds a new available entity and sets initial values.
 - Any other static `Void` function is converted to an iterator method, which iterates all entities that are currently in use.
 - You should not write `return` explicitly in these functions as the expressions are simply copied into `while` loops.
 
@@ -277,6 +278,7 @@ Regarding the function arguments:
 Then use it as an index for writing to vectors.
 - For disusing (releasing) an entity, define a special argument `disuse: Bool` in any iterator function.  
 Then write `disuse = true` under any condition. This will release the entity the next time you call `synchronize()` (below).
+- You can also include any chunk-level variable (see below) in arguments. This automatically declares local variables before the loop and saves the change (if not `final`) after the loop, so that you don't need to manually access `this.myChunkLevelVariable`.
 
 Synchronization:
 
@@ -306,7 +308,7 @@ List of metadata:
 |Metadata|Category|Description|
 |---|---|---|
 |@:banker.useEntity|method|Mark function as a "use" method|
-|@:banker.factory|variable|Specifies a factory function for initializing value of each entity.|
+|@:banker.factory|variable|Specifies a factory function for initializing each element of vector|
 |@:banker.hidden|field|Prevents to be copied to Chunk/AoSoA|
 |@:banker.swap|variable|Swap elements (instead of overwriting) when disusing entity|
 |@:banker.chunkLevel|field|Mark as a chunk-level field|
