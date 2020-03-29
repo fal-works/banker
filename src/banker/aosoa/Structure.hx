@@ -1,16 +1,10 @@
 package banker.aosoa;
 
 /**
-	Marker interface indicating that the class is to be rebuilt to an AoSoA
-	(Array of Structure of Arrays) class.
+	Marker interface indicating that the class is a structure from which an AoSoA
+	(Array of Structure of Arrays) class is to be generated.
 
-	By implementing this,
-	- All variables are converted to a vector, which constitute a "Chunk" of entities.
-	- The class implementing `Structure` will consist of multiple "Chunk"s.
-	- The following fields are added.
-		- `chunks`: Vector of "Chunk"s of which the whole AoSoA consists.
-		- `chunkCapacity`: Number of elements that a Chunk contains.
-		- `iterate()`: Iterates all entities.
+	By implementing this, the class will have a static method `createAosoa()`.
 **/
 @:autoBuild(banker.aosoa.macro.BuildMacro.build())
 interface Structure {}
