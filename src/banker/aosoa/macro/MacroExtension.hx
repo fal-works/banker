@@ -5,7 +5,7 @@ using haxe.macro.ComplexTypeTools;
 using haxe.macro.TypeTools;
 using banker.array.ArrayExtension;
 
-import sneaker.macro.ComplexTypes;
+import sneaker.macro.Values;
 import sneaker.macro.MacroComparator;
 
 class MacroExtension {
@@ -15,7 +15,7 @@ class MacroExtension {
 	public static function argumentIsWriteIndex(argument: FunctionArg): Bool
 		return argument.name == "i" && MacroComparator.unifyComplex(
 			argument.type,
-			ComplexTypes.intType
+			Values.intType
 		);
 
 	/**
@@ -24,7 +24,7 @@ class MacroExtension {
 	public static function argumentIsDisuse(argument: FunctionArg): Bool
 		return argument.name == "disuse" && argument.type != null && MacroComparator.unifyComplex(
 			argument.type,
-			ComplexTypes.boolType
+			Values.boolType
 		);
 
 	/**
@@ -33,7 +33,7 @@ class MacroExtension {
 	public static function isNullOrVoid(type: Null<ComplexType>): Bool {
 		return type == null || MacroComparator.unifyComplex(
 			type,
-			ComplexTypes.voidType
+			Values.voidType
 		);
 	}
 }
