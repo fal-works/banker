@@ -6,7 +6,6 @@ using banker.array.ArrayExtension;
 using banker.aosoa.macro.FieldExtension;
 using banker.aosoa.macro.MacroExtension;
 
-import sneaker.macro.ComplexTypes;
 import sneaker.macro.Types;
 import sneaker.macro.MacroComparator.unifyComplex;
 import banker.aosoa.macro.ChunkMethodBuilder.*;
