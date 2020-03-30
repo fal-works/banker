@@ -431,5 +431,5 @@ In that case you may have to reboot it manually (if VSCode, `>Haxe: Restart Lang
 
 ## Dependencies
 
-- [sneaker](https://github.com/fal-works/sneaker) (v0.7.0) for assertion, logging and macro utilities
-- [ripper](https://github.com/fal-works/ripper) (v0.2.2) for partial implementation
+- [sneaker](https://github.com/fal-works/sneaker) (v0.8.0) for assertion, logging and macro utilities
+- [ripper](https://github.com/fal-works/ripper) (v0.2.3) for partial implementation
