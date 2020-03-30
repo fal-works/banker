@@ -6,9 +6,11 @@ using haxe.macro.TypeTools;
 using sneaker.macro.MacroCaster;
 using sneaker.macro.extensions.ClassTypeExtension;
 using sneaker.macro.extensions.TypeExtension;
+using banker.array.ArrayExtension;
 using banker.array.ArrayFunctionalExtension;
 
 import haxe.macro.Context;
+import haxe.macro.Type;
 import sneaker.macro.ContextTools;
 import sneaker.macro.ModuleTools;
 import sneaker.macro.Types.Fields;
@@ -22,6 +24,12 @@ class Builder {
 	static final aosoaFieldsMap = new haxe.ds.StringMap<Fields>();
 
 	/**
+		Stores fields of `Structure` classes and their super-classes.
+		in order to process inherited fields in `build()`.
+	**/
+	static final buildFieldsMap = new haxe.ds.StringMap<Fields>();
+
+	/**
 		The entry point of build macro for `Structure` interface.
 		Rebuilds the class as an AoSoA (Array of Structure of Arrays).
 	**/
@@ -30,23 +38,27 @@ class Builder {
 		if (localClassResult.isFailedWarn()) return null;
 		final localClassRef = localClassResult.unwrap();
 		final localClass = localClassRef.get();
+		final localClassPathString = localClassRef.toString();
+		if (buildFieldsMap.get(localClassPathString) != null) return null; // already built
 
 		setVerificationState(localClass);
 		if (notVerified) debug("Start to build.");
 
+		final buildFields = Context.getBuildFields();
+		final allFields = getAllFields(localClassRef, buildFields);
+
+		final buildFieldClones = allFields.map(FieldExtension.clone);
+		// buildFieldClones.forEach(field -> field.pos = position);
+
 		final localClassName = localClass.name;
 		final position = Context.currentPos();
-		final buildFields = Context.getBuildFields();
-
-		final buildFieldClones = buildFields.map(FieldExtension.clone);
-		// buildFieldClones.forEach(field -> field.pos = position);
 
 		final chunk = Chunk.create(buildFieldClones, localClassName, position);
 		final chunkType = ModuleTools.defineSubTypes([chunk.typeDefinition])[0];
 		if (notVerified) debug('Created Chunk class: ${chunkType.pathString}');
 
 		final aosoaClass = Aosoa.create(localClassName, chunk, chunkType, position);
-		aosoaFieldsMap.set(localClassRef.toString(), aosoaClass.fields);
+		aosoaFieldsMap.set(localClassPathString, aosoaClass.fields);
 		if (notVerified) debug('Registered AoSoA fields.');
 
 		if (localClass.meta.has(MetadataNames.doNotDefineAosoa)) {
@@ -70,6 +82,36 @@ class Builder {
 		}
 
 		return buildFields;
+	}
+
+	/**
+		Saves `buildFields` and retrieves all fields of super-classes.
+		@return All fields including `buildFields` and fields of super-classes.
+	**/
+	static function getAllFields(localClassRef: Ref<ClassType>, buildFields: Fields): Fields {
+		final buildFieldsCopy = buildFields.copy();
+		buildFieldsMap.set(localClassRef.toString(), buildFieldsCopy);
+
+		final fieldArrays: Array<Fields> = [buildFields];
+		var currentClass: Null<ClassType> = localClassRef.get();
+
+		while (true) {
+			final superClass = currentClass.superClass;
+			if (superClass == null) break;
+
+			final superClassPath = superClass.t.toString();
+			final fields = buildFieldsMap.get(superClassPath);
+			if (fields == null) {
+				warn('Failed to get fields of $superClassPath ... Try restarting completion server.');
+				break;
+			}
+			fieldArrays.push(fields);
+
+			currentClass = superClass.t.get();
+		}
+
+		fieldArrays.reverse();
+		return fieldArrays.flatten();
 	}
 
 	/**
