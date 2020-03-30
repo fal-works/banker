@@ -263,4 +263,15 @@ class ArrayExtension {
 
 		return newArray;
 	}
+
+	/**
+		Pushes `value` to `this` only if `this` does not have any element equal to `value`.
+		@return `true` if pushed.
+	**/
+	public static inline function pushIfAbsent<T>(_this: Array<T>, value: T): Bool {
+		if (has(_this, value)) return false;
+
+		_this.push(value);
+		return true;
+	}
 }
