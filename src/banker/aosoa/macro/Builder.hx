@@ -5,6 +5,7 @@ using haxe.macro.ExprTools;
 using haxe.macro.TypeTools;
 using sneaker.macro.MacroCaster;
 using sneaker.macro.extensions.ClassTypeExtension;
+using sneaker.macro.extensions.TypeExtension;
 using banker.array.ArrayFunctionalExtension;
 
 import haxe.macro.Context;
@@ -72,11 +73,10 @@ class Builder {
 	}
 
 	/**
-
-		@param structureType
-		@return Fields
+		The entry point of build macro for copying AoSoA fields generated from another `Structure` type.
+		@param structureTypeExpression Any class that implements `banker.aosoa.Structure` interface.
 	**/
-	public static macro function aosoaFrom(structureTypeExpression: Expr): Fields {
+	public static macro function aosoaFrom(structureTypeExpression: Expr): Null<Fields> {
 		final localClassResult = ContextTools.getLocalClass();
 		if (localClassResult.isFailedWarn()) return null;
 		final localClass = localClassResult.unwrap();
@@ -95,17 +95,18 @@ class Builder {
 
 		if (notVerified) debug('Resolving class: $structureTypeString');
 
-		try {
-			var classType = structureType.getClass();
-			if (!classType.implementsInterface("banker.aosoa.Structure")) {
-				warn(
-					'Required a class implementing `banker.aosoa.Structure` interface',
-					position
-				);
-			}
-		} catch (_:Dynamic) {
-			warn('Failed to resolve type as a class: $structureTypeString', position);
+		final maybeClassType = structureType.toClassType();
+		if (maybeClassType.isNone()) {
+			warn('Failed to resolve type as a class', position);
 			return null;
+		}
+		final classType = maybeClassType.unwrap();
+
+		if (!classType.implementsInterface("banker.aosoa.Structure")) {
+			warn(
+				'Required a class implementing `banker.aosoa.Structure` interface',
+				position
+			);
 		}
 
 		setVerificationState(localClass); // Set again as the state may be changed
