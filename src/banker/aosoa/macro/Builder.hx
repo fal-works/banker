@@ -3,6 +3,8 @@ package banker.aosoa.macro;
 #if macro
 using haxe.macro.ExprTools;
 using haxe.macro.TypeTools;
+using sneaker.macro.MacroCaster;
+using sneaker.macro.extensions.ClassTypeExtension;
 using banker.array.ArrayFunctionalExtension;
 
 import haxe.macro.Context;
@@ -95,13 +97,7 @@ class Builder {
 
 		try {
 			var classType = structureType.getClass();
-			var foundInterface = false;
-			while (classType != null) {
-				foundInterface = classType.interfaces.hasAny(ref -> ref.t.get().module == "banker.aosoa.Structure");
-				final superClassRef = classType.superClass;
-				classType = if (superClassRef != null) superClassRef.t.get(); else null;
-			}
-			if (!foundInterface) {
+			if (!classType.implementsInterface("banker.aosoa.Structure")) {
 				warn(
 					'Required a class implementing `banker.aosoa.Structure` interface',
 					position
