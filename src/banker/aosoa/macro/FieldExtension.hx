@@ -29,20 +29,20 @@ class FieldExtension {
 		for (i in 0...metadataArray.length) {
 			final metadata = metadataArray[i];
 			switch (metadata.name) {
-				case MetadataNames.useEntity:
+				case MetadataNames.useEntity | MetadataNames.useEntity_:
 					map.useEntity = true;
-				case MetadataNames.hidden:
+				case MetadataNames.hidden | MetadataNames.hidden_:
 					map.hidden = true;
-				case MetadataNames.swap:
+				case MetadataNames.swap | MetadataNames.swap_:
 					map.swap = true;
-				case MetadataNames.chunkLevel:
+				case MetadataNames.chunkLevel | MetadataNames.chunkLevel_:
 					map.chunkLevel = true;
-				case MetadataNames.chunkLevelFinal:
+				case MetadataNames.chunkLevelFinal | MetadataNames.chunkLevelFinal_:
 					map.chunkLevelFinal = true;
-				case MetadataNames.onSynchronize:
+				case MetadataNames.onSynchronize | MetadataNames.onSynchronize_:
 					map.onSynchronize = true;
 
-				case MetadataNames.factory:
+				case MetadataNames.factory | MetadataNames.factory_:
 					if (duplicateMetadata(map.chunkLevelFactory, metadata.pos)) break;
 					final parameters = metadata.params;
 					if (!hasOneParameter(parameters, metadata.pos)) break;
@@ -50,7 +50,7 @@ class FieldExtension {
 					if (!validateFactoryType(expression)) break;
 					map.factory = Some(expression);
 
-				case MetadataNames.chunkLevelFactory:
+				case MetadataNames.chunkLevelFactory | MetadataNames.chunkLevelFactory_:
 					if (duplicateMetadata(map.chunkLevelFactory, metadata.pos)) break;
 					final parameters = metadata.params;
 					if (!hasOneParameter(parameters, metadata.pos)) break;

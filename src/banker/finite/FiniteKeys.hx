@@ -90,14 +90,14 @@ class FiniteKeys {
 		@return `true` if the class has "final" metadata.
 	**/
 	static function checkFinal(metaAccess: MetaAccess): Bool {
-		final valuesAreFinal = metaAccess.has('${MetadataName.finalValues}');
+		final valuesAreFinal = metaAccess.has(MetadataNames.finalValues) || metaAccess.has(MetadataNames.finalValues);
 
 		if (notVerified) {
 			if (valuesAreFinal) {
-				debug('Found metadata: @${MetadataName.finalValues}');
+				debug('Found metadata: @${MetadataNames.finalValues}');
 				debug('Create read-only fields.');
 			} else {
-				debug('Metadata not specified: @${MetadataName.finalValues}');
+				debug('Metadata not specified: @${MetadataNames.finalValues}');
 				debug('Create writable fields.');
 			}
 		}

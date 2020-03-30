@@ -48,7 +48,8 @@ class Builder {
 		final buildFieldsCopy = buildFields.copy();
 		buildFieldsMap.set(localClassRef.toString(), buildFieldsCopy);
 
-		if (localClass.meta.has(MetadataNames.doNotBuild)) {
+		final localMeta = localClass.meta;
+		if (localMeta.has(MetadataNames.doNotBuild) || localMeta.has(MetadataNames.doNotBuild_)) {
 			if (notVerified) {
 				debug('Found metadata: ${MetadataNames.doNotBuild}');
 				debug('End building.');
@@ -71,7 +72,7 @@ class Builder {
 		aosoaFieldsMap.set(localClassPathString, aosoaClass.fields);
 		if (notVerified) debug('Registered AoSoA fields.');
 
-		if (localClass.meta.has(MetadataNames.doNotDefineAosoa)) {
+		if (localMeta.has(MetadataNames.doNotDefineAosoa) || localMeta.has(MetadataNames.doNotDefineAosoa_)) {
 			debug('Found metadata: @${MetadataNames.doNotDefineAosoa}');
 			debug('End building.');
 			return null;

@@ -91,8 +91,10 @@ class FiniteKeysValidator {
 		pos: Context.currentPos()
 	};
 
-	static function metadataIsInitialValue(entry: MetadataEntry): Bool
-		return entry.name == MetadataName.initialValue;
+	static function metadataIsInitialValue(entry: MetadataEntry): Bool {
+		final name = entry.name;
+		return name == MetadataNames.initialValue || name == MetadataNames.initialValue_;
+	}
 
 	static function fieldIsInitialValue(field: Field): Bool {
 		if (field.name == "initialValue") return true;

@@ -22,10 +22,12 @@ class MacroContext {
 		Sets `verified` and `notVerified` according to the `@:banker.verified` metadata.
 	**/
 	public static function setVerificationState(classType: ClassType): Void {
-		verified = (classType.meta.has(verifiedMetadataName));
+		final meta = classType.meta;
+		verified = (meta.has(verifiedMetadataName) || meta.has(verifiedMetadataName_));
 		notVerified = !verified;
 	}
 
 	static final verifiedMetadataName = ":banker.verified";
+	static final verifiedMetadataName_ = ":banker_verified";
 }
 #end
