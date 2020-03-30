@@ -2,6 +2,7 @@ package banker.aosoa.macro;
 
 #if macro
 using sneaker.macro.extensions.FieldExtension;
+using sneaker.macro.MacroComparator;
 using banker.array.ArrayExtension;
 using banker.aosoa.macro.FieldExtension;
 using banker.aosoa.macro.MacroExtension;
