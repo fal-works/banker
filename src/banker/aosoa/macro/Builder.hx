@@ -9,6 +9,7 @@ using sneaker.macro.extensions.TypeExtension;
 using banker.array.ArrayExtension;
 using banker.array.ArrayFunctionalExtension;
 
+import haxe.ds.StringMap;
 import haxe.macro.Context;
 import haxe.macro.Type;
 import sneaker.macro.ContextTools;
@@ -18,16 +19,26 @@ import sneaker.macro.extensions.FieldExtension;
 
 class Builder {
 	/**
-		Stores fields of AoSoA classes generated in `build()`
-		in order to copy to another class in `aosoaFrom()`.
+		Mapping from class names (`Structure` classes and their super-classes) to their fields.
+		Used for processing inherited fields in `build()`.
 	**/
-	static final aosoaFieldsMap = new haxe.ds.StringMap<Fields>();
+	@:isVar static var buildFieldsMap(get, null): StringMap<Fields>;
+
+	static function get_buildFieldsMap() {
+		if (buildFieldsMap == null) buildFieldsMap = new StringMap<Fields>();
+		return buildFieldsMap;
+	}
 
 	/**
-		Stores fields of `Structure` classes and their super-classes.
-		in order to process inherited fields in `build()`.
+		Mapping from `Structure` class names to AoSoA class fields generated in `build()`.
+		Used for copying fields to another class in `aosoaFrom()`.
 	**/
-	static final buildFieldsMap = new haxe.ds.StringMap<Fields>();
+	@:isVar static var aosoaFieldsMap(get, null): StringMap<Fields>;
+
+	static function get_aosoaFieldsMap() {
+		if (aosoaFieldsMap == null) aosoaFieldsMap = new StringMap<Fields>();
+		return aosoaFieldsMap;
+	}
 
 	/**
 		The entry point of build macro for `Structure` interface.
