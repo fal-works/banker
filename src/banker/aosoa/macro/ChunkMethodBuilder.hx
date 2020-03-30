@@ -1,9 +1,7 @@
 package banker.aosoa.macro;
 
 #if macro
-using sneaker.macro.extensions.FieldExtension;
 using banker.array.ArrayExtension;
-using banker.aosoa.macro.FieldExtension;
 using banker.aosoa.macro.MacroExtension;
 
 import sneaker.macro.MacroComparator.unifyComplex;
