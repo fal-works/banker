@@ -15,7 +15,7 @@ class MacroExtension {
 	public static function argumentIsWriteIndex(argument: FunctionArg): Bool
 		return argument.name == "i" && MacroComparator.unifyComplex(
 			argument.type,
-			Values.intType
+			Values.intComplexType
 		);
 
 	/**
@@ -24,7 +24,7 @@ class MacroExtension {
 	public static function argumentIsDisuse(argument: FunctionArg): Bool
 		return argument.name == "disuse" && argument.type != null && MacroComparator.unifyComplex(
 			argument.type,
-			Values.boolType
+			Values.boolComplexType
 		);
 
 	/**
@@ -33,7 +33,7 @@ class MacroExtension {
 	public static function isNullOrVoid(type: Null<ComplexType>): Bool {
 		return type == null || MacroComparator.unifyComplex(
 			type,
-			Values.voidType
+			Values.voidComplexType
 		);
 	}
 }
