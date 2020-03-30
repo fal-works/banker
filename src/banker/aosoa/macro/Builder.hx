@@ -45,8 +45,18 @@ class Builder {
 		if (notVerified) debug("Start to build.");
 
 		final buildFields = Context.getBuildFields();
-		final allFields = getAllFields(localClassRef, buildFields);
+		final buildFieldsCopy = buildFields.copy();
+		buildFieldsMap.set(localClassRef.toString(), buildFieldsCopy);
 
+		if (localClass.meta.has(MetadataNames.doNotBuild)) {
+			if (notVerified) {
+				debug('Found metadata: ${MetadataNames.doNotBuild}');
+				debug('End building.');
+			}
+			return null;
+		}
+
+		final allFields = getAllFields(localClassRef, buildFieldsCopy);
 		final buildFieldClones = allFields.map(FieldExtension.clone);
 		// buildFieldClones.forEach(field -> field.pos = position);
 
@@ -85,13 +95,9 @@ class Builder {
 	}
 
 	/**
-		Saves `buildFields` and retrieves all fields of super-classes.
 		@return All fields including `buildFields` and fields of super-classes.
 	**/
 	static function getAllFields(localClassRef: Ref<ClassType>, buildFields: Fields): Fields {
-		final buildFieldsCopy = buildFields.copy();
-		buildFieldsMap.set(localClassRef.toString(), buildFieldsCopy);
-
 		final fieldArrays: Array<Fields> = [buildFields];
 		var currentClass: Null<ClassType> = localClassRef.get();
 

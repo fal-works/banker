@@ -11,5 +11,6 @@ class MetadataNames {
 	public static final onSynchronize = ":banker.onSynchronize";
 
 	// class-level
+	public static final doNotBuild = ":banker.doNotBuild";
 	public static final doNotDefineAosoa = ":banker.doNotDefineAosoa";
 }
