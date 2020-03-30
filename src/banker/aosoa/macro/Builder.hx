@@ -107,6 +107,7 @@ class Builder {
 				'Required a class implementing `banker.aosoa.Structure` interface',
 				position
 			);
+			return null;
 		}
 
 		setVerificationState(localClass); // Set again as the state may be changed
