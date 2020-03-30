@@ -24,11 +24,4 @@ class MetadataNames {
 
 	public static final onSynchronize = ":banker.onSynchronize";
 	public static final onSynchronize_ = ":banker_onSynchronize";
-
-	// class-level
-	public static final doNotBuild = ":banker.doNotBuild";
-	public static final doNotBuild_ = ":banker_doNotBuild";
-
-	public static final doNotDefineAosoa = ":banker.doNotDefineAosoa";
-	public static final doNotDefineAosoa_ = ":banker_doNotDefineAosoa";
 }

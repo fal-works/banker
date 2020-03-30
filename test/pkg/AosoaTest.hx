@@ -6,7 +6,7 @@ import sneaker.print.Printer;
 class AosoaTest {
 	static function basic() {
 		describe("This goes without error.");
-		final actorAosoa = Actor.createAosoa(2, 3);
+		final actorAosoa = new ActorAosoa(2, 3);
 		final firstChunk = actorAosoa.chunks[0];
 		final x = firstChunk.x[0];
 		final y = firstChunk.y[0];
@@ -18,7 +18,7 @@ class AosoaTest {
 
 	static function iterate() {
 		describe("This prints 5 lines of position infos.");
-		final actorAosoa = Actor.createAosoa(2, 3);
+		final actorAosoa = new ActorAosoa(2, 3);
 		for (i in 0...5) actorAosoa.useEmpty();
 		actorAosoa.synchronize();
 		actorAosoa.print();
@@ -28,7 +28,7 @@ class AosoaTest {
 
 	static function use() {
 		describe("This goes without error.");
-		final actorAosoa = Actor.createAosoa(2, 3);
+		final actorAosoa = new ActorAosoa(2, 3);
 		actorAosoa.use(10, 20);
 		final chunk = actorAosoa.chunks[0];
 		actorAosoa.synchronize();
@@ -42,7 +42,7 @@ class AosoaTest {
 
 	static function disuse() {
 		describe("This prints: 10, 40, 30, 50");
-		final actorAosoa = Actor.createAosoa(4, 2);
+		final actorAosoa = new ActorAosoa(4, 2);
 
 		actorAosoa.use(10, 10);
 		actorAosoa.use(20, 20); // will be removed
@@ -61,7 +61,7 @@ class AosoaTest {
 
 	static function chunkLevel() {
 		describe("This prints sequence numbers.");
-		final actorAosoa = Actor.createAosoa(3, 2);
+		final actorAosoa = new ActorAosoa(3, 2);
 		for (i in 0...6) actorAosoa.useEmpty();
 		actorAosoa.synchronize();
 		actorAosoa.sequenceNumbers();
@@ -71,7 +71,7 @@ class AosoaTest {
 
 	static function aosoaFrom() {
 		describe("It's OK if this compiles.");
-		final aosoa = new AlternativeAosoa(1, 1);
+		final aosoa = new ActorAosoa(1, 1);
 		println(aosoa);
 	}
 

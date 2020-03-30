@@ -12,6 +12,7 @@ using banker.array.ArrayFunctionalExtension;
 import haxe.ds.StringMap;
 import haxe.macro.Context;
 import haxe.macro.Type;
+import sneaker.types.Maybe;
 import sneaker.macro.ContextTools;
 import sneaker.macro.ModuleTools;
 import sneaker.macro.Types.Fields;
@@ -19,30 +20,8 @@ import sneaker.macro.extensions.FieldExtension;
 
 class Builder {
 	/**
-		Mapping from class names (`Structure` classes and their super-classes) to their fields.
-		Used for processing inherited fields in `build()`.
-	**/
-	@:isVar static var buildFieldsMap(get, null): StringMap<Fields>;
-
-	static function get_buildFieldsMap() {
-		if (buildFieldsMap == null) buildFieldsMap = new StringMap<Fields>();
-		return buildFieldsMap;
-	}
-
-	/**
-		Mapping from `Structure` class names to AoSoA class fields generated in `build()`.
-		Used for copying fields to another class in `aosoaFrom()`.
-	**/
-	@:isVar static var aosoaFieldsMap(get, null): StringMap<Fields>;
-
-	static function get_aosoaFieldsMap() {
-		if (aosoaFieldsMap == null) aosoaFieldsMap = new StringMap<Fields>();
-		return aosoaFieldsMap;
-	}
-
-	/**
 		The entry point of build macro for `Structure` interface.
-		Rebuilds the class as an AoSoA (Array of Structure of Arrays).
+		Registers a Chunk builder function.
 	**/
 	public static function build(): Fields {
 		final localClassResult = ContextTools.getLocalClassRef();
@@ -57,16 +36,7 @@ class Builder {
 
 		final buildFields = Context.getBuildFields();
 		final buildFieldsCopy = buildFields.copy();
-		buildFieldsMap.set(localClassRef.toString(), buildFieldsCopy);
-
-		final localMeta = localClass.meta;
-		if (localMeta.has(MetadataNames.doNotBuild) || localMeta.has(MetadataNames.doNotBuild_)) {
-			if (notVerified) {
-				debug('Found metadata: ${MetadataNames.doNotBuild}');
-				debug('End building.');
-			}
-			return null;
-		}
+		buildFieldsMap.set(localClassPathString, buildFieldsCopy);
 
 		final allFields = getAllFields(localClassRef, buildFieldsCopy);
 		final buildFieldClones = allFields.map(FieldExtension.clone);
@@ -75,36 +45,97 @@ class Builder {
 		final localClassName = localClass.name;
 		final position = Context.currentPos();
 
-		final chunk = Chunk.create(buildFieldClones, localClassName, position);
-		final chunkType = ModuleTools.defineSubTypes([chunk.typeDefinition])[0];
-		if (notVerified) debug('Created Chunk class: ${chunkType.pathString}');
-
-		final aosoaClass = Aosoa.create(localClassName, chunk, chunkType, position);
-		aosoaFieldsMap.set(localClassPathString, aosoaClass.fields);
-		if (notVerified) debug('Registered AoSoA fields.');
-
-		if (localMeta.has(MetadataNames.doNotDefineAosoa) || localMeta.has(MetadataNames.doNotDefineAosoa_)) {
-			debug('Found metadata: @${MetadataNames.doNotDefineAosoa}');
+		final chunkBuilder = Chunk.create.bind(_, buildFieldClones, position);
+		chunkBuilderMap.set(localClassPathString, chunkBuilder);
+		if (notVerified) {
+			debug('Registered Chunk builder for: $localClassPathString');
 			debug('End building.');
+		}
+
+		return null;
+	}
+
+	/**
+		The entry point of build macro for Chunk classes.
+		Adds Chunk fields to the local class and registeres an AoSoA builder function.
+		@param structureTypeExpression Any `Structure` class.
+	**/
+	public static macro function chunkFromStructure(structureTypeExpression: Expr): Null<Fields> {
+		final prepared = prepareFrom(structureTypeExpression, true);
+		if (prepared.isNone()) return null;
+		final localClassRef = prepared.unwrap().localClassRef;
+		final localClass = localClassRef.get();
+		final localClassPathString = localClassRef.toString();
+		final localClassPathStringFull = '${localClass.module}.${localClass.name}';
+		final chunkTypeString = prepared.unwrap().sourceTypeString;
+
+		final chunkBuilder = chunkBuilderMap.get(chunkTypeString);
+		if (chunkBuilder == null) {
+			warn(
+				'Failed to get Chunk definition ... Try restarting completion server.',
+				structureTypeExpression.pos
+			);
 			return null;
 		}
 
-		final aosoaType = ModuleTools.defineSubTypes([aosoaClass])[0];
-		if (notVerified) debug('Defined AoSoA class: ${aosoaType.pathString}');
+		if (notVerified) debug('Create Chunk fields.');
+		final chunk = chunkBuilder(localClass.name);
+		if (notVerified) debug('Created all fields.');
 
-		final createAosoaMethod = Aosoa.createAosoaCreatorMethod(
-			aosoaType,
-			position
-		);
-		buildFields.push(createAosoaMethod);
 
-		if (notVerified) {
-			debug('Added method: $localClassName::createAosoa()');
-			debug("End building.");
-		}
+		final aosoaClassBuilder = Aosoa.create.bind(_, localClassPathStringFull, chunk, localClass);
+		aosoaBuilderMap.set(localClassPathString, aosoaClassBuilder);
+		if (notVerified) debug('Registered AoSoA builder for: $localClassPathString');
 
-		return buildFields;
+		if (notVerified) debug("End building.");
+		return Context.getBuildFields().concat(chunk.typeDefinition.fields);
 	}
+
+	/**
+		The entry point of build macro for AoSoA classes.
+		Adds AoSoA fields to the local class.
+		@param chunkTypeExpression Any Chunk class.
+	**/
+	public static macro function aosoaFromChunk(chunkTypeExpression: Expr): Null<Fields> {
+		final prepared = prepareFrom(chunkTypeExpression, false);
+		if (prepared.isNone()) return null;
+		final localClassRef = prepared.unwrap().localClassRef;
+		final localClass = localClassRef.get();
+		final chunkTypeString = prepared.unwrap().sourceTypeString;
+
+		final aosoaBuilder = aosoaBuilderMap.get(chunkTypeString);
+		if (aosoaBuilder == null) {
+			warn(
+				'Failed to get AoSoA builder ... Try restarting completion server.',
+				chunkTypeExpression.pos
+			);
+			return null;
+		}
+		if (notVerified) debug('Create AoSoA fields.');
+		final aosoaClass = aosoaBuilder(localClass.name);
+		if (notVerified) debug('Created all fields.');
+
+		if (notVerified) debug("End building.");
+		return Context.getBuildFields().concat(aosoaClass.fields);
+	}
+
+	/**
+		Mapping from class names (`Structure` classes and their super-classes) to their fields.
+		Used for processing inherited fields in `build()`.
+	**/
+	@:isVar static var buildFieldsMap(get, null): StringMap<Fields>;
+
+	/**
+		Mapping from `Structure` class names to Chunk builder functions.
+		Used for building a Chunk class in `chunkFromStructure()`.
+	**/
+	@:isVar static var chunkBuilderMap(get, null): StringMap<(chunkName: String) -> ChunkDefinition>;
+
+	/**
+		Mapping from Chunk class names to AoSoA builder functions.
+		Used for building an AoSoA class in `aosoaFromChunk()`.
+	**/
+	@:isVar static var aosoaBuilderMap(get, null): StringMap<(aosoaName: String) -> TypeDefinition>;
 
 	/**
 		@return All fields including `buildFields` and fields of super-classes.
@@ -133,62 +164,75 @@ class Builder {
 	}
 
 	/**
-		The entry point of build macro for copying AoSoA fields generated from another `Structure` type.
-		@param structureTypeExpression Any class that implements `banker.aosoa.Structure` interface.
+		Resolves `sourceTypeExpression`.
+		Internally used in `chunkFromStructure()` and `aosoaFromChunk()`.
+		@param sourceTypeExpression Any class that is either a `Structure` or a Chunk.
+		@param checkStructureInterface `true` for checking that the source type implements `Structure`.
+		@return Local class in `Maybe` representation.
 	**/
-	public static macro function aosoaFrom(structureTypeExpression: Expr): Null<Fields> {
-		final localClassResult = ContextTools.getLocalClass();
+	static function prepareFrom(
+		sourceTypeExpression: Expr,
+		checkStructureInterface: Bool
+	): Maybe<{ localClassRef: Ref<ClassType>, sourceTypeString: String }> {
+		final localClassResult = ContextTools.getLocalClassRef();
 		if (localClassResult.isFailedWarn()) return null;
-		final localClass = localClassResult.unwrap();
+		final localClassRef = localClassResult.unwrap();
+		final localClass = localClassRef.get();
 
 		setVerificationState(localClass);
 		if (notVerified) debug("Start to build.");
 
-		final structureTypeString = structureTypeExpression.toString();
-		final position = structureTypeExpression.pos;
+		final sourceTypeString = sourceTypeExpression.toString();
+		final position = sourceTypeExpression.pos;
 
-		final structureType = ContextTools.tryGetType(structureTypeString);
-		if (structureType == null) {
-			warn('Type not found: $structureTypeString', position);
+		final sourceType = ContextTools.tryGetType(sourceTypeString);
+		if (sourceType == null) {
+			warn('Type not found: $sourceTypeString', position);
 			return null;
 		}
 
-		if (notVerified) debug('Resolving class: $structureTypeString');
+		if (notVerified) debug('Resolving class: $sourceTypeString');
 
-		final maybeClassType = structureType.toClassType();
-		if (maybeClassType.isNone()) {
+		final maybeSourceClass = sourceType.toClassType();
+		if (maybeSourceClass.isNone()) {
 			warn('Failed to resolve type as a class', position);
 			return null;
 		}
-		final classType = maybeClassType.unwrap();
 
-		if (!classType.implementsInterface("banker.aosoa.Structure")) {
-			warn(
-				'Required a class implementing `banker.aosoa.Structure` interface',
-				position
-			);
-			return null;
+		final sourceClass = maybeSourceClass.unwrap();
+		if (checkStructureInterface) {
+			if (!sourceClass.implementsInterface("banker.aosoa.Structure")) {
+				warn(
+					'Required a class implementing `banker.aosoa.Structure` interface',
+					position
+				);
+				return null;
+			}
 		}
 
 		setVerificationState(localClass); // Set again as the state may be changed
 
-		if (notVerified) {
-			debug('Resolved class: $structureTypeString');
-			debug('Add AoSoA fields generated from: $structureTypeString');
-		}
+		if (notVerified) debug('Resolved class: $sourceTypeString');
 
-		final aosoaFields = aosoaFieldsMap.get(structureTypeString);
-		if (aosoaFields == null) {
-			warn(
-				'Failed to get AoSoA fields ... Try restarting completion server.',
-				position
-			);
-			return null;
-		}
+		return {
+			localClassRef: localClassRef,
+			sourceTypeString: sourceType.toString()
+		};
+	}
 
-		if (notVerified) debug("End building.");
+	static function get_buildFieldsMap() {
+		if (buildFieldsMap == null) buildFieldsMap = new StringMap();
+		return buildFieldsMap;
+	}
 
-		return Context.getBuildFields().concat(aosoaFields);
+	static function get_chunkBuilderMap() {
+		if (chunkBuilderMap == null) chunkBuilderMap = new StringMap();
+		return chunkBuilderMap;
+	}
+
+	static function get_aosoaBuilderMap() {
+		if (aosoaBuilderMap == null) aosoaBuilderMap = new StringMap();
+		return aosoaBuilderMap;
 	}
 }
 #end

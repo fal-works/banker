@@ -14,11 +14,10 @@ class Chunk {
 		Creates a new Chunk class.
 	**/
 	public static function create(
+		chunkClassName: String,
 		buildFields: Array<Field>,
-		structureName: String,
 		position: Position
 	): ChunkDefinition {
-		final chunkClassName = structureName + "Chunk";
 		final prepared = prepare(chunkClassName, buildFields);
 		final variables = prepared.variables;
 
@@ -71,7 +70,7 @@ class Chunk {
 			}
 		};
 
-		chunkClass.doc = 'Chunk (or SoA: Structure of Arrays) class generated from the original Structure class `$structureName`.';
+		chunkClass.doc = 'Chunk (or SoA: Structure of Arrays) class generated from the original Structure class.';
 		chunkClass.pos = position;
 
 		final fields = chunkClass.fields;
@@ -192,7 +191,7 @@ class Chunk {
 						}
 					}
 					if (isChunkLevel) {
-						if (metaMap.chunkLevelFinal) buildField.access.push(AFinal);
+						if (metaMap.chunkLevelFinal) buildField.access.pushIfAbsent(AFinal);
 						chunkFields.push(buildField);
 						chunkLevelVariableFields.push({
 							field: buildField,

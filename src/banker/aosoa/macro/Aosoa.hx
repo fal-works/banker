@@ -1,7 +1,11 @@
 package banker.aosoa.macro;
 
 #if macro
-import sneaker.macro.Types.DefinedType;
+using haxe.macro.TypeTools;
+using sneaker.macro.MacroCaster;
+
+import haxe.macro.Context;
+import haxe.macro.Type;
 
 class Aosoa {
 	/**
@@ -9,17 +13,13 @@ class Aosoa {
 		which consists of multiple chunk instances.
 	**/
 	public static function create(
-		structureName: String,
+		aosoaClassName: String,
+		chunkClassPathString: String,
 		chunk: ChunkDefinition,
-		chunkType: DefinedType,
-		classPosition: Position
+		chunkType: ClassType
 	): TypeDefinition {
-		if (notVerified) debug("Start to create Aosoa class.");
-
-		final aosoaClassName = structureName + "Aosoa";
-
-		final chunkTypePath = chunkType.path;
-		final chunkComplexType = chunkType.complex;
+		final chunkTypePath = chunkType.toTypePath();
+		final chunkComplexType = Context.getType(chunkClassPathString).toComplexType();
 
 		final aosoaClass = macro class $aosoaClassName {
 			/**
@@ -88,8 +88,7 @@ class Aosoa {
 			}
 		}
 
-		aosoaClass.pos = classPosition;
-		aosoaClass.doc = 'Aosoa class generated from the original structure class `$structureName`.';
+		aosoaClass.doc = 'Aosoa class generated from the original structure class.';
 
 		final fields = aosoaClass.fields;
 
@@ -110,39 +109,6 @@ class Aosoa {
 		}
 
 		return aosoaClass;
-	}
-
-	/**
-		Creates a method field `createAosoa()` that creates an `aosoaType` instance.
-	**/
-	public static function createAosoaCreatorMethod(
-		aosoaType: DefinedType,
-		position: Position
-	): Field {
-		final aosoaTypePath = aosoaType.path;
-		final functionBody = macro return new $aosoaTypePath(chunkCapacity, chunkCount);
-		var documentation = 'Creates an AoSoA (Array of Structure of Arrays) instance.';
-		documentation += '\n\nAn Aosoa consists of multiple Chunks (or SoA: Structure of Arrays),';
-		documentation += '\nand each Chunk consists of vectors containing the data of entities.';
-		documentation += '\nThe total capacity of entities will be `chunkCapacity * chunkCount`.';
-		documentation += '\n@param chunkCapacity The capacity of each Chunk i.e. the length of each vector that a Chunk contains.';
-		documentation += '\n@param chunkCount The number of Chunks that the AoSoA contains.';
-
-		final createAosoaMethod: Field = {
-			name: "createAosoa",
-			kind: FFun({
-				args: [
-					{ name: "chunkCapacity", type: (macro:Int) },
-					{ name: "chunkCount", type: (macro:Int) }
-				],
-				ret: aosoaType.complex,
-				expr: functionBody
-			}),
-			access: [APublic, AStatic],
-			doc: documentation,
-			pos: position
-		};
-		return createAosoaMethod;
 	}
 
 	/**
