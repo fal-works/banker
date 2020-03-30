@@ -70,6 +70,7 @@ Suited for following situations:
 - All of this is nothing but reinventing the wheel!
 - Don't know much about other libraries/frameworks
 - Developed within a few weeks and not yet very well tested
+- Super-unstable!!!
 
 ---
 
