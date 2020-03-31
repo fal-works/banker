@@ -6,5 +6,8 @@ package banker.aosoa.interfaces;
 	Note that this is not automatically implemented.
 **/
 interface Aosoa {
+	/**
+		Reflects changes after the last synchronization.
+	**/
 	function synchronize(): Void;
 }
