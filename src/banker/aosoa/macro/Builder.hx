@@ -21,7 +21,7 @@ import sneaker.macro.extensions.FieldExtension;
 class Builder {
 	/**
 		The entry point of build macro for `Structure` interface.
-		Registers a Chunk builder function.
+		Registers fields and a Chunk builder function.
 	**/
 	public static function structure(): Fields {
 		final localClassResult = ContextTools.getLocalClassRef();
