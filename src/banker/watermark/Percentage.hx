@@ -11,6 +11,7 @@ import sneaker.string_buffer.StringBuffer;
 	No boundary checks implemented, however the values out of the range
 	from 0 to 100 should not be used.
 **/
+@:notNull
 abstract Percentage(Int) {
 	/** Special value used as an alternative to `null`. **/
 	public static inline final none = new Percentage(-1);

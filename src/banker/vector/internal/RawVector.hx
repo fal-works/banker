@@ -20,6 +20,7 @@ typedef RawVectorData<T> = haxe.ds.Vector<T>;
 #else
 @:forward(length, toArray)
 #end
+@:notNull
 abstract RawVector<T>(RawVectorData<T>) {
 	/**
 		@return Shallow copy of `array` as `RawVector<T>`.

@@ -9,6 +9,7 @@ import banker.vector.WritableVector;
 	changing the value has to be done explicitly with `set()`.
 	The internal representation is a vector with 1 element.
 **/
+@:notNull
 abstract Reference<T>(WritableVector<T>) {
 	@:from public static inline function fromValue<T>(value: T): Reference<T> {
 		final vector = new WritableVector(1);

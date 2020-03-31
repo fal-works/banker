@@ -13,6 +13,7 @@ import banker.vector.internal.RawVector;
 	banker.vector.extension.writable.Functional
 ) // @formatter:on
 @:allow(banker.vector)
+@:notNull
 abstract WritableVector<T>(RawVector<T>) from RawVector<T> {
 	/**
 		@return Shallow copy of `array` as `WritableVector<T>`.

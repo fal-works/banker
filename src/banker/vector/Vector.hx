@@ -7,6 +7,7 @@ import banker.vector.internal.RawVector;
 **/
 @:forward(length, toArray)
 @:allow(banker.vector)
+@:notNull
 abstract Vector<T>(RawVector<T>) from RawVector<T> {
 	/**
 		@return Shallow copy of `array` as `Vector<T>`.

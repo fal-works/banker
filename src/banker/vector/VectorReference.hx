@@ -14,6 +14,7 @@ import banker.vector.internal.RawVector;
 	banker.vector.extension.Search
 ) // @formatter:on
 @:allow(banker.vector)
+@:notNull
 abstract VectorReference<T>(RawVector<T>) from RawVector<T> {
 	var data(get, never): RawVector<T>;
 
