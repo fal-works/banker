@@ -23,7 +23,7 @@ class Builder {
 		The entry point of build macro for `Structure` interface.
 		Registers a Chunk builder function.
 	**/
-	public static function build(): Fields {
+	public static function structure(): Fields {
 		final localClassResult = ContextTools.getLocalClassRef();
 		if (localClassResult.isFailedWarn()) return null;
 		final localClassRef = localClassResult.unwrap();
@@ -121,7 +121,7 @@ class Builder {
 
 	/**
 		Mapping from class names (`Structure` classes and their super-classes) to their fields.
-		Used for processing inherited fields in `build()`.
+		Used for processing inherited fields in `structure()`.
 	**/
 	@:isVar static var buildFieldsMap(get, null): StringMap<Fields>;
 

@@ -6,5 +6,5 @@ package banker.aosoa;
 
 	By implementing this, the class will have a static method `createAosoa()`.
 **/
-@:autoBuild(banker.aosoa.macro.Builder.build())
+@:autoBuild(banker.aosoa.macro.Builder.structure())
 interface Structure {}
