@@ -214,7 +214,8 @@ class Chunk {
 					var isChunkLevel = hasChunkLevelMetadata;
 					if (!isChunkLevel) {
 						if (isStatic) {
-							debug('  Found a static variable. Preserve as a chunk-level field.');
+							if (notVerified)
+								debug('  Found a static variable. Preserve as a chunk-level field.');
 							isChunkLevel = true;
 						}
 					} else if (!isStatic) {
@@ -225,14 +226,18 @@ class Chunk {
 							variableType,
 							metaMap
 						);
-						switch (constructorPiece) {
-							case FromFactory(expression):
-								debug('  Found metadata: @${MetadataNames.chunkLevelFactory}');
-								constructorExpressions.push(expression);
-							case FromArgument(expression, argument):
-								debug('  Found neither initial value nor factory. To be initialized from new() argument.');
-								constructorExternalArguments.push(argument);
-								constructorExpressions.push(expression);
+						if (initialValue == null) {
+							switch (constructorPiece) {
+								case FromFactory(expression):
+									if (notVerified)
+										debug('  Found metadata: @${MetadataNames.chunkLevelFactory}');
+									constructorExpressions.push(expression);
+								case FromArgument(expression, argument):
+									if (notVerified)
+										debug('  Found neither initial value nor factory. To be initialized from new() argument.');
+									constructorExternalArguments.push(argument);
+									constructorExpressions.push(expression);
+							}
 						}
 					}
 					if (isChunkLevel) {
