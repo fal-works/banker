@@ -303,8 +303,10 @@ The changes are buffered and are not reflected unless you call this.
 #### Initializing variables
 
 - Type hint is mandatory when declaring variables in your `Structure` class.
-You also have to set an initializing value at the declaration, e.g. `var x: Float = 0`.
-Alternatively, add metadata `@:banker.factory(anyFactoryFunction)` to the variable to use the factory function instead of filling all entities with the same value.
+- You can set an initializing value at the declaration, e.g. `var x: Float = 0`, which will be used for every entity.
+- Add metadata `@:banker.factory(anyFactoryFunction)` to the variable to use the factory function instead of filling all entities with the same value.
+- If you provide neither an inital value nor a factory, you have to pass the initial value to `new()` when instanciating the AoSoA class.
+- Add metadata `@:banker.externalFactory` to the variable for enabling to pass any factory function instead of constant value when instanciating the AoSoA class.
 
 #### Chunk-level fields
 
@@ -323,6 +325,7 @@ Alternatively, add metadata `@:banker.factory(anyFactoryFunction)` to the variab
 |---|---|---|
 |@:banker.useEntity|method|Mark function as a "use" method|
 |@:banker.factory|variable|Specifies a factory function for initializing each element of vector|
+|@:banker.externalFactory|variable|Enables to pass any factory function to `new()` for inializing each element of vector (or the variable itself if chunk-level)|
 |@:banker.hidden|field|Prevents to be copied to Chunk/AoSoA|
 |@:banker.swap|variable|Swap elements (instead of overwriting) when disusing entity|
 |@:banker.chunkLevel|field|Mark as a chunk-level field|
