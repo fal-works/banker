@@ -167,8 +167,10 @@ class ChunkVariableBuilder {
 		} else switch (metaMap.factory) {
 			case None:
 				if (metaMap.externalFactory) {
-					debug('  Found metadata: @${MetadataNames.externalFactory}');
-					debug('  To be initialized with factory given by new() argument.');
+					if (notVerified) {
+						debug('  Found metadata: @${MetadataNames.externalFactory}');
+						debug('  To be initialized with factory given by new() argument.');
+					}
 					final argumentName = buildFieldName + "Factory";
 					expressions.push(macro $vector.populate($i{argumentName}));
 					argument = {
@@ -176,7 +178,8 @@ class ChunkVariableBuilder {
 						type: (macro: () -> $variableType)
 					};
 				} else {
-					debug('  Found neither initial value nor factory. To be initialized by new() argument.');
+					if (notVerified)
+						debug('  Found neither initial value nor factory. To be initialized by new() argument.');
 					final argumentName = buildFieldName + "Value";
 					expressions.push(macro $vector.fill($i{argumentName}));
 					argument = {
@@ -185,7 +188,7 @@ class ChunkVariableBuilder {
 					};
 				}
 			case Some(factoryExpression):
-				debug('  Found metadata: @${MetadataNames.factory}');
+				if (notVerified) debug('  Found metadata: @${MetadataNames.factory}');
 				expressions.push(macro $vector.populate($factoryExpression));
 		}
 
