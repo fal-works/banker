@@ -56,11 +56,11 @@ class Builder {
 	}
 
 	/**
-		The entry point of build macro for Chunk classes.
 		Adds Chunk fields to the local class and registeres an AoSoA builder function.
+		Called from `banker.aosoa.Chunk.fromStructure()`.
 		@param structureTypeExpression Any `Structure` class.
 	**/
-	public static macro function chunkFromStructure(structureTypeExpression: Expr): Null<Fields> {
+	public static function chunkFromStructure(structureTypeExpression: Expr): Null<Fields> {
 		final prepared = prepareFrom(structureTypeExpression, true);
 		if (prepared.isNone()) return null;
 		final localClassRef = prepared.unwrap().localClassRef;
@@ -92,11 +92,11 @@ class Builder {
 	}
 
 	/**
-		The entry point of build macro for AoSoA classes.
 		Adds AoSoA fields to the local class.
+		Called from `banker.aosoa.Aosoa.fromChunk()`.
 		@param chunkTypeExpression Any Chunk class.
 	**/
-	public static macro function aosoaFromChunk(chunkTypeExpression: Expr): Null<Fields> {
+	public static function aosoaFromChunk(chunkTypeExpression: Expr): Null<Fields> {
 		final prepared = prepareFrom(chunkTypeExpression, false);
 		if (prepared.isNone()) return null;
 		final localClassRef = prepared.unwrap().localClassRef;

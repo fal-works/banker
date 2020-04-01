@@ -1,4 +1,4 @@
 package pkg;
 
-@:build(banker.aosoa.macro.Builder.aosoaFromChunk(pkg.ActorChunk))
+@:build(banker.aosoa.Aosoa.fromChunk(pkg.ActorChunk))
 class ActorAosoa {}
