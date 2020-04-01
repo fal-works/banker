@@ -19,10 +19,17 @@ class MacroContext {
 	public static var notVerified(default, null) = true;
 
 	/**
+		Current local class.
+	**/
+	public static var localClass(default, null): ClassType;
+
+	/**
 		Sets `verified` and `notVerified` according to the `@:banker.verified` metadata.
 	**/
-	public static function setVerificationState(classType: ClassType): Void {
-		final meta = classType.meta;
+	public static function setVerificationState(?classType: ClassType): Void {
+		if (classType != null) localClass = classType;
+
+		final meta = localClass.meta;
 		verified = (meta.has(verifiedMetadataName) || meta.has(verifiedMetadataName_));
 		notVerified = !verified;
 	}

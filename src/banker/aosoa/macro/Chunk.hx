@@ -6,6 +6,7 @@ using banker.array.ArrayExtension;
 using banker.array.ArrayFunctionalExtension;
 using banker.aosoa.macro.FieldExtension;
 
+import haxe.macro.Type.ClassType;
 import sneaker.macro.Types;
 import sneaker.macro.Values.intComplexType;
 import banker.aosoa.macro.ChunkMethodBuilder.*;
@@ -16,11 +17,12 @@ class Chunk {
 		Creates a new Chunk class.
 	**/
 	public static function create(
+		localClass: ClassType,
 		chunkClassName: String,
 		buildFields: Array<Field>,
 		position: Position
 	): ChunkDefinition {
-		final prepared = prepare(chunkClassName, buildFields);
+		final prepared = prepare(localClass, chunkClassName, buildFields);
 		final variables = prepared.variables;
 
 		final chunkClass: TypeDefinition = macro class $chunkClassName {
@@ -119,7 +121,7 @@ class Chunk {
 		};
 	}
 
-	static function scanBuildFields(buildFields: Fields) {
+	static function scanBuildFields(localClass: ClassType, buildFields: Fields) {
 		final variables: Array<ChunkVariable> = [];
 		final iteratorFunctions: Array<ChunkFunction> = [];
 		final useFunctions: Array<ChunkFunction> = [];
@@ -136,6 +138,7 @@ class Chunk {
 			if (notVerified) debug('Found field: ${buildFieldName}');
 
 			final metaMap = buildField.createMetadataMap();
+			setVerificationState(localClass); // Set again as the verification state may be changed
 
 			if (metaMap.hidden) {
 				if (notVerified) debug('  Found metadata: ${MetadataNames.hidden} ... Skipping.');
@@ -298,8 +301,12 @@ class Chunk {
 		`chunkFields`: Fields of the chunk.
 		`constructorExpressions`: Expression list to be reified in the chunk constructor.
 	**/
-	static function prepare(chunkClassName: String, buildFields: Array<Field>) {
-		final scanned = scanBuildFields(buildFields);
+	static function prepare(
+		localClass: ClassType,
+		chunkClassName: String,
+		buildFields: Array<Field>
+	) {
+		final scanned = scanBuildFields(localClass, buildFields);
 
 		final variables = scanned.variables;
 		final chunkFields = scanned.chunkFields;

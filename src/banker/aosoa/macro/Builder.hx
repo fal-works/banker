@@ -45,7 +45,7 @@ class Builder {
 		final localClassName = localClass.name;
 		final position = Context.currentPos();
 
-		final chunkBuilder = Chunk.create.bind(_, buildFieldClones, position);
+		final chunkBuilder = Chunk.create.bind(_, _, buildFieldClones, position);
 		chunkBuilderMap.set(localClassPathString, chunkBuilder);
 		if (notVerified) {
 			debug('Registered Chunk builder for: $localClassPathString');
@@ -81,7 +81,7 @@ class Builder {
 		}
 
 		if (notVerified) debug('Create Chunk fields.');
-		final chunk = chunkBuilder(localClass.name);
+		final chunk = chunkBuilder(localClass, localClass.name);
 		if (notVerified) debug('Created all fields.');
 
 		final aosoaClassBuilder = Aosoa.create.bind(
@@ -138,7 +138,7 @@ class Builder {
 	@:isVar static var chunkBuilderMap(
 		get,
 		null
-	): StringMap<(chunkName: String) -> ChunkDefinition>;
+	): StringMap<(localClass: ClassType, chunkName: String) -> ChunkDefinition>;
 
 	/**
 		Mapping from Chunk class names to AoSoA builder functions.
