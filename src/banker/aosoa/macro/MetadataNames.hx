@@ -7,6 +7,9 @@ class MetadataNames {
 	public static final factory = ":banker.factory";
 	public static final factory_ = ":banker_factory";
 
+	public static final externalFactory = ":banker.externalFactory";
+	public static final externalFactory_ = ":banker_externalFactory";
+
 	public static final hidden = ":banker.hidden";
 	public static final hidden_ = ":banker_hidden";
 

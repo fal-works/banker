@@ -15,6 +15,7 @@ class FieldExtension {
 		final map: MetadataMap = {
 			useEntity: false,
 			factory: None,
+			externalFactory: false,
 			hidden: false,
 			swap: false,
 			chunkLevel: false,
@@ -31,6 +32,8 @@ class FieldExtension {
 			switch (metadata.name) {
 				case MetadataNames.useEntity | MetadataNames.useEntity_:
 					map.useEntity = true;
+				case MetadataNames.externalFactory | MetadataNames.externalFactory_:
+					map.externalFactory = true;
 				case MetadataNames.hidden | MetadataNames.hidden_:
 					map.hidden = true;
 				case MetadataNames.swap | MetadataNames.swap_:

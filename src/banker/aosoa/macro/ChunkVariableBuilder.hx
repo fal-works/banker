@@ -19,8 +19,9 @@ class ChunkVariableBuilder {
 		final chunkField = chunkVariable.field;
 		final chunkBufferField = createChunkBufferField(chunkField);
 
-		final constructor = createConstructorExpression(
+		final constructorPiece = createConstructorPiece(
 			buildField,
+			variableType,
 			initialValue,
 			metaMap
 		);
@@ -39,8 +40,8 @@ class ChunkVariableBuilder {
 		return {
 			variable: chunkVariable.data,
 			chunkFields: [chunkVariable.field, chunkBufferField],
+			constructorPiece: constructorPiece,
 			expressions: {
-				constructor: constructor,
 				synchronize: synchronize,
 				disuse: disuse
 			}
@@ -128,37 +129,56 @@ class ChunkVariableBuilder {
 		@param initialValue Obtained from `buildField.kind`.
 		@return Expression to be run in `new()`. `null` if the input is invalid.
 	**/
-	static function createConstructorExpression(
+	static function createConstructorPiece(
 		buildField: Field,
+		variableType: ComplexType,
 		initialValue: Null<Expr>,
 		metaMap: MetadataMap
-	): Expr {
+	): ConstructorPiece {
 		final buildFieldName = buildField.name;
 
 		final expressions: Array<Expr> = [];
-		final thisField = macro $p{["this", buildFieldName]};
+		final vector = macro this.$buildFieldName;
 
-		expressions.push(macro $thisField = new banker.vector.WritableVector(chunkCapacity));
+		expressions.push(macro $vector = new banker.vector.WritableVector(chunkCapacity));
+
+		var argument: Null<FunctionArg> = null;
 
 		if (initialValue != null) {
-			expressions.push(macro $thisField.fill($initialValue));
-		} else {
-			switch (metaMap.factory) {
-				case None:
-					warn(
-						'Field must be initialized or have @${MetadataNames.factory} metadata.',
-						buildField.pos
-					);
-					return macro $a{expressions};
-				case Some(factoryExpression):
-					expressions.push(macro $thisField.populate($factoryExpression));
-			}
+			expressions.push(macro $vector.fill($initialValue));
+		} else switch (metaMap.factory) {
+			case None:
+				if (metaMap.externalFactory) {
+					debug('  Found metadata: @${MetadataNames.externalFactory}');
+					debug('  To be initialized with factory given by new() argument.');
+					final argumentName = buildFieldName + "Factory";
+					expressions.push(macro $vector.populate($i{argumentName}));
+					argument = {
+						name: argumentName,
+						type: (macro: () -> $variableType)
+					};
+				} else {
+					debug('  Found neither initial value nor factory. To be initialized by new() argument.');
+					final argumentName = buildFieldName + "Value";
+					expressions.push(macro $vector.fill($i{argumentName}));
+					argument = {
+						name: argumentName,
+						type: variableType
+					};
+				}
+			case Some(factoryExpression):
+				debug('  Found metadata: @${MetadataNames.factory}');
+				expressions.push(macro $vector.populate($factoryExpression));
 		}
 
-		final thisBuffer = macro $p{["this", buildFieldName + "ChunkBuffer"]};
-		expressions.push(macro $thisBuffer = $thisField.ref.copyWritable());
+		final vectorBuffer = macro $p{["this", buildFieldName + "ChunkBuffer"]};
+		expressions.push(macro $vectorBuffer = $vector.ref.copyWritable());
 
-		return macro $a{expressions};
+		final expression = macro $a{expressions};
+		return switch argument {
+			case null: FromFactory(expression);
+			case argumentObject: FromArgument(expression, argumentObject);
+		}
 	}
 }
 #end

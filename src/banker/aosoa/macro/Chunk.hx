@@ -264,8 +264,15 @@ class Chunk {
 					variables.push(processed.variable);
 					chunkFields.pushFromArray(processed.chunkFields);
 
+					switch (processed.constructorPiece) {
+						case FromFactory(expression):
+							constructorExpressions.push(expression);
+						case FromArgument(expression, argument):
+							constructorExpressions.push(expression);
+							constructorExternalArguments.push(argument);
+					}
+
 					final expressions = processed.expressions;
-					constructorExpressions.push(expressions.constructor);
 					synchronizeExpressions.push(expressions.synchronize);
 					disuseExpressions.push(expressions.disuse);
 

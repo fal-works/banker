@@ -7,6 +7,7 @@ import haxe.macro.Expr;
 typedef MetadataMap = {
 	useEntity: Bool,
 	factory: Option<Expr>,
+	externalFactory: Bool,
 	hidden: Bool,
 	swap: Bool,
 	chunkLevel: Bool,
