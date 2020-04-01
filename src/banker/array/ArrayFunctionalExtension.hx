@@ -197,12 +197,11 @@ class ArrayFunctionalExtension {
 		@return New array with elements that are mapped from `array` by `callback`.
 	**/
 	public static inline function map<T, S>(_this: Array<T>, callback: T->S): Array<S> {
-		final newArray = ArrayTools.allocate(_this.length);
-
 		final len = _this.length;
+		final newArray = ArrayTools.allocate(len);
 		var i = 0;
 		while (i < len) {
-			newArray[i] = callback(get(_this, i));
+			set(newArray, i, callback(get(_this, i)));
 			++i;
 		}
 
