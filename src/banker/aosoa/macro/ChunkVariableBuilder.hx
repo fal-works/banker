@@ -48,18 +48,24 @@ class ChunkVariableBuilder {
 	}
 
 	/**
-		Creates an initializing expression for including in `new()`.
+		Creates an initializing expression (and an argument, if needed)
+		for including in `new()`.
 		Should not be used for static variables.
 	**/
-	public static function createChunkLevelConstructorExpression(
+	public static function createChunkLevelConstructorPiece(
 		variableFieldName: String,
+		variableType: ComplexType,
 		metaMap: MetadataMap
-	): Option<Expr> {
+	): ConstructorPiece {
 		return switch (metaMap.chunkLevelFactory) {
 			case None:
-				None;
-			case Some(expression):
-				Some(macro this.$variableFieldName = $expression(chunkCapacity));
+				final argumentName = variableFieldName + "Value";
+				FromArgument(
+					macro this.$variableFieldName = $i{argumentName},
+					{ name: argumentName, type: variableType }
+				);
+			case Some(factory):
+				FromFactory(macro this.$variableFieldName = $factory(chunkCapacity));
 		}
 	}
 

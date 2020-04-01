@@ -3,9 +3,11 @@ package banker.aosoa.macro;
 #if macro
 using sneaker.macro.MacroComparator;
 using banker.array.ArrayExtension;
+using banker.array.ArrayFunctionalExtension;
 using banker.aosoa.macro.FieldExtension;
 
 import sneaker.macro.Types;
+import sneaker.macro.Values.intComplexType;
 import banker.aosoa.macro.ChunkMethodBuilder.*;
 import banker.aosoa.macro.ChunkVariableBuilder.*;
 
@@ -40,14 +42,6 @@ class Chunk {
 			**/
 			final readWriteIndexMap: banker.vector.WritableVector<Int>;
 
-			public function new(
-				chunkCapacity: Int,
-				defaultReadWriteIndexMap: banker.vector.Vector<Int>
-			) {
-				$b{prepared.constructorExpressions};
-				this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
-			}
-
 			/**
 				Synchronizes all vectors and their corresponding buffer vectors.
 			**/
@@ -73,14 +67,55 @@ class Chunk {
 		chunkClass.doc = 'Chunk (or SoA: Structure of Arrays) class generated from the original Structure class.';
 		chunkClass.pos = position;
 
+		final constructor = createConstructor(
+			prepared.constructorExternalArguments,
+			prepared.constructorExpressions,
+			position
+		);
+
 		final fields = chunkClass.fields;
+		fields.insert(3, constructor);
 		fields.pushFromArray(prepared.chunkFields);
 
 		return {
 			typeDefinition: chunkClass,
+			constructorExternalArguments: prepared.constructorExternalArguments,
 			variables: prepared.variables,
 			iterators: prepared.iterators,
 			useMethods: prepared.useMethods
+		};
+	}
+
+	/**
+		@return `new()` field for Chunk class.
+	**/
+	static function createConstructor(
+		externalArguments: Array<FunctionArg>,
+		expressions: Array<Expr>,
+		position: Position
+	): Field {
+		final constructorArguments: Array<FunctionArg> = [{
+			name: "chunkCapacity",
+			type: intComplexType
+		}, {
+			name: "defaultReadWriteIndexMap",
+			type: (macro:banker.vector.Vector<Int>)
+		}];
+		constructorArguments.pushFromArray(externalArguments);
+
+		return {
+			name: "new",
+			kind: FFun({
+				args: constructorArguments,
+				ret: null,
+				expr: macro {
+					$b{expressions};
+					this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
+				}
+			}),
+			access: [APublic],
+			pos: position,
+			doc: "Creates a Chunk instance. Called from `new()` of AoSoA class."
 		};
 	}
 
@@ -94,6 +129,7 @@ class Chunk {
 		final synchronizeExpressions: Array<Expr> = [];
 		final onSynchronizeExpressions: Array<Expr> = [];
 		final chunkLevelVariableFields: Array<VariableField> = [];
+		final constructorExternalArguments: Array<FunctionArg> = [];
 
 		for (buildField in buildFields) {
 			final buildFieldName = buildField.name;
@@ -176,19 +212,28 @@ class Chunk {
 					}
 
 					var isChunkLevel = hasChunkLevelMetadata;
-					if (!isChunkLevel && isStatic) {
-						debug('  Found a static variable. Preserve as a chunk-level field.');
-						isChunkLevel = true;
-					} else {
-						switch (createChunkLevelConstructorExpression(
+					if (!isChunkLevel) {
+						if (isStatic) {
+							debug('  Found a static variable. Preserve as a chunk-level field.');
+							isChunkLevel = true;
+						}
+					} else if (!isStatic) {
+						// If chunk-level and not static,
+						// initialize either by a factory or by an external argument of new().
+						final constructorPiece = createChunkLevelConstructorPiece(
 							buildFieldName,
+							variableType,
 							metaMap
-						)) {
-							case None:
-							case Some(expression):
+						);
+						switch (constructorPiece) {
+							case FromFactory(expression):
 								debug('  Found metadata: @${MetadataNames.chunkLevelFactory}');
 								constructorExpressions.push(expression);
-						}
+							case FromArgument(expression, argument):
+								debug('  Found neither initial value nor factory. To be initialized from new() argument.');
+								constructorExternalArguments.push(argument);
+								constructorExpressions.push(expression);
+							}
 					}
 					if (isChunkLevel) {
 						if (metaMap.chunkLevelFinal) buildField.access.pushIfAbsent(AFinal);
@@ -231,6 +276,7 @@ class Chunk {
 			iteratorFunctions: iteratorFunctions,
 			useFunctions: useFunctions,
 			chunkFields: chunkFields,
+			constructorExternalArguments: constructorExternalArguments,
 			constructorExpressions: constructorExpressions,
 			disuseExpressions: disuseExpressions,
 			synchronizeExpressions: synchronizeExpressions,
@@ -287,6 +333,7 @@ class Chunk {
 		return {
 			variables: variables,
 			chunkFields: chunkFields,
+			constructorExternalArguments: scanned.constructorExternalArguments,
 			constructorExpressions: scanned.constructorExpressions,
 			disuseExpressions: disuseExpressions,
 			synchronizeExpressions: scanned.synchronizeExpressions,

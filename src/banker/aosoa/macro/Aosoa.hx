@@ -3,9 +3,11 @@ package banker.aosoa.macro;
 #if macro
 using haxe.macro.TypeTools;
 using sneaker.macro.MacroCaster;
+using banker.array.ArrayExtension;
 
 import haxe.macro.Context;
 import haxe.macro.Type;
+import sneaker.macro.Values.intComplexType;
 
 class Aosoa {
 	/**
@@ -50,20 +52,6 @@ class Aosoa {
 			var nextWriteChunkIndex = 0;
 
 			/**
-				Called from `createAosoa()` that is added to the original Structure class by the build macro.
-			**/
-			public function new(chunkCapacity: Int, chunkCount: Int) {
-				final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkCapacity) i]);
-
-				this.chunks = banker.vector.Vector.createPopulated(
-					chunkCount,
-					() -> new $chunkTypePath(chunkCapacity, defaultReadWriteIndexMap)
-				);
-				this.chunkCapacity = chunkCapacity;
-				this.defaultReadWriteIndexMap = defaultReadWriteIndexMap;
-			}
-
-			/**
 				Synchronizes all chunks that have any entity in use.
 			**/
 			public function synchronize() {
@@ -88,9 +76,10 @@ class Aosoa {
 			}
 		}
 
-		aosoaClass.doc = 'Aosoa class generated from the original structure class.';
+		final constructor = createConstructor(chunkTypePath, chunk.constructorExternalArguments);
 
 		final fields = aosoaClass.fields;
+		fields.insert(5, constructor);
 
 		if (notVerified) debug('  Add iterator methods:');
 		final iterators = chunk.iterators;
@@ -108,7 +97,50 @@ class Aosoa {
 			if (notVerified) debug('  - ${useMethod.name}');
 		}
 
+		aosoaClass.doc = 'AoSoA class generated from the original Structure/Chunk classes.';
+
 		return aosoaClass;
+	}
+
+	/**
+		@return `new()` field for AoSoA class.
+	**/
+	static function createConstructor(
+		chunkTypePath: TypePath,
+		externalArguments: Array<FunctionArg>
+	): Field {
+		final constructorArguments: Array<FunctionArg> = [
+			{ name: "chunkCapacity", type: intComplexType },
+			{ name: "chunkCount", type: intComplexType }
+		];
+		constructorArguments.pushFromArray(externalArguments);
+
+		final chunkConstructorArguments: Array<Expr> = [
+			macro chunkCapacity,
+			macro defaultReadWriteIndexMap
+		];
+		chunkConstructorArguments.pushFromArray(externalArguments.map(arg -> macro $i{arg.name}));
+
+		final constructor: Field = {
+			name: "new",
+			kind: FFun({
+				args: constructorArguments,
+				ret: null,
+				expr: macro {
+					final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkCapacity) i]);
+
+					this.chunks = banker.vector.Vector.createPopulated(
+						chunkCount,
+						() -> new $chunkTypePath($a{chunkConstructorArguments})
+					);
+					this.chunkCapacity = chunkCapacity;
+					this.defaultReadWriteIndexMap = defaultReadWriteIndexMap;
+				}
+			}),
+			access: [APublic],
+			pos: Context.currentPos()
+		};
+		return constructor;
 	}
 
 	/**

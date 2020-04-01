@@ -60,11 +60,15 @@ typedef ChunkMethod = {
 **/
 typedef ChunkDefinition = {
 	typeDefinition: TypeDefinition,
+	constructorExternalArguments: Array<FunctionArg>,
 	variables: Array<ChunkVariable>,
 	iterators: Array<ChunkMethod>,
 	useMethods: Array<ChunkMethod>
 };
 
+/**
+	Kind of arguments in use/iterator methods.
+**/
 enum ArgumentKind {
 	External;
 	WriteIndex;
@@ -74,8 +78,19 @@ enum ArgumentKind {
 	ChunkLevel(isStatic: Bool, isFinal: Bool);
 }
 
+/**
+	Kind of chunk method, either use or iterator.
+**/
 enum ChunkMethodKind {
 	UseEntity;
 	Iterate;
+}
+
+/**
+	Initializing expression (and argument, if required) to be included in `new()`.
+**/
+enum ConstructorPiece {
+	FromFactory(expression: Expr);
+	FromArgument(expression: Expr, argument: FunctionArg);
 }
 #end
