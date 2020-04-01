@@ -60,7 +60,9 @@ class Builder {
 		Called from `banker.aosoa.Chunk.fromStructure()`.
 		@param structureTypeExpression Any `Structure` class.
 	**/
-	public static function chunkFromStructure(structureTypeExpression: Expr): Null<Fields> {
+	public static function chunkFromStructure(
+		structureTypeExpression: Expr
+	): Null<Fields> {
 		final prepared = prepareFrom(structureTypeExpression, true);
 		if (prepared.isNone()) return null;
 		final localClassRef = prepared.unwrap().localClassRef;
@@ -82,8 +84,12 @@ class Builder {
 		final chunk = chunkBuilder(localClass.name);
 		if (notVerified) debug('Created all fields.');
 
-
-		final aosoaClassBuilder = Aosoa.create.bind(_, localClassPathStringFull, chunk, localClass);
+		final aosoaClassBuilder = Aosoa.create.bind(
+			_,
+			localClassPathStringFull,
+			chunk,
+			localClass
+		);
 		aosoaBuilderMap.set(localClassPathString, aosoaClassBuilder);
 		if (notVerified) debug('Registered AoSoA builder for: $localClassPathString');
 
@@ -129,18 +135,27 @@ class Builder {
 		Mapping from `Structure` class names to Chunk builder functions.
 		Used for building a Chunk class in `chunkFromStructure()`.
 	**/
-	@:isVar static var chunkBuilderMap(get, null): StringMap<(chunkName: String) -> ChunkDefinition>;
+	@:isVar static var chunkBuilderMap(
+		get,
+		null
+	): StringMap<(chunkName: String) -> ChunkDefinition>;
 
 	/**
 		Mapping from Chunk class names to AoSoA builder functions.
 		Used for building an AoSoA class in `aosoaFromChunk()`.
 	**/
-	@:isVar static var aosoaBuilderMap(get, null): StringMap<(aosoaName: String) -> TypeDefinition>;
+	@:isVar static var aosoaBuilderMap(
+		get,
+		null
+	): StringMap<(aosoaName: String) -> TypeDefinition>;
 
 	/**
 		@return All fields including `buildFields` and fields of super-classes.
 	**/
-	static function getAllFields(localClassRef: Ref<ClassType>, buildFields: Fields): Fields {
+	static function getAllFields(
+		localClassRef: Ref<ClassType>,
+		buildFields: Fields
+	): Fields {
 		final fieldArrays: Array<Fields> = [buildFields];
 		var currentClass: Null<ClassType> = localClassRef.get();
 
@@ -173,7 +188,7 @@ class Builder {
 	static function prepareFrom(
 		sourceTypeExpression: Expr,
 		checkStructureInterface: Bool
-	): Maybe<{ localClassRef: Ref<ClassType>, sourceTypeString: String }> {
+	): Maybe<{localClassRef: Ref<ClassType>, sourceTypeString: String }> {
 		final localClassResult = ContextTools.getLocalClassRef();
 		if (localClassResult.isFailedWarn()) return null;
 		final localClassRef = localClassResult.unwrap();

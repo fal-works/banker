@@ -12,7 +12,7 @@ import haxe.macro.Context;
 **/
 class FieldExtension {
 	public static function createMetadataMap(_this: Field) {
-		final map:MetadataMap = {
+		final map: MetadataMap = {
 			useEntity: false,
 			factory: None,
 			hidden: false,
@@ -66,8 +66,8 @@ class FieldExtension {
 		return map;
 	}
 
-	static final factoryType = (macro: () -> Dynamic).toType();
-	static final chunkLevelFactoryType = (macro: (chunkCapacity: Int) -> Dynamic).toType();
+	static final factoryType = (macro:() -> Dynamic).toType();
+	static final chunkLevelFactoryType = (macro:(chunkCapacity: Int) -> Dynamic).toType();
 
 	/**
 		@return `true` if `registered` is already `Some<T>`. Otherwise `false` (also outputs warning log).
@@ -97,7 +97,10 @@ class FieldExtension {
 		return if (Context.typeof(expression).unify(factoryType)) {
 			true;
 		} else {
-			warn('Invalid type.\nWant: () -> ?\nHave: ${type.toString()}', expression.pos);
+			warn(
+				'Invalid type.\nWant: () -> ?\nHave: ${type.toString()}',
+				expression.pos
+			);
 			false;
 		}
 	}
@@ -107,7 +110,10 @@ class FieldExtension {
 		return if (type.unify(chunkLevelFactoryType)) {
 			true;
 		} else {
-			warn('Invalid type.\nWant: (chunkCapacity: Int) -> ?\nHave: ${type.toString()}', expression.pos);
+			warn(
+				'Invalid type.\nWant: (chunkCapacity: Int) -> ?\nHave: ${type.toString()}',
+				expression.pos
+			);
 			false;
 		}
 	}

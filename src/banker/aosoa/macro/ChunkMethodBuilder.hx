@@ -240,7 +240,10 @@ class ChunkMethodBuilder {
 		func: Function
 	): MacroResult<Expr> {
 		if (func.args.length > 0)
-			return Failed("onSynchronize method cannot have arguments", originalField.pos);
+			return Failed(
+				"onSynchronize method cannot have arguments",
+				originalField.pos
+			);
 
 		final name = originalField.name;
 

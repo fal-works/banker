@@ -9,10 +9,12 @@ class Chunk {
 		The entry point of build macro for Chunk classes.
 		@param structureTypeExpression Any class that implements `banker.aosoa.Structure`.
 	**/
-	public static macro function fromStructure(structureTypeExpression: Expr): Null<Array<Field>> {
+	public static macro function fromStructure(
+		structureTypeExpression: Expr
+	): Null<Array<Field>> {
 		return Builder.chunkFromStructure(structureTypeExpression);
 	}
 }
 #else
-class Chunk{}
+class Chunk {}
 #end

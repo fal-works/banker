@@ -233,7 +233,7 @@ class Chunk {
 								debug('  Found neither initial value nor factory. To be initialized from new() argument.');
 								constructorExternalArguments.push(argument);
 								constructorExpressions.push(expression);
-							}
+						}
 					}
 					if (isChunkLevel) {
 						if (metaMap.chunkLevelFinal) buildField.access.pushIfAbsent(AFinal);

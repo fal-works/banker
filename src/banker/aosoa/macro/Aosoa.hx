@@ -76,7 +76,10 @@ class Aosoa {
 			}
 		}
 
-		final constructor = createConstructor(chunkTypePath, chunk.constructorExternalArguments);
+		final constructor = createConstructor(
+			chunkTypePath,
+			chunk.constructorExternalArguments
+		);
 
 		final fields = aosoaClass.fields;
 		fields.insert(5, constructor);
@@ -115,10 +118,7 @@ class Aosoa {
 		];
 		constructorArguments.pushFromArray(externalArguments);
 
-		final chunkConstructorArguments: Array<Expr> = [
-			macro chunkCapacity,
-			macro defaultReadWriteIndexMap
-		];
+		final chunkConstructorArguments: Array<Expr> = [macro chunkCapacity, macro defaultReadWriteIndexMap];
 		chunkConstructorArguments.pushFromArray(externalArguments.map(arg -> macro $i{arg.name}));
 
 		final constructor: Field = {

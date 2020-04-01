@@ -14,5 +14,5 @@ class Aosoa {
 	}
 }
 #else
-class Aosoa{}
+class Aosoa {}
 #end

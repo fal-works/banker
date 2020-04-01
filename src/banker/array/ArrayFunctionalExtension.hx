@@ -197,7 +197,10 @@ class ArrayFunctionalExtension {
 		It first allocates a new array with the entire length and then assigns mapped values.
 		@return New array with elements that are mapped from `array` by `callback`.
 	**/
-	public static inline function allocateMap<T, S>(_this: Array<T>, callback: T->S): Array<S> {
+	public static inline function allocateMap<T, S>(
+		_this: Array<T>,
+		callback: T->S
+	): Array<S> {
 		final len = _this.length;
 		final newArray = ArrayTools.allocate(len);
 		var i = 0;
