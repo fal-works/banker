@@ -232,12 +232,8 @@ class Chunk {
 						if (initialValue == null) {
 							switch (constructorPiece) {
 								case FromFactory(expression):
-									if (notVerified)
-										debug('  Found metadata: @${MetadataNames.chunkLevelFactory}');
 									constructorExpressions.push(expression);
 								case FromArgument(expression, argument):
-									if (notVerified)
-										debug('  Found neither initial value nor factory. To be initialized from new() argument.');
 									constructorExternalArguments.push(argument);
 									constructorExpressions.push(expression);
 							}

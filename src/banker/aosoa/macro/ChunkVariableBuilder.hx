@@ -60,12 +60,30 @@ class ChunkVariableBuilder {
 	): ConstructorPiece {
 		return switch (metaMap.chunkLevelFactory) {
 			case None:
-				final argumentName = variableFieldName + "Value";
-				FromArgument(
-					macro this.$variableFieldName = $i{argumentName},
-					{ name: argumentName, type: variableType }
-				);
+				if (metaMap.externalFactory) {
+					if (notVerified) {
+						debug('  Found metadata: @${MetadataNames.externalFactory}');
+						debug('  To be initialized with factory given by new() argument.');
+					}
+					final argumentName = variableFieldName + "Factory";
+					FromArgument(
+						macro this.$variableFieldName = $i{argumentName}(),
+						{ name: argumentName, type: (macro: () -> $variableType) }
+					);
+				} else {
+					if (notVerified) {
+						debug('  Found neither initial value nor factory.');
+						debug('  To be initialized by new() argument.');
+					}
+					final argumentName = variableFieldName + "Value";
+					FromArgument(
+						macro this.$variableFieldName = $i{argumentName},
+						{ name: argumentName, type: variableType }
+					);
+				}
 			case Some(factory):
+				if (notVerified)
+					debug('  Found metadata: @${MetadataNames.chunkLevelFactory}');
 				FromFactory(macro this.$variableFieldName = $factory(chunkCapacity));
 		}
 	}
