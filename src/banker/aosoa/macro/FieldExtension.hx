@@ -21,7 +21,7 @@ class FieldExtension {
 			chunkLevel: false,
 			chunkLevelFinal: false,
 			chunkLevelFactory: None,
-			onSynchronize: false
+			onSynchronizeChunk: false
 		};
 
 		final metadataArray = _this.meta;
@@ -42,8 +42,8 @@ class FieldExtension {
 					map.chunkLevel = true;
 				case MetadataNames.chunkLevelFinal | MetadataNames.chunkLevelFinal_:
 					map.chunkLevelFinal = true;
-				case MetadataNames.onSynchronize | MetadataNames.onSynchronize_:
-					map.onSynchronize = true;
+				case MetadataNames.onSynchronizeChunk | MetadataNames.onSynchronizeChunk_:
+					map.onSynchronizeChunk = true;
 
 				case MetadataNames.factory | MetadataNames.factory_:
 					if (duplicateMetadata(map.chunkLevelFactory, metadata.pos)) break;

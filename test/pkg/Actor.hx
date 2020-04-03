@@ -15,7 +15,7 @@ class Actor implements banker.aosoa.Structure {
 		++staticInt;
 	}
 
-	function onSynchronize() {
+	function onSynchronizeChunk() {
 		staticInt = 0;
 		println("synchronize chunk.");
 	}

@@ -13,7 +13,7 @@ typedef MetadataMap = {
 	chunkLevel: Bool,
 	chunkLevelFinal: Bool,
 	chunkLevelFactory: Option<Expr>,
-	onSynchronize: Bool
+	onSynchronizeChunk: Bool
 }
 
 typedef FunctionField = {

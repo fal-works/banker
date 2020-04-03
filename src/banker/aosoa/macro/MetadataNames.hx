@@ -25,6 +25,6 @@ class MetadataNames {
 	public static final chunkLevelFactory = ":banker.chunkLevelFactory";
 	public static final chunkLevelFactory_ = ":banker_chunkLevelFactory";
 
-	public static final onSynchronize = ":banker.onSynchronize";
-	public static final onSynchronize_ = ":banker_onSynchronize";
+	public static final onSynchronizeChunk = ":banker.onSynchronizeChunk";
+	public static final onSynchronizeChunk_ = ":banker_onSynchronizeChunk";
 }
