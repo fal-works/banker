@@ -15,6 +15,7 @@ class FieldExtension {
 		final map: MetadataMap = {
 			useEntity: false,
 			onSynchronize: false,
+			onCompleteSynchronize: false,
 			factory: None,
 			externalFactory: false,
 			hidden: false,
@@ -34,6 +35,8 @@ class FieldExtension {
 					map.useEntity = true;
 				case MetadataNames.onSynchronize | MetadataNames.onSynchronize_:
 					map.onSynchronize = true;
+				case MetadataNames.onCompleteSynchronize | MetadataNames.onCompleteSynchronize_:
+					map.onCompleteSynchronize = true;
 				case MetadataNames.externalFactory | MetadataNames.externalFactory_:
 					map.externalFactory = true;
 				case MetadataNames.hidden | MetadataNames.hidden_:

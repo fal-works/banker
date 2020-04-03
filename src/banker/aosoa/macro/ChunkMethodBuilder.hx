@@ -8,12 +8,19 @@ import sneaker.macro.MacroComparator.unifyComplex;
 
 class ChunkMethodBuilder {
 	public static function getChunkMethodKind(metaMap: MetadataMap): ChunkMethodKind {
-		return if (metaMap.useEntity)
+		return if (metaMap.useEntity) {
+			if (notVerified) debug('  Found metadata: @${MetadataNames.useEntity}');
 			UseEntity;
-		else if (metaMap.onSynchronize)
-			OnSynchronizeEntity;
-		else
+		} else if (metaMap.onSynchronize) {
+			if (notVerified) debug('  Found metadata: @${MetadataNames.onSynchronize}.');
+			OnSynchronizeEntity(false);
+		} else if (metaMap.onCompleteSynchronize) {
+			if (notVerified) debug('  Found metadata: @${MetadataNames.onCompleteSynchronize}.');
+			OnSynchronizeEntity(true);
+		} else {
+			if (notVerified) debug('  Register as an iterator.');
 			Iterate;
+		}
 	}
 
 	public static function createChunkFunction(
@@ -375,7 +382,7 @@ class ChunkMethodBuilder {
 			pos: originalFunction.position,
 			doc: originalFunction.documentation,
 			access: switch (originalFunction.kind) {
-				case OnSynchronizeEntity: [AInline];
+				case OnSynchronizeEntity(_): [AInline];
 				default: [APublic, AInline];
 			}
 		};
@@ -392,7 +399,7 @@ class ChunkMethodBuilder {
 		final fieldName = buildField.name;
 		var documentation = switch kind {
 			case UseEntity: 'Finds an entity that is currently available and marks it as in-use.';
-			case OnSynchronizeEntity: 'Synchronizes all entities that are currently in use.';
+			case OnSynchronizeEntity(_): 'Synchronizes all entities that are currently in use.';
 			case Iterate: 'Iterates all entities that are currently in use.';
 		}
 		documentation += '\n\nGenerated from function `$fieldName` in the original Structure class.';

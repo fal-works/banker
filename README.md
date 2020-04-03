@@ -298,7 +298,7 @@ Then write `disuse = true` under any condition. This will release the entity the
 
 - Each AoSoA instance has a method `synchronize()`, which reflects use/disuse/other changes of entities.  
 The changes are buffered and are not reflected unless you call this.
-- If you have any function with metadata `@:banker.onSynchronize` (either entity-level iterator or chunk-level method), that function is automatically called for each chunk before the synchronization when `synchronize()` is called.
+- If you have any function (either entity-level iterator or chunk-level method) with metadata `@:banker.onSynchronize` or `@:banker.onCompleteSynchronize`, that function is automatically called for each chunk before/after the synchronization when `synchronize()` is called.
 
 #### Initializing variables
 
@@ -332,6 +332,7 @@ The changes are buffered and are not reflected unless you call this.
 |@:banker.chunkLevelFinal|variable|Mark as a chunk-level `final` variable|
 |@:banker.chunkLevelFactory|variable|Specifies function `(chunkCapacity: Int) -> ?` for initializing a chunk-level variable|
 |@:banker.onSynchronize|method|Mark method so that it is automatically called before every synchronization|
+|@:banker.onCompleteSynchronize|method|Mark method so that it is automatically called after every synchronization|
 |@:banker.verified|class|Mark as verified|
 
 

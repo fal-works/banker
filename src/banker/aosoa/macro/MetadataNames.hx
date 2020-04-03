@@ -7,6 +7,9 @@ class MetadataNames {
 	public static final onSynchronize = ":banker.onSynchronize";
 	public static final onSynchronize_ = ":banker_onSynchronize";
 
+	public static final onCompleteSynchronize = ":banker.onCompleteSynchronize";
+	public static final onCompleteSynchronize_ = ":banker_onCompleteSynchronize";
+
 	public static final factory = ":banker.factory";
 	public static final factory_ = ":banker_factory";
 

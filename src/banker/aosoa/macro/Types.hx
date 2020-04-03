@@ -7,6 +7,7 @@ import haxe.macro.Expr;
 typedef MetadataMap = {
 	useEntity: Bool,
 	onSynchronize: Bool,
+	onCompleteSynchronize: Bool,
 	factory: Option<Expr>,
 	externalFactory: Bool,
 	hidden: Bool,
@@ -97,7 +98,7 @@ enum ChunkMethodKind {
 	/**
 		Similar to `Iterate`, but automatically called in `synchronize()`.
 	**/
-	OnSynchronizeEntity;
+	OnSynchronizeEntity(onComplete: Bool);
 }
 
 /**

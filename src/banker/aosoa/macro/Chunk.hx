@@ -62,6 +62,9 @@ class Chunk {
 				);
 
 				this.endReadIndex = nextWriteIndex;
+
+				$b{prepared.onCompleteSynchronizeExpressions};
+
 				return nextWriteIndex;
 			}
 		};
@@ -130,6 +133,7 @@ class Chunk {
 		final disuseExpressions: Array<Expr> = [];
 		final synchronizeExpressions: Array<Expr> = [];
 		final onSynchronizeExpressions: Array<Expr> = [];
+		final onCompleteSynchronizeExpressions: Array<Expr> = [];
 		final chunkLevelVariableFields: Array<VariableField> = [];
 		final constructorExternalArguments: Array<FunctionArg> = [];
 
@@ -151,7 +155,7 @@ class Chunk {
 
 			if (hasChunkLevelMetadata) {
 				if (notVerified)
-					debug('  Found metadata: @${MetadataNames.chunkLevel} ... Preserve as a chunk-level field.');
+					debug('  Found metadata: @${MetadataNames.chunkLevel}');
 			}
 
 			switch buildField.kind {
@@ -159,15 +163,17 @@ class Chunk {
 					if (hasChunkLevelMetadata) {
 						chunkFields.push(buildField);
 
-						if (metaMap.onSynchronize) {
-							if (notVerified) {
-								debug('  Found metadata: ${MetadataNames.onSynchronize}');
-								debug('  Preserve as a chunk-level sync function.');
-							}
+						if (metaMap.onSynchronize || metaMap.onCompleteSynchronize) {
+							if (notVerified)
+								debug('  Found metadata: @${metaMap.onSynchronize ? MetadataNames.onSynchronize : MetadataNames.onCompleteSynchronize}');
 
 							final expression = createOnSynchronizeExpression(buildField, func, true);
 							if (expression.isFailedWarn()) continue;
-							onSynchronizeExpressions.push(expression.unwrap());
+
+							if (metaMap.onSynchronize)
+								onSynchronizeExpressions.push(expression.unwrap());
+							else
+								onCompleteSynchronizeExpressions.push(expression.unwrap());
 						}
 
 						continue;
@@ -194,19 +200,14 @@ class Chunk {
 					switch chunkMethodKind {
 						case UseEntity:
 							useFunctions.push(chunkFunction);
-							if (notVerified) {
-								debug('  Found metadata: @${MetadataNames.useEntity}');
-								debug('  Registered as a function for using new entity.');
-							}
-						case OnSynchronizeEntity:
+						case OnSynchronizeEntity(onComplete):
 							final expression = createOnSynchronizeExpression(buildField, func, false);
 							if (expression.isFailedWarn()) continue;
 							iteratorFunctions.push(chunkFunction); // It's also a kind of iterator
-							onSynchronizeExpressions.push(expression.unwrap());
-							if (notVerified) debug('  Registered as an Entity-level sync function.');
+							final array = onComplete ? onCompleteSynchronizeExpressions : onSynchronizeExpressions;
+							array.push(expression.unwrap());
 						case Iterate:
 							iteratorFunctions.push(chunkFunction);
-							if (notVerified) debug('  Registered as a Chunk iterator.');
 					}
 
 				case FVar(variableType, initialValue):
@@ -296,6 +297,7 @@ class Chunk {
 			disuseExpressions: disuseExpressions,
 			synchronizeExpressions: synchronizeExpressions,
 			onSynchronizeExpressions: onSynchronizeExpressions,
+			onCompleteSynchronizeExpressions: onCompleteSynchronizeExpressions,
 			chunkLevelVariableFields: chunkLevelVariableFields
 		}
 	}
@@ -358,6 +360,7 @@ class Chunk {
 			disuseExpressions: disuseExpressions,
 			synchronizeExpressions: scanned.synchronizeExpressions,
 			onSynchronizeExpressions: scanned.onSynchronizeExpressions,
+			onCompleteSynchronizeExpressions: scanned.onCompleteSynchronizeExpressions,
 			iterators: iterators,
 			useMethods: useMethods
 		};
