@@ -130,6 +130,12 @@ class ArrayExtension {
 		return _this.indexOf(value, 0) >= 0;
 
 	/**
+		@return `true` if the array is not null and contains an element that is `element == value`.
+	**/
+	public static inline function existsAndHas<T>(_this: Null<Array<T>>, value: T): Bool
+		return _this != null && has(_this, value);
+
+	/**
 		@return The first found element that is `element == value`.
 	**/
 	public static inline function find<T>(
@@ -139,6 +145,18 @@ class ArrayExtension {
 	): T {
 		final index = _this.indexOf(value, 0);
 		return if (index >= 0) get(_this, index) else defaultValue;
+	}
+
+	/**
+		@return The first found element that is `element == value`.
+		`defaultValue` if this array is `null` or the element is not found.
+	**/
+	public static inline function findIfNotNull<T>(
+		_this: Null<Array<T>>,
+		value: T,
+		defaultValue: T
+	): T {
+		return if (_this != null) find(_this, value, defaultValue) else defaultValue;
 	}
 
 	/**
