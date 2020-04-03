@@ -5,16 +5,13 @@ using haxe.macro.ExprTools;
 using haxe.macro.TypeTools;
 using sneaker.macro.MacroCaster;
 using sneaker.macro.extensions.ClassTypeExtension;
-using sneaker.macro.extensions.TypeExtension;
 using banker.array.ArrayExtension;
-using banker.array.ArrayFunctionalExtension;
 
 import haxe.ds.StringMap;
 import haxe.macro.Context;
 import haxe.macro.Type;
 import sneaker.types.Maybe;
 import sneaker.macro.ContextTools;
-import sneaker.macro.ModuleTools;
 import sneaker.macro.Types.Fields;
 import sneaker.macro.extensions.FieldExtension;
 
