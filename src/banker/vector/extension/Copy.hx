@@ -3,6 +3,8 @@ package banker.vector.extension;
 import banker.common.MathTools;
 import banker.array.ArrayTools;
 
+using banker.array.ArrayExtension;
+
 class Copy {
 	/**
 		@return Shallow copy of `this`.
@@ -133,7 +135,7 @@ class Copy {
 		var readIndex = startPosition;
 		var writeIndex = 0;
 		while (readIndex < endPosition) {
-			array[writeIndex] = _this[readIndex];
+			array.set(writeIndex, _this[readIndex]);
 			++readIndex;
 			++writeIndex;
 		}
