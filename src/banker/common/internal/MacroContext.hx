@@ -2,6 +2,7 @@ package banker.common.internal;
 
 #if macro
 import haxe.macro.Type.ClassType;
+import haxe.macro.Expr.Position;
 
 /**
 	Global context of the macro process of banker.
@@ -24,10 +25,18 @@ class MacroContext {
 	public static var localClass(default, null): ClassType;
 
 	/**
+		Position of current local class.
+	**/
+	public static var localPosition(default, null): Position;
+
+	/**
 		Sets `verified` and `notVerified` according to the `@:banker.verified` metadata.
 	**/
 	public static function setVerificationState(?classType: ClassType): Void {
-		if (classType != null) localClass = classType;
+		if (classType != null) {
+			localClass = classType;
+			localPosition = classType.pos;
+		}
 
 		final meta = localClass.meta;
 		verified = (meta.has(verifiedMetadataName) || meta.has(verifiedMetadataName_));
