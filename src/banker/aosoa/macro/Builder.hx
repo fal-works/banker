@@ -6,6 +6,7 @@ using haxe.macro.TypeTools;
 using sneaker.macro.MacroCaster;
 using sneaker.macro.extensions.ClassTypeExtension;
 using banker.array.ArrayExtension;
+using banker.array.ArrayFunctionalExtension;
 
 import haxe.ds.StringMap;
 import haxe.macro.Context;
@@ -172,7 +173,13 @@ class Builder {
 		}
 
 		fieldArrays.reverse();
-		return fieldArrays.flatten();
+		final allFields = fieldArrays.flatten();
+
+		allFields.reverse();
+		allFields.deduplicateWith(FieldExtension.hasSameName);
+		allFields.reverse();
+
+		return allFields;
 	}
 
 	/**
