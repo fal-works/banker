@@ -14,9 +14,11 @@ class VectorTools {
 		destinationPosition: Int,
 		rangeLength: Int
 	): Void {
+		#if !macro
 		assert(sourcePosition >= 0 && destinationPosition >= 0);
 		assert(sourcePosition + rangeLength <= source.length);
 		assert(destinationPosition + rangeLength <= destination.length);
+		#end
 		destination.ref.data.blit(
 			destinationPosition,
 			source.data,
@@ -34,8 +36,10 @@ class VectorTools {
 		destination: WritableVector<T>,
 		rangeLength: Int
 	): Void {
+		#if !macro
 		assert(rangeLength <= source.length);
 		assert(rangeLength <= destination.length);
+		#end
 		destination.ref.data.blit(0, source.data, 0, rangeLength);
 	}
 
@@ -49,9 +53,11 @@ class VectorTools {
 		destinationPosition: Int,
 		rangeLength: Int
 	): Void {
+		#if !macro
 		assert(sourcePosition >= 0 && destinationPosition >= 0);
 		assert(sourcePosition + rangeLength <= sourceVector.length);
 		assert(destinationPosition + rangeLength <= destinationArray.length);
+		#end
 		var i = 0;
 		while (i < rangeLength) {
 			destinationArray[destinationPosition + i] = sourceVector[sourcePosition + i];
