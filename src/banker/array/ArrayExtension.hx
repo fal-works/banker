@@ -1,6 +1,7 @@
 package banker.array;
 
 import banker.array.ArrayFunctionalExtension.hasEqual;
+import banker.vector.WritableVector;
 
 class ArrayExtension {
 	/**
@@ -310,5 +311,34 @@ class ArrayExtension {
 
 		_this.push(value);
 		return true;
+	}
+
+
+	/**
+		Copies `this` and also deduplicates values.
+		O(n^2) complexity (which is not very good).
+		@return New array with deduplicated values from `this`.
+	**/
+	public static inline function copyDeduplicated<T>(
+		_this: Array<T>
+	): Array<T> {
+		final length = _this.length;
+
+		return if (length == 0) _this.copy() else {
+			final newVector = new WritableVector(length);
+
+			newVector[0] = get(_this, 0);
+			var writeIndex = 1;
+
+			for (readIndex in 1...length) {
+				final value = get(_this, readIndex);
+				if (newVector.ref.hasIn(value, 0, writeIndex)) continue;
+
+				newVector[writeIndex] = value;
+				++writeIndex;
+			}
+
+			newVector.ref.sliceToArray(0, writeIndex);
+		}
 	}
 }

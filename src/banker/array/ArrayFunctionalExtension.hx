@@ -1,6 +1,7 @@
 package banker.array;
 
 import banker.array.ArrayExtension.*;
+import banker.vector.WritableVector;
 
 /**
 	Functions for `Array` that take any other function as argument.
@@ -231,5 +232,41 @@ class ArrayFunctionalExtension {
 		}
 
 		return newArray;
+	}
+
+	/**
+		Copies `this` and also deduplicates values.
+		O(n^2) complexity (which is not very good).
+		@param equalityPredicate Function that returns `true` if two given elements
+		  should be considered as equal.
+		@return New array with deduplicated values from `this`.
+	**/
+	public static inline function copyDeduplicatedWith<T>(
+		_this: Array<T>,
+		equalityPredicate: T->T->Bool
+	): Array<T> {
+		final length = _this.length;
+
+		return if (length == 0) _this.copy() else {
+			final newVector = new WritableVector(length);
+
+			newVector[0] = get(_this, 0);
+			var writeIndex = 1;
+
+			for (readIndex in 1...length) {
+				final value = get(_this, readIndex);
+				if (newVector.ref.hasEqualIn(
+					value,
+					equalityPredicate,
+					0,
+					writeIndex
+				)) continue;
+
+				newVector[writeIndex] = value;
+				++writeIndex;
+			}
+
+			newVector.ref.sliceToArray(0, writeIndex);
+		}
 	}
 }
