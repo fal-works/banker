@@ -7,20 +7,13 @@ using banker.aosoa.macro.MacroExtension;
 import sneaker.macro.MacroComparator.unifyComplex;
 
 class ChunkMethodBuilder {
-	public static function getChunkMethodKind(
-		buildField: Field,
-		metaMap: MetadataMap
-	): ChunkMethodKind {
-		final name = buildField.name;
-
-		if (metaMap.useEntity || name == useEntityDefaultMethodname)
-			return UseEntity;
-
-		if (metaMap.onSynchronize || name == onSynchronizeDefaultMethodname) {
-			return OnSynchronizeEntity;
-		}
-
-		return Iterate;
+	public static function getChunkMethodKind(metaMap: MetadataMap): ChunkMethodKind {
+		return if (metaMap.useEntity)
+			UseEntity;
+		else if (metaMap.onSynchronize)
+			OnSynchronizeEntity;
+		else
+			Iterate;
 	}
 
 	public static function createChunkFunction(

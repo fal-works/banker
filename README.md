@@ -279,7 +279,7 @@ Actor.hx:26: { x: 13, y: 3 }
 
 #### User-defined functions
 
--	Any static `Void` function that has `@:banker.useEntity` metadata or is named `useEntity()` is converted to a method which finds a new available entity and sets initial values.
+-	Any static `Void` function with metadata `@:banker.useEntity` is converted to a method which finds a new available entity and sets initial values.
 - Any other static `Void` function is converted to an iterator method, which iterates all entities that are currently in use.
 - You should not write `return` explicitly in these functions as the expressions are simply copied into `while` loops.
 
@@ -298,7 +298,7 @@ Then write `disuse = true` under any condition. This will release the entity the
 
 - Each AoSoA instance has a method `synchronize()`, which reflects use/disuse/other changes of entities.  
 The changes are buffered and are not reflected unless you call this.
-- If you have any function that has metadata `@:banker.onSynchronize` or named `onSynchronize()`, that function is automatically called before the synchronization when `synchronize()` is called.
+- If you have any function with metadata `@:banker.onSynchronize` (either entity-level iterator or chunk-level method), that function is automatically called for each chunk before the synchronization when `synchronize()` is called.
 
 #### Initializing variables
 
