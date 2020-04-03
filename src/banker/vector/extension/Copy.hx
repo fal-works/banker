@@ -1,6 +1,7 @@
 package banker.vector.extension;
 
 import banker.common.MathTools;
+import banker.array.ArrayTools;
 
 class Copy {
 	/**
@@ -127,7 +128,17 @@ class Copy {
 		startPosition: Int,
 		endPosition: Int
 	): Array<T> {
-		return [for (i in startPosition...endPosition) _this[i]];
+		final array = ArrayTools.allocate(endPosition - startPosition);
+
+		var readIndex = startPosition;
+		var writeIndex = 0;
+		while (readIndex < endPosition) {
+			array[writeIndex] = _this[readIndex];
+			++readIndex;
+			++writeIndex;
+		}
+
+		return array;
 	}
 
 	/**
