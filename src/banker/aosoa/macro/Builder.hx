@@ -31,7 +31,7 @@ class Builder {
 		final localClassPathString = localClassRef.toString();
 		if (buildFieldsMap.get(localClassPathString) != null) return null; // already built
 
-		setVerificationState(localClass);
+		setLocalClass(localClass);
 		if (notVerified) debug("Start to build.");
 
 		final buildFields = Context.getBuildFields();
@@ -194,7 +194,7 @@ class Builder {
 		final localClassRef = localClassResult.unwrap();
 		final localClass = localClassRef.get();
 
-		setVerificationState(localClass);
+		setLocalClass(localClass);
 		if (notVerified) debug("Start to build.");
 
 		final sourceTypeString = sourceTypeExpression.toString();
@@ -225,7 +225,7 @@ class Builder {
 			}
 		}
 
-		setVerificationState(localClass); // Set again as the state may be changed
+		setLocalClass(localClass); // Set again as the state may be changed
 
 		if (notVerified) debug('Resolved class: $sourceTypeString');
 

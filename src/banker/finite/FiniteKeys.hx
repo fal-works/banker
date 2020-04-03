@@ -26,7 +26,7 @@ class FiniteKeys {
 		if (localClassResult.isFailedWarn()) return null;
 		final localClass = localClassResult.unwrap();
 
-		setVerificationState(localClass);
+		setLocalClass(localClass);
 
 		if (notVerified) {
 			debug('Start to build.');

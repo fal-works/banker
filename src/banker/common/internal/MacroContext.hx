@@ -9,7 +9,7 @@ import haxe.macro.Expr.Position;
 **/
 class MacroContext {
 	/**
-		Is set by `setVerificationState()`.
+		Is set by `setLocalClass()`.
 		DEBUG and INFO logs should be suppressed if this is `true`.
 	**/
 	public static var verified(default, null) = false;
@@ -30,13 +30,12 @@ class MacroContext {
 	public static var localPosition(default, null): Position;
 
 	/**
-		Sets `verified` and `notVerified` according to the `@:banker.verified` metadata.
+		Saves current local class and its position.
+		Also sets `verified` and `notVerified` according to the `@:banker.verified` metadata.
 	**/
-	public static function setVerificationState(?classType: ClassType): Void {
-		if (classType != null) {
-			localClass = classType;
-			localPosition = classType.pos;
-		}
+	public static function setLocalClass(classType: ClassType): Void {
+		localClass = classType;
+		localPosition = classType.pos;
 
 		final meta = localClass.meta;
 		verified = (meta.has(verifiedMetadataName) || meta.has(verifiedMetadataName_));

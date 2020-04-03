@@ -138,7 +138,7 @@ class Chunk {
 			if (notVerified) debug('Found field: ${buildFieldName}');
 
 			final metaMap = buildField.createMetadataMap();
-			setVerificationState(localClass); // Set again as the verification state may be changed
+			setLocalClass(localClass); // Set again as the verification state may be changed
 
 			if (metaMap.hidden) {
 				if (notVerified) debug('  Found metadata: ${MetadataNames.hidden} ... Skipping.');
