@@ -235,6 +235,40 @@ class ArrayFunctionalExtension {
 	}
 
 	/**
+		Deduplicates values of `this`.
+		Elements with smaller indices have more priority.
+		O(n^2) complexity (which is not very good).
+		@param equalityPredicate Function that returns `true` if two given elements
+		  should be considered as equal.
+	**/
+	public static inline function deduplicateWith<T>(
+		_this: Array<T>,
+		equalityPredicate: T->T->Bool
+	): Void {
+		final length = _this.length;
+
+		if (length > 0) {
+			var writeIndex = 1;
+
+			for (readIndex in 1...length) {
+				final value = get(_this, readIndex);
+				var found = false;
+				for (k in 0...writeIndex) {
+					if (!equalityPredicate(get(_this, k), value)) continue;
+					found = true;
+					break;
+				}
+				if (found) continue;
+
+				set(_this, writeIndex, value);
+				++writeIndex;
+			}
+
+			_this.resize(writeIndex);
+		}
+	}
+
+	/**
 		Copies `this` and also deduplicates values.
 		Elements with smaller indices have more priority.
 		O(n^2) complexity (which is not very good).
