@@ -157,25 +157,17 @@ class Copy {
 			final newVector = new WritableVector(length);
 
 			newVector[0] = _this[0];
-			var newLength = 1;
+			var writeIndex = 1;
 
-			for (i in 1...length) {
-				final value = _this[i];
+			for (readIndex in 1...length) {
+				final value = _this[readIndex];
+				if (newVector.ref.hasIn(value, 0, writeIndex)) continue;
 
-				var found = false;
-				for (k in 0...newLength) {
-					if (value != newVector[k]) continue;
-					found = true;
-					break;
-				}
-
-				if (found) continue;
-
-				newVector[newLength] = value;
-				++newLength;
+				newVector[writeIndex] = value;
+				++writeIndex;
 			}
 
-			slice(newVector, 0, newLength);
+			slice(newVector, 0, writeIndex);
 		}
 	}
 
@@ -188,5 +180,55 @@ class Copy {
 		_this: VectorReference<T>
 	): WritableVector<T> {
 		return copyDeduplicated(_this).writable();
+	}
+
+	/**
+		Copies `this` and also deduplicates values.
+		O(n^2) complexity (which is not very good).
+		@param equalityPredicate Function that returns `true` if two given elements
+			should be considered as equal.
+		@return New vector with deduplicated values from `this`.
+	**/
+	public static inline function copyDeduplicatedWith<T>(
+		_this: VectorReference<T>,
+		equalityPredicate: T->T->Bool
+	): Vector<T> {
+		final length = _this.length;
+
+		return if (length == 0) copy(_this) else {
+			final newVector = new WritableVector(length);
+
+			newVector[0] = _this[0];
+			var writeIndex = 1;
+
+			for (readIndex in 1...length) {
+				final value = _this[readIndex];
+				if (newVector.ref.hasEqualIn(
+					value,
+					equalityPredicate,
+					0,
+					writeIndex
+				)) continue;
+
+				newVector[writeIndex] = value;
+				++writeIndex;
+			}
+
+			slice(newVector, 0, writeIndex);
+		}
+	}
+
+	/**
+		Copies `this` and also deduplicates values.
+		O(n^2) complexity (which is not very good).
+		@param equalityPredicate Function that returns `true` if two given elements
+			should be considered as equal.
+		@return New vector with deduplicated values from `this`.
+	**/
+	public static inline function copyDeduplicatedWithWritable<T>(
+		_this: VectorReference<T>,
+		equalityPredicate: T->T->Bool
+	): WritableVector<T> {
+		return copyDeduplicatedWith(_this, equalityPredicate).writable();
 	}
 }
