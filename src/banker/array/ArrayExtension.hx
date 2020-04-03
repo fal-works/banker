@@ -1,5 +1,7 @@
 package banker.array;
 
+import banker.array.ArrayFunctionalExtension.hasEqual;
+
 class ArrayExtension {
 	/**
 		@return The element at `index`.
@@ -288,6 +290,23 @@ class ArrayExtension {
 	**/
 	public static inline function pushIfAbsent<T>(_this: Array<T>, value: T): Bool {
 		if (has(_this, value)) return false;
+
+		_this.push(value);
+		return true;
+	}
+
+	/**
+		Pushes `value` to `this` only if `this` does not have any element equal to `value`.
+		@param equalityPredicate Function that returns `true` if two given elements
+		  should be considered as equal.
+		@return `true` if pushed.
+	**/
+	public static inline function pushIfNotFound<T>(
+		_this: Array<T>,
+		value: T,
+		equalityPredicate: (a: T, b: T) -> Bool
+	): Bool {
+		if (hasEqual(_this, value, equalityPredicate)) return false;
 
 		_this.push(value);
 		return true;
