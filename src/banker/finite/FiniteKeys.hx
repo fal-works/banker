@@ -90,7 +90,7 @@ class FiniteKeys {
 		@return `true` if the class has "final" metadata.
 	**/
 	static function checkFinal(metaAccess: MetaAccess): Bool {
-		final valuesAreFinal = metaAccess.has(MetadataNames.finalValues) || metaAccess.has(MetadataNames.finalValues);
+		final valuesAreFinal = metaAccess.has(MetadataNames.finalValues) || metaAccess.has(MetadataNames.finalValues_);
 
 		if (notVerified) {
 			if (valuesAreFinal) {
