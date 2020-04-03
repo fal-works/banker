@@ -316,6 +316,7 @@ class ArrayExtension {
 
 	/**
 		Copies `this` and also deduplicates values.
+		Elements with smaller indices have more priority.
 		O(n^2) complexity (which is not very good).
 		@return New array with deduplicated values from `this`.
 	**/

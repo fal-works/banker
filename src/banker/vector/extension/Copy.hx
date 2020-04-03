@@ -145,6 +145,7 @@ class Copy {
 
 	/**
 		Copies `this` and also deduplicates values.
+		Elements with smaller indices have more priority.
 		O(n^2) complexity (which is not very good).
 		@return New vector with deduplicated values from `this`.
 	**/
@@ -173,6 +174,7 @@ class Copy {
 
 	/**
 		Copies `this` and also deduplicates values.
+		Elements with smaller indices have more priority.
 		O(n^2) complexity (which is not very good).
 		@return New vector with deduplicated values from `this`.
 	**/
@@ -184,6 +186,7 @@ class Copy {
 
 	/**
 		Copies `this` and also deduplicates values.
+		Elements with smaller indices have more priority.
 		O(n^2) complexity (which is not very good).
 		@param equalityPredicate Function that returns `true` if two given elements
 			should be considered as equal.
@@ -220,6 +223,7 @@ class Copy {
 
 	/**
 		Copies `this` and also deduplicates values.
+		Elements with smaller indices have more priority.
 		O(n^2) complexity (which is not very good).
 		@param equalityPredicate Function that returns `true` if two given elements
 			should be considered as equal.
