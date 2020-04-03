@@ -279,7 +279,7 @@ Actor.hx:26: { x: 13, y: 3 }
 
 #### User-defined functions
 
--	Any static `Void` function with `@:banker.useEntity` metadata is converted to a method which finds a new available entity and sets initial values.
+-	Any static `Void` function that has `@:banker.useEntity` metadata or is named `useEntity()` is converted to a method which finds a new available entity and sets initial values.
 - Any other static `Void` function is converted to an iterator method, which iterates all entities that are currently in use.
 - You should not write `return` explicitly in these functions as the expressions are simply copied into `while` loops.
 

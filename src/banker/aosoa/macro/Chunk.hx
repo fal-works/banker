@@ -186,7 +186,7 @@ class Chunk {
 						continue;
 					}
 
-					final chunkMethodKind = getChunkMethodKind(metaMap);
+					final chunkMethodKind = getChunkMethodKind(metaMap, buildFieldName);
 					final chunkFunction = createChunkFunction(
 						buildField,
 						func,

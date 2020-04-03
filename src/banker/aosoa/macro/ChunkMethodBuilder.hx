@@ -7,8 +7,12 @@ using banker.aosoa.macro.MacroExtension;
 import sneaker.macro.MacroComparator.unifyComplex;
 
 class ChunkMethodBuilder {
-	public static function getChunkMethodKind(metaMap: MetadataMap): ChunkMethodKind
-		return if (metaMap.useEntity) UseEntity else Iterate;
+	public static function getChunkMethodKind(metaMap: MetadataMap, buildFieldName: String): ChunkMethodKind {
+		return if (metaMap.useEntity || buildFieldName == useEntityDefaultMethodname)
+			UseEntity
+		else
+			Iterate;
+	}
 
 	public static function createChunkFunction(
 		buildField: Field,
@@ -249,6 +253,8 @@ class ChunkMethodBuilder {
 
 		return Ok(macro $i{name}());
 	}
+
+	static final useEntityDefaultMethodname = "useEntity";
 
 	static function getArgumentKindDebugMessage(argumentKind: ArgumentKind): String {
 		return switch argumentKind {
