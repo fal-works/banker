@@ -78,6 +78,27 @@ class ArrayFunctionalExtension {
 	}
 
 	/**
+		Checks if the array contains one or more elements that is equal to `value`,
+		@param equalityPredicate Function that returns `true` if two given elements
+		  should be considered as equal.
+		@return `true` if found.
+	**/
+	public static inline function hasEqual<T>(_this: Array<T>, value: T, equalityPredicate: T->T->Bool): Bool {
+		final len = _this.length;
+		var found = false;
+		var i = 0;
+		while (i < len) {
+			if (equalityPredicate(get(_this, i), value)) {
+				found = true;
+				break;
+			}
+			++i;
+		}
+
+		return found;
+	}
+
+	/**
 		Finds the first occurrence of the element.
 		@param predicate Function that returns `true` if a given element meets the condition.
 		@return First element that matches to `predicate`. `defaultValue` if not found.
