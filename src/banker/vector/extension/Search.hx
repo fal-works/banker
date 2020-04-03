@@ -72,6 +72,49 @@ class Search {
 	}
 
 	/**
+		@param element Element to search.
+		@param equalityPredicate Function that returns `true` if two given elements
+		  should be considered as equal.
+		@return `true` if `this` contains `element`.
+	**/
+	public static inline function hasEqualIn<T>(
+		_this: VectorReference<T>,
+		element: T,
+		equalityPredicate: T->T->Bool,
+		startIndex: Int,
+		endIndex: Int
+	): Bool {
+		#if !macro
+		assert(startIndex >= 0 && endIndex <= _this.length);
+		#end
+		var found = false;
+		var i = startIndex;
+		while (i < endIndex) {
+			if (equalityPredicate(_this[i], element)) {
+				found = true;
+				break;
+			}
+			++i;
+		}
+
+		return found;
+	}
+
+	/**
+		@param element Element to search.
+		@param equalityPredicate Function that returns `true` if two given elements
+		  should be considered as equal.
+		@return `true` if `this` contains `element`.
+	**/
+	public static inline function hasEqual<T>(
+		_this: VectorReference<T>,
+		element: T,
+		equalityPredicate: T->T->Bool
+	): Bool {
+		return hasEqualIn(_this, element, equalityPredicate, 0, _this.length);
+	}
+
+	/**
 		Finds the first occurrence of the element.
 		@param predicate Function that returns true if the given element meets the condition.
 		@return First element that matches to the given filter. Null if not found.
