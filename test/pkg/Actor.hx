@@ -10,6 +10,8 @@ class Actor implements banker.aosoa.Structure {
 	@:banker.chunkLevelFactory((chunkCapacity: Int) -> chunkCapacity)
 	var chunkLevelFloat: Float;
 
+	@:banker.onSynchronize
+	@:banker.chunkLevel
 	function onSynchronizeChunk() {
 		staticInt = 0;
 		println("synchronize chunk.");
@@ -20,6 +22,7 @@ class Actor implements banker.aosoa.Structure {
 		++staticInt;
 	}
 
+	@:banker.onSynchronize
 	static function onSynchronizeEntity() {
 		println("synchronize entity.");
 	}

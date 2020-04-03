@@ -156,22 +156,20 @@ class Chunk {
 
 			switch buildField.kind {
 				case FFun(func):
-					final onSynchronizeChunk = metaMap.onSynchronizeChunk || buildFieldName == "onSynchronizeChunk";
-					if (onSynchronizeChunk) {
-						if (notVerified) {
-							if (metaMap.onSynchronizeChunk)
-								debug('  Found metadata: ${MetadataNames.onSynchronizeChunk} ... Preserve as a chunk-level sync function.');
-							else
-								debug('  Found field onSynchronizeChunk ... Preserve as a chunk-level sync function.');
+					if (hasChunkLevelMetadata) {
+						chunkFields.push(buildField);
+
+						if (metaMap.onSynchronize) {
+							if (notVerified) {
+								debug('  Found metadata: ${MetadataNames.onSynchronize}');
+								debug('  Preserve as a chunk-level sync function.');
+							}
+
+							final expression = createOnSynchronizeExpression(buildField, func, true);
+							if (expression.isFailedWarn()) continue;
+							onSynchronizeExpressions.push(expression.unwrap());
 						}
 
-						final expression = createOnSynchronizeExpression(buildField, func, true);
-						if (expression.isFailedWarn()) continue;
-						onSynchronizeExpressions.push(expression.unwrap());
-					}
-
-					if (hasChunkLevelMetadata || onSynchronizeChunk) {
-						chunkFields.push(buildField);
 						continue;
 					}
 

@@ -16,7 +16,7 @@ class ChunkMethodBuilder {
 		if (metaMap.useEntity || name == useEntityDefaultMethodname)
 			return UseEntity;
 
-		if (metaMap.onSynchronizeEntity || name == onSynchronizeEntityDefaultMethodname) {
+		if (metaMap.onSynchronize || name == onSynchronizeDefaultMethodname) {
 			return OnSynchronizeEntity;
 		}
 
@@ -257,7 +257,7 @@ class ChunkMethodBuilder {
 		// Entity-level methods should be checked later
 		if (chunkLevel && func.args.length > 0)
 			return Failed(
-				"onSynchronizeChunk method cannot have arguments",
+				"onSynchronize method cannot have arguments",
 				originalField.pos
 			);
 
@@ -267,7 +267,7 @@ class ChunkMethodBuilder {
 	}
 
 	static final useEntityDefaultMethodname = "useEntity";
-	static final onSynchronizeEntityDefaultMethodname = "onSynchronizeEntity";
+	static final onSynchronizeDefaultMethodname = "onSynchronize";
 
 	static function getArgumentKindDebugMessage(argumentKind: ArgumentKind): String {
 		return switch argumentKind {

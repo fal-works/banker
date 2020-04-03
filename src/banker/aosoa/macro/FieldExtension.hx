@@ -14,15 +14,14 @@ class FieldExtension {
 	public static function createMetadataMap(_this: Field) {
 		final map: MetadataMap = {
 			useEntity: false,
-			onSynchronizeEntity: false,
+			onSynchronize: false,
 			factory: None,
 			externalFactory: false,
 			hidden: false,
 			swap: false,
 			chunkLevel: false,
 			chunkLevelFinal: false,
-			chunkLevelFactory: None,
-			onSynchronizeChunk: false
+			chunkLevelFactory: None
 		};
 
 		final metadataArray = _this.meta;
@@ -33,8 +32,8 @@ class FieldExtension {
 			switch (metadata.name) {
 				case MetadataNames.useEntity | MetadataNames.useEntity_:
 					map.useEntity = true;
-				case MetadataNames.onSynchronizeEntity | MetadataNames.onSynchronizeEntity_:
-					map.onSynchronizeEntity = true;
+				case MetadataNames.onSynchronize | MetadataNames.onSynchronize_:
+					map.onSynchronize = true;
 				case MetadataNames.externalFactory | MetadataNames.externalFactory_:
 					map.externalFactory = true;
 				case MetadataNames.hidden | MetadataNames.hidden_:
@@ -45,8 +44,6 @@ class FieldExtension {
 					map.chunkLevel = true;
 				case MetadataNames.chunkLevelFinal | MetadataNames.chunkLevelFinal_:
 					map.chunkLevelFinal = true;
-				case MetadataNames.onSynchronizeChunk | MetadataNames.onSynchronizeChunk_:
-					map.onSynchronizeChunk = true;
 
 				case MetadataNames.factory | MetadataNames.factory_:
 					if (duplicateMetadata(map.chunkLevelFactory, metadata.pos)) break;

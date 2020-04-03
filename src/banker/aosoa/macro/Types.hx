@@ -6,15 +6,14 @@ import haxe.macro.Expr;
 
 typedef MetadataMap = {
 	useEntity: Bool,
-	onSynchronizeEntity: Bool,
+	onSynchronize: Bool,
 	factory: Option<Expr>,
 	externalFactory: Bool,
 	hidden: Bool,
 	swap: Bool,
 	chunkLevel: Bool,
 	chunkLevelFinal: Bool,
-	chunkLevelFactory: Option<Expr>,
-	onSynchronizeChunk: Bool
+	chunkLevelFactory: Option<Expr>
 }
 
 typedef FunctionField = {

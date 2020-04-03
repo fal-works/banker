@@ -4,8 +4,8 @@ class MetadataNames {
 	public static final useEntity = ":banker.useEntity";
 	public static final useEntity_ = ":banker_useEntity";
 
-	public static final onSynchronizeEntity = ":banker.onSynchronizeEntity";
-	public static final onSynchronizeEntity_ = ":banker_onSynchronizeEntity";
+	public static final onSynchronize = ":banker.onSynchronize";
+	public static final onSynchronize_ = ":banker_onSynchronize";
 
 	public static final factory = ":banker.factory";
 	public static final factory_ = ":banker_factory";
@@ -27,7 +27,4 @@ class MetadataNames {
 
 	public static final chunkLevelFactory = ":banker.chunkLevelFactory";
 	public static final chunkLevelFactory_ = ":banker_chunkLevelFactory";
-
-	public static final onSynchronizeChunk = ":banker.onSynchronizeChunk";
-	public static final onSynchronizeChunk_ = ":banker_onSynchronizeChunk";
 }
