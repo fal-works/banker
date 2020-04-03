@@ -10,8 +10,10 @@ class Copy {
 		destinationPosition: Int,
 		rangeLength: Int
 	): Void {
+		#if !macro
 		assert(sourcePosition + rangeLength <= _this.length);
 		assert(destinationPosition + rangeLength <= _this.length);
+		#end
 		VectorTools.blit(
 			_this,
 			sourcePosition,

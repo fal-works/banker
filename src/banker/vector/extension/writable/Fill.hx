@@ -11,7 +11,9 @@ class Fill {
 		startIndex: Int,
 		endIndex: Int
 	): WritableVector<T> {
+		#if !macro
 		assert(startIndex >= 0 && endIndex <= _this.length);
+		#end
 
 		for (i in startIndex...endIndex) _this.set(i, value);
 
@@ -39,7 +41,9 @@ class Fill {
 		_this: WritableVector<T>,
 		factory: Void->T
 	): WritableVector<T> {
+		#if !macro
 		assert(factory != null);
+		#end
 
 		for (i in 0..._this.length) _this.set(i, factory());
 

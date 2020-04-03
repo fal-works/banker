@@ -12,7 +12,9 @@ class Search {
 		startIndex: Int,
 		endIndex: Int
 	): Int {
+		#if !macro
 		assert(startIndex >= 0 && endIndex <= _this.length);
+		#end
 		var found = -1;
 		var i = startIndex;
 		while (i < endIndex) {
@@ -49,7 +51,9 @@ class Search {
 		startIndex: Int,
 		endIndex: Int
 	): Bool {
+		#if !macro
 		assert(startIndex >= 0 && endIndex <= _this.length);
+		#end
 		var found = false;
 		var i = startIndex;
 		while (i < endIndex) {
@@ -125,7 +129,9 @@ class Search {
 		startIndex: Int,
 		endIndex: Int
 	): Null<T> {
+		#if !macro
 		assert(startIndex >= 0 && endIndex <= _this.length);
+		#end
 		var element: T;
 		var found: Null<T> = null;
 

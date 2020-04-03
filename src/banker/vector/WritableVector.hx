@@ -33,12 +33,16 @@ abstract WritableVector<T>(RawVector<T>) from RawVector<T> {
 		this = new RawVector<T>(length);
 
 	@:op([]) public inline function get(index: Int): T {
+		#if !macro
 		assert(index >= 0 && index < this.length, null, "Out of bound.");
+		#end
 		return this[index];
 	}
 
 	@:op([]) public inline function set(index: Int, value: T): T {
+		#if !macro
 		assert(index >= 0 && index < this.length, null, "Out of bound.");
+		#end
 		return this[index] = value;
 	}
 
