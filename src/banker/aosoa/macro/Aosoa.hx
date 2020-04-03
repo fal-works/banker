@@ -163,7 +163,7 @@ class Aosoa {
 			kind: FFun(builtFunction),
 			pos: chunkField.pos,
 			doc: chunkField.doc,
-			access: [APublic]
+			access: if (chunkField.access.existsAndHas(APublic)) [APublic] else []
 		};
 
 		return field;
@@ -187,7 +187,7 @@ class Aosoa {
 
 			while (i < endReadChunkIndex) {
 				final chunk = chunks[i];
-				final nextWriteIndex = chunk.$methodName($a{argumentExpressions});
+				final nextWriteIndex = @:privateAccess chunk.$methodName($a{argumentExpressions});
 
 				if (nextWriteIndex < chunkCapacity && i < this.nextWriteChunkIndex)
 					this.nextWriteChunkIndex = i;

@@ -8,13 +8,19 @@ import sneaker.macro.MacroComparator.unifyComplex;
 
 class ChunkMethodBuilder {
 	public static function getChunkMethodKind(
-		metaMap: MetadataMap,
-		buildFieldName: String
+		buildField: Field,
+		metaMap: MetadataMap
 	): ChunkMethodKind {
-		return if (metaMap.useEntity || buildFieldName == useEntityDefaultMethodname)
-			UseEntity
-		else
-			Iterate;
+		final name = buildField.name;
+
+		if (metaMap.useEntity || name == useEntityDefaultMethodname)
+			return UseEntity;
+
+		if (metaMap.onSynchronizeEntity || name == onSynchronizeEntityDefaultMethodname) {
+			return OnSynchronizeEntity;
+		}
+
+		return Iterate;
 	}
 
 	public static function createChunkFunction(
@@ -29,7 +35,8 @@ class ChunkMethodBuilder {
 			arguments: func.args.copy(),
 			expression: func.expr,
 			documentation: documentation,
-			position: buildField.pos
+			position: buildField.pos,
+			kind: kind
 		};
 	}
 
@@ -244,11 +251,13 @@ class ChunkMethodBuilder {
 
 	public static function createOnSynchronizeExpression(
 		originalField: Field,
-		func: Function
+		func: Function,
+		chunkLevel: Bool
 	): MacroResult<Expr> {
-		if (func.args.length > 0)
+		// Entity-level methods should be checked later
+		if (chunkLevel && func.args.length > 0)
 			return Failed(
-				"onSynchronize method cannot have arguments",
+				"onSynchronizeChunk method cannot have arguments",
 				originalField.pos
 			);
 
@@ -258,6 +267,7 @@ class ChunkMethodBuilder {
 	}
 
 	static final useEntityDefaultMethodname = "useEntity";
+	static final onSynchronizeEntityDefaultMethodname = "onSynchronizeEntity";
 
 	static function getArgumentKindDebugMessage(argumentKind: ArgumentKind): String {
 		return switch argumentKind {
@@ -371,7 +381,10 @@ class ChunkMethodBuilder {
 			kind: FFun(builtFunction),
 			pos: originalFunction.position,
 			doc: originalFunction.documentation,
-			access: [APublic, AInline]
+			access: switch (originalFunction.kind) {
+				case OnSynchronizeEntity: [AInline];
+				default: [APublic, AInline];
+			}
 		};
 
 		return field;
@@ -386,6 +399,7 @@ class ChunkMethodBuilder {
 		final fieldName = buildField.name;
 		var documentation = switch kind {
 			case UseEntity: 'Finds an entity that is currently available and marks it as in-use.';
+			case OnSynchronizeEntity: 'Synchronizes all entities that are currently in use.';
 			case Iterate: 'Iterates all entities that are currently in use.';
 		}
 		documentation += '\n\nGenerated from function `$fieldName` in the original Structure class.';

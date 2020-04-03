@@ -6,6 +6,7 @@ import haxe.macro.Expr;
 
 typedef MetadataMap = {
 	useEntity: Bool,
+	onSynchronizeEntity: Bool,
 	factory: Option<Expr>,
 	externalFactory: Bool,
 	hidden: Bool,
@@ -44,7 +45,8 @@ typedef ChunkFunction = {
 	arguments: Array<FunctionArg>,
 	expression: Expr,
 	documentation: String,
-	position: Position
+	position: Position,
+	kind: ChunkMethodKind
 }
 
 /**
@@ -83,8 +85,20 @@ enum ArgumentKind {
 	Kind of chunk method, either use or iterator.
 **/
 enum ChunkMethodKind {
+	/**
+		Method that uses a new available entity.
+	**/
 	UseEntity;
+
+	/**
+		Method that iterates all entities that are currently in use.
+	**/
 	Iterate;
+
+	/**
+		Similar to `Iterate`, but automatically called in `synchronize()`.
+	**/
+	OnSynchronizeEntity;
 }
 
 /**

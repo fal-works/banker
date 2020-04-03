@@ -4,6 +4,9 @@ class MetadataNames {
 	public static final useEntity = ":banker.useEntity";
 	public static final useEntity_ = ":banker_useEntity";
 
+	public static final onSynchronizeEntity = ":banker.onSynchronizeEntity";
+	public static final onSynchronizeEntity_ = ":banker_onSynchronizeEntity";
+
 	public static final factory = ":banker.factory";
 	public static final factory_ = ":banker_factory";
 

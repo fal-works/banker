@@ -10,14 +10,18 @@ class Actor implements banker.aosoa.Structure {
 	@:banker.chunkLevelFactory((chunkCapacity: Int) -> chunkCapacity)
 	var chunkLevelFloat: Float;
 
+	function onSynchronizeChunk() {
+		staticInt = 0;
+		println("synchronize chunk.");
+	}
+
 	static function sequenceNumbers(staticInt: Int) {
 		println(staticInt);
 		++staticInt;
 	}
 
-	function onSynchronizeChunk() {
-		staticInt = 0;
-		println("synchronize chunk.");
+	static function onSynchronizeEntity() {
+		println("synchronize entity.");
 	}
 
 	/** Prints position of all entities. **/

@@ -14,6 +14,7 @@ class FieldExtension {
 	public static function createMetadataMap(_this: Field) {
 		final map: MetadataMap = {
 			useEntity: false,
+			onSynchronizeEntity: false,
 			factory: None,
 			externalFactory: false,
 			hidden: false,
@@ -32,6 +33,8 @@ class FieldExtension {
 			switch (metadata.name) {
 				case MetadataNames.useEntity | MetadataNames.useEntity_:
 					map.useEntity = true;
+				case MetadataNames.onSynchronizeEntity | MetadataNames.onSynchronizeEntity_:
+					map.onSynchronizeEntity = true;
 				case MetadataNames.externalFactory | MetadataNames.externalFactory_:
 					map.externalFactory = true;
 				case MetadataNames.hidden | MetadataNames.hidden_:

@@ -165,7 +165,7 @@ class Chunk {
 								debug('  Found field onSynchronizeChunk ... Preserve as a chunk-level sync function.');
 						}
 
-						final expression = createOnSynchronizeExpression(buildField, func);
+						final expression = createOnSynchronizeExpression(buildField, func, true);
 						if (expression.isFailedWarn()) continue;
 						onSynchronizeExpressions.push(expression.unwrap());
 					}
@@ -186,7 +186,7 @@ class Chunk {
 						continue;
 					}
 
-					final chunkMethodKind = getChunkMethodKind(metaMap, buildFieldName);
+					final chunkMethodKind = getChunkMethodKind(buildField, metaMap);
 					final chunkFunction = createChunkFunction(
 						buildField,
 						func,
@@ -200,6 +200,12 @@ class Chunk {
 								debug('  Found metadata: @${MetadataNames.useEntity}');
 								debug('  Registered as a function for using new entity.');
 							}
+						case OnSynchronizeEntity:
+							final expression = createOnSynchronizeExpression(buildField, func, false);
+							if (expression.isFailedWarn()) continue;
+							iteratorFunctions.push(chunkFunction); // It's also a kind of iterator
+							onSynchronizeExpressions.push(expression.unwrap());
+							if (notVerified) debug('  Registered as an Entity-level sync function.');
 						case Iterate:
 							iteratorFunctions.push(chunkFunction);
 							if (notVerified) debug('  Registered as a Chunk iterator.');
@@ -327,6 +333,7 @@ class Chunk {
 				chunkLevelVariableFields,
 				disuseExpressions
 			);
+
 			iterators.push(iterator);
 			chunkFields.push(iterator.field);
 		}
