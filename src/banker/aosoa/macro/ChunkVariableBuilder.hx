@@ -68,7 +68,7 @@ class ChunkVariableBuilder {
 					final argumentName = variableFieldName + "Factory";
 					FromArgument(
 						macro this.$variableFieldName = $i{argumentName}(),
-						{ name: argumentName, type: (macro: () -> $variableType) }
+						{ name: argumentName, type: (macro:() -> $variableType) }
 					);
 				} else {
 					if (notVerified) {
@@ -175,7 +175,7 @@ class ChunkVariableBuilder {
 					expressions.push(macro $vector.populate($i{argumentName}));
 					argument = {
 						name: argumentName,
-						type: (macro: () -> $variableType)
+						type: (macro:() -> $variableType)
 					};
 				} else {
 					if (notVerified)
