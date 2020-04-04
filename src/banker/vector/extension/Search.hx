@@ -42,6 +42,45 @@ class Search {
 	}
 
 	/**
+		Finds index of the first occurrence of the element that matches `predicate`.
+		@param predicate Function that returns true if the given element meets the condition.
+		@return The found index. `-1` if not found.
+	**/
+	public static inline function findFirstIndexIn<T>(
+		_this: VectorReference<T>,
+		predicate: T->Bool,
+		startIndex: Int,
+		endIndex: Int
+	): Int {
+		#if !macro
+		assert(startIndex >= 0 && endIndex <= _this.length);
+		#end
+		var found = -1;
+		var i = startIndex;
+		while (i < endIndex) {
+			if (predicate(_this[i])) {
+				found = i;
+				break;
+			}
+			++i;
+		}
+
+		return found;
+	}
+
+	/**
+		Finds index of the first occurrence of the element that matches `predicate`.
+		@param predicate Function that returns true if the given element meets the condition.
+		@return The found index. `-1` if not found.
+	**/
+	public static inline function findFirstIndex<T>(
+		_this: VectorReference<T>,
+		predicate: T->Bool
+	): Int {
+		return findFirstIndexIn(_this, predicate, 0, _this.length);
+	}
+
+	/**
 		@param element Element to search.
 		@return `true` if this list contains `element`.
 	**/
