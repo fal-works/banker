@@ -374,7 +374,7 @@ trace(mySet.A); // true
 You can specify an initial value with any type by adding a variable that is either:
 
 - named `initialValue`, or
-- added `@:banker.finite.initialValue` metadata.
+- added `@:banker.initialValue` metadata.
 
 ```haxe
 @:build(banker.finite.FiniteKeys.from(MyEnumAbstract))
@@ -402,7 +402,7 @@ The class will also have some methods such as `get(key)`, `set(key, value)` and 
 
 ### Make read-only
 
-By adding `@:banker.finite.final` metadata to the class,
+By adding `@:banker.final` metadata to the class,
 
 - All generated variables will be declared as `final`, and
 - The class will not have setter methods.
