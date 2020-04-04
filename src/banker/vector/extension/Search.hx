@@ -121,19 +121,20 @@ class Search {
 	/**
 		Finds the first occurrence of the element.
 		@param predicate Function that returns true if the given element meets the condition.
-		@return First element that matches to the given filter. Null if not found.
+		@return First element that matches to the given filter. `defaultValue` if not found.
 	**/
 	public static inline function findFirstIn<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool,
+		defaultValue: T,
 		startIndex: Int,
 		endIndex: Int
-	): Null<T> {
+	): T {
 		#if !macro
 		assert(startIndex >= 0 && endIndex <= _this.length);
 		#end
 		var element: T;
-		var found: Null<T> = null;
+		var found: T = defaultValue;
 
 		var i = startIndex;
 		while (i < endIndex) {
@@ -151,12 +152,13 @@ class Search {
 	/**
 		Finds the first occurrence of the element.
 		@param predicate Function that returns true if the given element meets the condition.
-		@return First element that matches to the given filter. Null if not found.
+		@return First element that matches to the given filter. `defaultValue` if not found.
 	**/
 	public static inline function findFirst<T>(
 		_this: VectorReference<T>,
-		predicate: T->Bool
-	): Null<T> { @:nullSafety(Off) // XXX: Don't know why this is necessary
-		return findFirstIn(_this, predicate, 0, _this.length);
+		predicate: T->Bool,
+		defaultValue: T
+	): T {
+		return findFirstIn(_this, predicate, defaultValue, 0, _this.length);
 	}
 }
