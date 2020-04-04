@@ -31,7 +31,6 @@ class Search {
 	/**
 		Searches `element` in `this` vector and returns the index number.
 		@param element The element to search.
-		@param fromIndex The index to start the search.
 		@return The found index. `-1` if not found.
 	**/
 	public static inline function findIndex<T>(
