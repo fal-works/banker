@@ -52,7 +52,7 @@ class FieldExtension {
 					if (duplicateMetadata(map.chunkLevelFactory, metadata.pos)) break;
 					final parameters = metadata.params;
 					if (!hasOneParameter(parameters, metadata.pos)) break;
-					final expression = parameters[0];
+					final expression = macro @:privateAccess ${parameters[0]};
 					if (!validateFactoryType(expression)) break;
 					map.factory = Some(expression);
 
@@ -60,7 +60,7 @@ class FieldExtension {
 					if (duplicateMetadata(map.chunkLevelFactory, metadata.pos)) break;
 					final parameters = metadata.params;
 					if (!hasOneParameter(parameters, metadata.pos)) break;
-					final expression = parameters[0];
+					final expression = macro @:privateAccess  ${parameters[0]};
 					if (!validateChunkLevelFactoryType(expression)) break;
 					map.chunkLevelFactory = Some(expression);
 			}
