@@ -4,14 +4,14 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Suite of GC-free data structures. What we need is efficiency!",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"classPath": "src/",
-	"releasenote": "Improve AoSoA generator.",
+	"releasenote": "Improve AoSoA generator and other several small enhancements.",
 	"contributors": [
 		"fal-works"
 	],
 	"dependencies": {
-		"sneaker": "0.8.0",
-		"ripper": "0.2.3"
+		"sneaker": "0.8.1",
+		"ripper": "0.3.0"
 	}
 }
