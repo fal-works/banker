@@ -159,7 +159,11 @@ class ArrayExtension {
 		value: T,
 		defaultValue: T
 	): T {
-		return if (_this != null) find(_this, value, defaultValue) else defaultValue;
+		return if (_this != null) find(
+			_this,
+			value,
+			defaultValue
+		) else defaultValue;
 	}
 
 	/**
@@ -299,7 +303,7 @@ class ArrayExtension {
 	/**
 		Pushes `value` to `this` only if `this` does not have any element equal to `value`.
 		@param equalityPredicate Function that returns `true` if two given elements
-		  should be considered as equal.
+			should be considered as equal.
 		@return `true` if pushed.
 	**/
 	public static inline function pushIfNotFound<T>(
@@ -318,11 +322,9 @@ class ArrayExtension {
 		Elements with smaller indices have more priority.
 		O(n^2) complexity (which is not very good).
 		@param equalityPredicate Function that returns `true` if two given elements
-		  should be considered as equal.
+			should be considered as equal.
 	**/
-	public static inline function deduplicate<T>(
-		_this: Array<T>
-	): Void {
+	public static inline function deduplicate<T>(_this: Array<T>): Void {
 		final length = _this.length;
 
 		if (length > 0) {
@@ -352,9 +354,7 @@ class ArrayExtension {
 		O(n^2) complexity (which is not very good).
 		@return New array with deduplicated values from `this`.
 	**/
-	public static inline function copyDeduplicated<T>(
-		_this: Array<T>
-	): Array<T> {
+	public static inline function copyDeduplicated<T>(_this: Array<T>): Array<T> {
 		final length = _this.length;
 
 		return if (length == 0) _this.copy() else {

@@ -116,7 +116,7 @@ class Search {
 	/**
 		@param element Element to search.
 		@param equalityPredicate Function that returns `true` if two given elements
-		  should be considered as equal.
+			should be considered as equal.
 		@return `true` if `this` contains `element`.
 	**/
 	public static inline function hasEqualIn<T>(
@@ -145,7 +145,7 @@ class Search {
 	/**
 		@param element Element to search.
 		@param equalityPredicate Function that returns `true` if two given elements
-		  should be considered as equal.
+			should be considered as equal.
 		@return `true` if `this` contains `element`.
 	**/
 	public static inline function hasEqual<T>(

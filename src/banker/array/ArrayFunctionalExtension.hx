@@ -81,10 +81,14 @@ class ArrayFunctionalExtension {
 	/**
 		Checks if the array contains one or more elements that is equal to `value`,
 		@param equalityPredicate Function that returns `true` if two given elements
-		  should be considered as equal.
+			should be considered as equal.
 		@return `true` if found.
 	**/
-	public static inline function hasEqual<T>(_this: Array<T>, value: T, equalityPredicate: T->T->Bool): Bool {
+	public static inline function hasEqual<T>(
+		_this: Array<T>,
+		value: T,
+		equalityPredicate: T->T->Bool
+	): Bool {
 		final len = _this.length;
 		var found = false;
 		var i = 0;
@@ -239,7 +243,7 @@ class ArrayFunctionalExtension {
 		Elements with smaller indices have more priority.
 		O(n^2) complexity (which is not very good).
 		@param equalityPredicate Function that returns `true` if two given elements
-		  should be considered as equal.
+			should be considered as equal.
 	**/
 	public static inline function deduplicateWith<T>(
 		_this: Array<T>,
@@ -273,7 +277,7 @@ class ArrayFunctionalExtension {
 		Elements with smaller indices have more priority.
 		O(n^2) complexity (which is not very good).
 		@param equalityPredicate Function that returns `true` if two given elements
-		  should be considered as equal.
+			should be considered as equal.
 		@return New array with deduplicated values from `this`.
 	**/
 	public static inline function copyDeduplicatedWith<T>(

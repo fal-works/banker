@@ -167,7 +167,11 @@ class Chunk {
 							if (notVerified)
 								debug('  Found metadata: @${metaMap.onSynchronize ? MetadataNames.onSynchronize : MetadataNames.onCompleteSynchronize}');
 
-							final expression = createOnSynchronizeExpression(buildField, func, true);
+							final expression = createOnSynchronizeExpression(
+								buildField,
+								func,
+								true
+							);
 							if (expression.isFailedWarn()) continue;
 
 							if (metaMap.onSynchronize)
@@ -201,7 +205,11 @@ class Chunk {
 						case UseEntity:
 							useFunctions.push(chunkFunction);
 						case OnSynchronizeEntity(onComplete):
-							final expression = createOnSynchronizeExpression(buildField, func, false);
+							final expression = createOnSynchronizeExpression(
+								buildField,
+								func,
+								false
+							);
 							if (expression.isFailedWarn()) continue;
 							iteratorFunctions.push(chunkFunction); // It's also a kind of iterator
 							final array = onComplete ? onCompleteSynchronizeExpressions : onSynchronizeExpressions;

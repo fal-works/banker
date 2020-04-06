@@ -15,7 +15,8 @@ class ChunkMethodBuilder {
 			if (notVerified) debug('  Found metadata: @${MetadataNames.onSynchronize}.');
 			OnSynchronizeEntity(false);
 		} else if (metaMap.onCompleteSynchronize) {
-			if (notVerified) debug('  Found metadata: @${MetadataNames.onCompleteSynchronize}.');
+			if (notVerified)
+				debug('  Found metadata: @${MetadataNames.onCompleteSynchronize}.');
 			OnSynchronizeEntity(true);
 		} else {
 			if (notVerified) debug('  Register as an iterator.');
