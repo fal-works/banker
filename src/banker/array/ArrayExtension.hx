@@ -60,7 +60,7 @@ class ArrayExtension {
 		endIndex: Int
 	): Array<T> {
 		#if !macro
-		assert(startIndex >= 0 && endIndex < _this.length);
+		assert(startIndex >= 0 && endIndex <= _this.length);
 		#end
 
 		var i = startIndex;
