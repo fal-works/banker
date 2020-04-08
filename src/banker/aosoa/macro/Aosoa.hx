@@ -74,6 +74,15 @@ class Aosoa {
 
 				this.endReadChunkIndex = usedChunkMaxIndex + 1;
 			}
+
+			/**
+				@return The chunk specified by `chunkEntityId`.
+			**/
+			public inline function getChunk(
+				chunkEntityId: banker.aosoa.ChunkEntityId
+			): $chunkComplexType {
+				return this.chunks[chunkEntityId.chunk];
+			}
 		}
 
 		final constructor = createConstructor(

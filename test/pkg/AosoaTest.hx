@@ -1,6 +1,7 @@
 package pkg;
 
 import sneaker.print.Printer;
+import banker.aosoa.ChunkEntityId;
 
 @:access(pkg.Actor, pkg.ActorChunk)
 class AosoaTest {
@@ -87,6 +88,25 @@ class AosoaTest {
 	}
 	static final _printId = testCase(printId, Visual);
 
+	static function randomAccess() {
+		describe("This prints: 4");
+		final actorAosoa = new ActorAosoa(3, 3);
+
+		for (i in 0...9) actorAosoa.use(i, i);
+		actorAosoa.synchronize();
+
+		final id = new ChunkEntityId(1, 1);
+		println("chunk: " + id.chunk);
+		println("entity: " + id.entity);
+		final chunk = actorAosoa.getChunk(id);
+		final index = chunk.getReadIndex(id);
+		final x = chunk.x[index];
+		println(x);
+
+		assert(x == 4);
+	}
+	static final _randomAccess = testCase(randomAccess, Ok);
+
 	public static final all = testCaseGroup([
 		_basic,
 		_iterate,
@@ -94,6 +114,7 @@ class AosoaTest {
 		_disuse,
 		_chunkLevel,
 		_aosoaFrom,
-		_printId
+		_printId,
+		_randomAccess
 	]);
 }

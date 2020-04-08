@@ -327,11 +327,26 @@ Note that `entityId` may not be identical to the physical index in variable vect
 For example, if your entity has a variable `x: Float`:
 
 ```haxe
-static function getX(aosoa: YourAosoa, chunkId: Int, entityId: Int): Float {
-	final chunk = aosoa.chunks[chunkId];
-	final index = chunk.entityIdReadIndexMap[entityId];
-	final x = chunk.x[index];
-	return x;
+class Main {
+	static function getX(aosoa: YourAosoa, chunkId: Int, entityId: Int): Float {
+		final chunk = aosoa.chunks[chunkId];
+		final index = chunk.entityIdReadIndexMap[entityId];
+		final x = chunk.x[index];
+		return x;
+	}
+}
+```
+
+Or using an abstract type `banker.aosoa.ChunkEntityId`:
+
+```haxe
+class Main {
+	static function getX(aosoa: YourAosoa, id: ChunkEntityId): Float {
+		final chunk = aosoa.getChunk(id);
+		final index = chunk.getReadIndex(id);
+		final x = chunk.x[index];
+		return x;
+	}
 }
 ```
 

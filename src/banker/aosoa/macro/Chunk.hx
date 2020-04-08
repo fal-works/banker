@@ -86,6 +86,15 @@ class Chunk {
 
 				return nextWriteIndex;
 			}
+
+			/**
+				@return The physical index in variable vectors at which the entity data is stored.
+			**/
+			public inline function getReadIndex(
+				chunkEntityId: banker.aosoa.ChunkEntityId
+			): Int {
+				return this.entityIdReadIndexMap[chunkEntityId.entity];
+			}
 		};
 
 		chunkClass.doc = 'Chunk (or SoA: Structure of Arrays) class generated from the original Structure class.';
