@@ -77,12 +77,23 @@ class AosoaTest {
 
 	static final _aosoaFrom = testCase(aosoaFrom, Ok);
 
+
+	static function printId() {
+		describe("This prints chunk/entity IDs.");
+		final actorAosoa = new ActorAosoa(3, 2);
+		for (i in 0...6) actorAosoa.useEmpty();
+		actorAosoa.synchronize();
+		actorAosoa.printId();
+	}
+	static final _printId = testCase(printId, Visual);
+
 	public static final all = testCaseGroup([
 		_basic,
 		_iterate,
 		_use,
 		_disuse,
 		_chunkLevel,
-		_aosoaFrom
+		_aosoaFrom,
+		_printId
 	]);
 }

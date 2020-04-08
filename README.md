@@ -314,6 +314,27 @@ The changes are buffered and are not reflected unless you call this.
 - Static variables are automatically considered as chunk-level.
 - By adding metadata `@:banker.chunkLevelFactory` you can specify a factory function `(chunkCapacity: Int) -> ?` for a chunk-level variable. In that case `@:banker.chunkLevel` metadata can be omitted.
 
+#### Random access by Chunk/Entity ID
+
+There are built-in variables as below (which can also be used as arguments in user-defined functions):
+
+|level|variable|description|
+|---|---|---|
+|chunk|`chunkId: Int`|The id of the chunk that is unique in an AoSoA.|
+|entity|`entityId: Int`|The id of the entity that is unique in an Chunk.|
+
+Note that `entityId` may not be identical to the physical index in variable vectors.  
+For example, if your entity has a variable `x: Float`:
+
+```haxe
+static function getX(aosoa: YourAosoa, chunkId: Int, entityId: Int): Float {
+	final chunk = aosoa.chunks[chunkId];
+	final index = chunk.entityIdReadIndexMap[entityId];
+	final x = chunk.x[index];
+	return x;
+}
+```
+
 #### Debug
 
 - Set the compiler flag `sneaker_macro_log_level` to 500 or more to show debug logs during the class generation.

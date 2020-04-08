@@ -32,6 +32,10 @@ class Actor implements banker.aosoa.Structure {
 		println('$x, $y');
 	}
 
+	static function printId(chunkId: Int, entityId: Int) {
+		println('chunk $chunkId, entity $entityId');
+	}
+
 	static function disuseIf20(
 		x: Float,
 		y: Float,

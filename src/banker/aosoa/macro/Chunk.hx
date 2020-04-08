@@ -44,8 +44,14 @@ class Chunk {
 			public var nextWriteIndex(default, null) = 0;
 
 			/**
+				Table that maps entity IDs to physical indices in variable vectors.
+			**/
+			public final entityIdReadIndexMap: banker.vector.WritableVector<Int>;
+
+			/**
 				Table that maps the indices between the main vector and the WRITE-buffer vector.
 				The indices in the buffer vector may change when disusing any entity.
+				This table is reset every time `synchronize()` is called.
 			**/
 			final readWriteIndexMap: banker.vector.WritableVector<Int>;
 
@@ -59,7 +65,15 @@ class Chunk {
 				$b{prepared.onSynchronizeExpressions};
 
 				final nextWriteIndex = this.nextWriteIndex;
+
 				$b{prepared.synchronizeExpressions};
+
+				banker.vector.IntVectorTools.blitInverse(
+					this.entityId,
+					this.entityIdReadIndexMap,
+					nextWriteIndex
+				);
+
 				banker.vector.VectorTools.blitZero(
 					defaultReadWriteIndexMap,
 					this.readWriteIndexMap,
@@ -84,7 +98,7 @@ class Chunk {
 		);
 
 		final fields = chunkClass.fields;
-		fields.insert(4, constructor);
+		fields.insert(7, constructor);
 		fields.pushFromArray(prepared.chunkFields);
 
 		return {
@@ -124,7 +138,13 @@ class Chunk {
 				expr: macro {
 					this.chunkId = chunkId;
 					$b{expressions};
+
+					this.entityIdReadIndexMap = banker.vector.IntVectorTools.createSequenceNumbersWritable(0, chunkCapacity);
+
 					this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
+
+					banker.vector.IntVectorTools.assignSequenceNumbers(this.entityId, 0);
+					banker.vector.IntVectorTools.assignSequenceNumbers(this.entityIdChunkBuffer, 0);
 				}
 			}),
 			access: [APublic],
@@ -332,7 +352,9 @@ class Chunk {
 		chunkClassName: String,
 		buildFields: Array<Field>
 	) {
-		final scanned = scanBuildFields(localClass, buildFields);
+		final buildFieldsCopy = buildFields.copy();
+		buildFieldsCopy.push(createEntityIdField());
+		final scanned = scanBuildFields(localClass, buildFieldsCopy);
 
 		final variables = scanned.variables;
 		final chunkFields = scanned.chunkFields;
@@ -381,6 +403,15 @@ class Chunk {
 			iterators: iterators,
 			useMethods: useMethods
 		};
+	}
+
+	static function createEntityIdField(): Field {
+		return {
+			name: "entityId",
+			kind: FVar(intComplexType, macro 0),
+			pos: localPosition,
+			doc: "The identifier number of the entity that is unique in a Chunk."
+		}
 	}
 }
 #end
