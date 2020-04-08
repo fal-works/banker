@@ -222,6 +222,9 @@ class ChunkMethodBuilder {
 		if (argument.argumentIsDisuse())
 			return Disuse;
 
+		if (argument.argumentIsChunkId())
+			return ChunkLevel(false, true);
+
 		final argumentName = argument.name;
 		final argumentType = argument.type;
 

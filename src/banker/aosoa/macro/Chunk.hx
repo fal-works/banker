@@ -27,6 +27,11 @@ class Chunk {
 
 		final chunkClass: TypeDefinition = macro class $chunkClassName {
 			/**
+				The id number of the chunk that is unique in an AoSoA.
+			**/
+			public final chunkId: Int;
+
+			/**
 				The largest index of entities that are currently in use.
 				The chunk iterates until (but not including) this index when iterating entities.
 			**/
@@ -79,7 +84,7 @@ class Chunk {
 		);
 
 		final fields = chunkClass.fields;
-		fields.insert(3, constructor);
+		fields.insert(4, constructor);
 		fields.pushFromArray(prepared.chunkFields);
 
 		return {
@@ -100,6 +105,9 @@ class Chunk {
 		position: Position
 	): Field {
 		final constructorArguments: Array<FunctionArg> = [{
+			name: "chunkId",
+			type: intComplexType
+		}, {
 			name: "chunkCapacity",
 			type: intComplexType
 		}, {
@@ -114,6 +122,7 @@ class Chunk {
 				args: constructorArguments,
 				ret: null,
 				expr: macro {
+					this.chunkId = chunkId;
 					$b{expressions};
 					this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
 				}

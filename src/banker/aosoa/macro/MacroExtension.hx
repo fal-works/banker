@@ -10,6 +10,15 @@ import sneaker.macro.MacroComparator;
 
 class MacroExtension {
 	/**
+		@return `true` if `argument` is the special argument `chunkId`.
+	**/
+	public static function argumentIsChunkId(argument: FunctionArg): Bool {
+		if (argument.name != "chunkId") return false;
+		final complexType = argument.type;
+		return complexType != null && complexType.toType().unify(Values.intType);
+	}
+
+	/**
 		@return `true` if `argument` is the special argument `i`.
 	**/
 	public static function argumentIsWriteIndex(argument: FunctionArg): Bool {

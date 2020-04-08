@@ -118,7 +118,7 @@ class Aosoa {
 		];
 		constructorArguments.pushFromArray(externalArguments);
 
-		final chunkConstructorArguments: Array<Expr> = [macro chunkCapacity, macro defaultReadWriteIndexMap];
+		final chunkConstructorArguments: Array<Expr> = [macro chunkId++, macro chunkCapacity, macro defaultReadWriteIndexMap];
 		chunkConstructorArguments.pushFromArray(externalArguments.map(arg -> macro $i{arg.name}));
 
 		final constructor: Field = {
@@ -129,6 +129,7 @@ class Aosoa {
 				expr: macro {
 					final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkCapacity) i]);
 
+					var chunkId = 0;
 					this.chunks = banker.vector.Vector.createPopulated(
 						chunkCount,
 						() -> new $chunkTypePath($a{chunkConstructorArguments})
