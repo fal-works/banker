@@ -6,6 +6,12 @@ package banker.aosoa;
 @:notNull
 abstract ChunkEntityId(Int) {
 	/**
+		Dummy value of `ChunkEntityId`.
+		Both Chunk ID and Entity ID are `65535`.
+	**/
+	public static final dummy: ChunkEntityId = cast 0xFFFFFFFF;
+
+	/**
 		The identifier number of the Chunk to which the entity belongs.
 	**/
 	public var chunk(get, never): Int;
@@ -17,8 +23,8 @@ abstract ChunkEntityId(Int) {
 
 	public function new(chunkId: Int, entityId: Int) {
 		#if !macro
-		assert(chunkId & 0xFFFF0000 == 0);
-		assert(entityId & 0xFFFF0000 == 0);
+		assert(chunkId & 0xFFFF0000 == 0 && chunkId != 0xFFFF);
+		assert(entityId & 0xFFFF0000 == 0 && entityId != 0xFFFF);
 		#end
 		this = chunkId << 16 | entityId;
 	}

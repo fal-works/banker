@@ -322,6 +322,7 @@ There are built-in variables as below (which can also be used as arguments in us
 |---|---|---|
 |chunk|`chunkId: Int`|The id of the chunk that is unique in an AoSoA.|
 |entity|`entityId: Int`|The id of the entity that is unique in an Chunk.|
+|entity|`id: banker.aosoa.ChunkEntityId`|The id of the entity that is unique in an AoSoA.|
 
 Note that `entityId` may not be identical to the physical index in variable vectors.  
 For example, if your entity has a variable `x: Float`:

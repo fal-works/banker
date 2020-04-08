@@ -362,7 +362,9 @@ class Chunk {
 		buildFields: Array<Field>
 	) {
 		final buildFieldsCopy = buildFields.copy();
+		buildFieldsCopy.push(createIdField());
 		buildFieldsCopy.push(createEntityIdField());
+
 		final scanned = scanBuildFields(localClass, buildFieldsCopy);
 
 		final variables = scanned.variables;
@@ -412,6 +414,19 @@ class Chunk {
 			iterators: iterators,
 			useMethods: useMethods
 		};
+	}
+
+	static function createIdField(): Field {
+		return {
+			name: "id",
+			kind: FVar(macro: banker.aosoa.ChunkEntityId, macro banker.aosoa.ChunkEntityId.dummy),
+			pos: localPosition,
+			doc: "The identifier of the entity that is unique in an AoSoA.",
+			meta: [{
+				name: MetadataNames.readOnly_,
+				pos: localPosition
+			}]
+		}
 	}
 
 	static function createEntityIdField(): Field {
