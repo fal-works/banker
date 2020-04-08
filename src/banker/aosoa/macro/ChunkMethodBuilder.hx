@@ -68,10 +68,9 @@ class ChunkMethodBuilder {
 		initializeBeforeLoops.push(macro var readIndex = 0);
 		initializeBeforeLoops.push(macro var nextWriteIndex = this.nextWriteIndex);
 		initializeBeforeLoops.push(macro var disuse = false);
-		initializeBeforeLoops.push(macro var i = 0);
 
 		final initializeLoop: Array<Expr> = [];
-		initializeLoop.push(macro i = readWriteIndexMap[readIndex]);
+		initializeLoop.push(macro final i = readWriteIndexMap[readIndex]);
 		initializeLoop.pushFromArray(pieces.declareLocalInsideLoop);
 
 		final finalizeLoop: Array<Expr> = [];
