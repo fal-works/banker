@@ -410,7 +410,11 @@ class Chunk {
 			name: "entityId",
 			kind: FVar(intComplexType, macro 0),
 			pos: localPosition,
-			doc: "The identifier number of the entity that is unique in a Chunk."
+			doc: "The identifier number of the entity that is unique in a Chunk.",
+			meta: [{
+				name: MetadataNames.readOnly_,
+				pos: localPosition
+			}]
 		}
 	}
 }
