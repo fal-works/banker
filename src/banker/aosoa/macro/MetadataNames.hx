@@ -16,6 +16,9 @@ class MetadataNames {
 	public static final externalFactory = ":banker.externalFactory";
 	public static final externalFactory_ = ":banker_externalFactory";
 
+	public static final readOnly = ":banker.readOnly";
+	public static final readOnly_ = ":banker_readOnly";
+
 	public static final hidden = ":banker.hidden";
 	public static final hidden_ = ":banker_hidden";
 

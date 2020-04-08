@@ -15,7 +15,7 @@ class ChunkVariableBuilder {
 		initialValue: Null<Expr>,
 		metaMap: MetadataMap
 	) {
-		final chunkVariable = createChunkVariable(buildField, variableType);
+		final chunkVariable = createChunkVariable(buildField, variableType, metaMap);
 		final chunkField = chunkVariable.field;
 		final chunkBufferField = createChunkBufferField(chunkField);
 
@@ -90,7 +90,8 @@ class ChunkVariableBuilder {
 
 	static function createChunkVariable(
 		buildField: Field,
-		variableType: ComplexType
+		variableType: ComplexType,
+		metaMap: MetadataMap
 	): { field: Field, data: ChunkVariable } {
 		final documentation = if (buildField.doc != null)
 			buildField.doc;
@@ -107,7 +108,8 @@ class ChunkVariableBuilder {
 			data: {
 				name: buildField.name,
 				type: variableType,
-				vectorType: vectorType
+				vectorType: vectorType,
+				readOnly: metaMap.readOnly
 			}
 		}
 	}

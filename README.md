@@ -347,6 +347,7 @@ static function getX(aosoa: YourAosoa, chunkId: Int, entityId: Int): Float {
 |@:banker.useEntity|method|Mark function as a "use" method|
 |@:banker.factory|variable|Specifies a factory function for initializing each element of vector|
 |@:banker.externalFactory|variable|Enables to pass any factory function to `new()` for inializing each element of vector (or the variable itself if chunk-level)|
+|@:banker.readOnly|variable|Prevents an entity-level variable from providing WRITE access|
 |@:banker.hidden|field|Prevents to be copied to Chunk/AoSoA|
 |@:banker.swap|variable|Swap elements (instead of overwriting) when disusing entity|
 |@:banker.chunkLevel|field|Mark as a chunk-level field|

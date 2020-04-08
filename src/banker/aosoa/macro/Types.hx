@@ -10,6 +10,7 @@ typedef MetadataMap = {
 	onCompleteSynchronize: Bool,
 	factory: Option<Expr>,
 	externalFactory: Bool,
+	readOnly: Bool,
 	hidden: Bool,
 	swap: Bool,
 	chunkLevel: Bool,
@@ -34,7 +35,8 @@ typedef VariableField = {
 typedef ChunkVariable = {
 	name: String,
 	type: ComplexType,
-	vectorType: ComplexType
+	vectorType: ComplexType,
+	readOnly: Bool
 };
 
 /**

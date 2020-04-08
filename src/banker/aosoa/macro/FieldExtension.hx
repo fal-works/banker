@@ -18,6 +18,7 @@ class FieldExtension {
 			onCompleteSynchronize: false,
 			factory: None,
 			externalFactory: false,
+			readOnly: false,
 			hidden: false,
 			swap: false,
 			chunkLevel: false,
@@ -39,6 +40,8 @@ class FieldExtension {
 					map.onCompleteSynchronize = true;
 				case MetadataNames.externalFactory | MetadataNames.externalFactory_:
 					map.externalFactory = true;
+				case MetadataNames.readOnly | MetadataNames.readOnly_:
+					map.readOnly = true;
 				case MetadataNames.hidden | MetadataNames.hidden_:
 					map.hidden = true;
 				case MetadataNames.swap | MetadataNames.swap_:

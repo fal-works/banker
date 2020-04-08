@@ -234,7 +234,7 @@ class ChunkMethodBuilder {
 			if (unifyComplex(variable.type, argumentType))
 				return Read;
 
-			if (unifyComplex(variable.vectorType, argumentType))
+			if (!variable.readOnly && unifyComplex(variable.vectorType, argumentType))
 				return Write;
 		}
 
