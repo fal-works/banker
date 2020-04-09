@@ -26,6 +26,8 @@ class Main {
 
 	static final otherCases = finite.FiniteKeysTest.all;
 
+	static final linkTestCases = LinkedListTest.all;
+
 	static function main() {
 		println("\n");
 
@@ -36,7 +38,8 @@ class Main {
 		// test(testCases);
 		// test(watermarkTestCases);
 		// test(poolTestCases);
-		test(aosoaTestCases);
+		// test(aosoaTestCases);
 		// test(otherCases);
+		test(linkTestCases);
 	}
 }
