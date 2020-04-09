@@ -36,7 +36,31 @@ class LinkedListTest {
 
 	static final _basic = testCase(basic, Ok);
 
+	static function traverse() {
+		describe("This goes without error.");
+
+		final first = new SNode(1);
+		final second = new SNode(2);
+		final third = new SNode(3);
+
+		first.linkTo(second);
+		second.linkTo(third);
+
+		var sum = 0;
+
+		first.traverse(node -> {
+			sum += node.value;
+			print('${node.value} ');
+		});
+
+		assert(sum == 6);
+		println("");
+	}
+
+	static final _traverse = testCase(traverse, Ok);
+
 	public static final all = testCaseGroup([
-		_basic
+		_basic,
+		_traverse
 	]);
 }

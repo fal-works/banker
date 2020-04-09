@@ -60,6 +60,20 @@ class SinglyLinkableMacro {
 				this.$nextNodeVariableName = sneaker.types.Maybe.from(null);
 
 			/**
+				Runs `callback` for each node in the list starting from `this` until the last node.
+			**/
+			public inline function traverse(callback: (node: $localClassComplexType) -> Void): Void {
+				callback(this);
+
+				var current = this.$nextNodeVariableName;
+				while (current.isSome()) {
+					final node = current.unwrap();
+					callback(node);
+					current = node.$nextNodeVariableName;
+				}
+			}
+
+			/**
 				Clears the link from `this`. Same as `this.unlinkNext()`.
 			**/
 			public inline function reset(): Void

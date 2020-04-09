@@ -90,11 +90,37 @@ class DoublyLinkableMacro {
 			}
 
 			/**
-				Clears the links from `this`.
+				Runs `callback` for each node in the list starting from `this` until the last node.
+			**/
+			public inline function traverse(callback: (node: $localClassComplexType) -> Void): Void {
+				callback(this);
 
+				var current = this.$nextNodeVariableName;
+				while (current.isSome()) {
+					final node = current.unwrap();
+					callback(node);
+					current = node.$nextNodeVariableName;
+				}
+			}
+
+			/**
+				Runs `callback` for each node in the list starting from `this` until the first node.
+			**/
+			public inline function traverseBackwards(callback: (node: $localClassComplexType) -> Void): Void {
+				callback(this);
+
+				var current = this.$previousNodeVariableName;
+				while (current.isSome()) {
+					final node = current.unwrap();
+					callback(node);
+					current = node.$previousNodeVariableName;
+				}
+			}
+
+			/**
+				Clears the links from `this`.
 				Note that this does not affect the next/previous nodes of `this`.
 			**/
-
 			public inline function reset(): Void {
 				this.$previousNodeVariableName = sneaker.types.Maybe.from(null);
 				this.$nextNodeVariableName = sneaker.types.Maybe.from(null);
