@@ -1,11 +1,11 @@
-package banker.linker;
+package banker.map;
 
 using banker.type_extension.MapExtension;
 
 import haxe.ds.Map as StdMap;
-import banker.linker.buffer.top_aligned.TopAlignedBuffer;
+import banker.map.buffer.top_aligned.TopAlignedBuffer;
 
-class LinkerBuilder {
+class MapBuilder {
 	/**
 		@param capacity Max number of key-value pairs that can be contained.
 		if negative, the number of `map` keys is used.

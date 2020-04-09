@@ -92,11 +92,11 @@ Collection classes with 1 type parameter.
 
 ![Class diagram. Visit GitHub repo for details.](docs/container.svg)
 
-## package: linker
+## package: map
 
 Collection classes with 2 type parameters.
 
-![Class diagram. Visit GitHub repo for details.](docs/linker.svg)
+![Class diagram. Visit GitHub repo for details.](docs/map.svg)
 
 ## package: pool
 
@@ -138,7 +138,7 @@ You can also create your own pool classes by extending `ObjectPoolBase` or `Obje
 
 If the compiler flag `banker_watermark_enable` is set, "watermark" feature is activated.
 
-This is a simple profiling feature for all data collection objects (in `container`, `linker` and `pool` packages)
+This is a simple profiling feature for all data collection objects (in `container`, `map` and `pool` packages)
 that have limited capacity.
 
 It automatically records the maximum usage (size to capacity ratio) per instance group,  
@@ -457,7 +457,7 @@ Similar to the `aosoa` package,
 
 ## Doesn't work?
 
-Regarding packages `container`, `linker`, `pool` and `aosoa`:
+Regarding packages `container`, `map`, `pool` and `aosoa`:
 
 If you are using [completion server](https://haxe.org/manual/cr-completion-server.html), sometimes it might go wrong and raise odd errors due to reusing of macro context.  
 In that case you may have to reboot it manually (if VSCode, `>Haxe: Restart Language Server` or `>Developer: Reload Window`).

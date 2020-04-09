@@ -1,4 +1,4 @@
-package banker.linker.buffer.top_aligned.constraints;
+package banker.map.buffer.top_aligned.constraints;
 
 #if !banker_generic_disable
 @:generic
@@ -6,8 +6,8 @@ package banker.linker.buffer.top_aligned.constraints;
 @:ripper.verified
 class Unordered<K, V> extends TopAlignedBuffer<K, V> implements ripper.Spirit {
 	/**
-		@see `banker.linker.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
-		@see `banker.linker.buffer.top_aligned.InternalExtension`
+		@see `banker.map.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
+		@see `banker.map.buffer.top_aligned.InternalExtension`
 	**/
 	override inline function removeAtInternal(
 		keyVector: WritableVector<K>,
@@ -25,8 +25,8 @@ class Unordered<K, V> extends TopAlignedBuffer<K, V> implements ripper.Spirit {
 	}
 
 	/**
-		@see `banker.linker.interfaces.Set`
-		@see `banker.linker.buffer.top_aligned.InternalExtension`
+		@see `banker.map.interfaces.Set`
+		@see `banker.map.buffer.top_aligned.InternalExtension`
 	**/
 	override inline function removeAllInternal(
 		predicate: (key: K, value: V) -> Bool
@@ -35,8 +35,8 @@ class Unordered<K, V> extends TopAlignedBuffer<K, V> implements ripper.Spirit {
 	}
 
 	/**
-		@see `banker.linker.interfaces.Set`
-		@see `banker.linker.buffer.top_aligned.InternalExtension`
+		@see `banker.map.interfaces.Set`
+		@see `banker.map.buffer.top_aligned.InternalExtension`
 	**/
 	override inline function removeApplyAllInternal(
 		predicate: (key: K, value: V) -> Bool,

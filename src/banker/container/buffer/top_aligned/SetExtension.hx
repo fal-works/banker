@@ -1,6 +1,6 @@
 package banker.container.buffer.top_aligned;
 
-import banker.linker.ArrayMap;
+import banker.map.ArrayMap;
 
 class SetExtension {
 	/** @see `banker.container.interfaces.Set` **/

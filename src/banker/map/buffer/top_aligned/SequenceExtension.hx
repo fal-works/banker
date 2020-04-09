@@ -1,7 +1,7 @@
-package banker.linker.buffer.top_aligned;
+package banker.map.buffer.top_aligned;
 
 class SequenceExtension {
-	/** @see `buffer.linker.interfaces.Sequence` **/
+	/** @see `buffer.map.interfaces.Sequence` **/
 	public static inline function forEachKey<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		callback: K->Void
@@ -9,7 +9,7 @@ class SequenceExtension {
 		_this.keyVector.ref.forEachIn(callback, 0, _this.size);
 	}
 
-	/** @see `buffer.linker.interfaces.Sequence` **/
+	/** @see `buffer.map.interfaces.Sequence` **/
 	public static inline function forEachValue<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		callback: V->Void
@@ -17,7 +17,7 @@ class SequenceExtension {
 		_this.valueVector.ref.forEachIn(callback, 0, _this.size);
 	}
 
-	/** @see `buffer.linker.interfaces.Sequence` **/
+	/** @see `buffer.map.interfaces.Sequence` **/
 	public static inline function forEach<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		callback: K->V->Void
@@ -32,7 +32,7 @@ class SequenceExtension {
 		}
 	}
 
-	/** @see `buffer.linker.interfaces.Sequence` **/
+	/** @see `buffer.map.interfaces.Sequence` **/
 	public static inline function forEachIndex<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		callback: (
@@ -51,7 +51,7 @@ class SequenceExtension {
 		}
 	}
 
-	/** @see `buffer.linker.interfaces.Sequence` **/
+	/** @see `buffer.map.interfaces.Sequence` **/
 	public static inline function forFirst<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		predicate: (key: K, value: V) -> Bool,

@@ -1,6 +1,6 @@
 package banker.container.interfaces;
 
-import banker.linker.ArrayMap;
+import banker.map.ArrayMap;
 
 interface Set<T> {
 	/**

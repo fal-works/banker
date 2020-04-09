@@ -1,7 +1,7 @@
-package banker.linker.buffer.top_aligned;
+package banker.map.buffer.top_aligned;
 
 class SetExtension {
-	/** @see `banker.linker.interfaces.Set` **/
+	/** @see `banker.map.interfaces.Set` **/
 	public static inline function hasKey<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
@@ -9,7 +9,7 @@ class SetExtension {
 		return _this.keyVector.ref.hasIn(key, 0, _this.size);
 	}
 
-	/** @see `banker.linker.interfaces.Set` **/
+	/** @see `banker.map.interfaces.Set` **/
 	public static inline function hasValue<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		value: V
@@ -17,7 +17,7 @@ class SetExtension {
 		return _this.valueVector.ref.hasIn(value, 0, _this.size);
 	}
 
-	/** @see `banker.linker.interfaces.Set` **/
+	/** @see `banker.map.interfaces.Set` **/
 	public static inline function hasAny<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		predicate: (key: K, value: V) -> Bool
@@ -41,7 +41,7 @@ class SetExtension {
 		return found;
 	}
 
-	/** @see `banker.linker.interfaces.Set` **/
+	/** @see `banker.map.interfaces.Set` **/
 	public static inline function remove<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
@@ -65,7 +65,7 @@ class SetExtension {
 		return found;
 	}
 
-	/** @see `banker.linker.interfaces.Set` **/
+	/** @see `banker.map.interfaces.Set` **/
 	public static inline function removeGet<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
@@ -81,7 +81,7 @@ class SetExtension {
 		return value;
 	}
 
-	/** @see `banker.linker.interfaces.Set` **/
+	/** @see `banker.map.interfaces.Set` **/
 	public static inline function tryRemoveGet<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
@@ -98,7 +98,7 @@ class SetExtension {
 		} else null;
 	}
 
-	/** @see `banker.linker.interfaces.Set` **/
+	/** @see `banker.map.interfaces.Set` **/
 	public static inline function removeApply<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K,
@@ -120,7 +120,7 @@ class SetExtension {
 		}
 	}
 
-	/** @see `banker.linker.interfaces.Set` **/
+	/** @see `banker.map.interfaces.Set` **/
 	public static inline function removeAll<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		predicate: (key: K, value: V) -> Bool
@@ -128,7 +128,7 @@ class SetExtension {
 		return _this.removeAllInternal(predicate);
 	}
 
-	/** @see `banker.linker.interfaces.Set` **/
+	/** @see `banker.map.interfaces.Set` **/
 	public static inline function removeApplyAll<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		predicate: (key: K, value: V) -> Bool,

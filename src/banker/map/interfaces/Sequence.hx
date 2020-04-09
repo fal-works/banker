@@ -1,4 +1,4 @@
-package banker.linker.interfaces;
+package banker.map.interfaces;
 
 interface Sequence<K, V> {
 	/**

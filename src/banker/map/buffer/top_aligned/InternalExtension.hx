@@ -1,4 +1,4 @@
-package banker.linker.buffer.top_aligned;
+package banker.map.buffer.top_aligned;
 
 class InternalExtension {
 	/**
@@ -6,7 +6,7 @@ class InternalExtension {
 		(thus the order is not preserved).
 		O(1) complexity.
 
-		@see `banker.linker.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
+		@see `banker.map.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
 	**/
 	public static inline function removeSwapAt<K, V>(
 		_this: TopAlignedBuffer<K, V>,
@@ -26,7 +26,7 @@ class InternalExtension {
 		indices towards index zero (thus the order is preserved).
 		O(n) complexity.
 
-		@see `banker.linker.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
+		@see `banker.map.buffer.top_aligned.TopAlignedBuffer.removeAtInternal()`
 	**/
 	public static inline function removeShiftAt<K, V>(
 		_this: TopAlignedBuffer<K, V>,
@@ -46,7 +46,7 @@ class InternalExtension {
 		Removes all key-value pairs that match `predicate`.
 		The order is not preserved.
 
-		Used for implementing `banker.linker.interfaces.Set.removeAll()`.
+		Used for implementing `banker.map.interfaces.Set.removeAll()`.
 		@return `true` if any found and removed.
 	**/
 	public static inline function removeSwapAll<K, V>(
@@ -80,7 +80,7 @@ class InternalExtension {
 		Removes all key-value pairs that match `predicate`.
 		The order is preserved.
 
-		Used for implementing `banker.linker.interfaces.Set.removeAll()`.
+		Used for implementing `banker.map.interfaces.Set.removeAll()`.
 		@return `true` if any found and removed.
 	**/
 	public static inline function removeShiftAll<K, V>(
@@ -120,7 +120,7 @@ class InternalExtension {
 		applies `callback` to each removed pair.
 		The order is not preserved.
 
-		Used for implementing `banker.linker.interfaces.Set.removeApplyAll()`.
+		Used for implementing `banker.map.interfaces.Set.removeApplyAll()`.
 		@return `true` if any found and removed.
 	**/
 	public static inline function removeSwapApplyAll<K, V>(
@@ -160,7 +160,7 @@ class InternalExtension {
 		applies `callback` to each removed pair.
 		The order is preserved.
 
-		Used for implementing `banker.linker.interfaces.Set.removeAll()`.
+		Used for implementing `banker.map.interfaces.Set.removeAll()`.
 		@return `true` if any found and removed.
 	**/
 	public static inline function removeShiftApplyAll<K, V>(

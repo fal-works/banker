@@ -4,4 +4,4 @@ import sneaker.tag.Tag;
 import sneaker.tag.Tagged;
 import sneaker.tag.TaggedExtension;
 import banker.vector.*;
-import banker.linker.interfaces.*;
+import banker.map.interfaces.*;

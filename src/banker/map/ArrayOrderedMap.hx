@@ -1,6 +1,6 @@
-package banker.linker;
+package banker.map;
 
-import banker.linker.buffer.top_aligned.*;
+import banker.map.buffer.top_aligned.*;
 
 /**
 	Array-based map.
@@ -33,7 +33,7 @@ class ArrayOrderedMap<K, V>
 		super(capacity);
 	}
 
-	/** @see `banker.linker.interfaces.Convert` **/
+	/** @see `banker.map.interfaces.Convert` **/
 	public inline function mapValues<W>(
 		convertValue: (key: K, value: V) -> W
 	): ArrayOrderedMap<K, W> {

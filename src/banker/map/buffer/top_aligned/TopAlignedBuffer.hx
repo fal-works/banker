@@ -1,4 +1,4 @@
-package banker.linker.buffer.top_aligned;
+package banker.map.buffer.top_aligned;
 
 import sneaker.exception.NotOverriddenException;
 import banker.common.LimitedCapacityBuffer;
@@ -8,7 +8,7 @@ import banker.watermark.Percentage;
 #if !banker_generic_disable
 @:generic
 #end
-@:allow(banker.linker)
+@:allow(banker.map)
 class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	/** @inheritdoc **/
 	public var capacity(get, never): Int;
@@ -42,27 +42,27 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		valueVector.fill(@:nullSafety(Off) cast null);
 	}
 
-	/** @see `banker.linker.interfaces.Convert` **/
+	/** @see `banker.map.interfaces.Convert` **/
 	public inline function exportKeys(): Vector<K>
 		return ConvertExtension.exportKeys(this);
 
-	/** @see `banker.linker.interfaces.Convert` **/
+	/** @see `banker.map.interfaces.Convert` **/
 	public inline function exportValues(): Vector<V>
 		return ConvertExtension.exportValues(this);
 
-	/** @see `banker.linker.interfaces.Convert` **/
+	/** @see `banker.map.interfaces.Convert` **/
 	public inline function exportKeysWritable(): WritableVector<K>
 		return ConvertExtension.exportKeysWritable(this);
 
-	/** @see `banker.linker.interfaces.Convert` **/
+	/** @see `banker.map.interfaces.Convert` **/
 	public inline function exportValuesWritable(): WritableVector<V>
 		return ConvertExtension.exportValuesWritable(this);
 
-	/** @see banker.linker.buffer.top_aligned.ConvertExtension **/
+	/** @see banker.map.buffer.top_aligned.ConvertExtension **/
 	public inline function cloneAsMap(newCapacity = -1): ArrayMap<K, V>
 		return ConvertExtension.cloneAsMap(this, newCapacity);
 
-	/** @see banker.linker.buffer.top_aligned.ConvertExtension **/
+	/** @see banker.map.buffer.top_aligned.ConvertExtension **/
 	public inline function cloneAsOrderedMap(newCapacity = -1): ArrayOrderedMap<K, V>
 		return ConvertExtension.cloneAsOrderedMap(this, newCapacity);
 
@@ -195,8 +195,8 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		This method must be overridden by the concrete subclass
 		according the specification e.g. whether to preserve order.
 
-		@see `banker.linker.interfaces.Set`
-		@see `banker.linker.buffer.top_aligned.InternalExtension`
+		@see `banker.map.interfaces.Set`
+		@see `banker.map.buffer.top_aligned.InternalExtension`
 	**/
 	function removeAllInternal(predicate: (key: K, value: V) -> Bool): Bool {
 		throw new NotOverriddenException();
@@ -209,8 +209,8 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		This method must be overridden by the concrete subclass
 		according the specification e.g. whether to preserve order.
 
-		@see `banker.linker.interfaces.Set`
-		@see `banker.linker.buffer.top_aligned.InternalExtension`
+		@see `banker.map.interfaces.Set`
+		@see `banker.map.buffer.top_aligned.InternalExtension`
 	**/
 	function removeApplyAllInternal(
 		predicate: (key: K, value: V) -> Bool,

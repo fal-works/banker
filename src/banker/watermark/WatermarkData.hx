@@ -3,7 +3,7 @@ package banker.watermark;
 #if banker_watermark_enable
 using StringTools;
 
-import banker.linker.ArrayOrderedMap;
+import banker.map.ArrayOrderedMap;
 import sneaker.string_buffer.StringBuffer;
 #end
 

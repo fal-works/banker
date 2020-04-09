@@ -1,7 +1,7 @@
 package;
 
-import banker.linker.ArrayMap;
-import banker.linker.ArrayOrderedMap;
+import banker.map.ArrayMap;
+import banker.map.ArrayOrderedMap;
 
 class ArrayMapTest {
 	static function getSet() {

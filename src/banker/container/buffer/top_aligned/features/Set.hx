@@ -50,6 +50,6 @@ class Set<T>
 	/** @see `banker.container.interfaces.Set` **/
 	public inline function countAll<S>(
 		grouperCallback: (element: T) -> S
-	): banker.linker.ArrayMap<S, Int>
+	): banker.map.ArrayMap<S, Int>
 		return SetExtension.countAll(this, grouperCallback);
 }
