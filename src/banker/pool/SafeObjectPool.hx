@@ -9,8 +9,7 @@ import sneaker.tag.TaggedExtension;
 @:generic
 #end
 @:ripper.verified
-@:using(sneaker.tag.TaggedExtension)
-class SafeObjectPool<T> extends ObjectPool<T> {
+class SafeObjectPool<T> extends ObjectPoolBase<T> {
 	/**
 		Factory function for additionally creating new instances in case `this` is empty.
 	**/
@@ -49,10 +48,10 @@ class SafeObjectPool<T> extends ObjectPool<T> {
 			this.debug("Already full.");
 
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
-	override public function setTag(tag): ObjectPool<T>
+	override public function setTag(tag): SafeObjectPool<T>
 		return TaggedExtension.setTag(this, tag);
 
 	/** @see `sneaker.tag.TaggedExtension.newTag()` **/
-	override public function newTag(name, bits): ObjectPool<T>
+	override public function newTag(name, bits): SafeObjectPool<T>
 		return TaggedExtension.newTag(this, name, bits);
 }

@@ -105,7 +105,7 @@ Provides object pool classes:
 - `ObjectPool<T>`
 - `SafeObjectPool<T>`
 
-Say you have a class named `Actor`, an example would be:
+Say you have a class named `Actor`, an example of `ObjectPool` would be:
 
 ```haxe
 import banker.pool.ObjectPool;
@@ -126,10 +126,10 @@ class Main {
 }
 ```
 
-`ObjectPool` can also be extended for your own purpose, like `SafeObjectPool` does.
-
 `SafeObjectPool` does boundary checks and does not crash even if it is empty/full  
 (note that it requires additional memory allocation when trying to get from an empty pool).
+
+You can also create your own pool classes by extending `ObjectPoolBase`.
 
 
 ## package: watermark
