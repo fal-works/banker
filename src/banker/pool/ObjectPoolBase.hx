@@ -21,7 +21,7 @@ class ObjectPoolBase<T> extends TopAlignedBuffer<T> implements ripper.Body {
 	**/
 	public function new(capacity: Int, factory: () -> T) {
 		super(capacity);
-		final elements = Vector.createPopulated(capacity, factory);
+		final elements = Vector.createPopulated(capacity, factory).ref.copyReversed();
 		StackExtension.pushFromVector(this, elements);
 	}
 
