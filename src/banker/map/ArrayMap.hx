@@ -12,8 +12,8 @@ import banker.map.buffer.top_aligned.*;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.verified
-@:ripper.spirits(
+@:ripper_verified
+@:ripper_spirits(
 	buffer.top_aligned.features.Map,
 	buffer.top_aligned.features.Sequence,
 	buffer.top_aligned.features.Set,

@@ -2,16 +2,16 @@ package pkg;
 
 import banker.vector.WritableVector as Vec;
 
-// @:banker.verified
+// @:banker_verified
 class Actor implements banker.aosoa.Structure {
 	public static var staticInt: Int = 0;
 
-	@:banker.chunkLevelFinal
-	@:banker.chunkLevelFactory((chunkCapacity: Int) -> chunkCapacity)
+	@:banker_chunkLevelFinal
+	@:banker_chunkLevelFactory((chunkCapacity: Int) -> chunkCapacity)
 	var chunkLevelFloat: Float;
 
-	@:banker.onSynchronize
-	@:banker.chunkLevel
+	@:banker_onSynchronize
+	@:banker_chunkLevel
 	function onSynchronizeChunk() {
 		staticInt = 0;
 		println("synchronize chunk.");
@@ -22,7 +22,7 @@ class Actor implements banker.aosoa.Structure {
 		++staticInt;
 	}
 
-	@:banker.onSynchronize
+	@:banker_onSynchronize
 	static function onSynchronizeEntity() {
 		println("synchronize entity.");
 	}
@@ -44,11 +44,11 @@ class Actor implements banker.aosoa.Structure {
 		if (x == 20) disuse = true;
 	}
 
-	@:banker.useEntity
+	@:banker_useEntity
 	static function useEmpty() {}
 
 	/** Use new entity. **/
-	@:banker.useEntity
+	@:banker_useEntity
 	static function use(
 		x: Vec<Float>,
 		y: Vec<Float>,
@@ -64,9 +64,9 @@ class Actor implements banker.aosoa.Structure {
 	var x: Float = 0;
 
 	/** Y position. **/
-	@:banker.factory(Math.random)
+	@:banker_factory(Math.random)
 	var y: Float;
 
-	@:banker.hidden
+	@:banker_hidden
 	var hidden: Int = 0;
 }

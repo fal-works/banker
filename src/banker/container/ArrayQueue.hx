@@ -8,8 +8,8 @@ import banker.container.buffer.ring.*; // Necessary for spirits
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.verified
-@:ripper.spirits(buffer.ring.features.Queue, buffer.ring.features.Sequence)
+@:ripper_verified
+@:ripper_spirits(buffer.ring.features.Queue, buffer.ring.features.Sequence)
 class ArrayQueue<T>
 	extends RingBuffer<T>
 	implements Queue<T>

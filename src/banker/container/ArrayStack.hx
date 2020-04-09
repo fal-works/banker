@@ -8,8 +8,8 @@ import banker.container.buffer.top_aligned.*; // Necessary for spirits
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.verified
-@:ripper.spirits(
+@:ripper_verified
+@:ripper_spirits(
 	buffer.top_aligned.features.Stack,
 	buffer.top_aligned.constraints.Ordered,
 	buffer.top_aligned.constraints.NotUnique

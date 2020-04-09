@@ -3,7 +3,7 @@ package banker.container.buffer.top_aligned.constraints;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.verified
+@:ripper_verified
 class Unique<T> extends TopAlignedBuffer<T> implements ripper.Spirit {
 	/**
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`

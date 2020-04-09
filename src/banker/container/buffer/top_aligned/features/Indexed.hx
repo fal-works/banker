@@ -3,7 +3,7 @@ package banker.container.buffer.top_aligned.features;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.verified
+@:ripper_verified
 class Indexed<T>
 	extends TopAlignedBuffer<T>
 	implements banker.container.interfaces.Indexed<T>

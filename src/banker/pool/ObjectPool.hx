@@ -9,7 +9,7 @@ import banker.container.buffer.top_aligned.StackExtension;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.verified
+@:ripper_verified
 class ObjectPool<T> extends ObjectPoolBase<T> {
 	/**
 		Gets an element that is currently not in use.

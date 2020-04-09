@@ -8,8 +8,8 @@ import banker.container.buffer.ring.*; // Necessary for spirits
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.verified
-@:ripper.spirits(buffer.ring.features.Deque, buffer.ring.features.Sequence)
+@:ripper_verified
+@:ripper_spirits(buffer.ring.features.Deque, buffer.ring.features.Sequence)
 class ArrayDeque<T>
 	extends RingBuffer<T>
 	implements Deque<T>

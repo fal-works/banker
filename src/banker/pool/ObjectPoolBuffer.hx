@@ -11,9 +11,9 @@ import banker.vector.*; // Necessary for spirits
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.verified
-@:ripper.spirits(banker.container.buffer.top_aligned.constraints.Unordered)
-@:ripper.spirits(banker.container.buffer.top_aligned.constraints.NotUnique)
+@:ripper_verified
+@:ripper_spirits(banker.container.buffer.top_aligned.constraints.Unordered)
+@:ripper_spirits(banker.container.buffer.top_aligned.constraints.NotUnique)
 class ObjectPoolBuffer<T> extends TopAlignedBuffer<T> implements ripper.Body {
 	/**
 		Creates an object pool populated with elements made by `factory()`.

@@ -8,7 +8,7 @@ import sneaker.tag.TaggedExtension;
 #if !banker_generic_disable
 @:generic
 #end
-@:ripper.verified
+@:ripper_verified
 class SafeObjectPool<T> extends ObjectPoolBase<T> {
 	/**
 		Factory function for additionally creating new instances in case `this` is empty.
