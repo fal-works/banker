@@ -17,7 +17,7 @@ class MapTools {
 	): ArrayMap<K, V> {
 		final length = if (capacity >= 0) capacity else map.countKeys();
 		final arrayMap = new ArrayMap<K, V>(length);
-		blitFromMapToBuffer(map, arrayMap);
+		blitFromStandardMapToBuffer(map, arrayMap);
 		return arrayMap;
 	}
 
@@ -32,14 +32,15 @@ class MapTools {
 	): ArrayOrderedMap<K, V> {
 		final length = if (capacity >= 0) capacity else map.countKeys();
 		final arrayMap = new ArrayOrderedMap<K, V>(length);
-		blitFromMapToBuffer(map, arrayMap);
+		blitFromStandardMapToBuffer(map, arrayMap);
 		return arrayMap;
 	}
 
 	/**
 		Overrites `buffer` with all key-value entries of `map`.
+		This does not update watermark of `buffer`.
 	**/
-	static inline function blitFromMapToBuffer<K, V>(
+	static inline function blitFromStandardMapToBuffer<K, V>(
 		map: StdMap<K, V>,
 		buffer: TopAlignedBuffer<K, V>
 	): Void {
