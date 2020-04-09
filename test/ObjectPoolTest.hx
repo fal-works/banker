@@ -2,6 +2,7 @@ package;
 
 import banker.pool.ObjectPool;
 import banker.pool.SafeObjectPool;
+import banker.pool.ObjectLender;
 
 class Actor {
 	static var nextId = 0;
@@ -50,9 +51,24 @@ class ObjectPoolTest {
 
 	static final _emptySafe = testCase(emptySafe, Ok);
 
+	static function lend() {
+		describe("This goes without exception.");
+		final lender = new ObjectLender<Actor>(10, () -> new Actor());
+
+		for (i in 0...5) lender.lend();
+		assert(lender.size == 5);
+		lender.collect(2);
+		assert(lender.size == 7);
+		lender.collectAll();
+		assert(lender.size == 10);
+	}
+
+	static final _lend = testCase(lend, Ok);
+
 	public static final all = testCaseGroup([
 		_basic,
 		_empty,
-		_emptySafe
+		_emptySafe,
+		_lend
 	]);
 }
