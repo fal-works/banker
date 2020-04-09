@@ -129,6 +129,8 @@ class Main {
 `SafeObjectPool` does boundary checks and does not crash even if it is empty/full  
 (note that it requires additional memory allocation when trying to get from an empty pool).
 
+`ObjectLender` is an alternative kind of object pool which can `collect()` objects and force them to be used again.
+
 You can also create your own pool classes by extending `ObjectPoolBase` or `ObjectPoolBuffer` class.
 
 
