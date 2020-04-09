@@ -144,6 +144,35 @@ class Copy {
 	}
 
 	/**
+		@return Shallow copy of `this` with values in reversed order.
+	**/
+	public static inline function copyReversed<T>(
+		_this: VectorReference<T>
+	): Vector<T> {
+		return copyReversedWritable(_this).nonWritable();
+	}
+
+	/**
+		@return Shallow copy of `this` with values in reversed order.
+	**/
+	public static inline function copyReversedWritable<T>(
+		_this: VectorReference<T>
+	): WritableVector<T> {
+		final length = _this.length;
+		final newVector = new WritableVector(length);
+
+		var readIndex = length;
+		var writeIndex = 0;
+		while (readIndex != 0) {
+			--readIndex;
+			newVector[writeIndex] = _this[readIndex];
+			++writeIndex;
+		}
+
+		return newVector;
+	}
+
+	/**
 		Copies `this` and also deduplicates values.
 		Elements with smaller indices have more priority.
 		O(n^2) complexity (which is not very good).
