@@ -5,7 +5,7 @@ using banker.type_extension.MapExtension;
 import haxe.ds.Map as StdMap;
 import banker.map.buffer.top_aligned.TopAlignedBuffer;
 
-class MapBuilder {
+class MapTools {
 	/**
 		@param capacity Max number of key-value pairs that can be contained.
 		if negative, the number of `map` keys is used.
