@@ -23,9 +23,6 @@ class DoublyLinkableMacro {
 		final localClassComplexType = Context.getType(localClassPathStringFull)
 			.toComplexType();
 
-		final nextNodeVariableName = "next";
-		final previousNodeVariableName = "previous";
-
 		final classDef = macro class DoublyLinkableBase {
 			/**
 				Interconnects `former` and `latter`.
@@ -34,8 +31,8 @@ class DoublyLinkableMacro {
 				former: $localClassComplexType,
 				latter: $localClassComplexType
 			): Void {
-				former.$nextNodeVariableName = latter;
-				latter.$previousNodeVariableName = former;
+				former.next = latter;
+				latter.previous = former;
 			}
 
 			/**
@@ -47,19 +44,19 @@ class DoublyLinkableMacro {
 				former: $localClassComplexType,
 				latter: $localClassComplexType
 			): Void {
-				former.$nextNodeVariableName = sneaker.types.Maybe.from(null);
-				latter.$previousNodeVariableName = sneaker.types.Maybe.from(null);
+				former.next = sneaker.types.Maybe.from(null);
+				latter.previous = sneaker.types.Maybe.from(null);
 			}
 
 			/**
 				The next node linked from `this`.
 			**/
-			public var $nextNodeVariableName:sneaker.types.Maybe<$localClassComplexType>;
+			public var next:sneaker.types.Maybe<$localClassComplexType>;
 
 			/**
 				The previous node linked from `this`.
 			**/
-			public var $previousNodeVariableName:sneaker.types.Maybe<$localClassComplexType>;
+			public var previous:sneaker.types.Maybe<$localClassComplexType>;
 
 			/**
 				Interconnects `previous` and `this`.
@@ -77,7 +74,7 @@ class DoublyLinkableMacro {
 				Disconnects `this` and its next node (if exists) from each other.
 			**/
 			public inline function unlinkNext(): Void {
-				final next = this.$nextNodeVariableName;
+				final next = this.next;
 				if (next.isSome()) unlink(this, next.unwrap());
 			}
 
@@ -85,7 +82,7 @@ class DoublyLinkableMacro {
 				Disconnects `this` and its previous node (if exists) from each other.
 			**/
 			public inline function unlinkPrevious(): Void {
-				final previous = this.$previousNodeVariableName;
+				final previous = this.previous;
 				if (previous.isSome()) unlink(previous.unwrap(), this);
 			}
 
@@ -95,11 +92,11 @@ class DoublyLinkableMacro {
 			public inline function traverse(callback: (node: $localClassComplexType) -> Void): Void {
 				callback(this);
 
-				var current = this.$nextNodeVariableName;
+				var current = this.next;
 				while (current.isSome()) {
 					final node = current.unwrap();
 					callback(node);
-					current = node.$nextNodeVariableName;
+					current = node.next;
 				}
 			}
 
@@ -109,11 +106,11 @@ class DoublyLinkableMacro {
 			public inline function traverseBackwards(callback: (node: $localClassComplexType) -> Void): Void {
 				callback(this);
 
-				var current = this.$previousNodeVariableName;
+				var current = this.previous;
 				while (current.isSome()) {
 					final node = current.unwrap();
 					callback(node);
-					current = node.$previousNodeVariableName;
+					current = node.previous;
 				}
 			}
 
@@ -122,8 +119,8 @@ class DoublyLinkableMacro {
 				Note that this does not affect the next/previous nodes of `this`.
 			**/
 			public inline function reset(): Void {
-				this.$previousNodeVariableName = sneaker.types.Maybe.from(null);
-				this.$nextNodeVariableName = sneaker.types.Maybe.from(null);
+				this.previous = sneaker.types.Maybe.from(null);
+				this.next = sneaker.types.Maybe.from(null);
 			}
 
 			/**
@@ -131,11 +128,11 @@ class DoublyLinkableMacro {
 				interconnects the previous/next nodes of `this` and then calls `this.reset()`.
 			**/
 			public inline function removeSplice(): Void {
-				final previous = this.$previousNodeVariableName;
-				final next = this.$nextNodeVariableName;
+				final previous = this.previous;
+				final next = this.next;
 
-				if (previous.isSome()) previous.unwrap().$nextNodeVariableName = next;
-				if (next.isSome()) next.unwrap().$previousNodeVariableName = previous;
+				if (previous.isSome()) previous.unwrap().next = next;
+				if (next.isSome()) next.unwrap().previous = previous;
 
 				this.reset();
 			}
@@ -151,8 +148,8 @@ class DoublyLinkableMacro {
 				func.expr = macro $b{
 					[
 						func.expr,
-						macro this.$nextNodeVariableName = sneaker.types.Maybe.none(),
-						macro this.$previousNodeVariableName = sneaker.types.Maybe.none()
+						macro this.next = sneaker.types.Maybe.none(),
+						macro this.previous = sneaker.types.Maybe.none()
 					]
 				}
 			default:

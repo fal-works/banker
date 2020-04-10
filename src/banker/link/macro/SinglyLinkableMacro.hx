@@ -23,8 +23,6 @@ class SinglyLinkableMacro {
 		final localClassComplexType = Context.getType(localClassPathStringFull)
 			.toComplexType();
 
-		final nextNodeVariableName = "next";
-
 		final classDef = macro class SinglyLinkableBase {
 			/**
 				Interconnects `former` and `latter`.
@@ -33,13 +31,13 @@ class SinglyLinkableMacro {
 				former: $localClassComplexType,
 				latter: $localClassComplexType
 			): Void {
-				former.$nextNodeVariableName = latter;
+				former.next = latter;
 			}
 
 			/**
 				The next node linked from `this`.
 			**/
-			public var $nextNodeVariableName:sneaker.types.Maybe<$localClassComplexType>;
+			public var next: sneaker.types.Maybe<$localClassComplexType>;
 
 			/**
 				Interconnects `previous` and `this`.
@@ -57,7 +55,7 @@ class SinglyLinkableMacro {
 				Clears the link from `this` to the next node (if exists).
 			**/
 			public inline function unlinkNext(): Void
-				this.$nextNodeVariableName = sneaker.types.Maybe.from(null);
+				this.next = sneaker.types.Maybe.from(null);
 
 			/**
 				Runs `callback` for each node in the list starting from `this` until the last node.
@@ -65,11 +63,11 @@ class SinglyLinkableMacro {
 			public inline function traverse(callback: (node: $localClassComplexType) -> Void): Void {
 				callback(this);
 
-				var current = this.$nextNodeVariableName;
+				var current = this.next;
 				while (current.isSome()) {
 					final node = current.unwrap();
 					callback(node);
-					current = node.$nextNodeVariableName;
+					current = node.next;
 				}
 			}
 
@@ -90,7 +88,7 @@ class SinglyLinkableMacro {
 				func.expr = macro $b{
 					[
 						func.expr,
-						macro this.$nextNodeVariableName = sneaker.types.Maybe.none()
+						macro this.next = sneaker.types.Maybe.none()
 					]
 				}
 			default:
