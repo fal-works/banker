@@ -61,13 +61,12 @@ class SinglyLinkableMacro {
 				Runs `callback` for each node in the list starting from `this` until the last node.
 			**/
 			public inline function traverse(callback: (node: $localClassComplexType) -> Void): Void {
-				callback(this);
-
 				var current = this.next;
+				callback(this);
 				while (current.isSome()) {
 					final node = current.unwrap();
-					callback(node);
 					current = node.next;
+					callback(node);
 				}
 			}
 
@@ -76,6 +75,19 @@ class SinglyLinkableMacro {
 			**/
 			public inline function reset(): Void
 				this.unlinkNext();
+
+			/**
+				Runs `reset()` for each node in the list starting from `this` until the last node.
+			**/
+			public inline function traverseReset(): Void {
+				var current = this.next;
+				this.reset();
+				while (current.isSome()) {
+					final node = current.unwrap();
+					current = node.next;
+					node.reset();
+				}
+			}
 		};
 
 		final buildFields = Context.getBuildFields();

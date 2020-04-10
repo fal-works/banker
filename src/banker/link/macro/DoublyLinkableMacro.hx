@@ -90,13 +90,12 @@ class DoublyLinkableMacro {
 				Runs `callback` for each node in the list starting from `this` until the last node.
 			**/
 			public inline function traverse(callback: (node: $localClassComplexType) -> Void): Void {
-				callback(this);
-
 				var current = this.next;
+				callback(this);
 				while (current.isSome()) {
 					final node = current.unwrap();
-					callback(node);
 					current = node.next;
+					callback(node);
 				}
 			}
 
@@ -104,13 +103,12 @@ class DoublyLinkableMacro {
 				Runs `callback` for each node in the list starting from `this` until the first node.
 			**/
 			public inline function traverseBackwards(callback: (node: $localClassComplexType) -> Void): Void {
-				callback(this);
-
 				var current = this.previous;
+				callback(this);
 				while (current.isSome()) {
 					final node = current.unwrap();
-					callback(node);
 					current = node.previous;
+					callback(node);
 				}
 			}
 
@@ -121,6 +119,32 @@ class DoublyLinkableMacro {
 			public inline function reset(): Void {
 				this.previous = sneaker.types.Maybe.from(null);
 				this.next = sneaker.types.Maybe.from(null);
+			}
+
+			/**
+				Runs `reset()` for each node in the list starting from `this` until the last node.
+			**/
+			public inline function traverseReset(): Void {
+				var current = this.next;
+				this.reset();
+				while (current.isSome()) {
+					final node = current.unwrap();
+					current = node.next;
+					node.reset();
+				}
+			}
+
+			/**
+				Runs `reset()` for each node in the list starting from `this` until the first node.
+			**/
+			public inline function traverseResetBackwards(): Void {
+				var current = this.next;
+				this.reset();
+				while (current.isSome()) {
+					final node = current.unwrap();
+					current = node.previous;
+					node.reset();
+				}
 			}
 
 			/**
