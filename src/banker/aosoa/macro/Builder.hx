@@ -202,32 +202,13 @@ class Builder {
 		if (notVerified) debug("Start to build.");
 
 		final sourceTypeString = sourceTypeExpression.toString();
-		final position = sourceTypeExpression.pos;
 
-		final sourceType = ContextTools.tryGetType(sourceTypeString);
-		if (sourceType == null) {
-			warn('Type not found: $sourceTypeString', position);
-			return null;
-		}
+		if (notVerified) debug('Resolving: $sourceTypeString');
 
-		if (notVerified) debug('Resolving class: $sourceTypeString');
-
-		final maybeSourceClass = sourceType.toClassType();
-		if (maybeSourceClass.isNone()) {
-			warn('Failed to resolve type as a class', position);
-			return null;
-		}
-
-		final sourceClass = maybeSourceClass.unwrap();
-		if (checkStructureInterface) {
-			if (!sourceClass.implementsInterface("banker.aosoa.Structure")) {
-				warn(
-					'Required a class implementing `banker.aosoa.Structure` interface',
-					position
-				);
-				return null;
-			}
-		}
+		final interfaceModule = if (checkStructureInterface) "banker.aosoa.Structure" else null;
+		final resolved = ContextTools.resolveClassType(sourceTypeExpression, interfaceModule);
+		if (resolved.isFailedWarn()) return null;
+		final sourceType = resolved.unwrap().type;
 
 		setLocalClass(localClass); // Set again as the state may be changed
 
