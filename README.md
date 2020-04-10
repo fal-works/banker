@@ -14,7 +14,7 @@ Fixed-length array. Unlike the standard `haxe.ds.Vector`,
 - Read-only type and Writable type are strictly separated.
 - Uses `hl.NativeArray` on HashLink target.
 
-### Data collection classes
+### Array-based data collection classes
 
 Internally based on the vector type above.
 
@@ -28,6 +28,10 @@ No allocation/GC by adding/removing/iterating elements.
 ### "Watermark" feature
 
 For profiling usage ratio of data collection objects.
+
+### Linked list generator
+
+Generates node/list classes, either singly or doubly linked.
 
 ### AoSoA generator
 
@@ -156,6 +160,59 @@ To see the result, call the below whenever you like:
 ```haxe
 banker.watermark.Watermark.printData();
 ```
+
+## package: link
+
+### Singly linked queue
+
+First create your own class for queue nodes and implement `SinglyLinkable` interface.  
+This automatically adds some fields which enables you to link instances of that class.
+
+```haxe
+package mypackage;
+
+class MyQueueNode implements banker.link.SinglyLinkable {
+	public final myValue: Int;
+
+	public function new(myValue: Int) {
+		this.myValue = myValue;
+	}
+}
+```
+
+Then create your own class for a queue and apply the build macro as below.  
+This adds some fields such as `enqueue()`/`dequeue()`/`forEach()`.
+
+```haxe
+package mypackage;
+
+@:build(banker.link.SinglyLinkedQueue.from(mypackage.MyQueueNode))
+class MyQueue {}
+```
+
+### Doubly linked deque
+
+Similar to above:
+
+```haxe
+package mypackage;
+
+class MyDequeNode implements banker.link.DoublyLinkable {
+	public final myValue: Int;
+
+	public function new(myValue: Int) {
+		this.myValue = myValue;
+	}
+}
+```
+
+```haxe
+package mypackage;
+
+@:build(banker.link.DoublyLinkedDeque.from(mypackage.MyDequeNode))
+class MyDeque {}
+```
+
 
 ## package: aosoa
 
