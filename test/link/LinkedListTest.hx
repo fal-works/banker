@@ -1,11 +1,4 @@
-import banker.link.SinglyLinkable;
-
-class SNode implements SinglyLinkable {
-	public final value: Int;
-	public function new(value: Int) {
-		this.value = value;
-	}
-}
+package link;
 
 class LinkedListTest {
 	static function basic() {
@@ -59,8 +52,34 @@ class LinkedListTest {
 
 	static final _traverse = testCase(traverse, Ok);
 
+	static function queue() {
+		describe("This goes without error.");
+
+		final queue = new SQueue();
+		queue.enqueue(new SNode(10));
+		queue.enqueue(new SNode(1));
+		queue.enqueue(new SNode(3));
+		queue.enqueue(new SNode(5));
+		final removed = queue.dequeue();
+		final removedValue = removed.value;
+		assert(removedValue == 10);
+
+		var sum = 0;
+
+		queue.forEach(node -> {
+			sum += node.value;
+			print('${node.value} ');
+		});
+
+		assert(sum == 9);
+		println("");
+	}
+
+	static final _queue = testCase(queue, Ok);
+
 	public static final all = testCaseGroup([
 		_basic,
-		_traverse
+		_traverse,
+		_queue
 	]);
 }

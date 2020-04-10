@@ -26,7 +26,7 @@ class Main {
 
 	static final otherCases = finite.FiniteKeysTest.all;
 
-	static final linkTestCases = LinkedListTest.all;
+	static final linkTestCases = link.LinkedListTest.all;
 
 	static function main() {
 		println("\n");
