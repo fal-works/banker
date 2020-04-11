@@ -40,4 +40,23 @@ class Write {
 		_this[indexA] = _this[indexB];
 		_this[indexB] = tmp;
 	}
+
+	/**
+		Reverses the order of elements in `this`.
+	**/
+	public static inline function reverse<T>(
+		_this: WritableVector<T>
+	): Void {
+		final len = _this.length;
+		var tmp: T;
+		var i = 0;
+		var k = len - 1;
+		while (i < len) {
+			tmp = _this[i];
+			_this[i] = _this[k];
+			_this[k] = tmp;
+			++i;
+			--k;
+		}
+	}
 }
