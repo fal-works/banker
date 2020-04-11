@@ -1,7 +1,6 @@
 package banker.pool;
 
 import banker.container.buffer.top_aligned.TopAlignedBuffer;
-import banker.container.buffer.top_aligned.StackExtension;
 import banker.container.buffer.top_aligned.InternalExtension; // Necessary for spirits
 import banker.vector.*; // Necessary for spirits
 
@@ -21,11 +20,9 @@ class ObjectPoolBuffer<T> extends TopAlignedBuffer<T> implements ripper.Body {
 	public function new(capacity: Int, factory: () -> T) {
 		super(capacity);
 
-		final elements = Vector.createPopulated(
-			capacity,
-			factory
-		).ref.copyReversed();
-
-		StackExtension.pushFromVector(this, elements);
+		final vector = this.vector;
+		vector.populate(factory);
+		vector.reverse();
+		this.setSize(capacity);
 	}
 }
