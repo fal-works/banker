@@ -8,7 +8,7 @@ import banker.vector.internal.RawVector;
 @:forward(length, toArray)
 // @formatter:off
 @:using(
-	banker.vector.extension.writable.Copy,
+	banker.vector.extension.writable.Write,
 	banker.vector.extension.writable.Fill,
 	banker.vector.extension.writable.Functional
 ) // @formatter:on

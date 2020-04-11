@@ -1,6 +1,6 @@
 package banker.vector.extension.writable;
 
-class Copy {
+class Write {
 	/**
 		Copies elements from source to destination position within a same vector.
 	**/
