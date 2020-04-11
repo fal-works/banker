@@ -147,6 +147,11 @@ class Chunk {
 
 			this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
 
+			final id = this.id;
+			for (i in 0...chunkCapacity)
+				id[i] = new banker.aosoa.ChunkEntityId(chunkId, i);
+			banker.vector.VectorTools.blitZero(id, this.idChunkBuffer, chunkCapacity);
+
 			banker.vector.IntVectorTools.assignSequenceNumbers(this.entityId, 0);
 			banker.vector.IntVectorTools.assignSequenceNumbers(this.entityIdChunkBuffer, 0);
 		};
