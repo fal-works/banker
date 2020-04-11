@@ -139,22 +139,24 @@ class Chunk {
 		}];
 		constructorArguments.pushFromArray(externalArguments);
 
+		final expression = macro {
+			this.chunkId = chunkId;
+			$b{expressions};
+
+			this.entityIdReadIndexMap = banker.vector.IntVectorTools.createSequenceNumbersWritable(0, chunkCapacity);
+
+			this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
+
+			banker.vector.IntVectorTools.assignSequenceNumbers(this.entityId, 0);
+			banker.vector.IntVectorTools.assignSequenceNumbers(this.entityIdChunkBuffer, 0);
+		};
+
 		return {
 			name: "new",
 			kind: FFun({
 				args: constructorArguments,
 				ret: null,
-				expr: macro {
-					this.chunkId = chunkId;
-					$b{expressions};
-
-					this.entityIdReadIndexMap = banker.vector.IntVectorTools.createSequenceNumbersWritable(0, chunkCapacity);
-
-					this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
-
-					banker.vector.IntVectorTools.assignSequenceNumbers(this.entityId, 0);
-					banker.vector.IntVectorTools.assignSequenceNumbers(this.entityIdChunkBuffer, 0);
-				}
+				expr: expression
 			}),
 			access: [APublic],
 			pos: position,
