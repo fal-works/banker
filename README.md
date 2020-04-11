@@ -363,7 +363,7 @@ The changes are buffered and are not reflected unless you call this.
 
 - Type hint is mandatory when declaring variables in your `Structure` class.
 - You can set an initializing value at the declaration, e.g. `var x: Float = 0`, which will be used for every entity.
-- Add metadata `@:banker.factory(anyFactoryFunction)` to the variable to use the factory function instead of filling all entities with the same value.
+- Add metadata `@:banker.factory(anyFactoryFunction)` to the variable to use the factory function instead of filling all entities with the same value. The function can be either `() -> ?` or `(id: ChunkEntityId) -> ?`.
 - If you provide neither an inital value nor a factory, you have to pass the initial value to `new()` when instanciating the AoSoA class.
 - Add metadata `@:banker.externalFactory` to the variable for enabling to pass any factory function instead of constant value when instanciating the AoSoA class.
 

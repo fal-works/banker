@@ -56,7 +56,7 @@ class FieldExtension {
 					final parameters = metadata.params;
 					if (!hasOneParameter(parameters, metadata.pos)) break;
 					final expression = macro @:privateAccess ${parameters[0]};
-					if (!validateFactoryType(expression)) break;
+					// Validate in ChunkVariableBuilder.createConstructorPiece() instead of here
 					map.factory = Some(expression);
 
 				case MetadataNames.chunkLevelFactory | MetadataNames.chunkLevelFactory_:
@@ -75,7 +75,6 @@ class FieldExtension {
 		return map;
 	}
 
-	static final factoryType = (macro:() -> Dynamic).toType();
 	static final chunkLevelFactoryType = (macro:(chunkCapacity: Int) -> Dynamic).toType();
 
 	/**
@@ -99,19 +98,6 @@ class FieldExtension {
 			warn("Too many parameters", position);
 			false;
 		} else true;
-	}
-
-	static function validateFactoryType(expression: Expr): Bool {
-		final type = Context.typeof(expression);
-		return if (Context.typeof(expression).unify(factoryType)) {
-			true;
-		} else {
-			warn(
-				'Invalid type.\nWant: () -> ?\nHave: ${type.toString()}',
-				expression.pos
-			);
-			false;
-		}
 	}
 
 	static function validateChunkLevelFactoryType(expression: Expr): Bool {

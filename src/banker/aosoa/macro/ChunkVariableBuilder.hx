@@ -1,8 +1,12 @@
 package banker.aosoa.macro;
 
 #if macro
+using haxe.macro.TypeTools;
+using haxe.macro.ComplexTypeTools;
 using sneaker.macro.extensions.FieldExtension;
+using sneaker.macro.extensions.ExprExtension;
 
+import haxe.macro.Context;
 import haxe.ds.Option;
 
 class ChunkVariableBuilder {
@@ -87,6 +91,9 @@ class ChunkVariableBuilder {
 				FromFactory(macro this.$variableFieldName = $factory(chunkCapacity));
 		}
 	}
+
+	static final factoryType = (macro:() -> Dynamic);
+	static final factoryWithIdType = (macro:(id: banker.aosoa.ChunkEntityId) -> Dynamic);
 
 	static function createChunkVariable(
 		buildField: Field,
@@ -191,7 +198,21 @@ class ChunkVariableBuilder {
 				}
 			case Some(factoryExpression):
 				if (notVerified) debug('  Found metadata: @${MetadataNames.factory}');
-				expressions.push(macro $vector.populate($factoryExpression));
+				final position = buildField.pos;
+				final expr = if (factoryExpression.unify(factoryType))
+					macro $vector.populate($factoryExpression);
+				else if (factoryExpression.unify(factoryWithIdType))
+					macro {
+						var i = 0;
+						$vector.populate(() -> {
+							final value = $factoryExpression(new banker.aosoa.ChunkEntityId(chunkId, i));
+							++i;
+							return value;
+						});
+					};
+				else
+					throw new Error("Invalid factory function", position);
+				expressions.push(expr);
 		}
 
 		final vectorBuffer = macro $p{["this", buildFieldName + "ChunkBuffer"]};
