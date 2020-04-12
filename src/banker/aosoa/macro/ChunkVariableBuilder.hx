@@ -199,9 +199,9 @@ class ChunkVariableBuilder {
 			case Some(factoryExpression):
 				if (notVerified) debug('  Found metadata: @${MetadataNames.factory}');
 				final position = buildField.pos;
-				final expr = if (factoryExpression.unify(factoryType))
+				final expr = if (factoryExpression.unify(macro: () -> $variableType))
 					macro $vector.populate($factoryExpression);
-				else if (factoryExpression.unify(factoryWithIdType))
+				else if (factoryExpression.unify(macro:(id: banker.aosoa.ChunkEntityId) -> $variableType))
 					macro {
 						var i = 0;
 						$vector.populate(() -> {
