@@ -35,6 +35,11 @@ class Aosoa {
 			public final chunkCapacity: Int;
 
 			/**
+				The total number of entities in `this` AoSoA, i.e. (chunk capacity) * (chunk count).
+			**/
+			public final capacity: Int;
+
+			/**
 				Default values for `readWriteIndexMap` of the chunk class.
 			**/
 			final defaultReadWriteIndexMap: banker.vector.Vector<Int>;
@@ -144,6 +149,7 @@ class Aosoa {
 						() -> new $chunkTypePath($a{chunkConstructorArguments})
 					);
 					this.chunkCapacity = chunkCapacity;
+					this.capacity = chunkCount * chunkCapacity;
 					this.defaultReadWriteIndexMap = defaultReadWriteIndexMap;
 				}
 			}),
