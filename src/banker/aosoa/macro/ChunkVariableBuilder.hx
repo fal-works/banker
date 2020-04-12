@@ -19,7 +19,11 @@ class ChunkVariableBuilder {
 		initialValue: Null<Expr>,
 		metaMap: MetadataMap
 	) {
-		final chunkVariable = createChunkVariable(buildField, variableType, metaMap);
+		final chunkVariable = createChunkVariable(
+			buildField,
+			variableType,
+			metaMap
+		);
 		final chunkField = chunkVariable.field;
 		final chunkBufferField = createChunkBufferField(chunkField);
 
@@ -62,33 +66,34 @@ class ChunkVariableBuilder {
 		variableType: ComplexType,
 		metaMap: MetadataMap
 	): ConstructorPiece {
-		return switch (metaMap.chunkLevelFactory) {
-			case None:
-				if (metaMap.externalFactory) {
-					if (notVerified) {
-						debug('  Found metadata: @${MetadataNames.externalFactory}');
-						debug('  To be initialized with factory given by new() argument.');
-					}
-					final argumentName = variableFieldName + "Factory";
-					FromArgument(
-						macro this.$variableFieldName = $i{argumentName}(),
-						{ name: argumentName, type: (macro:() -> $variableType) }
-					);
-				} else {
-					if (notVerified) {
-						debug('  Found neither initial value nor factory.');
-						debug('  To be initialized by new() argument.');
-					}
-					final argumentName = variableFieldName + "Value";
-					FromArgument(
-						macro this.$variableFieldName = $i{argumentName},
-						{ name: argumentName, type: variableType }
-					);
-				}
-			case Some(factory):
-				if (notVerified)
-					debug('  Found metadata: @${MetadataNames.chunkLevelFactory}');
-				FromFactory(macro this.$variableFieldName = $factory(chunkCapacity));
+		final factoryMetadata = metaMap.chunkLevelFactory;
+		if (factoryMetadata.isSome()) {
+			final factory = factoryMetadata.unwrap();
+			if (notVerified)
+				debug('  Found metadata: @${MetadataNames.chunkLevelFactory}');
+			return FromFactory(macro this.$variableFieldName = $factory(chunkCapacity));
+		}
+
+		if (metaMap.externalFactory) {
+			if (notVerified) {
+				debug('  Found metadata: @${MetadataNames.externalFactory}');
+				debug('  To be initialized with factory given by new() argument.');
+			}
+			final argumentName = variableFieldName + "Factory";
+			return FromArgument(
+				macro this.$variableFieldName = $i{argumentName}(),
+				{ name: argumentName, type: (macro:() -> $variableType) }
+			);
+		} else {
+			if (notVerified) {
+				debug('  Found neither initial value nor factory.');
+				debug('  To be initialized by new() argument.');
+			}
+			final argumentName = variableFieldName + "Value";
+			return FromArgument(
+				macro this.$variableFieldName = $i{argumentName},
+				{ name: argumentName, type: variableType }
+			);
 		}
 	}
 
@@ -173,47 +178,59 @@ class ChunkVariableBuilder {
 
 		if (initialValue != null) {
 			expressions.push(macro $vector.fill($initialValue));
-		} else switch (metaMap.factory) {
-			case None:
-				if (metaMap.externalFactory) {
-					if (notVerified) {
-						debug('  Found metadata: @${MetadataNames.externalFactory}');
-						debug('  To be initialized with factory given by new() argument.');
-					}
-					final argumentName = buildFieldName + "Factory";
-					expressions.push(macro $vector.populate($i{argumentName}));
-					argument = {
-						name: argumentName,
-						type: (macro:() -> $variableType)
-					};
-				} else {
-					if (notVerified)
-						debug('  Found neither initial value nor factory. To be initialized by new() argument.');
-					final argumentName = buildFieldName + "Value";
-					expressions.push(macro $vector.fill($i{argumentName}));
-					argument = {
-						name: argumentName,
-						type: variableType
-					};
+		} else if (metaMap.factory.isSome()) {
+			if (notVerified) debug('  Found metadata: @${MetadataNames.factory}');
+			final factoryExpression = metaMap.factory.unwrap();
+			if (factoryExpression.unify((macro: () -> $variableType).toType()))
+				expressions.push(macro $vector.populate($factoryExpression));
+			else {
+				var message = 'Factory function should be ';
+				message += '() -> ${variableType.toString()}';
+				warn(message, factoryExpression.pos);
+			}
+		} else if (metaMap.factoryWithId.isSome()) {
+			if (notVerified) debug('  Found metadata: @${MetadataNames.factoryWithId}');
+			final factoryExpression = metaMap.factoryWithId.unwrap();
+			if (factoryExpression.unify((macro: (id: banker.aosoa.ChunkEntityId) -> $variableType).toType())) {
+				final populateExpression = macro {
+					var i = 0;
+					$vector.populate(() -> {
+						final value = $factoryExpression(new banker.aosoa.ChunkEntityId(
+							chunkId,
+							i
+						));
+						++i;
+						return value;
+					});
+				};
+				expressions.push(populateExpression);
+			} else {
+				var message = 'Factory function should be ';
+				message += '(id: banker.aosoa.ChunkEntityId) -> ${variableType.toString()}';
+				warn(message, factoryExpression.pos);
+			}
+		} else {
+			if (metaMap.externalFactory) {
+				if (notVerified) {
+					debug('  Found metadata: @${MetadataNames.externalFactory}');
+					debug('  To be initialized with factory given by new() argument.');
 				}
-			case Some(factoryExpression):
-				if (notVerified) debug('  Found metadata: @${MetadataNames.factory}');
-				final position = buildField.pos;
-				final dynamicFactory = factoryExpression.as(macro: Dynamic);
-				final expr = if (factoryExpression.unify(macro: () -> $variableType)) {
-					macro $vector.populate($dynamicFactory);
-				} else if (factoryExpression.unify(macro:(id: banker.aosoa.ChunkEntityId) -> $variableType)) {
-					macro {
-						var i = 0;
-						$vector.populate(() -> {
-							final value = $dynamicFactory(new banker.aosoa.ChunkEntityId(chunkId, i));
-							++i;
-							return value;
-						});
-					};
-				} else
-					throw new Error("Invalid factory function", position);
-				expressions.push(expr);
+				final argumentName = buildFieldName + "Factory";
+				expressions.push(macro $vector.populate($i{argumentName}));
+				argument = {
+					name: argumentName,
+					type: (macro:() -> $variableType)
+				};
+			} else {
+				if (notVerified)
+					debug('  Found neither initial value nor factory. To be initialized by new() argument.');
+				final argumentName = buildFieldName + "Value";
+				expressions.push(macro $vector.fill($i{argumentName}));
+				argument = {
+					name: argumentName,
+					type: variableType
+				};
+			}
 		}
 
 		final vectorBuffer = macro $p{["this", buildFieldName + "ChunkBuffer"]};

@@ -1,21 +1,22 @@
 package banker.aosoa.macro;
 
 #if macro
-import haxe.ds.Option;
 import haxe.macro.Expr;
+import sneaker.types.Maybe;
 
 typedef MetadataMap = {
 	useEntity: Bool,
 	onSynchronize: Bool,
 	onCompleteSynchronize: Bool,
-	factory: Option<Expr>,
+	factory: Maybe<Expr>,
+	factoryWithId: Maybe<Expr>,
 	externalFactory: Bool,
 	readOnly: Bool,
 	hidden: Bool,
 	swap: Bool,
 	chunkLevel: Bool,
 	chunkLevelFinal: Bool,
-	chunkLevelFactory: Option<Expr>
+	chunkLevelFactory: Maybe<Expr>
 }
 
 typedef FunctionField = {

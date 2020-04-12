@@ -38,8 +38,8 @@ class Main {
 		// test(testCases);
 		// test(watermarkTestCases);
 		// test(poolTestCases);
-		// test(aosoaTestCases);
+		test(aosoaTestCases);
 		// test(otherCases);
-		test(linkTestCases);
+		// test(linkTestCases);
 	}
 }

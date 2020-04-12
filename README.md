@@ -363,7 +363,8 @@ The changes are buffered and are not reflected unless you call this.
 
 - Type hint is mandatory when declaring variables in your `Structure` class.
 - You can set an initializing value at the declaration, e.g. `var x: Float = 0`, which will be used for every entity.
-- Add metadata `@:banker.factory(anyFactoryFunction)` to the variable to use the factory function instead of filling all entities with the same value. The function can be either `() -> ?` or `(id: ChunkEntityId) -> ?`.
+- Add metadata `@:banker.factory(anyFactoryFunction)` to the variable to use the factory function instead of filling all entities with the same value. The function should be `() -> ?`.  
+Alternatively, add metadata `@:banker.factoryWithId(anyFactoryFunction)` to use a factory function of type `(id: ChunkEntityId) -> ?`.
 - If you provide neither an inital value nor a factory, you have to pass the initial value to `new()` when instanciating the AoSoA class.
 - Add metadata `@:banker.externalFactory` to the variable for enabling to pass any factory function instead of constant value when instanciating the AoSoA class.
 
@@ -421,6 +422,7 @@ class Main {
 |---|---|---|
 |@:banker.useEntity|method|Mark function as a "use" method|
 |@:banker.factory|variable|Specifies a factory function for initializing each element of vector|
+|@:banker.factoryWithId|variable|Ditto|
 |@:banker.externalFactory|variable|Enables to pass any factory function to `new()` for inializing each element of vector (or the variable itself if chunk-level)|
 |@:banker.readOnly|variable|Prevents an entity-level variable from providing WRITE access|
 |@:banker.hidden|field|Prevents to be copied to Chunk/AoSoA|

@@ -3,9 +3,11 @@ package banker.aosoa.macro;
 #if macro
 using haxe.macro.TypeTools;
 using haxe.macro.ComplexTypeTools;
+using sneaker.macro.extensions.ExprExtension;
 
-import haxe.ds.Option;
+import haxe.macro.Type;
 import haxe.macro.Context;
+import sneaker.types.Maybe;
 
 /**
 	Functions for static extension used in `banker.aosoa.macro`.
@@ -16,14 +18,15 @@ class FieldExtension {
 			useEntity: false,
 			onSynchronize: false,
 			onCompleteSynchronize: false,
-			factory: None,
+			factory: Maybe.none(),
+			factoryWithId: Maybe.none(),
 			externalFactory: false,
 			readOnly: false,
 			hidden: false,
 			swap: false,
 			chunkLevel: false,
 			chunkLevelFinal: false,
-			chunkLevelFactory: None
+			chunkLevelFactory: Maybe.none()
 		};
 
 		final metadataArray = _this.meta;
@@ -56,20 +59,27 @@ class FieldExtension {
 					final parameters = metadata.params;
 					if (!hasOneParameter(parameters, metadata.pos)) break;
 					final expression = macro @:privateAccess ${parameters[0]};
+					map.factory = Maybe.from(expression);
 					// Validate in ChunkVariableBuilder.createConstructorPiece() instead of here
-					map.factory = Some(expression);
+
+				case MetadataNames.factoryWithId | MetadataNames.factoryWithId_:
+					if (duplicateMetadata(map.chunkLevelFactory, metadata.pos)) break;
+					final parameters = metadata.params;
+					if (!hasOneParameter(parameters, metadata.pos)) break;
+					final expression = parameters[0].privateAccess();
+					map.factoryWithId = Maybe.from(expression);
 
 				case MetadataNames.chunkLevelFactory | MetadataNames.chunkLevelFactory_:
 					if (duplicateMetadata(map.chunkLevelFactory, metadata.pos)) break;
 					final parameters = metadata.params;
 					if (!hasOneParameter(parameters, metadata.pos)) break;
-					final expression = macro @:privateAccess ${parameters[0]};
-					if (!validateChunkLevelFactoryType(expression)) break;
-					map.chunkLevelFactory = Some(expression);
+					final expression = parameters[0].privateAccess();
+					if (!validateChunkLevelFactoryType(expression, chunkLevelFactoryType)) break;
+					map.chunkLevelFactory = Maybe.from(expression);
 			}
 		}
 
-		if (map.chunkLevelFinal || map.chunkLevelFactory != None)
+		if (map.chunkLevelFinal || map.chunkLevelFactory.isSome())
 			map.chunkLevel = true;
 
 		return map;
@@ -80,8 +90,8 @@ class FieldExtension {
 	/**
 		@return `true` if `registered` is already `Some<T>`. Otherwise `false` (also outputs warning log).
 	**/
-	static function duplicateMetadata(registered: Option<Dynamic>, position: Position) {
-		return if (registered != None) {
+	static function duplicateMetadata(registered: Maybe<Dynamic>, position: Position) {
+		return if (registered.isSome()) {
 			warn("Duplicate metadata", position);
 			true;
 		} else false;
@@ -100,9 +110,9 @@ class FieldExtension {
 		} else true;
 	}
 
-	static function validateChunkLevelFactoryType(expression: Expr): Bool {
+	static function validateChunkLevelFactoryType(expression: Expr, requiredType: Type): Bool {
 		final type = Context.typeof(expression);
-		return if (type.unify(chunkLevelFactoryType)) {
+		return if (type.unify(requiredType)) {
 			true;
 		} else {
 			warn(
