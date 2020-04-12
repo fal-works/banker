@@ -113,7 +113,7 @@ class ChunkVariableBuilder {
 		final vectorType = macro:banker.vector.WritableVector<$variableType>;
 
 		final field = buildField.clone()
-			.setDoc(documentation).setVariableType(vectorType).setAccess([AFinal]);
+			.setDoc(documentation).setVariableType(vectorType).setAccess([APublic, AFinal], false);
 
 		return {
 			field: field,
@@ -131,7 +131,7 @@ class ChunkVariableBuilder {
 		final bufferName = originalName + "ChunkBuffer";
 		final chunkBufferDocumentation = 'Vector for providing buffered WRITE access to `$originalName`.';
 
-		return chunkField.clone().setName(bufferName).setDoc(chunkBufferDocumentation);
+		return chunkField.clone().setName(bufferName).setDoc(chunkBufferDocumentation).setAccess([AFinal], false);
 	}
 
 	static function createDisuseExpression(
