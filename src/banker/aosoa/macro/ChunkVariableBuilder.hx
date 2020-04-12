@@ -199,18 +199,19 @@ class ChunkVariableBuilder {
 			case Some(factoryExpression):
 				if (notVerified) debug('  Found metadata: @${MetadataNames.factory}');
 				final position = buildField.pos;
-				final expr = if (factoryExpression.unify(macro: () -> $variableType))
-					macro $vector.populate($factoryExpression);
-				else if (factoryExpression.unify(macro:(id: banker.aosoa.ChunkEntityId) -> $variableType))
+				final dynamicFactory = factoryExpression.as(macro: Dynamic);
+				final expr = if (factoryExpression.unify(macro: () -> $variableType)) {
+					macro $vector.populate($dynamicFactory);
+				} else if (factoryExpression.unify(macro:(id: banker.aosoa.ChunkEntityId) -> $variableType)) {
 					macro {
 						var i = 0;
 						$vector.populate(() -> {
-							final value = $factoryExpression(new banker.aosoa.ChunkEntityId(chunkId, i));
+							final value = $dynamicFactory(new banker.aosoa.ChunkEntityId(chunkId, i));
 							++i;
 							return value;
 						});
 					};
-				else
+				} else
 					throw new Error("Invalid factory function", position);
 				expressions.push(expr);
 		}
