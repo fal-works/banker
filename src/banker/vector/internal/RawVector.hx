@@ -1,5 +1,9 @@
 package banker.vector.internal;
 
+import banker.array.ArrayTools;
+
+using banker.array.ArrayExtension;
+
 /**
 	The body of `RawVector<T>`.
 
@@ -31,7 +35,7 @@ abstract RawVector<T>(RawVectorData<T>) {
 		final newVector = new RawVector<T>(len);
 		var i = 0;
 		while (i < len) {
-			newVector[i] = array[i];
+			newVector[i] = array.get(i);
 			++i;
 		}
 		return newVector;
@@ -134,7 +138,15 @@ abstract RawVector<T>(RawVectorData<T>) {
 	/**
 		@return Shallow copy of `this` as `Array<T>`.
 	**/
-	public inline function toArray(): Array<T>
-		return [for (i in 0...this.length) this[i]];
+	public inline function toArray(): Array<T> {
+		final array = ArrayTools.allocate(this.length);
+		final len = this.length;
+		var i = 0;
+		while (i < len) {
+			array.set(i, this[i]);
+			++i;
+		}
+		return array;
+	}
 	#end
 }
