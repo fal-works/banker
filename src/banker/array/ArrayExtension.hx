@@ -7,7 +7,7 @@ class ArrayExtension {
 	/**
 		@return The element at `index`.
 	**/
-	public static inline function get<T>(_this: Array<T>, index: Int): T {
+	public static extern inline function get<T>(_this: Array<T>, index: Int): T {
 		#if !macro
 		assert(index >= 0 && index < _this.length, null, "Out of bound.");
 		#end
@@ -22,7 +22,7 @@ class ArrayExtension {
 	/**
 		Sets `value` at `index`.
 	**/
-	public static inline function set<T>(
+	public static extern inline function set<T>(
 		_this: Array<T>,
 		index: Int,
 		value: T
@@ -41,7 +41,7 @@ class ArrayExtension {
 	/**
 		@return The last element of the array.
 	**/
-	public static inline function getLast<T>(_this: Array<T>): T {
+	public static extern inline function getLast<T>(_this: Array<T>): T {
 		#if cpp
 		return cpp.NativeArray.unsafeGet(_this, _this.length - 1);
 		#else
@@ -76,7 +76,7 @@ class ArrayExtension {
 		Fills the array with `value`.
 		@return The filled array.
 	**/
-	public static inline function fill<T>(_this: Array<T>, value: T): Array<T> {
+	public static extern inline function fill<T>(_this: Array<T>, value: T): Array<T> {
 		return fillIn(_this, value, 0, _this.length);
 	}
 
