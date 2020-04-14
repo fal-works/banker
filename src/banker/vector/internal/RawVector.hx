@@ -10,9 +10,9 @@ using banker.array.ArrayExtension;
 	If HashLink `hl.NativeArray<T>`, otherwise `haxe.ds.Vector<T>`.
 **/
 #if hl
-typedef RawVectorData<T> = hl.NativeArray<T>;
+import hl.NativeArray as RawVectorData;
 #else
-typedef RawVectorData<T> = haxe.ds.Vector<T>;
+import haxe.ds.Vector as RawVectorData;
 #end
 
 /**
