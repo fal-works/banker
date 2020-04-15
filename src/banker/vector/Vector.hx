@@ -35,15 +35,15 @@ abstract Vector<T>(RawVector<T>) from RawVector<T> {
 	**/
 	public var ref(get, never): VectorReference<T>;
 
-	inline function get_ref(): VectorReference<T>
+	extern inline function get_ref(): VectorReference<T>
 		return this;
 
-	@:op([]) public inline function get(index: Int): T
+	@:op([]) public extern inline function get(index: Int): T
 		return this[index];
 
-	@:to inline function toReference<T>(): VectorReference<T>
+	@:to extern inline function toReference<T>(): VectorReference<T>
 		return this;
 
-	inline function writable(): WritableVector<T>
+	extern inline function writable(): WritableVector<T>
 		return this;
 }

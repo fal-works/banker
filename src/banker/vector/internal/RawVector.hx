@@ -44,21 +44,21 @@ abstract RawVector<T>(RawVectorData<T>) {
 		#end
 	}
 
-	static inline function fromData<T>(data: RawVectorData<T>): RawVector<T>
+	static extern inline function fromData<T>(data: RawVectorData<T>): RawVector<T>
 		return cast data;
 
 	var data(get, never): RawVectorData<T>;
 
-	inline function get_data()
+	extern inline function get_data()
 		return this;
 
-	public inline function new(length: Int)
+	public extern inline function new(length: Int)
 		this = new RawVectorData<T>(length);
 
-	@:op([]) public inline function get(index: Int): T
+	@:op([]) public extern inline function get(index: Int): T
 		return this[index];
 
-	@:op([]) public inline function set(index: Int, value: T): T
+	@:op([]) public extern inline function set(index: Int, value: T): T
 		return this[index] = value;
 
 	/**
@@ -68,7 +68,7 @@ abstract RawVector<T>(RawVectorData<T>) {
 		@param srcPos The source position.
 		@param srcLen The length of the range to be copied.
 	**/
-	public inline function blit<T>(
+	public extern inline function blit<T>(
 		pos: Int,
 		src: RawVector<T>,
 		srcPos: Int,

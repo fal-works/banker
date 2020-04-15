@@ -26,29 +26,29 @@ abstract WritableVector<T>(RawVector<T>) from RawVector<T> {
 	**/
 	public var ref(get, never): VectorReference<T>;
 
-	inline function get_ref(): VectorReference<T>
+	extern inline function get_ref(): VectorReference<T>
 		return this;
 
-	public inline function new(length: Int)
+	public extern inline function new(length: Int)
 		this = new RawVector<T>(length);
 
-	@:op([]) public inline function get(index: Int): T {
+	@:op([]) public extern inline function get(index: Int): T {
 		#if !macro
 		assert(index >= 0 && index < this.length, null, "Out of bound.");
 		#end
 		return this[index];
 	}
 
-	@:op([]) public inline function set(index: Int, value: T): T {
+	@:op([]) public extern inline function set(index: Int, value: T): T {
 		#if !macro
 		assert(index >= 0 && index < this.length, null, "Out of bound.");
 		#end
 		return this[index] = value;
 	}
 
-	@:to inline function toReference<T>(): VectorReference<T>
+	@:to extern inline function toReference<T>(): VectorReference<T>
 		return this;
 
-	inline function nonWritable(): Vector<T>
+	extern inline function nonWritable(): Vector<T>
 		return this;
 }

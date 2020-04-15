@@ -18,9 +18,9 @@ import banker.vector.internal.RawVector;
 abstract VectorReference<T>(RawVector<T>) from RawVector<T> {
 	var data(get, never): RawVector<T>;
 
-	inline function get_data()
+	extern inline function get_data()
 		return this;
 
-	@:op([]) public inline function get(index: Int): T
+	@:op([]) public extern inline function get(index: Int): T
 		return this[index];
 }
