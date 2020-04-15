@@ -12,6 +12,12 @@ abstract ChunkEntityId(Int) {
 	public static final dummy: ChunkEntityId = cast 0xFFFFFFFF;
 
 	/**
+		Casts `Int` to `ChunkEntityId`.
+	**/
+	public static inline function fromInt(v: Int): ChunkEntityId
+		return cast v;
+
+	/**
 		The identifier number of the Chunk to which the entity belongs.
 	**/
 	public var chunk(get, never): Int;
