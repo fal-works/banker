@@ -10,6 +10,12 @@ import banker.vector.internal.RawVector;
 @:notNull
 abstract Vector<T>(RawVector<T>) from RawVector<T> {
 	/**
+		@return A dummy vector with zero length.
+	**/
+	public static extern inline function createZero<T>(): Vector<T>
+		return RawVector.createZero();
+
+	/**
 		@return Shallow copy of `array` as `Vector<T>`.
 	**/
 	public static inline function fromArrayCopy<T>(array: Array<T>): Vector<T>

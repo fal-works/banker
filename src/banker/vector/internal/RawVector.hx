@@ -27,6 +27,13 @@ import haxe.ds.Vector as RawVectorData;
 @:notNull
 abstract RawVector<T>(RawVectorData<T>) {
 	/**
+		@return A dummy vector with zero length.
+	**/
+	public static extern inline function createZero<T>(): RawVector<T> {
+		return new RawVector(0);
+	}
+
+	/**
 		@return Shallow copy of `array` as `RawVector<T>`.
 	**/
 	public static inline function fromArrayCopy<T>(array: Array<T>): RawVector<T> {
