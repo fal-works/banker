@@ -2,7 +2,6 @@ package banker.finite;
 
 #if macro
 import haxe.macro.Expr;
-import banker.array.ArrayTools;
 
 /**
 	Functions for creating copying methods.
@@ -65,7 +64,7 @@ class FiniteKeysCopy {
 
 		final instanceCount = instanceNames.length;
 		final lastK = instanceCount - 1;
-		final elementExpressions: Array<Expr> = ArrayTools.allocate(instanceCount * 2 - 1);
+		final elementExpressions: Array<Expr> = Arrays.allocate(instanceCount * 2 - 1);
 
 		for (k in 0...instanceCount) {
 			final name = instanceNames[k];

@@ -6,7 +6,7 @@ class SetExtension {
 		_this: TopAlignedBuffer<K, V>,
 		key: K
 	): Bool {
-		return _this.keyVector.ref.hasIn(key, 0, _this.size);
+		return _this.keyVector.ref.hasIn(key, UInt.zero, _this.size);
 	}
 
 	/** @see `banker.map.interfaces.Set` **/
@@ -14,7 +14,7 @@ class SetExtension {
 		_this: TopAlignedBuffer<K, V>,
 		value: V
 	): Bool {
-		return _this.valueVector.ref.hasIn(value, 0, _this.size);
+		return _this.valueVector.ref.hasIn(value, UInt.zero, _this.size);
 	}
 
 	/** @see `banker.map.interfaces.Set` **/
@@ -27,7 +27,7 @@ class SetExtension {
 		final size = _this.size;
 
 		var found = false;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < size) {
 			if (!predicate(keys[i], values[i])) {
 				++i;
@@ -50,7 +50,7 @@ class SetExtension {
 		final keys = _this.keyVector;
 		final values = _this.valueVector;
 		final len = _this.size;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < len) {
 			if (keys[i] != key) {
 				++i;
@@ -72,12 +72,12 @@ class SetExtension {
 	): V {
 		final size = _this.size;
 		final keys = _this.keyVector;
-		final index = keys.ref.findIndexIn(key, 0, size);
-		assert(index >= 0, _this.tag, "Not found.");
+		final index = keys.ref.findIndexIn(key, UInt.zero, size);
+		assert(index.isSome(), _this.tag, "Not found.");
 
 		final values = _this.valueVector;
-		final value = values[index];
-		_this.removeAtInternal(keys, values, size, index);
+		final value = values[index.unwrap()];
+		_this.removeAtInternal(keys, values, size, index.unwrap());
 		return value;
 	}
 
@@ -88,12 +88,12 @@ class SetExtension {
 	): Null<V> {
 		final size = _this.size;
 		final keys = _this.keyVector;
-		final index = keys.ref.findIndexIn(key, 0, size);
+		final index = keys.ref.findIndexIn(key, UInt.zero, size);
 
-		return if (index >= 0) {
+		return if (index.isSome()) {
 			final values = _this.valueVector;
-			final value = values[index];
-			_this.removeAtInternal(keys, values, size, index);
+			final value = values[index.unwrap()];
+			_this.removeAtInternal(keys, values, size, index.unwrap());
 			value;
 		} else null;
 	}
@@ -107,7 +107,7 @@ class SetExtension {
 		final keys = _this.keyVector;
 		final values = _this.valueVector;
 		final len = _this.size;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < len) {
 			if (keys[i] != key) {
 				++i;

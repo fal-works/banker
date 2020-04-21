@@ -24,14 +24,14 @@ abstract Vector<T>(RawVector<T>) from RawVector<T> {
 	/**
 		Creates a vector filled with the given value.
 	**/
-	public static inline function createFilled<T>(length: Int, fillValue: T): Vector<T>
+	public static inline function createFilled<T>(length: UInt, fillValue: T): Vector<T>
 		return new WritableVector<T>(length).fill(fillValue).nonWritable();
 
 	/**
 		Creates a vector populated using the given factory function.
 	**/
 	public static inline function createPopulated<T>(
-		length: Int,
+		length: UInt,
 		factory: Void->T
 	): Vector<T>
 		return new WritableVector<T>(length).populate(factory).nonWritable();
@@ -44,7 +44,7 @@ abstract Vector<T>(RawVector<T>) from RawVector<T> {
 	extern inline function get_ref(): VectorReference<T>
 		return this;
 
-	@:op([]) public extern inline function get(index: Int): T
+	@:op([]) public extern inline function get(index: UInt): T
 		return this[index];
 
 	@:to extern inline function toReference<T>(): VectorReference<T>

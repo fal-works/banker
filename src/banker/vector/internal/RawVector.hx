@@ -1,9 +1,5 @@
 package banker.vector.internal;
 
-import banker.array.ArrayTools;
-
-using banker.array.ArrayExtension;
-
 /**
 	The body of `RawVector<T>`.
 
@@ -19,10 +15,8 @@ import haxe.ds.Vector as RawVectorData;
 	Integration of `hl.NativeArray` and `haxe.ds.Vector`.
 	Internally used in `banker.vector` package.
 **/
-#if hl
-@:forward(length)
-#else
-@:forward(length, toArray)
+#if !hl
+@:forward(toArray)
 #end
 @:notNull
 abstract RawVector<T>(RawVectorData<T>) {
@@ -42,7 +36,7 @@ abstract RawVector<T>(RawVectorData<T>) {
 		final newVector = new RawVector<T>(len);
 		var i = 0;
 		while (i < len) {
-			newVector[i] = array.get(i);
+			newVector[i] = array[i];
 			++i;
 		}
 		return newVector;
@@ -54,18 +48,24 @@ abstract RawVector<T>(RawVectorData<T>) {
 	static extern inline function fromData<T>(data: RawVectorData<T>): RawVector<T>
 		return cast data;
 
+	public var length(get, never): UInt;
+
+	extern inline function get_length()
+		return this.length;
+
 	var data(get, never): RawVectorData<T>;
 
 	extern inline function get_data()
 		return this;
 
-	public extern inline function new(length: Int)
-		this = new RawVectorData<T>(length);
+	public extern inline function new(length: UInt) {
+		this = new RawVectorData<T>(length.int());
+	}
 
-	@:op([]) public extern inline function get(index: Int): T
+	@:op([]) public extern inline function get(index: UInt): T
 		return this[index];
 
-	@:op([]) public extern inline function set(index: Int, value: T): T
+	@:op([]) public extern inline function set(index: UInt, value: T): T
 		return this[index] = value;
 
 	/**
@@ -76,10 +76,10 @@ abstract RawVector<T>(RawVectorData<T>) {
 		@param srcLen The length of the range to be copied.
 	**/
 	public extern inline function blit<T>(
-		pos: Int,
+		pos: UInt,
 		src: RawVector<T>,
-		srcPos: Int,
-		srcLen: Int
+		srcPos: UInt,
+		srcLen: UInt
 	): Void {
 		#if hl
 		this.blit(pos, src.data, srcPos, srcLen);
@@ -130,7 +130,7 @@ abstract RawVector<T>(RawVectorData<T>) {
 		@param len The length of the range to be copied.
 		@return New vector.
 	**/
-	public inline function sub<T>(pos: Int, len: Int): RawVector<T> {
+	public inline function sub<T>(pos: UInt, len: UInt): RawVector<T> {
 		#if hl
 		return fromData(this.sub(pos, len));
 		#else
@@ -146,11 +146,11 @@ abstract RawVector<T>(RawVectorData<T>) {
 		@return Shallow copy of `this` as `Array<T>`.
 	**/
 	public inline function toArray(): Array<T> {
-		final array = ArrayTools.allocate(this.length);
+		final array = Arrays.allocate(this.length);
 		final len = this.length;
 		var i = 0;
 		while (i < len) {
-			array.set(i, this[i]);
+			array[i] = this[i];
 			++i;
 		}
 		return array;

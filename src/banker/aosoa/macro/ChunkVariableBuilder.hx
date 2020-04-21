@@ -193,7 +193,7 @@ class ChunkVariableBuilder {
 			final factoryExpression = metaMap.factoryWithId.unwrap();
 			if (factoryExpression.unify((macro: (id: banker.aosoa.ChunkEntityId) -> $variableType).toType())) {
 				final populateExpression = macro {
-					var i = 0;
+					var i = sinker.UInt.zero;
 					$vector.populate(() -> {
 						final value = $factoryExpression(new banker.aosoa.ChunkEntityId(
 							chunkId,

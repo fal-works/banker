@@ -6,7 +6,7 @@ class SequenceExtension {
 		_this: TopAlignedBuffer<K, V>,
 		callback: K->Void
 	): Void {
-		_this.keyVector.ref.forEachIn(callback, 0, _this.size);
+		_this.keyVector.ref.forEachIn(callback, UInt.zero, _this.size);
 	}
 
 	/** @see `buffer.map.interfaces.Sequence` **/
@@ -14,7 +14,7 @@ class SequenceExtension {
 		_this: TopAlignedBuffer<K, V>,
 		callback: V->Void
 	): Void {
-		_this.valueVector.ref.forEachIn(callback, 0, _this.size);
+		_this.valueVector.ref.forEachIn(callback, UInt.zero, _this.size);
 	}
 
 	/** @see `buffer.map.interfaces.Sequence` **/
@@ -44,7 +44,7 @@ class SequenceExtension {
 		final keys = _this.keyVector;
 		final values = _this.valueVector;
 		final len = _this.size;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < len) {
 			callback(i, keys, values);
 			++i;
@@ -62,7 +62,7 @@ class SequenceExtension {
 		final len = _this.size;
 
 		var found = false;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < len) {
 			final key = keys[i];
 			final value = values[i];

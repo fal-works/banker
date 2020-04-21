@@ -13,7 +13,7 @@ class SetExtension {
 		final vector = _this.vector;
 
 		var found = defaultValue;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < size) {
 			final element = vector[i];
 			if (!predicate(element)) {
@@ -34,7 +34,7 @@ class SetExtension {
 		final vector = _this.vector;
 
 		var found = false;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < size) {
 			if (vector[i] != element) {
 				++i;
@@ -63,7 +63,7 @@ class SetExtension {
 		final vector = _this.vector;
 
 		var found = false;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < size) {
 			if (vector[i] != element) {
 				++i;
@@ -86,7 +86,7 @@ class SetExtension {
 		final vector = _this.vector;
 
 		var found = false;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < size) {
 			if (!predicate(vector[i])) {
 				++i;
@@ -107,8 +107,8 @@ class SetExtension {
 	): Int {
 		final size = _this.size;
 		final vector = _this.vector;
-		var count = 0;
-		var i = 0;
+		var count = UInt.zero;
+		var i = UInt.zero;
 		while (i < size) {
 			if (predicate(vector[i])) ++count;
 			++i;
@@ -124,7 +124,7 @@ class SetExtension {
 		final size = _this.size;
 		final vector = _this.vector;
 		final populationMap = new ArrayMap<S, Int>(size);
-		var i = 0;
+		var i = UInt.zero;
 		while (i < size) {
 			final group = grouperCallback(vector[i]);
 			populationMap.set(group, populationMap.getOr(group, 0) + 1);

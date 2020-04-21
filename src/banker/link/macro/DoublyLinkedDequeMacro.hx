@@ -9,7 +9,6 @@ import sneaker.macro.extensions.FieldExtension.isNew;
 import banker.link.macro.Utility.*;
 
 using haxe.macro.TypeTools;
-using banker.array.ArrayFunctionalExtension;
 
 class DoublyLinkedDequeMacro {
 	/**

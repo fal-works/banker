@@ -3,11 +3,9 @@ package banker.aosoa.macro;
 #if macro
 using haxe.macro.TypeTools;
 using sneaker.macro.MacroCaster;
-using banker.array.ArrayExtension;
 
 import haxe.macro.Context;
 import haxe.macro.Type;
-import sneaker.macro.Values.intComplexType;
 
 class Aosoa {
 	/**
@@ -32,29 +30,29 @@ class Aosoa {
 			/**
 				The capacity of each chunk i.e. the length of each vector that a chunk contains.
 			**/
-			public final chunkCapacity: Int;
+			public final chunkCapacity: sinker.UInt;
 
 			/**
 				The total number of entities in `this` AoSoA, i.e. (chunk capacity) * (chunk count).
 			**/
-			public final capacity: Int;
+			public final capacity: sinker.UInt;
 
 			/**
 				Default values for `readWriteIndexMap` of the chunk class.
 			**/
-			final defaultReadWriteIndexMap: banker.vector.Vector<Int>;
+			final defaultReadWriteIndexMap: banker.vector.Vector<sinker.UInt>;
 
 			/**
 				The largest index of chunks that have any entity currently in use.
 				The Aosoa iterates chunks until (but not including) this index.
 			**/
-			var endReadChunkIndex = 0;
+			var endReadChunkIndex = sinker.UInt.zero;
 
 			/**
 				The smallest index of chunks that have any entity currently not in use.
 				The Aosoa starts at this index when searching an available chunk to use a new entity.
 			**/
-			var nextWriteChunkIndex = 0;
+			var nextWriteChunkIndex = sinker.UInt.zero;
 
 			/**
 				Synchronizes all chunks that have any entity in use.
@@ -64,17 +62,20 @@ class Aosoa {
 				final chunkCount = chunks.length;
 				final chunkCapacity = this.chunkCapacity;
 				final defaultReadWriteIndexMap = this.defaultReadWriteIndexMap;
-				var usedChunkMaxIndex = 0;
-				var endReadEntityIndex = chunkCapacity;
+				var usedChunkMaxIndex = sinker.UInt.zero;
+				var endReadEntityIndex: sinker.UInt;
 
-				for (chunkIndex in 0...chunkCount) {
+				var chunkIndex = sinker.UInt.zero;
+				while (chunkIndex < chunkCount) {
 					endReadEntityIndex = chunks[chunkIndex].synchronize(
 						chunkCapacity,
 						defaultReadWriteIndexMap
 					);
 
-					if (endReadEntityIndex > 0) usedChunkMaxIndex = chunkIndex;
+					if (!endReadEntityIndex.isZero()) usedChunkMaxIndex = chunkIndex;
 					else break; // TODO: do not break?
+
+					++chunkIndex;
 				}
 
 				this.endReadChunkIndex = usedChunkMaxIndex + 1;
@@ -127,8 +128,8 @@ class Aosoa {
 		externalArguments: Array<FunctionArg>
 	): Field {
 		final constructorArguments: Array<FunctionArg> = [
-			{ name: "chunkCapacity", type: intComplexType },
-			{ name: "chunkCount", type: intComplexType }
+			{ name: "chunkCapacity", type: (macro:sinker.UInt) },
+			{ name: "chunkCount", type: (macro:sinker.UInt) }
 		];
 		constructorArguments.pushFromArray(externalArguments);
 
@@ -141,9 +142,9 @@ class Aosoa {
 				args: constructorArguments,
 				ret: null,
 				expr: macro {
-					final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkCapacity) i]);
+					final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkCapacity) (i: sinker.UInt)]);
 
-					var chunkId = 0;
+					var chunkId = sinker.UInt.zero;
 					this.chunks = banker.vector.Vector.createPopulated(
 						chunkCount,
 						() -> new $chunkTypePath($a{chunkConstructorArguments})
@@ -199,7 +200,7 @@ class Aosoa {
 			final chunks = this.chunks;
 			final chunkCapacity = this.chunkCapacity;
 			final endReadChunkIndex = this.endReadChunkIndex;
-			var i = 0;
+			var i = sinker.UInt.zero;
 
 			while (i < endReadChunkIndex) {
 				final chunk = chunks[i];

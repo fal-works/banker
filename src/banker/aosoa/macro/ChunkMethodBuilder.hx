@@ -1,7 +1,6 @@
 package banker.aosoa.macro;
 
 #if macro
-using banker.array.ArrayExtension;
 using banker.aosoa.macro.MacroExtension;
 
 import sneaker.macro.MacroComparator.unifyComplex;
@@ -65,7 +64,7 @@ class ChunkMethodBuilder {
 		initializeBeforeLoops.pushFromArray(pieces.declareLocalBeforeLoop);
 		initializeBeforeLoops.push(macro final readWriteIndexMap = this.readWriteIndexMap);
 		initializeBeforeLoops.push(macro final endReadIndex = this.endReadIndex);
-		initializeBeforeLoops.push(macro var readIndex = 0);
+		initializeBeforeLoops.push(macro var readIndex = sinker.UInt.zero);
 		initializeBeforeLoops.push(macro var nextWriteIndex = this.nextWriteIndex);
 		initializeBeforeLoops.push(macro var disuse = false);
 
@@ -101,7 +100,7 @@ class ChunkMethodBuilder {
 
 		final iteratorFunction: Function = {
 			args: externalArguments,
-			ret: (macro:Int),
+			ret: (macro:sinker.UInt),
 			expr: macro $b{wholeExpressions}
 		};
 
@@ -115,10 +114,9 @@ class ChunkMethodBuilder {
 				var readIndex = 0;
 				var nextWriteIndex = this.nextWriteIndex
 				var disuse = false;
-				var i: Int;
 
 				while (readIndex < endReadIndex) {
-					i = readWriteIndexMap[readIndex]; // write index
+					final i = readWriteIndexMap[readIndex]; // write index
 					declareLocalInsideLoop();
 
 					originalFunction();
@@ -172,7 +170,7 @@ class ChunkMethodBuilder {
 
 		expressions.push(originalFunction.expression);
 
-		expressions.push(macro final nextIndex = i + 1);
+		expressions.push(macro final nextIndex = i.plusOne());
 		expressions.push(macro this.nextWriteIndex = nextIndex);
 		expressions.pushFromArray(pieces.saveLocalAfterLoop);
 
@@ -180,7 +178,7 @@ class ChunkMethodBuilder {
 
 		final useFunction: Function = {
 			args: externalArguments,
-			ret: (macro:Int),
+			ret: (macro:sinker.UInt),
 			expr: macro $b{expressions}
 		};
 

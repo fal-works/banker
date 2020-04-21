@@ -9,16 +9,16 @@ class Unique<T> extends TopAlignedBuffer<T> implements ripper.Spirit {
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
 		@see `banker.container.buffer.top_aligned.InternalExtension`
 	**/
-	override inline function pushInternal(index: Int, element: T): Void
+	override inline function pushInternal(index: UInt, element: T): Void
 		InternalExtension.pushDuplicatesPrevented(this, index, element);
 
 	/**
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
 	**/
 	override inline function pushFromVectorInternal(
-		index: Int,
+		index: UInt,
 		otherVector: VectorReference<T>,
-		otherVectorLength: Int
+		otherVectorLength: UInt
 	): Void {
 		InternalExtension.pushFromVectorDuplicatesPrevented(
 			this,
@@ -31,6 +31,6 @@ class Unique<T> extends TopAlignedBuffer<T> implements ripper.Spirit {
 	/**
 		@see `banker.container.buffer.top_aligned.CloneExtension`
 	**/
-	public inline function cloneAsSet(newCapacity = -1): ArraySet<T>
+	public inline function cloneAsSet(newCapacity = MaybeUInt.none): ArraySet<T>
 		return CloneExtension.cloneAsSet(this, newCapacity);
 }

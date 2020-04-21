@@ -20,6 +20,6 @@ package banker.aosoa.interfaces;
 	```
 **/
 typedef AosoaConstructible = haxe.Constraints.Constructible<(
-	chunkCapacity: Int,
-	chunkCount: Int
+	chunkCapacity: UInt,
+	chunkCount: UInt
 ) -> Void>;

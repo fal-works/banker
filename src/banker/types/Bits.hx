@@ -6,48 +6,48 @@ import sneaker.string_buffer.StringBuffer;
 	Bit array based on `Int`.
 **/
 abstract Bits(Int) {
-	extern public static inline final zero = Bits.from(0);
-	extern public static inline final one = Bits.from(1);
+	public static extern inline final zero = Bits.from(0);
+	public static extern inline final one = Bits.from(1);
 
 	/**
 		Casts `Int` to `Bits`.
 	**/
-	extern public static inline function from(v: Int): Bits
+	public static extern inline function from(v: Int): Bits
 		return new Bits(v);
 
 	@:op(A << B)
-	extern public static inline function leftShift(bits: Bits, shiftCount: Int): Bits
-		return Bits.from(bits.toInt() << shiftCount);
+	public static extern inline function leftShift(bits: Bits, shiftCount: Int): Bits
+		return Bits.from(bits.int() << shiftCount);
 
 	@:op(A >> B)
-	extern public static inline function rightShift(bits: Bits, shiftCount: Int): Bits
-		return Bits.from(bits.toInt() >> shiftCount);
+	public static extern inline function rightShift(bits: Bits, shiftCount: Int): Bits
+		return Bits.from(bits.int() >> shiftCount);
 
 	@:op(A >>> B)
-	extern public static inline function unsignedRightShift(
+	public static extern inline function unsignedRightShift(
 		bits: Bits,
 		shiftCount: Int
 	): Bits {
-		return Bits.from(bits.toInt() >>> shiftCount);
+		return Bits.from(bits.int() >>> shiftCount);
 	}
 
-	@:op(A == B) extern public static function equal(a: Bits, b: Bits): Bool;
+	@:op(A == B) public static function equal(a: Bits, b: Bits): Bool;
 
-	@:op(A != B) extern public static function notEqual(a: Bits, b: Bits): Bool;
+	@:op(A != B) public static function notEqual(a: Bits, b: Bits): Bool;
 
-	@:op(A & B) extern public static function and(a: Bits, b: Bits): Bits;
+	@:op(A & B) public static function and(a: Bits, b: Bits): Bits;
 
-	@:op(A | B) extern public static function or(a: Bits, b: Bits): Bits;
+	@:op(A | B) public static function or(a: Bits, b: Bits): Bits;
 
-	@:op(A ^ B) extern public static function xor(a: Bits, b: Bits): Bits;
+	@:op(A ^ B) public static function xor(a: Bits, b: Bits): Bits;
 
-	@:op(~A) extern public static function negate(a: Bits): Bits;
+	@:op(~A) public static function negate(a: Bits): Bits;
 
 	/**
 		Sets the bit at `index`.
 		@return New `Bits` value.
 	**/
-	public static inline function set(bits: Bits, index: Int): Bits {
+	public static extern inline function set(bits: Bits, index: Int): Bits {
 		return bits | (one << index);
 	}
 
@@ -55,7 +55,7 @@ abstract Bits(Int) {
 		Unsets the bit at `index`.
 		@return New `Bits` value.
 	**/
-	public static inline function unsetBit(bits: Bits, index: Int): Bits {
+	public static extern inline function unsetBit(bits: Bits, index: Int): Bits {
 		return bits & ~(one << index);
 	}
 
@@ -69,20 +69,20 @@ abstract Bits(Int) {
 		return a.separateBits() | (b.separateBits() << 1);
 	}
 
-	extern public inline function new(v: Int) {
+	public extern inline function new(v: Int) {
 		this = v;
 	}
 
 	/**
 		Casts `this` to `Int`.
 	**/
-	extern public inline function toInt(): Int
+	public extern inline function int(): Int
 		return this;
 
 	/**
 		@return `true` if the bit at `index` is set.
 	**/
-	public inline function get(index: Int): Bool {
+	public extern inline function get(index: Int): Bool {
 		return new Bits(this) & (one << index) != zero;
 	}
 
@@ -111,9 +111,10 @@ abstract Bits(Int) {
 	}
 
 	/**
+		@param byteCount Number of bytes to be stringified.
 		@return `String` representation of `this`, each byte separated with a space.
 	**/
-	public function stringify(byteCount: Int): String {
+	public function stringify(byteCount: UInt): String {
 		var buffer = new StringBuffer();
 		var bitMask = one << (8 * byteCount - 1);
 
@@ -122,7 +123,7 @@ abstract Bits(Int) {
 			bitMask >>>= 1;
 		}
 
-		for (k in 0...byteCount - 1) {
+		for (k in 0...byteCount.int() - 1) {
 			buffer.addChar(" ".code);
 
 			for (i in 0...8) {
@@ -137,7 +138,7 @@ abstract Bits(Int) {
 	/**
 		@return `String` representation (4 bytes).
 	**/
-	public inline function toString(): String {
+	public extern inline function toString(): String {
 		return Bits.from(this).stringify(4);
 	}
 }

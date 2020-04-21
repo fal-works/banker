@@ -33,7 +33,7 @@ abstract Percentage(Int) {
 	/**
 		@return `Int` representaion. (valid range: 0 to 100)
 	**/
-	public inline function toInt(): Int
+	public inline function int(): Int
 		return this;
 
 	/**

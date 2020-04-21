@@ -3,8 +3,6 @@ package banker.finite;
 #if macro
 using haxe.macro.TypeTools;
 using haxe.macro.ComplexTypeTools;
-using banker.array.ArrayExtension;
-using banker.array.ArrayFunctionalExtension;
 
 import sneaker.macro.PositionStack;
 import sneaker.macro.ContextTools;

@@ -3,7 +3,6 @@ package banker.finite;
 #if macro
 using haxe.macro.ExprTools;
 using sneaker.macro.MacroCaster;
-using banker.array.ArrayFunctionalExtension;
 
 import sneaker.macro.ContextTools;
 import sneaker.macro.MacroResult;

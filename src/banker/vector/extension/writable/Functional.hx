@@ -8,11 +8,11 @@ class Functional {
 		_this: WritableVector<T>,
 		callback: (
 			element: T,
-			index: Int,
+			index: UInt,
 			vector: WritableVector<T>
 		) -> Void,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): Void {
 		var i = startIndex;
 		while (i < endIndex) {
@@ -28,10 +28,10 @@ class Functional {
 		_this: WritableVector<T>,
 		callback: (
 			element: T,
-			index: Int,
+			index: UInt,
 			vector: WritableVector<T>
 		) -> Void
 	): Void {
-		forEachIndexIn(_this, callback, 0, _this.length);
+		forEachIndexIn(_this, callback, UInt.zero, _this.length);
 	}
 }

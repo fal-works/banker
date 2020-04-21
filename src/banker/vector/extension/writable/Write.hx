@@ -6,9 +6,9 @@ class Write {
 	**/
 	public static inline function blitInternal<T>(
 		_this: WritableVector<T>,
-		sourcePosition: Int,
-		destinationPosition: Int,
-		rangeLength: Int
+		sourcePosition: UInt,
+		destinationPosition: UInt,
+		rangeLength: UInt
 	): Void {
 		#if !macro
 		assert(sourcePosition + rangeLength <= _this.length);
@@ -28,12 +28,11 @@ class Write {
 	**/
 	public static inline function swap<T>(
 		_this: WritableVector<T>,
-		indexA: Int,
-		indexB: Int
+		indexA: UInt,
+		indexB: UInt
 	): Void {
 		#if !macro
-		assert(indexA >= 0 && indexA < _this.length);
-		assert(indexB >= 0 && indexB < _this.length);
+		assert(indexA < _this.length && indexB < _this.length);
 		#end
 
 		final tmp = _this[indexA];
@@ -44,19 +43,26 @@ class Write {
 	/**
 		Reverses the order of elements in `this`.
 	**/
+	@:access(sinker.UInt)
 	public static inline function reverse<T>(
 		_this: WritableVector<T>
 	): Void {
 		final len = _this.length;
-		var tmp: T;
-		var i = 0;
-		var k = len - 1;
-		while (i < len) {
-			tmp = _this[i];
-			_this[i] = _this[k];
-			_this[k] = tmp;
-			++i;
-			--k;
+
+		if (!len.isZero()) {
+			var tmp: T;
+			var i = UInt.zero;
+			var k = len;
+
+			while (i < len) {
+				--k;
+
+				tmp = _this[i];
+				_this[i] = _this[k];
+				_this[k] = tmp;
+
+				++i;
+			}
 		}
 	}
 }

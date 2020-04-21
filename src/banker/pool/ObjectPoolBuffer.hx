@@ -17,7 +17,7 @@ class ObjectPoolBuffer<T> extends TopAlignedBuffer<T> implements ripper.Body {
 	/**
 		Creates an object pool populated with elements made by `factory()`.
 	**/
-	public function new(capacity: Int, factory: () -> T) {
+	public function new(capacity: UInt, factory: () -> T) {
 		super(capacity);
 
 		final vector = this.vector;

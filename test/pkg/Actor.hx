@@ -7,7 +7,7 @@ class Actor implements banker.aosoa.Structure {
 	public static var staticInt: Int = 0;
 
 	@:banker_chunkLevelFinal
-	@:banker_chunkLevelFactory((chunkCapacity: Int) -> chunkCapacity)
+	@:banker_chunkLevelFactory((chunkCapacity: UInt) -> chunkCapacity)
 	var chunkLevelFloat: Float;
 
 	@:banker_onSynchronize
@@ -32,7 +32,7 @@ class Actor implements banker.aosoa.Structure {
 		println('$x, $y');
 	}
 
-	static function printId(chunkId: Int, entityId: Int) {
+	static function printId(chunkId: UInt, entityId: UInt) {
 		println('chunk $chunkId, entity $entityId');
 	}
 
@@ -54,7 +54,7 @@ class Actor implements banker.aosoa.Structure {
 		y: Vec<Float>,
 		newX: Float,
 		newY: Float,
-		i: Int
+		i: UInt
 	) {
 		x[i] = newX;
 		y[i] = newY;

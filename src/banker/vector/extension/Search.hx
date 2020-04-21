@@ -9,13 +9,13 @@ class Search {
 	public static inline function findIndexIn<T>(
 		_this: VectorReference<T>,
 		element: T,
-		startIndex: Int,
-		endIndex: Int
-	): Int {
+		startIndex: UInt,
+		endIndex: UInt
+	): MaybeUInt {
 		#if !macro
-		assert(startIndex >= 0 && endIndex <= _this.length);
+		assert(endIndex <= _this.length);
 		#end
-		var found = -1;
+		var found = MaybeUInt.none;
 		var i = startIndex;
 		while (i < endIndex) {
 			if (_this[i] == element) {
@@ -36,8 +36,8 @@ class Search {
 	public static inline function findIndex<T>(
 		_this: VectorReference<T>,
 		element: T
-	): Int {
-		return findIndexIn(_this, element, 0, _this.length);
+	): MaybeUInt {
+		return findIndexIn(_this, element, UInt.zero, _this.length);
 	}
 
 	/**
@@ -48,13 +48,13 @@ class Search {
 	public static inline function findFirstIndexIn<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool,
-		startIndex: Int,
-		endIndex: Int
-	): Int {
+		startIndex: UInt,
+		endIndex: UInt
+	): MaybeUInt {
 		#if !macro
-		assert(startIndex >= 0 && endIndex <= _this.length);
+		assert(endIndex <= _this.length);
 		#end
-		var found = -1;
+		var found = MaybeUInt.none;
 		var i = startIndex;
 		while (i < endIndex) {
 			if (predicate(_this[i])) {
@@ -75,8 +75,8 @@ class Search {
 	public static inline function findFirstIndex<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool
-	): Int {
-		return findFirstIndexIn(_this, predicate, 0, _this.length);
+	): MaybeUInt {
+		return findFirstIndexIn(_this, predicate, UInt.zero, _this.length);
 	}
 
 	/**
@@ -86,11 +86,11 @@ class Search {
 	public static inline function hasIn<T>(
 		_this: VectorReference<T>,
 		element: T,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): Bool {
 		#if !macro
-		assert(startIndex >= 0 && endIndex <= _this.length);
+		assert(endIndex <= _this.length);
 		#end
 		var found = false;
 		var i = startIndex;
@@ -110,7 +110,7 @@ class Search {
 		@return `true` if this list contains `element`.
 	**/
 	public static inline function has<T>(_this: VectorReference<T>, element: T): Bool {
-		return hasIn(_this, element, 0, _this.length);
+		return hasIn(_this, element, UInt.zero, _this.length);
 	}
 
 	/**
@@ -123,11 +123,11 @@ class Search {
 		_this: VectorReference<T>,
 		element: T,
 		equalityPredicate: T->T->Bool,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): Bool {
 		#if !macro
-		assert(startIndex >= 0 && endIndex <= _this.length);
+		assert(endIndex <= _this.length);
 		#end
 		var found = false;
 		var i = startIndex;
@@ -153,7 +153,7 @@ class Search {
 		element: T,
 		equalityPredicate: T->T->Bool
 	): Bool {
-		return hasEqualIn(_this, element, equalityPredicate, 0, _this.length);
+		return hasEqualIn(_this, element, equalityPredicate, UInt.zero, _this.length);
 	}
 
 	/**
@@ -165,11 +165,11 @@ class Search {
 		_this: VectorReference<T>,
 		predicate: T->Bool,
 		defaultValue: T,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): T {
 		#if !macro
-		assert(startIndex >= 0 && endIndex <= _this.length);
+		assert(endIndex <= _this.length);
 		#end
 		var element: T;
 		var found: T = defaultValue;
@@ -197,6 +197,6 @@ class Search {
 		predicate: T->Bool,
 		defaultValue: T
 	): T {
-		return findFirstIn(_this, predicate, defaultValue, 0, _this.length);
+		return findFirstIn(_this, predicate, defaultValue, UInt.zero, _this.length);
 	}
 }

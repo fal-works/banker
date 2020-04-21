@@ -16,7 +16,7 @@ class SafeObjectPool<T> extends ObjectPoolBase<T> {
 	public var factory: () -> T;
 
 	/** @inheritdoc **/
-	public function new(capacity: Int, factory: () -> T) {
+	public function new(capacity: UInt, factory: () -> T) {
 		super(capacity, factory);
 		this.factory = factory;
 	}
@@ -28,7 +28,7 @@ class SafeObjectPool<T> extends ObjectPoolBase<T> {
 		outputs DEBUG log if enabled (see `sneaker` library about logging).
 	**/
 	override public function get(): T
-		return if (this.size > 0)
+		return if (!this.size.isZero())
 			super.get()
 		else {
 			this.debug("Empty. Create new instance.");

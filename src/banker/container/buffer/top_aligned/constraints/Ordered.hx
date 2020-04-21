@@ -11,8 +11,8 @@ class Ordered<T> extends TopAlignedBuffer<T> implements ripper.Spirit {
 	**/
 	override inline function removeAtInternal(
 		vector: WritableVector<T>,
-		currentSize: Int,
-		index: Int
+		currentSize: UInt,
+		index: UInt
 	): T {
 		return InternalExtension.removeShiftAt(this, vector, currentSize, index);
 	}

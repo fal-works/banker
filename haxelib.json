@@ -11,6 +11,7 @@
 		"fal-works"
 	],
 	"dependencies": {
+		"sinker": "0.1.0",
 		"sneaker": "0.8.1",
 		"ripper": "0.3.0"
 	}

@@ -23,7 +23,7 @@ class Sequence<K, V>
 	/** @see `banker.map.interfaces.Sequence` **/
 	public inline function forEachIndex(
 		callback: (
-			index: Int,
+			index: UInt,
 			keys: WritableVector<K>,
 			values: WritableVector<V>
 		) -> Void

@@ -16,7 +16,7 @@ class SequenceExtension {
 			vector.ref.forEachIn(callback, headIndex, headIndex + size);
 		} else {
 			vector.ref.forEachIn(callback, headIndex, vectorLength);
-			vector.ref.forEachIn(callback, 0, tailIndex);
+			vector.ref.forEachIn(callback, UInt.zero, tailIndex);
 		}
 	}
 
@@ -35,7 +35,7 @@ class SequenceExtension {
 			vector.ref.filterIn(predicate, headIndex, headIndex + size);
 		} else {
 			final buffer: Array<T> = [];
-			var i: Int;
+			var i: UInt;
 
 			i = headIndex;
 			while (i < vectorLength) {
@@ -44,7 +44,7 @@ class SequenceExtension {
 				++i;
 			}
 
-			i = 0;
+			i = UInt.zero;
 			while (i < tailIndex) {
 				final item = vector[i];
 				if (predicate(item)) buffer.push(item);
@@ -71,8 +71,8 @@ class SequenceExtension {
 			vector.ref.mapIn(callback, headIndex, headIndex + size);
 		} else {
 			final newVector = new WritableVector<S>(vectorLength);
-			var sourceIndex: Int;
-			var destinationIndex = 0;
+			var sourceIndex: UInt;
+			var destinationIndex = UInt.zero;
 
 			sourceIndex = headIndex;
 			while (sourceIndex < vectorLength) {
@@ -82,7 +82,7 @@ class SequenceExtension {
 				++destinationIndex;
 			}
 
-			sourceIndex = 0;
+			sourceIndex = UInt.zero;
 			while (sourceIndex < tailIndex) {
 				final item = vector[sourceIndex];
 				newVector[destinationIndex] = callback(item);

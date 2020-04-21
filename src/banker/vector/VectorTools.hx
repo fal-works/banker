@@ -1,7 +1,5 @@
 package banker.vector;
 
-import banker.common.MathTools.minInt;
-
 class VectorTools {
 	/**
 		Copies `rangeLength` of elements from `source` (beginning at `sourcePosition`)
@@ -9,13 +7,12 @@ class VectorTools {
 	**/
 	public static inline function blit<T>(
 		source: VectorReference<T>,
-		sourcePosition: Int,
+		sourcePosition: UInt,
 		destination: WritableVector<T>,
-		destinationPosition: Int,
-		rangeLength: Int
+		destinationPosition: UInt,
+		rangeLength: UInt
 	): Void {
 		#if !macro
-		assert(sourcePosition >= 0 && destinationPosition >= 0);
 		assert(sourcePosition + rangeLength <= source.length);
 		assert(destinationPosition + rangeLength <= destination.length);
 		#end
@@ -34,13 +31,13 @@ class VectorTools {
 	public static inline function blitZero<T>(
 		source: VectorReference<T>,
 		destination: WritableVector<T>,
-		rangeLength: Int
+		rangeLength: UInt
 	): Void {
 		#if !macro
 		assert(rangeLength <= source.length);
 		assert(rangeLength <= destination.length);
 		#end
-		destination.ref.data.blit(0, source.data, 0, rangeLength);
+		destination.ref.data.blit(UInt.zero, source.data, UInt.zero, rangeLength);
 	}
 
 	/**
@@ -48,17 +45,16 @@ class VectorTools {
 	**/
 	public static inline function blitToArray<T>(
 		sourceVector: VectorReference<T>,
-		sourcePosition: Int,
+		sourcePosition: UInt,
 		destinationArray: Array<T>,
-		destinationPosition: Int,
-		rangeLength: Int
+		destinationPosition: UInt,
+		rangeLength: UInt
 	): Void {
 		#if !macro
-		assert(sourcePosition >= 0 && destinationPosition >= 0);
 		assert(sourcePosition + rangeLength <= sourceVector.length);
 		assert(destinationPosition + rangeLength <= destinationArray.length);
 		#end
-		var i = 0;
+		var i = UInt.zero;
 		while (i < rangeLength) {
 			destinationArray[destinationPosition + i] = sourceVector[sourcePosition + i];
 			++i;
@@ -72,12 +68,12 @@ class VectorTools {
 		vectorA: VectorReference<T>,
 		vectorB: VectorReference<U>,
 		zipper: (elementA: T, elementB: U) -> V,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): WritableVector<V> {
 		final newVector = new WritableVector<V>(endIndex - startIndex);
 		var readIndex = startIndex;
-		var writeIndex = 0;
+		var writeIndex = UInt.zero;
 		while (readIndex < endIndex) {
 			newVector[writeIndex] = zipper(vectorA[readIndex], vectorB[readIndex]);
 			++readIndex;
@@ -94,8 +90,8 @@ class VectorTools {
 		vectorA: VectorReference<T>,
 		vectorB: VectorReference<U>,
 		zipper: (elementA: T, elementB: U) -> V,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): Vector<V> {
 		return zipInWritable(
 			vectorA,
@@ -118,8 +114,8 @@ class VectorTools {
 			vectorA,
 			vectorB,
 			zipper,
-			0,
-			minInt(vectorA.length, vectorB.length)
+			UInt.zero,
+			UInts.min(vectorA.length, vectorB.length)
 		);
 	}
 
@@ -135,8 +131,8 @@ class VectorTools {
 			vectorA,
 			vectorB,
 			zipper,
-			0,
-			minInt(vectorA.length, vectorB.length)
+			UInt.zero,
+			UInts.min(vectorA.length, vectorB.length)
 		);
 	}
 }

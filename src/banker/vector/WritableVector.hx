@@ -35,19 +35,19 @@ abstract WritableVector<T>(RawVector<T>) from RawVector<T> {
 	extern inline function get_ref(): VectorReference<T>
 		return this;
 
-	public extern inline function new(length: Int)
+	public extern inline function new(length: UInt)
 		this = new RawVector<T>(length);
 
-	@:op([]) public extern inline function get(index: Int): T {
+	@:op([]) public extern inline function get(index: UInt): T {
 		#if !macro
-		assert(index >= 0 && index < this.length, null, "Out of bound.");
+		assert(index < this.length, null, "Out of bound.");
 		#end
 		return this[index];
 	}
 
-	@:op([]) public extern inline function set(index: Int, value: T): T {
+	@:op([]) public extern inline function set(index: UInt, value: T): T {
 		#if !macro
-		assert(index >= 0 && index < this.length, null, "Out of bound.");
+		assert(index < this.length, null, "Out of bound.");
 		#end
 		return this[index] = value;
 	}

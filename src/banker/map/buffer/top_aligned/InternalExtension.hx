@@ -12,8 +12,8 @@ class InternalExtension {
 		_this: TopAlignedBuffer<K, V>,
 		keyVector: WritableVector<K>,
 		valueVector: WritableVector<V>,
-		currentSize: Int,
-		index: Int
+		currentSize: UInt,
+		index: UInt
 	): Void {
 		final lastIndex = currentSize - 1;
 		keyVector[index] = keyVector[lastIndex];
@@ -32,8 +32,8 @@ class InternalExtension {
 		_this: TopAlignedBuffer<K, V>,
 		keyVector: WritableVector<K>,
 		valueVector: WritableVector<V>,
-		currentSize: Int,
-		index: Int
+		currentSize: UInt,
+		index: UInt
 	): Void {
 		final nextSize = currentSize - 1;
 		final movingRange = nextSize - index;
@@ -58,7 +58,7 @@ class InternalExtension {
 
 		var found = false;
 		var len = _this.size;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < len) {
 			if (!predicate(keys[i], values[i])) {
 				++i;
@@ -92,8 +92,8 @@ class InternalExtension {
 		final values = _this.valueVector;
 
 		var found = false;
-		var readIndex = 0;
-		var writeIndex = 0;
+		var readIndex = UInt.zero;
+		var writeIndex = UInt.zero;
 
 		while (readIndex < size) {
 			final readingKey = keys[readIndex];
@@ -133,7 +133,7 @@ class InternalExtension {
 
 		var found = false;
 		var len = _this.size;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < len) {
 			final key = keys[i];
 			final value = values[i];
@@ -173,8 +173,8 @@ class InternalExtension {
 		final values = _this.valueVector;
 
 		var found = false;
-		var readIndex = 0;
-		var writeIndex = 0;
+		var readIndex = UInt.zero;
+		var writeIndex = UInt.zero;
 
 		while (readIndex < size) {
 			final readingKey = keys[readIndex];

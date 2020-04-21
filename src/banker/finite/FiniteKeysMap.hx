@@ -3,7 +3,6 @@ package banker.finite;
 #if macro
 using sneaker.macro.extensions.FieldExtension;
 
-import banker.array.ArrayTools;
 import banker.finite.FiniteKeysCollection.*;
 
 /**

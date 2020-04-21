@@ -9,7 +9,7 @@ class NotUnique<T> extends TopAlignedBuffer<T> implements ripper.Spirit {
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer`
 		@see `banker.container.buffer.top_aligned.InternalExtension`
 	**/
-	override inline function pushInternal(index: Int, element: T): Void
+	override inline function pushInternal(index: UInt, element: T): Void
 		InternalExtension.pushDuplicatesAllowed(this, index, element);
 
 	/**
@@ -17,9 +17,9 @@ class NotUnique<T> extends TopAlignedBuffer<T> implements ripper.Spirit {
 		@see `banker.container.buffer.top_aligned.InternalExtension`
 	**/
 	override inline function pushFromVectorInternal(
-		index: Int,
+		index: UInt,
 		otherVector: VectorReference<T>,
-		otherVectorLength: Int
+		otherVectorLength: UInt
 	): Void {
 		InternalExtension.pushFromVectorDuplicatesAllowed(
 			this,

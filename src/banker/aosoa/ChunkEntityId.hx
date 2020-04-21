@@ -4,30 +4,31 @@ package banker.aosoa;
 	Composite value of Chunk ID and Entity ID.
 **/
 @:notNull
+@:access(sinker.UInt)
 abstract ChunkEntityId(Int) {
 	/**
 		Dummy value of `ChunkEntityId`.
 		Both Chunk ID and Entity ID are `65535`.
 	**/
-	public static final dummy: ChunkEntityId = cast 0xFFFFFFFF;
+	public static extern inline final dummy: ChunkEntityId = cast 0xFFFFFFFF;
 
 	/**
 		Casts `Int` to `ChunkEntityId`.
 	**/
-	public static inline function fromInt(v: Int): ChunkEntityId
+	public static extern inline function fromInt(v: Int): ChunkEntityId
 		return cast v;
 
 	/**
 		The identifier number of the Chunk to which the entity belongs.
 	**/
-	public var chunk(get, never): Int;
+	public var chunk(get, never): UInt;
 
 	/**
 		The identifier number of the entity, which is unique in the Chunk.
 	**/
-	public var entity(get, never): Int;
+	public var entity(get, never): UInt;
 
-	public function new(chunkId: Int, entityId: Int) {
+	public extern inline function new(chunkId: UInt, entityId: UInt) {
 		#if !macro
 		assert(chunkId & 0xFFFF0000 == 0 && chunkId != 0xFFFF);
 		assert(entityId & 0xFFFF0000 == 0 && entityId != 0xFFFF);
@@ -38,9 +39,14 @@ abstract ChunkEntityId(Int) {
 	/**
 		@return `Int` representation of `this`.
 	**/
-	public inline function toInt(): Int
+	public extern inline function int(): Int
 		return this;
 
-	inline function get_chunk() return this >>> 16;
-	inline function get_entity() return this & 0xFFFF;
+	extern inline function get_chunk() {
+		return new UInt(this >>> 16);
+	}
+
+	extern inline function get_entity() {
+		return new UInt(this & 0xFFFF);
+	}
 }

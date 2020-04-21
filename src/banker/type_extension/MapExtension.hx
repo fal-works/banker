@@ -91,7 +91,7 @@ class MapExtension {
 		@return The number of keys.
 	**/
 	public static inline function countKeys<K, V>(_this: Map<K, V>): Int {
-		var i = 0;
+		var i = UInt.zero;
 		for (key in _this.keys()) ++i;
 		return i;
 	}

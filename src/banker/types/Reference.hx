@@ -12,16 +12,16 @@ import banker.vector.WritableVector;
 @:notNull
 abstract Reference<T>(WritableVector<T>) {
 	@:from public static inline function fromValue<T>(value: T): Reference<T> {
-		final vector = new WritableVector(1);
-		vector[0] = value;
+		final vector = new WritableVector(UInt.one);
+		vector[UInt.zero] = value;
 		return new Reference(vector);
 	}
 
 	@:to public inline function get(): T
-		return this[0];
+		return this[UInt.zero];
 
 	public inline function set(value: T): T
-		return this[0] = value;
+		return this[UInt.zero] = value;
 
 	inline function new(vector: WritableVector<T>)
 		this = vector;

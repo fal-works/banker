@@ -8,8 +8,8 @@ class Functional {
 	public static inline function forEachIn<T>(
 		_this: VectorReference<T>,
 		callback: T->Void,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): Void {
 		var i = startIndex;
 		while (i < endIndex) {
@@ -25,7 +25,7 @@ class Functional {
 		_this: VectorReference<T>,
 		callback: T->Void
 	): Void {
-		forEachIn(_this, callback, 0, _this.length);
+		forEachIn(_this, callback, UInt.zero, _this.length);
 	}
 
 	/**
@@ -36,8 +36,8 @@ class Functional {
 	public static inline function filterIn<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): Vector<T> {
 		final buffer = new Array<T>();
 		var i = startIndex;
@@ -58,7 +58,7 @@ class Functional {
 		_this: VectorReference<T>,
 		predicate: T->Bool
 	): Vector<T> {
-		return filterIn(_this, predicate, 0, _this.length);
+		return filterIn(_this, predicate, UInt.zero, _this.length);
 	}
 
 	/**
@@ -67,8 +67,8 @@ class Functional {
 	public static inline function filterInWritable<T>(
 		_this: VectorReference<T>,
 		predicate: T->Bool,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): WritableVector<T> {
 		return filterIn(_this, predicate, startIndex, endIndex).writable();
 	}
@@ -89,12 +89,12 @@ class Functional {
 	public static inline function mapInWritable<T, S>(
 		_this: VectorReference<T>,
 		callback: T->S,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): WritableVector<S> {
 		final newVector = new WritableVector<S>(endIndex - startIndex);
 		var i = startIndex;
-		var k = 0;
+		var k = UInt.zero;
 		while (i < endIndex) {
 			newVector[k] = callback(_this[i]);
 			++i;
@@ -121,8 +121,8 @@ class Functional {
 	public static inline function mapIn<T, S>(
 		_this: VectorReference<T>,
 		callback: T->S,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): Vector<S> {
 		return mapInWritable(_this, callback, startIndex, endIndex).nonWritable();
 	}
@@ -145,11 +145,11 @@ class Functional {
 		_this: VectorReference<T>,
 		callback: (
 			element: T,
-			index: Int,
+			index: UInt,
 			vector: VectorReference<T>
 		) -> Void,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): Void {
 		var i = startIndex;
 		while (i < endIndex) {
@@ -165,10 +165,10 @@ class Functional {
 		_this: VectorReference<T>,
 		callback: (
 			element: T,
-			index: Int,
+			index: UInt,
 			vector: VectorReference<T>
 		) -> Void
 	): Void {
-		forEachIndexIn(_this, callback, 0, _this.length);
+		forEachIndexIn(_this, callback, UInt.zero, _this.length);
 	}
 }

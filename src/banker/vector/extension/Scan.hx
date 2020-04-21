@@ -15,7 +15,7 @@ class Scan {
 		if (len != otherVector.length)
 			return false;
 
-		var i = 0;
+		var i = UInt.zero;
 		while (i < len) {
 			if (_this[i] != otherVector[i]) return false;
 			++i;
@@ -29,17 +29,16 @@ class Scan {
 	**/
 	public static inline function joinIn<T>(
 		_this: VectorReference<T>,
-		startIndex: Int,
-		endIndex: Int,
+		startIndex: UInt,
+		endIndex: UInt,
 		separator: String
 	): String {
-		final length = endIndex - startIndex;
-		if (length <= 0) return "";
+		if (endIndex <= startIndex) return "";
 
 		final buffer = new StringBuf();
 		buffer.add(_this[startIndex]);
 
-		for (i in startIndex + 1...endIndex) {
+		for (i in startIndex.plusOne()...endIndex) {
 			buffer.add(separator);
 			buffer.add(_this[i]);
 		}
@@ -54,6 +53,6 @@ class Scan {
 		_this: VectorReference<T>,
 		separator: String
 	): String {
-		return joinIn(_this, 0, _this.length, separator);
+		return joinIn(_this, UInt.zero, _this.length, separator);
 	}
 }

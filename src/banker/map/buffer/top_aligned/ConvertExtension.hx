@@ -5,28 +5,28 @@ class ConvertExtension {
 	public static inline function exportKeys<K, V>(
 		_this: TopAlignedBuffer<K, V>
 	): Vector<K> {
-		return _this.keyVector.ref.slice(0, _this.size);
+		return _this.keyVector.ref.slice(UInt.zero, _this.size);
 	}
 
 	/** @see `banker.map.interfaces.Convert` **/
 	public static inline function exportValues<K, V>(
 		_this: TopAlignedBuffer<K, V>
 	): Vector<V> {
-		return _this.valueVector.ref.slice(0, _this.size);
+		return _this.valueVector.ref.slice(UInt.zero, _this.size);
 	}
 
 	/** @see `banker.map.interfaces.Convert` **/
 	public static inline function exportKeysWritable<K, V>(
 		_this: TopAlignedBuffer<K, V>
 	): WritableVector<K> {
-		return _this.keyVector.ref.sliceWritable(0, _this.size);
+		return _this.keyVector.ref.sliceWritable(UInt.zero, _this.size);
 	}
 
 	/** @see `banker.map.interfaces.Convert` **/
 	public static inline function exportValuesWritable<K, V>(
 		_this: TopAlignedBuffer<K, V>
 	): WritableVector<V> {
-		return _this.valueVector.ref.sliceWritable(0, _this.size);
+		return _this.valueVector.ref.sliceWritable(UInt.zero, _this.size);
 	}
 
 	/**
@@ -49,7 +49,7 @@ class ConvertExtension {
 		final newKeys = destination.keyVector;
 		final newValues = destination.valueVector;
 
-		var i = 0;
+		var i = UInt.zero;
 		while (i < size) {
 			final key = keys[i];
 			newKeys[i] = key;
@@ -63,7 +63,7 @@ class ConvertExtension {
 	/**
 		Creates a copy.
 
-		- If `newCapacity` is negative,
+		- If `newCapacity` is `MaybeUInt.none`,
 			the new container has the same capacity as `this`.
 		- If `newCapacity` is less than the number of current elements (`this.size`),
 			the overflowing data is truncated.
@@ -72,9 +72,10 @@ class ConvertExtension {
 	**/
 	public static inline function cloneAsMap<K, V>(
 		_this: TopAlignedBuffer<K, V>,
-		newCapacity: Int
+		newCapacity: MaybeUInt
 	): ArrayMap<K, V> {
-		final newCapacityValue = if (newCapacity < 0) _this.capacity else newCapacity;
+		final newCapacityValue = if (newCapacity.isSome()) newCapacity.unwrap() else
+			_this.capacity;
 		final newContainer = new ArrayMap<K, V>(newCapacityValue);
 		newContainer.blitAllFrom(_this);
 		return newContainer;
@@ -86,9 +87,10 @@ class ConvertExtension {
 	**/
 	public static inline function cloneAsOrderedMap<K, V>(
 		_this: TopAlignedBuffer<K, V>,
-		newCapacity: Int
+		newCapacity: MaybeUInt
 	): ArrayOrderedMap<K, V> {
-		final newCapacityValue = if (newCapacity < 0) _this.capacity else newCapacity;
+		final newCapacityValue = if (newCapacity.isSome()) newCapacity.unwrap() else
+			_this.capacity;
 		final newContainer = new ArrayOrderedMap<K, V>(newCapacityValue);
 		newContainer.blitAllFrom(_this);
 		return newContainer;

@@ -11,9 +11,10 @@ class StackExtension {
 
 	/** @see `banker.container.interfaces.Stack` **/
 	public static inline function pop<T>(_this: TopAlignedBuffer<T>): T {
-		final index = _this.nextFreeSlotIndex - 1;
-		assert(index >= 0, _this.tag, "The list is empty.");
+		final maybeIndex = _this.nextFreeSlotIndex.minusOne();
+		assert(maybeIndex.isSome(), _this.tag, "The list is empty.");
 
+		final index = maybeIndex.unwrap();
 		_this.setSize(index);
 
 		return _this.vector[index];
@@ -21,10 +22,10 @@ class StackExtension {
 
 	/** @see `banker.container.interfaces.Stack` **/
 	public static inline function peek<T>(_this: TopAlignedBuffer<T>): T {
-		final index = _this.nextFreeSlotIndex - 1;
-		assert(index >= 0, _this.tag, "The list is empty.");
+		final maybeIndex = _this.nextFreeSlotIndex.minusOne();
+		assert(maybeIndex.isSome(), _this.tag, "The list is empty.");
 
-		return _this.vector[index];
+		return _this.vector[maybeIndex.unwrap()];
 	}
 
 	/** @see `banker.container.interfaces.Stack` **/

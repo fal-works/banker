@@ -8,7 +8,7 @@ using StringTools;
 
 // dunno how to do tests!
 class Main {
-	static final basicTestCases = testCaseGroup([NullableTest.all, VectorTest.all]);
+	static final basicTestCases = testCaseGroup([VectorTest.all]);
 
 	static final testCases = testCaseGroup([
 		TopAlignedBufferTest.all,
@@ -31,8 +31,8 @@ class Main {
 	static function main() {
 		println("\n");
 
-		// TesterSettings.hidePassedResults = true;
-		// TesterSettings.showCallStack = true;
+		TesterSettings.hidePassedResults = true;
+		TesterSettings.showCallStack = true;
 
 		// test(basicTestCases);
 		// test(testCases);

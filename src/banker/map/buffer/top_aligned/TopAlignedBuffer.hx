@@ -2,7 +2,6 @@ package banker.map.buffer.top_aligned;
 
 import sneaker.exception.NotOverriddenException;
 import banker.common.LimitedCapacityBuffer;
-import banker.common.MathTools.minInt;
 import banker.watermark.Percentage;
 
 #if !banker_generic_disable
@@ -11,10 +10,10 @@ import banker.watermark.Percentage;
 @:allow(banker.map)
 class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	/** @inheritdoc **/
-	public var capacity(get, never): Int;
+	public var capacity(get, never): UInt;
 
 	/** @inheritdoc **/
-	public var size(get, never): Int;
+	public var size(get, never): UInt;
 
 	/** The internal vector for keys. **/
 	var keyVector: WritableVector<K>;
@@ -23,14 +22,14 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	var valueVector: WritableVector<V>;
 
 	/** The index indicating the free slot for putting next element. **/
-	var nextFreeSlotIndex: Int = 0;
+	var nextFreeSlotIndex: UInt = UInt.zero;
 
 	/**
 		Clears `this` logically, i.e. the `size` is set to `0`
 		but the references remain internally.
 	**/
 	public inline function clear(): Void
-		setSize(0);
+		setSize(UInt.zero);
 
 	/**
 		Clears `this` physically, i.e. the `size` is set to `0`
@@ -59,11 +58,11 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		return ConvertExtension.exportValuesWritable(this);
 
 	/** @see banker.map.buffer.top_aligned.ConvertExtension **/
-	public inline function cloneAsMap(newCapacity = -1): ArrayMap<K, V>
+	public inline function cloneAsMap(newCapacity = MaybeUInt.none): ArrayMap<K, V>
 		return ConvertExtension.cloneAsMap(this, newCapacity);
 
 	/** @see banker.map.buffer.top_aligned.ConvertExtension **/
-	public inline function cloneAsOrderedMap(newCapacity = -1): ArrayOrderedMap<K, V>
+	public inline function cloneAsOrderedMap(newCapacity = MaybeUInt.none): ArrayOrderedMap<K, V>
 		return ConvertExtension.cloneAsOrderedMap(this, newCapacity);
 
 	/** @inheritdoc **/
@@ -73,7 +72,7 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	/** @inheritdoc **/
 	public inline function toString(): String {
 		final size = this.size;
-		return if (size == 0) {
+		return if (size.isZero()) {
 			"{}";
 		} else {
 			final buffer = new StringBuf();
@@ -98,8 +97,7 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	/**
 		@param capacity The number of elements that can be added to this.
 	**/
-	function new(capacity: Int) {
-		assert(capacity >= 0);
+	function new(capacity: UInt) {
 		super();
 
 		this.keyVector = new WritableVector<K>(capacity);
@@ -118,7 +116,7 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		This also calls `setWatermark()` if watermark mode is enabled.
 		Set `this.nextFreeSlotIndex` directly for avoiding this.
 	**/
-	inline function setSize(index: Int): Int {
+	inline function setSize(index: UInt): Int {
 		this.nextFreeSlotIndex = index;
 		#if banker_watermark_enable
 		this.setWatermark(index / this.capacity);
@@ -142,13 +140,13 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	inline function addKeyValue(
 		keyVector: WritableVector<K>,
 		valueVector: WritableVector<V>,
-		currentSize: Int,
+		currentSize: UInt,
 		key: K,
 		value: V
 	) {
 		keyVector[currentSize] = key;
 		valueVector[currentSize] = value;
-		setSize(currentSize + 1);
+		setSize(currentSize.plusOne());
 	}
 
 	/**
@@ -159,7 +157,7 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		this does not check uniqueness of entries.
 	**/
 	inline function blitAllFrom(other: TopAlignedBuffer<K, V>): Void {
-		final length = minInt(this.capacity, other.size);
+		final length = UInts.min(this.capacity, other.size);
 		VectorTools.blitZero(other.keyVector, this.keyVector, length);
 		VectorTools.blitZero(other.valueVector, this.valueVector, length);
 		this.nextFreeSlotIndex = length;
@@ -183,8 +181,8 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 	function removeAtInternal(
 		keyVector: WritableVector<K>,
 		valueVector: WritableVector<V>,
-		currentSize: Int,
-		index: Int
+		currentSize: UInt,
+		index: UInt
 	): Void {
 		throw new NotOverriddenException();
 	}

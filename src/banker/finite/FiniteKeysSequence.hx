@@ -2,7 +2,6 @@ package banker.finite;
 
 #if macro
 import haxe.macro.Expr;
-import banker.array.ArrayTools;
 
 /**
 	Functions for creating iterating methods.
@@ -79,7 +78,7 @@ class FiniteKeysSequence {
 		createCallback: (keyExpression: Expr, keyName: String) -> Expr
 	): Field {
 		final keyTypeExpression = keyValueTypes.key.expression;
-		final expressions: Array<Expr> = ArrayTools.allocate(instanceNames.length);
+		final expressions: Array<Expr> = Arrays.allocate(instanceNames.length);
 		for (i in 0...instanceNames.length) {
 			final name = instanceNames[i];
 			final key = macro $keyTypeExpression.$name;

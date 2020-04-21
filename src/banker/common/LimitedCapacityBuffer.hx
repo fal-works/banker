@@ -9,10 +9,10 @@ import banker.watermark.Percentage;
 @:using(banker.watermark.TaggedExtension)
 interface LimitedCapacityBuffer extends Tagged {
 	/** Max number of elements `this` can contain. **/
-	var capacity(get, never): Int;
+	var capacity(get, never): UInt;
 
 	/** Current number of elements. **/
-	var size(get, never): Int;
+	var size(get, never): UInt;
 
 	/**
 		Clears `this` logically.

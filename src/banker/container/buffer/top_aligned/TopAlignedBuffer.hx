@@ -2,7 +2,6 @@ package banker.container.buffer.top_aligned;
 
 import sneaker.exception.NotOverriddenException;
 import banker.common.LimitedCapacityBuffer;
-import banker.common.MathTools.minInt;
 import banker.watermark.Percentage;
 
 #if !banker_generic_disable
@@ -11,22 +10,21 @@ import banker.watermark.Percentage;
 @:allow(banker.container)
 class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	/** @inheritdoc **/
-	public var capacity(get, never): Int;
+	public var capacity(get, never): UInt;
 
 	/** @inheritdoc **/
-	public var size(get, never): Int;
+	public var size(get, never): UInt;
 
 	/** The internal vector. **/
 	final vector: WritableVector<T>;
 
 	/** The index indicating the free slot for putting next element. **/
-	var nextFreeSlotIndex: Int = 0;
+	var nextFreeSlotIndex: UInt = UInt.zero;
 
 	/**
 		@param capacity Max number of elements `this` can contain.
 	**/
-	function new(capacity: Int) {
-		assert(capacity >= 0);
+	function new(capacity: UInt) {
 		super();
 
 		this.vector = new WritableVector(capacity);
@@ -37,7 +35,7 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		but the references remain in the internal vector.
 	**/
 	public inline function clear(): Void {
-		setSize(0);
+		setSize(UInt.zero);
 	}
 
 	/**
@@ -66,21 +64,21 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		return CloneExtension.exportWritable(this);
 
 	/** @see banker.container.buffer.top_aligned.CloneExtension **/
-	public inline function cloneAsList(newCapacity = -1): ArrayList<T>
+	public inline function cloneAsList(newCapacity = MaybeUInt.none): ArrayList<T>
 		return CloneExtension.cloneAsList(this, newCapacity);
 
 	/** @see banker.container.buffer.top_aligned.CloneExtension **/
-	public inline function cloneAsStack(newCapacity = -1): ArrayStack<T>
+	public inline function cloneAsStack(newCapacity = MaybeUInt.none): ArrayStack<T>
 		return CloneExtension.cloneAsStack(this, newCapacity);
 
 	/** @see banker.container.buffer.top_aligned.CloneExtension **/
-	public inline function cloneAsMultiset(newCapacity = -1): ArrayMultiset<T>
+	public inline function cloneAsMultiset(newCapacity = MaybeUInt.none): ArrayMultiset<T>
 		return CloneExtension.cloneAsMultiset(this, newCapacity);
 
 	inline function get_capacity()
 		return vector.length;
 
-	inline function get_size(): Int
+	inline function get_size()
 		return nextFreeSlotIndex;
 
 	/**
@@ -89,7 +87,7 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		This also calls `setWatermark()` if watermark mode is enabled.
 		Set `this.nextFreeSlotIndex` directly for avoiding this.
 	**/
-	inline function setSize(size: Int): Void {
+	inline function setSize(size: UInt): Void {
 		this.nextFreeSlotIndex = size;
 		#if banker_watermark_enable
 		this.setWatermark(size / this.capacity);
@@ -104,7 +102,7 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		this does not check uniqueness of elements.
 	**/
 	inline function blitAllFrom(other: TopAlignedBuffer<T>): Void {
-		final length = minInt(this.capacity, other.size);
+		final length = UInts.min(this.capacity, other.size);
 		VectorTools.blitZero(other.vector, this.vector, length);
 		this.nextFreeSlotIndex = length;
 		// do not update watermark as `this` is just created and has the same tag as `other`
@@ -120,7 +118,7 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		This method must be overridden by the concrete subclass
 		according to the specification e.g. whether to allow duplicates.
 	**/
-	function pushInternal(index: Int, element: T): Void {
+	function pushInternal(index: UInt, element: T): Void {
 		throw new NotOverriddenException();
 	}
 
@@ -135,9 +133,9 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		according to the specification e.g. whether to allow duplicates.
 	**/
 	function pushFromVectorInternal(
-		index: Int,
+		index: UInt,
 		otherVector: VectorReference<T>,
-		otherVectorLength: Int
+		otherVectorLength: UInt
 	): Void {
 		throw new NotOverriddenException();
 	}
@@ -157,8 +155,8 @@ class TopAlignedBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	**/
 	function removeAtInternal(
 		vector: WritableVector<T>,
-		currentSize: Int,
-		index: Int
+		currentSize: UInt,
+		index: UInt
 	): T {
 		throw new NotOverriddenException();
 	}

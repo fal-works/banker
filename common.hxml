@@ -7,9 +7,11 @@
 --macro nullSafety("banker", Strict)
 -main Main
 
+-lib sinker
 -lib sneaker
 -lib ripper
 
-# -D banker_watermark_enable
+-D sinker_debug
 # -D sneaker_log_level=500
 -D sneaker_macro_log_level=500
+# -D banker_watermark_enable

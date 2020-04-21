@@ -5,8 +5,6 @@ using haxe.macro.ExprTools;
 using haxe.macro.TypeTools;
 using sneaker.macro.MacroCaster;
 using sneaker.macro.extensions.ClassTypeExtension;
-using banker.array.ArrayExtension;
-using banker.array.ArrayFunctionalExtension;
 
 import haxe.ds.StringMap;
 import haxe.macro.Context;

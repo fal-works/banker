@@ -7,11 +7,11 @@ class InternalExtension {
 	**/
 	public static inline function pushDuplicatesAllowed<T>(
 		_this: TopAlignedBuffer<T>,
-		index: Int,
+		index: UInt,
 		element: T
 	): Void {
 		_this.vector[index] = element;
-		_this.setSize(index + 1);
+		_this.setSize(index.plusOne());
 	}
 
 	/**
@@ -21,13 +21,13 @@ class InternalExtension {
 	**/
 	public static inline function pushDuplicatesPrevented<T>(
 		_this: TopAlignedBuffer<T>,
-		index: Int,
+		index: UInt,
 		element: T
 	): Void {
 		final vector = _this.vector;
-		if (!vector.ref.hasIn(element, 0, index)) {
+		if (!vector.ref.hasIn(element, UInt.zero, index)) {
 			vector[index] = element;
-			_this.setSize(index + 1);
+			_this.setSize(index.plusOne());
 		}
 	}
 
@@ -38,11 +38,17 @@ class InternalExtension {
 	**/
 	public static inline function pushFromVectorDuplicatesAllowed<T>(
 		_this: TopAlignedBuffer<T>,
-		index: Int,
+		index: UInt,
 		otherVector: VectorReference<T>,
-		otherVectorLength: Int
+		otherVectorLength: UInt
 	): Void {
-		VectorTools.blit(otherVector, 0, _this.vector, index, otherVectorLength);
+		VectorTools.blit(
+			otherVector,
+			UInt.zero,
+			_this.vector,
+			index,
+			otherVectorLength
+		);
 		_this.setSize(index + otherVectorLength);
 	}
 
@@ -54,16 +60,16 @@ class InternalExtension {
 	**/
 	public static inline function pushFromVectorDuplicatesPrevented<T>(
 		_this: TopAlignedBuffer<T>,
-		index: Int,
+		index: UInt,
 		otherVector: VectorReference<T>,
-		otherVectorLength: Int
+		otherVectorLength: UInt
 	): Void {
 		final thisVector = _this.vector;
-		var readIndex = 0;
+		var readIndex = UInt.zero;
 		var writeIndex = index;
 		while (readIndex < otherVectorLength) {
 			final element = otherVector[readIndex];
-			if (!thisVector.ref.hasIn(element, 0, writeIndex)) {
+			if (!thisVector.ref.hasIn(element, UInt.zero, writeIndex)) {
 				thisVector[writeIndex] = element;
 				++writeIndex;
 			}
@@ -82,8 +88,8 @@ class InternalExtension {
 	public static inline function removeSwapAt<T>(
 		_this: TopAlignedBuffer<T>,
 		vector: WritableVector<T>,
-		currentSize: Int,
-		index: Int
+		currentSize: UInt,
+		index: UInt
 	): T {
 		final removed = vector[index];
 
@@ -104,12 +110,17 @@ class InternalExtension {
 	public static inline function removeShiftAt<T>(
 		_this: TopAlignedBuffer<T>,
 		vector: WritableVector<T>,
-		currentSize: Int,
-		index: Int
+		currentSize: UInt,
+		index: UInt
 	): T {
 		final removed = vector[index];
-		vector.blitInternal(index + 1, index, currentSize - 1 - index);
-		_this.setSize(currentSize - 1);
+		final nextSize = currentSize - 1;
+		vector.blitInternal(
+			index.plusOne(),
+			index,
+			nextSize - index
+		);
+		_this.setSize(nextSize);
 
 		return removed;
 	}
@@ -121,6 +132,7 @@ class InternalExtension {
 		@return `true` if any found and removed.
 		@see `banker.container.buffer.top_aligned.TopAlignedBuffer.removeAllInternal()`
 	**/
+	@:access(sinker.UInt)
 	public static inline function removeSwapAll<T>(
 		_this: TopAlignedBuffer<T>,
 		predicate: (element: T) -> Bool
@@ -128,8 +140,8 @@ class InternalExtension {
 		final vector = _this.vector;
 
 		var found = false;
-		var len = _this.size;
-		var i = 0;
+		var len = _this.size.int();
+		var i = UInt.zero;
 		while (i < len) {
 			if (!predicate(vector[i])) {
 				++i;
@@ -137,11 +149,11 @@ class InternalExtension {
 			}
 
 			--len;
-			vector[i] = vector[len];
+			vector[i] = vector[new UInt(len)];
 			found = true;
 		}
 
-		_this.setSize(len);
+		_this.setSize(new UInt(len));
 
 		return found;
 	}
@@ -161,8 +173,8 @@ class InternalExtension {
 		final vector = _this.vector;
 
 		var found = false;
-		var readIndex = 0;
-		var writeIndex = 0;
+		var readIndex = UInt.zero;
+		var writeIndex = UInt.zero;
 
 		while (readIndex < size) {
 			final readingElement = vector[readIndex];

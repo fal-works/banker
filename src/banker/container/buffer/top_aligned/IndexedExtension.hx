@@ -2,18 +2,18 @@ package banker.container.buffer.top_aligned;
 
 class IndexedExtension {
 	/** @see `banker.container.interfaces.Indexed` **/
-	public static inline function get<T>(_this: TopAlignedBuffer<T>, index: Int): T {
-		assert(index < _this.size);
+	public static inline function get<T>(_this: TopAlignedBuffer<T>, index: UInt): T {
+		assert(index < _this.size, _this.tag, "Out of bounds.");
 		return _this.vector[index];
 	}
 
 	/** @see `banker.container.interfaces.Indexed` **/
 	public static inline function set<T>(
 		_this: TopAlignedBuffer<T>,
-		index: Int,
+		index: UInt,
 		value: T
 	): T {
-		assert(index < _this.size);
+		assert(index < _this.size, _this.tag, "Out of bounds.");
 		return _this.vector[index] = value;
 	}
 
@@ -26,7 +26,7 @@ class IndexedExtension {
 	**/
 	public static inline function insertAt<T>(
 		_this: TopAlignedBuffer<T>,
-		index: Int,
+		index: UInt,
 		value: T
 	): T {
 		final size = _this.size;
@@ -34,18 +34,18 @@ class IndexedExtension {
 
 		var movingElementCount = size - index;
 		var vector = _this.vector;
-		vector.blitInternal(index, index + 1, movingElementCount);
+		vector.blitInternal(index, index.plusOne(), movingElementCount);
 		vector[index] = value;
 
-		_this.setSize(size + 1);
+		_this.setSize(size.plusOne());
 
 		return value;
 	}
 
 	/** @see `banker.container.interfaces.Indexed` **/
-	public static inline function removeAt<T>(_this: TopAlignedBuffer<T>, index: Int): T {
+	public static inline function removeAt<T>(_this: TopAlignedBuffer<T>, index: UInt): T {
 		final size = _this.size;
-		assert(index >= 0 && index < size, _this.tag, "Out of bound.");
+		assert(index < size, _this.tag, "Out of bound.");
 
 		return _this.removeAtInternal(_this.vector, size, index);
 	}

@@ -100,10 +100,10 @@ class FiniteKeysField {
 		@return A static variable `entryCount`,
 		of which value is the number of enum abstract instances.
 	**/
-	public static function createEntryCount(instanceCount: Int): Field {
+	public static function createEntryCount(instanceCount: UInt): Field {
 		return {
 			name: "entryCount",
-			kind: FVar((macro:Int), macro $v{instanceCount}),
+			kind: FVar((macro:sinker.UInt), macro $v{instanceCount}),
 			access: [
 				APublic,
 				AInline,

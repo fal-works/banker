@@ -1,10 +1,5 @@
 package banker.vector.extension;
 
-import banker.common.MathTools;
-import banker.array.ArrayTools;
-
-using banker.array.ArrayExtension;
-
 class Copy {
 	/**
 		@return Shallow copy of `this`.
@@ -30,7 +25,7 @@ class Copy {
 	**/
 	public static inline function copyResized<T>(
 		_this: VectorReference<T>,
-		newLength: Int
+		newLength: UInt
 	): Vector<T>
 		return copyResizedWritable(_this, newLength).nonWritable();
 
@@ -42,13 +37,13 @@ class Copy {
 	**/
 	public static inline function copyResizedWritable<T>(
 		_this: VectorReference<T>,
-		newLength: Int
+		newLength: UInt
 	): WritableVector<T> {
 		final newVector = new WritableVector(newLength);
 		VectorTools.blitZero(
 			_this,
 			newVector,
-			MathTools.minInt(_this.length, newLength)
+			UInts.min(_this.length, newLength)
 		);
 		return newVector;
 	}
@@ -58,8 +53,8 @@ class Copy {
 	**/
 	public static inline function subVector<T>(
 		_this: VectorReference<T>,
-		position: Int,
-		length: Int
+		position: UInt,
+		length: UInt
 	): Vector<T> {
 		return _this.data.sub(position, length);
 	}
@@ -67,8 +62,8 @@ class Copy {
 	/** @see `subVector()` **/
 	public static inline function subVectorWritable<T>(
 		_this: VectorReference<T>,
-		position: Int,
-		length: Int
+		position: UInt,
+		length: UInt
 	): WritableVector<T> {
 		return _this.data.sub(position, length);
 	}
@@ -82,8 +77,8 @@ class Copy {
 		final otherLength = otherVector.length;
 		final newVector = new WritableVector(thisLength + otherLength);
 		// @formatter:off
-		VectorTools.blit(_this, 0, newVector, 0, thisLength);
-		VectorTools.blit(otherVector, 0, newVector, thisLength, otherLength);
+		VectorTools.blitZero(_this, newVector, thisLength);
+		VectorTools.blit(otherVector, UInt.zero, newVector, thisLength, otherLength);
 		// @formatter:on
 		return newVector;
 	}
@@ -105,8 +100,8 @@ class Copy {
 	**/
 	public static inline function slice<T>(
 		_this: VectorReference<T>,
-		startPosition: Int,
-		endPosition: Int
+		startPosition: UInt,
+		endPosition: UInt
 	): Vector<T> {
 		return _this.data.sub(startPosition, endPosition - startPosition);
 	}
@@ -114,8 +109,8 @@ class Copy {
 	/** @see `Copy.slice()` **/
 	public static inline function sliceWritable<T>(
 		_this: VectorReference<T>,
-		startPosition: Int,
-		endPosition: Int
+		startPosition: UInt,
+		endPosition: UInt
 	): WritableVector<T> {
 		return slice(_this, startPosition, endPosition).writable();
 	}
@@ -127,15 +122,15 @@ class Copy {
 	**/
 	public static inline function sliceToArray<T>(
 		_this: VectorReference<T>,
-		startPosition: Int,
-		endPosition: Int
+		startPosition: UInt,
+		endPosition: UInt
 	): Array<T> {
-		final array = ArrayTools.allocate(endPosition - startPosition);
+		final array = Arrays.allocate(endPosition - startPosition);
 
 		var readIndex = startPosition;
-		var writeIndex = 0;
+		var writeIndex = UInt.zero;
 		while (readIndex < endPosition) {
-			array.set(writeIndex, _this[readIndex]);
+			array[writeIndex] = _this[readIndex];
 			++readIndex;
 			++writeIndex;
 		}
@@ -162,8 +157,8 @@ class Copy {
 		final newVector = new WritableVector(length);
 
 		var readIndex = length;
-		var writeIndex = 0;
-		while (readIndex != 0) {
+		var writeIndex = UInt.zero;
+		while (!readIndex.isZero()) {
 			--readIndex;
 			newVector[writeIndex] = _this[readIndex];
 			++writeIndex;
@@ -183,21 +178,21 @@ class Copy {
 	): Vector<T> {
 		final length = _this.length;
 
-		return if (length == 0) copy(_this) else {
+		return if (length.isZero()) copy(_this) else {
 			final newVector = new WritableVector(length);
 
-			newVector[0] = _this[0];
-			var writeIndex = 1;
+			newVector[UInt.zero] = _this[UInt.zero];
+			var writeIndex = UInt.one;
 
-			for (readIndex in 1...length) {
-				final value = _this[readIndex];
-				if (newVector.ref.hasIn(value, 0, writeIndex)) continue;
+			for (readIndex in UInt.one...length) {
+				final value = _this[u(readIndex)];
+				if (newVector.ref.hasIn(value, UInt.zero, writeIndex)) continue;
 
 				newVector[writeIndex] = value;
 				++writeIndex;
 			}
 
-			slice(newVector, 0, writeIndex);
+			slice(newVector, UInt.zero, writeIndex);
 		}
 	}
 
@@ -227,18 +222,18 @@ class Copy {
 	): Vector<T> {
 		final length = _this.length;
 
-		return if (length == 0) copy(_this) else {
+		return if (length.isZero()) copy(_this) else {
 			final newVector = new WritableVector(length);
 
-			newVector[0] = _this[0];
-			var writeIndex = 1;
+			newVector[UInt.zero] = _this[UInt.zero];
+			var writeIndex = UInt.one;
 
-			for (readIndex in 1...length) {
-				final value = _this[readIndex];
+			for (readIndex in UInt.one...length) {
+				final value = _this[u(readIndex)];
 				if (newVector.ref.hasEqualIn(
 					value,
 					equalityPredicate,
-					0,
+					UInt.zero,
 					writeIndex
 				)) continue;
 
@@ -246,7 +241,7 @@ class Copy {
 				++writeIndex;
 			}
 
-			slice(newVector, 0, writeIndex);
+			slice(newVector, UInt.zero, writeIndex);
 		}
 	}
 
@@ -263,5 +258,10 @@ class Copy {
 		equalityPredicate: T->T->Bool
 	): WritableVector<T> {
 		return copyDeduplicatedWith(_this, equalityPredicate).writable();
+	}
+
+	@:access(sinker.UInt)
+	static extern inline function u(v: Int): UInt {
+		return new UInt(v);
 	}
 }

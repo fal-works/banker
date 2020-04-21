@@ -2,13 +2,10 @@ package banker.aosoa.macro;
 
 #if macro
 using sneaker.macro.MacroComparator;
-using banker.array.ArrayExtension;
-using banker.array.ArrayFunctionalExtension;
 using banker.aosoa.macro.FieldExtension;
 
 import haxe.macro.Type.ClassType;
 import sneaker.macro.Types;
-import sneaker.macro.Values.intComplexType;
 import banker.aosoa.macro.ChunkMethodBuilder.*;
 import banker.aosoa.macro.ChunkVariableBuilder.*;
 
@@ -29,46 +26,46 @@ class Chunk {
 			/**
 				The id number of the chunk that is unique in an AoSoA.
 			**/
-			public final chunkId: Int;
+			public final chunkId: sinker.UInt;
 
 			/**
 				The largest index of entities that are currently in use.
 				The chunk iterates until (but not including) this index when iterating entities.
 			**/
-			public var endReadIndex(default, null) = 0;
+			public var endReadIndex(default, null) = sinker.UInt.zero;
 
 			/**
 				The first index of entities that are currently not in use.
 				The chunk uses this index when using a new entity.
 			**/
-			public var nextWriteIndex(default, null) = 0;
+			public var nextWriteIndex(default, null) = sinker.UInt.zero;
 
 			/**
 				Table that maps entity IDs to physical indices in variable vectors.
 			**/
-			public final entityIdReadIndexMap: banker.vector.WritableVector<Int>;
+			public final entityIdReadIndexMap: banker.vector.WritableVector<sinker.UInt>;
 
 			/**
 				Table that maps the indices between the main vector and the WRITE-buffer vector.
 				The indices in the buffer vector may change when disusing any entity.
 				This table is reset every time `synchronize()` is called.
 			**/
-			final readWriteIndexMap: banker.vector.WritableVector<Int>;
+			final readWriteIndexMap: banker.vector.WritableVector<sinker.UInt>;
 
 			/**
 				Synchronizes all vectors and their corresponding buffer vectors.
 			**/
 			public function synchronize(
-				chunkCapacity: Int,
-				defaultReadWriteIndexMap: banker.vector.Vector<Int>
-			): Int {
+				chunkCapacity: sinker.UInt,
+				defaultReadWriteIndexMap: banker.vector.Vector<sinker.UInt>
+			): sinker.UInt {
 				$b{prepared.onSynchronizeExpressions};
 
 				final nextWriteIndex = this.nextWriteIndex;
 
 				$b{prepared.synchronizeExpressions};
 
-				banker.vector.IntVectorTools.blitInverse(
+				banker.vector.UIntVectorTools.blitInverse(
 					this.entityId,
 					this.entityIdReadIndexMap,
 					nextWriteIndex
@@ -92,7 +89,7 @@ class Chunk {
 			**/
 			public inline function getReadIndex(
 				chunkEntityId: banker.aosoa.ChunkEntityId
-			): Int {
+			): sinker.UInt {
 				return this.entityIdReadIndexMap[chunkEntityId.entity];
 			}
 		};
@@ -129,13 +126,13 @@ class Chunk {
 	): Field {
 		final constructorArguments: Array<FunctionArg> = [{
 			name: "chunkId",
-			type: intComplexType
+			type: (macro:sinker.UInt)
 		}, {
 			name: "chunkCapacity",
-			type: intComplexType
+			type: (macro:sinker.UInt)
 		}, {
 			name: "defaultReadWriteIndexMap",
-			type: (macro:banker.vector.Vector<Int>)
+			type: (macro:banker.vector.Vector<sinker.UInt>)
 		}];
 		constructorArguments.pushFromArray(externalArguments);
 
@@ -143,17 +140,23 @@ class Chunk {
 			this.chunkId = chunkId;
 			$b{expressions};
 
-			this.entityIdReadIndexMap = banker.vector.IntVectorTools.createSequenceNumbersWritable(0, chunkCapacity);
+			this.entityIdReadIndexMap = banker.vector.UIntVectorTools.createSequenceNumbersWritable(
+				sinker.UInt.zero,
+				chunkCapacity
+			);
 
 			this.readWriteIndexMap = defaultReadWriteIndexMap.ref.copyWritable();
 
 			final id = this.id;
-			for (i in 0...chunkCapacity)
+			var i = sinker.UInt.zero;
+			while (i < chunkCapacity) {
 				id[i] = new banker.aosoa.ChunkEntityId(chunkId, i);
+				++i;
+			}
 			banker.vector.VectorTools.blitZero(id, this.idChunkBuffer, chunkCapacity);
 
-			banker.vector.IntVectorTools.assignSequenceNumbers(this.entityId, 0);
-			banker.vector.IntVectorTools.assignSequenceNumbers(this.entityIdChunkBuffer, 0);
+			banker.vector.UIntVectorTools.assignSequenceNumbers(this.entityId, sinker.UInt.zero);
+			banker.vector.UIntVectorTools.assignSequenceNumbers(this.entityIdChunkBuffer, sinker.UInt.zero);
 		};
 
 		return {
@@ -439,7 +442,7 @@ class Chunk {
 	static function createEntityIdField(): Field {
 		return {
 			name: "entityId",
-			kind: FVar(intComplexType, macro 0),
+			kind: FVar((macro: sinker.UInt), macro sinker.UInt.zero),
 			pos: localPosition,
 			doc: "The identifier number of the entity that is unique in a Chunk.",
 			meta: [{

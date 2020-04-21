@@ -27,7 +27,7 @@ class ObjectLender<T> extends ObjectPoolBuffer<T> {
 
 		Be sure to stop using the objects that are going to be collected.
 	**/
-	public inline function collect(n: Int): Void {
+	public inline function collect(n: UInt): Void {
 		final nextSize = this.size + n;
 		#if !macro
 		assert(nextSize <= this.capacity);

@@ -8,11 +8,11 @@ class Fill {
 	public static inline function fillIn<T>(
 		_this: WritableVector<T>,
 		value: T,
-		startIndex: Int,
-		endIndex: Int
+		startIndex: UInt,
+		endIndex: UInt
 	): WritableVector<T> {
 		#if !macro
-		assert(startIndex >= 0 && endIndex <= _this.length);
+		assert(endIndex <= _this.length);
 		#end
 
 		for (i in startIndex...endIndex) _this.set(i, value);
@@ -28,7 +28,7 @@ class Fill {
 		_this: WritableVector<T>,
 		value: T
 	): WritableVector<T> {
-		for (i in 0..._this.length) _this.set(i, value);
+		for (i in UInt.zero..._this.length) _this.set(i, value);
 
 		return _this;
 	}
@@ -45,7 +45,7 @@ class Fill {
 		assert(factory != null);
 		#end
 
-		for (i in 0..._this.length) _this.set(i, factory());
+		for (i in UInt.zero..._this.length) _this.set(i, factory());
 
 		return _this;
 	}

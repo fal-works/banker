@@ -3,7 +3,6 @@ package banker.aosoa.macro;
 #if macro
 using haxe.macro.ComplexTypeTools;
 using haxe.macro.TypeTools;
-using banker.array.ArrayExtension;
 
 import sneaker.macro.Values;
 import sneaker.macro.MacroComparator;

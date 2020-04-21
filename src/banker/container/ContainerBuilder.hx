@@ -6,13 +6,13 @@ class ContainerBuilder {
 	/**
 		Creates an `ArrayStack` instance by copying data from `vector`.
 		@param capacity Max number of elements that can be contained.
-				If negative (default), the capacity will be the same as `vector.length`.
+				If `MaybeUInt.none` (default), the capacity will be the same as `vector.length`.
 	**/
 	public static inline function arrayStackFromVector<T>(
 		vector: VectorReference<T>,
-		capacity: Int = -1
+		capacity: MaybeUInt = MaybeUInt.none
 	) {
-		final capacityValue = if (capacity >= 0) capacity else vector.length;
+		final capacityValue = if (capacity.isSome()) capacity.unwrap() else vector.length;
 		assert(vector.length <= capacityValue);
 
 		final container = new ArrayStack<T>(capacityValue);
@@ -23,13 +23,13 @@ class ContainerBuilder {
 	/**
 		Creates an `ArrayList` instance by copying data from `vector`.
 		@param capacity Max number of elements that can be contained.
-				If negative (default), the capacity will be the same as `vector.length`.
+				If `MaybeUInt.none` (default), the capacity will be the same as `vector.length`.
 	**/
 	public static inline function arrayListFromVector<T>(
 		vector: VectorReference<T>,
-		capacity: Int = -1
+		capacity: MaybeUInt = MaybeUInt.none
 	) {
-		final capacityValue = if (capacity >= 0) capacity else vector.length;
+		final capacityValue = if (capacity.isSome()) capacity.unwrap() else vector.length;
 		assert(vector.length <= capacityValue);
 
 		final container = new ArrayList<T>(capacityValue);

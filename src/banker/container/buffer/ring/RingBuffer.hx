@@ -9,28 +9,27 @@ import banker.watermark.Percentage;
 @:allow(banker.container)
 class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	/** @inheritdoc **/
-	public var capacity(get, never): Int;
+	public var capacity(get, never): UInt;
 
 	/** @inheritdoc **/
-	public var size(get, never): Int;
+	public var size(get, never): UInt;
 
 	/** The internal vector. **/
 	final vector: WritableVector<T>;
 
 	/** The index indicating the slot that holds the top element. **/
-	var headIndex: Int = 0;
+	var headIndex: UInt = UInt.zero;
 
 	/** The index indicating the free slot for putting next element. **/
-	var tailIndex: Int = 0;
+	var tailIndex: UInt = UInt.zero;
 
 	/** The physical field for `size`. **/
-	var internalSize: Int = 0;
+	var internalSize: UInt = UInt.zero;
 
 	/**
 		@param capacity Max number of elements `this` can contain.
 	**/
-	function new(capacity: Int) {
-		assert(capacity >= 0);
+	function new(capacity: UInt) {
 		super();
 
 		this.vector = new WritableVector(capacity);
@@ -41,9 +40,9 @@ class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		but the references remain in the internal vector.
 	**/
 	public inline function clear(): Void {
-		headIndex = 0;
-		tailIndex = 0;
-		setSize(0);
+		headIndex = UInt.zero;
+		tailIndex = UInt.zero;
+		setSize(UInt.zero);
 	}
 
 	/**
@@ -71,7 +70,7 @@ class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 			vector.ref.joinIn(headIndex, headIndex + size, ", ");
 		else {
 			final former = vector.ref.joinIn(headIndex, length, ", ");
-			final latter = vector.ref.joinIn(0, tailIndex, ", ");
+			final latter = vector.ref.joinIn(UInt.zero, tailIndex, ", ");
 			former + ", " + latter;
 		}
 	}
@@ -79,7 +78,7 @@ class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 	inline function get_capacity()
 		return vector.length;
 
-	inline function get_size(): Int
+	inline function get_size()
 		return internalSize;
 
 	/**
@@ -88,7 +87,7 @@ class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		This also calls `setWatermark()` if watermark mode is enabled.
 		Set `this.internalSize` directly for avoiding this.
 	**/
-	inline function setSize(size: Int): Void {
+	inline function setSize(size: UInt): Void {
 		this.internalSize = size;
 		#if banker_watermark_enable
 		this.setWatermark(size / this.capacity);
