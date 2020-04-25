@@ -528,7 +528,7 @@ In that case you may have to reboot it manually (if VSCode, `>Haxe: Restart Lang
 |---|---|---|
 |banker|banker_watermark_enable|Enables watermark mode (see above).|
 |banker|banker_generic_disable|Disables `@:generic` meta.|
-|sneaker|sneaker_macro_log_level|Threshold for filtering macro logs. 500 or more to show all, less than 300 to hide all.|
+|sneaker|sneaker_macro_log_level|Threshold for filtering macro logs. 500 or more to show all, less than 300 to hide WARN/INFO/DEBUG logs.|
 |sneaker|sneaker_macro_message_level|Similar to above. See [sneaker](https://github.com/fal-works/sneaker) for more details.|
 
 
