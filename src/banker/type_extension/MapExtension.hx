@@ -1,7 +1,5 @@
 package banker.type_extension;
 
-using banker.type_extension.NullableExtension;
-
 class MapExtension {
 	/**
 		Alias for `exists()`.
@@ -19,7 +17,7 @@ class MapExtension {
 		key: K,
 		defaultValue: V
 	) {
-		return _this.get(key).or(defaultValue);
+		return Nulls.coalesce(_this.get(key), defaultValue);
 	}
 
 	/**
@@ -34,7 +32,7 @@ class MapExtension {
 	) {
 		final currentValue = _this.get(key);
 
-		return if (currentValue.exists()) {
+		return if (currentValue != null) {
 			currentValue;
 		} else {
 			_this.set(key, value);
@@ -53,7 +51,7 @@ class MapExtension {
 	): Bool {
 		final currentValue = _this.get(key);
 
-		return if (currentValue.exists()) {
+		return if (currentValue != null) {
 			callback(key, currentValue);
 			true;
 		} else {
