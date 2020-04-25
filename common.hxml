@@ -12,7 +12,6 @@
 -lib sneaker
 -lib ripper
 
--D sinker_debug
-# -D sneaker_log_level=500
--D sneaker_macro_log_level=500
+--debug
+
 # -D banker_watermark_enable
