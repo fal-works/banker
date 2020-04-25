@@ -1,13 +1,6 @@
 package banker.finite;
 
 #if macro
-using haxe.macro.TypeTools;
-using haxe.macro.ComplexTypeTools;
-
-import sneaker.macro.PositionStack;
-import sneaker.macro.ContextTools;
-import sneaker.macro.EnumAbstractType;
-import sneaker.macro.extensions.FieldExtension;
 import banker.finite.FiniteKeysValidator.*;
 
 class FiniteKeys {
@@ -18,8 +11,6 @@ class FiniteKeys {
 		@param keyTypeExpression Any enum abstract type.
 	**/
 	public static macro function from(keyTypeExpression: Expr): Fields {
-		PositionStack.reset();
-
 		final localClassResult = ContextTools.getLocalClass();
 		if (localClassResult.isFailedWarn()) return null;
 		final localClass = localClassResult.unwrap();
@@ -61,10 +52,7 @@ class FiniteKeys {
 		final valuesAreFinal = checkFinal(localClass.meta);
 		final instances = enumAbstractType.getInstances();
 
-		final constructorField = buildFields.removeFirst(
-			FieldExtension.isNew,
-			FiniteKeysField.nullField
-		);
+		final constructorField = buildFields.removeConstructor();
 		final constructor = switch (constructorField.kind) {
 			case FFun(func): func;
 			default: FiniteKeysField.nullFunction;

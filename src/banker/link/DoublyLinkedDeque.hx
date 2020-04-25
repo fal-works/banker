@@ -1,8 +1,6 @@
 package banker.link;
 
 #if macro
-import haxe.macro.Expr;
-import sneaker.macro.Types.Fields;
 import banker.link.macro.DoublyLinkedDequeMacro;
 
 class DoublyLinkedDeque {

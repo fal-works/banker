@@ -8,6 +8,7 @@
 -main Main
 
 -lib sinker
+-lib prayer
 -lib sneaker
 -lib ripper
 

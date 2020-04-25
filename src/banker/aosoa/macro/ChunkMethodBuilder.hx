@@ -3,8 +3,6 @@ package banker.aosoa.macro;
 #if macro
 using banker.aosoa.macro.MacroExtension;
 
-import sneaker.macro.MacroComparator.unifyComplex;
-
 class ChunkMethodBuilder {
 	public static function getChunkMethodKind(metaMap: MetadataMap): ChunkMethodKind {
 		return if (metaMap.useEntity) {
@@ -229,10 +227,10 @@ class ChunkMethodBuilder {
 			final variable = variables[m];
 			if (variable.name != argumentName) continue;
 
-			if (unifyComplex(variable.type, argumentType))
+			if (variable.type.unifyComplex(argumentType))
 				return Read;
 
-			if (!variable.readOnly && unifyComplex(variable.vectorType, argumentType))
+			if (!variable.readOnly && variable.vectorType.unifyComplex(argumentType))
 				return Write;
 		}
 
@@ -240,7 +238,7 @@ class ChunkMethodBuilder {
 			final variable = chunkLevelVariableFields[m];
 			final field = variable.field;
 			if (field.name != argumentName) continue;
-			if (!unifyComplex(variable.type, argumentType)) continue;
+			if (!variable.type.unifyComplex(argumentType)) continue;
 			final access = field.access;
 			final isStatic = access != null && access.has(AStatic);
 			final isFinal = access != null && access.has(AFinal);

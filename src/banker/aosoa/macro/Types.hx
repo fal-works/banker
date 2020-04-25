@@ -1,9 +1,6 @@
 package banker.aosoa.macro;
 
 #if macro
-import haxe.macro.Expr;
-import sneaker.types.Maybe;
-
 typedef MetadataMap = {
 	useEntity: Bool,
 	onSynchronize: Bool,

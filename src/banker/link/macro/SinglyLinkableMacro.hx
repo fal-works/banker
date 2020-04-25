@@ -1,15 +1,6 @@
 package banker.link.macro;
 
 #if macro
-import haxe.macro.Context;
-import haxe.macro.Expr;
-import sneaker.macro.Types;
-import sneaker.macro.ContextTools;
-import sneaker.macro.extensions.FieldExtension.isNew;
-import banker.link.macro.Utility.*;
-
-using haxe.macro.TypeTools;
-
 class SinglyLinkableMacro {
 	/**
 		The entry point of build macro for `SinglyLinkable` interface.
@@ -36,7 +27,7 @@ class SinglyLinkableMacro {
 			/**
 				The next node linked from `this`.
 			**/
-			public var next: sneaker.types.Maybe<$localClassComplexType>;
+			public var next: sinker.Maybe<$localClassComplexType>;
 
 			/**
 				Interconnects `previous` and `this`.
@@ -54,7 +45,7 @@ class SinglyLinkableMacro {
 				Clears the link from `this` to the next node (if exists).
 			**/
 			public inline function unlinkNext(): Void
-				this.next = sneaker.types.Maybe.from(null);
+				this.next = sinker.Maybe.from(null);
 
 			/**
 				Runs `callback` for each node in the list starting from `this` until the last node.
@@ -99,7 +90,7 @@ class SinglyLinkableMacro {
 				func.expr = macro $b{
 					[
 						func.expr,
-						macro this.next = sneaker.types.Maybe.none()
+						macro this.next = sinker.Maybe.none()
 					]
 				}
 			default:

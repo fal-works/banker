@@ -1,11 +1,8 @@
 package banker.aosoa.macro;
 
 #if macro
-using sneaker.macro.MacroComparator;
 using banker.aosoa.macro.FieldExtension;
 
-import haxe.macro.Type.ClassType;
-import sneaker.macro.Types;
 import banker.aosoa.macro.ChunkMethodBuilder.*;
 import banker.aosoa.macro.ChunkVariableBuilder.*;
 

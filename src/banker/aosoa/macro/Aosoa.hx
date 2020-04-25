@@ -1,12 +1,6 @@
 package banker.aosoa.macro;
 
 #if macro
-using haxe.macro.TypeTools;
-using sneaker.macro.MacroCaster;
-
-import haxe.macro.Context;
-import haxe.macro.Type;
-
 class Aosoa {
 	/**
 		Creates an Aosoa (Array of Structure of Arrays) class,

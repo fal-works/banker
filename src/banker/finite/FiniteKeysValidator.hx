@@ -1,13 +1,6 @@
 package banker.finite;
 
 #if macro
-using haxe.macro.ExprTools;
-using sneaker.macro.MacroCaster;
-
-import sneaker.macro.ContextTools;
-import sneaker.macro.MacroResult;
-import sneaker.macro.EnumAbstractType;
-
 /**
 	Functions for validation in `FiniteKeys` macro.
 **/
@@ -28,7 +21,7 @@ class FiniteKeysValidator {
 
 		return switch (abstractType.toEnumAbstractType()) {
 			case Ok(v): Ok(v);
-			case Failed(message): Failed(message, typeExpression.pos);
+			case Failed(message, _): Failed(message, typeExpression.pos);
 		}
 	};
 

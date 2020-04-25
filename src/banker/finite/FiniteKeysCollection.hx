@@ -1,8 +1,6 @@
 package banker.finite;
 
 #if macro
-using sneaker.format.StringExtension;
-
 /**
 	Functions for creating get/set methods.
 **/

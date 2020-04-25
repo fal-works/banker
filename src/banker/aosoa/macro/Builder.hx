@@ -1,18 +1,8 @@
 package banker.aosoa.macro;
 
 #if macro
-using haxe.macro.ExprTools;
-using haxe.macro.TypeTools;
-using sneaker.macro.MacroCaster;
-using sneaker.macro.extensions.ClassTypeExtension;
-
 import haxe.ds.StringMap;
-import haxe.macro.Context;
-import haxe.macro.Type;
-import sneaker.types.Maybe;
-import sneaker.macro.ContextTools;
-import sneaker.macro.Types.Fields;
-import sneaker.macro.extensions.FieldExtension;
+import prayer.extensions.FieldExtension;
 
 class Builder {
 	/**

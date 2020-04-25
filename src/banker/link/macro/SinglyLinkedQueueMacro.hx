@@ -1,15 +1,6 @@
 package banker.link.macro;
 
 #if macro
-import haxe.macro.Context;
-import haxe.macro.Expr;
-import sneaker.macro.Types;
-import sneaker.macro.ContextTools;
-import sneaker.macro.extensions.FieldExtension.isNew;
-import banker.link.macro.Utility.*;
-
-using haxe.macro.TypeTools;
-
 class SinglyLinkedQueueMacro {
 	/**
 		The entry point of build macro for `SinglyLinkable` interface.
@@ -30,12 +21,12 @@ class SinglyLinkedQueueMacro {
 			/**
 				The top/oldest node in `this` queue.
 			**/
-			public var top: sneaker.types.Maybe<$linkableType>;
+			public var top: sinker.Maybe<$linkableType>;
 
 			/**
 				The last/newest node in `this` queue.
 			**/
-			public var last: sneaker.types.Maybe<$linkableType>;
+			public var last: sinker.Maybe<$linkableType>;
 
 			/**
 				Adds `element` as the last/newest element of `this`.
@@ -77,8 +68,8 @@ class SinglyLinkedQueueMacro {
 				final maybeTop = this.top;
 				if (maybeTop.isSome()) {
 					maybeTop.unwrap().traverseReset();
-					this.top = sneaker.types.Maybe.none();
-					this.last = sneaker.types.Maybe.none();
+					this.top = sinker.Maybe.none();
+					this.last = sinker.Maybe.none();
 				}
 			}
 
@@ -86,8 +77,8 @@ class SinglyLinkedQueueMacro {
 				Clears `this` queue without affecting the nodes.
 			**/
 			public inline function clearWeak(): Void {
-				this.top = sneaker.types.Maybe.none();
-				this.last = sneaker.types.Maybe.none();
+				this.top = sinker.Maybe.none();
+				this.last = sinker.Maybe.none();
 			}
 		};
 
@@ -101,8 +92,8 @@ class SinglyLinkedQueueMacro {
 				func.expr = macro $b{
 					[
 						func.expr,
-						macro this.top = sneaker.types.Maybe.none(),
-						macro this.last = sneaker.types.Maybe.none()
+						macro this.top = sinker.Maybe.none(),
+						macro this.last = sinker.Maybe.none()
 					]
 				}
 			default:

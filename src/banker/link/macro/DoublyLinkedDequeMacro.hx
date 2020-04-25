@@ -1,15 +1,6 @@
 package banker.link.macro;
 
 #if macro
-import haxe.macro.Context;
-import haxe.macro.Expr;
-import sneaker.macro.Types;
-import sneaker.macro.ContextTools;
-import sneaker.macro.extensions.FieldExtension.isNew;
-import banker.link.macro.Utility.*;
-
-using haxe.macro.TypeTools;
-
 class DoublyLinkedDequeMacro {
 	/**
 		The entry point of build macro for `DoublyLinkable` interface.

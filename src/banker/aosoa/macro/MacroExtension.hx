@@ -1,12 +1,6 @@
 package banker.aosoa.macro;
 
 #if macro
-using haxe.macro.ComplexTypeTools;
-using haxe.macro.TypeTools;
-
-import sneaker.macro.Values;
-import sneaker.macro.MacroComparator;
-
 class MacroExtension {
 	/**
 		@return `true` if `argument` is the special argument `chunkId`.

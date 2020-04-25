@@ -1,14 +1,6 @@
 package banker.aosoa.macro;
 
 #if macro
-using haxe.macro.TypeTools;
-using haxe.macro.ComplexTypeTools;
-using sneaker.macro.extensions.ExprExtension;
-
-import haxe.macro.Type;
-import haxe.macro.Context;
-import sneaker.types.Maybe;
-
 /**
 	Functions for static extension used in `banker.aosoa.macro`.
 **/

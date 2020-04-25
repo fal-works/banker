@@ -1,8 +1,6 @@
 package banker.finite;
 
 #if macro
-import haxe.macro.Expr;
-
 /**
 	Functions for creating copying methods.
 **/

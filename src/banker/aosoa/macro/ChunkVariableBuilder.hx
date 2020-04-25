@@ -1,14 +1,6 @@
 package banker.aosoa.macro;
 
 #if macro
-using haxe.macro.TypeTools;
-using haxe.macro.ComplexTypeTools;
-using sneaker.macro.extensions.FieldExtension;
-using sneaker.macro.extensions.ExprExtension;
-
-import haxe.macro.Context;
-import haxe.ds.Option;
-
 class ChunkVariableBuilder {
 	/**
 		Generates fields and corresponding expressions from `buildField`.

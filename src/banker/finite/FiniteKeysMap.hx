@@ -1,8 +1,6 @@
 package banker.finite;
 
 #if macro
-using sneaker.macro.extensions.FieldExtension;
-
 import banker.finite.FiniteKeysCollection.*;
 
 /**
