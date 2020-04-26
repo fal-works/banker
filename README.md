@@ -43,7 +43,7 @@ Generates a map-like class from any user-defined enum abstract type.
 
 ### Other
 
-Some other small features like `Array` extensions or `ObjectPool` classes.
+Some other small features like `ObjectPool` classes.
 
 ### Overall
 
