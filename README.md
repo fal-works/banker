@@ -78,12 +78,6 @@ Suited for following situations:
 
 ---
 
-## package: array
-
-Utility functions/extensions for the basic `Array` type.
-
-Might be more efficient than the standard `Lambda`.
-
 ## package: vector
 
 Fixed-length array.
