@@ -445,6 +445,9 @@ class Chunk {
 			meta: [{
 				name: MetadataNames.readOnly_,
 				pos: localPosition
+			}, {
+				name: MetadataNames.swap_,
+				pos: localPosition
 			}]
 		}
 	}
@@ -457,6 +460,9 @@ class Chunk {
 			doc: "The identifier number of the entity that is unique in a Chunk.",
 			meta: [{
 				name: MetadataNames.readOnly_,
+				pos: localPosition
+			}, {
+				name: MetadataNames.swap_,
 				pos: localPosition
 			}]
 		}
