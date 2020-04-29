@@ -40,11 +40,7 @@ class Copy {
 		newLength: UInt
 	): WritableVector<T> {
 		final newVector = new WritableVector(newLength);
-		VectorTools.blitZero(
-			_this,
-			newVector,
-			UInts.min(_this.length, newLength)
-		);
+		VectorTools.blitZero(_this, newVector, UInts.min(_this.length, newLength));
 		return newVector;
 	}
 
@@ -141,9 +137,7 @@ class Copy {
 	/**
 		@return Shallow copy of `this` with values in reversed order.
 	**/
-	public static inline function copyReversed<T>(
-		_this: VectorReference<T>
-	): Vector<T> {
+	public static inline function copyReversed<T>(_this: VectorReference<T>): Vector<T> {
 		return copyReversedWritable(_this).nonWritable();
 	}
 

@@ -76,7 +76,8 @@ class FiniteKeys {
 		@return `true` if the class has "final" metadata.
 	**/
 	static function checkFinal(metaAccess: MetaAccess): Bool {
-		final valuesAreFinal = metaAccess.has(MetadataNames.finalValues) || metaAccess.has(MetadataNames.finalValues_);
+		final valuesAreFinal = metaAccess.has(MetadataNames.finalValues)
+			|| metaAccess.has(MetadataNames.finalValues_);
 
 		if (notVerified) {
 			if (valuesAreFinal) {
@@ -115,10 +116,10 @@ class FiniteKeys {
 
 		final instanceNames = instances.map(getInstanceName);
 
-		final mapMethods = if (valuesAreFinal)
-			FiniteKeysMap.createReadOnlyFields(instanceNames, keyValueTypes);
-		else
-			FiniteKeysMap.createWritableFields(instanceNames, keyValueTypes);
+		final mapMethods = if (valuesAreFinal) FiniteKeysMap.createReadOnlyFields(
+			instanceNames,
+			keyValueTypes
+		); else FiniteKeysMap.createWritableFields(instanceNames, keyValueTypes);
 
 		final sequenceMethods = FiniteKeysSequence.createSequenceMethods(
 			instanceNames,

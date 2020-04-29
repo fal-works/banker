@@ -41,12 +41,12 @@ class DoublyLinkableMacro {
 			/**
 				The next node linked from `this`.
 			**/
-			public var next:sneaker.types.Maybe<$localClassComplexType>;
+			public var next: sneaker.types.Maybe<$localClassComplexType>;
 
 			/**
 				The previous node linked from `this`.
 			**/
-			public var previous:sneaker.types.Maybe<$localClassComplexType>;
+			public var previous: sneaker.types.Maybe<$localClassComplexType>;
 
 			/**
 				Interconnects `previous` and `this`.
@@ -79,7 +79,9 @@ class DoublyLinkableMacro {
 			/**
 				Runs `callback` for each node in the list starting from `this` until the last node.
 			**/
-			public inline function traverse(callback: (node: $localClassComplexType) -> Void): Void {
+			public inline function traverse(
+				callback: (node: $localClassComplexType) -> Void
+			): Void {
 				var current = this.next;
 				callback(this);
 				while (current.isSome()) {
@@ -92,7 +94,9 @@ class DoublyLinkableMacro {
 			/**
 				Runs `callback` for each node in the list starting from `this` until the first node.
 			**/
-			public inline function traverseBackwards(callback: (node: $localClassComplexType) -> Void): Void {
+			public inline function traverseBackwards(
+				callback: (node: $localClassComplexType) -> Void
+			): Void {
 				var current = this.previous;
 				callback(this);
 				while (current.isSome()) {

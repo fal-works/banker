@@ -50,7 +50,9 @@ class SinglyLinkableMacro {
 			/**
 				Runs `callback` for each node in the list starting from `this` until the last node.
 			**/
-			public inline function traverse(callback: (node: $localClassComplexType) -> Void): Void {
+			public inline function traverse(
+				callback: (node: $localClassComplexType) -> Void
+			): Void {
 				var current = this.next;
 				callback(this);
 				while (current.isSome()) {
@@ -88,10 +90,7 @@ class SinglyLinkableMacro {
 		switch (constructor.kind) {
 			case FFun(func):
 				func.expr = macro $b{
-					[
-						func.expr,
-						macro this.next = sinker.Maybe.none()
-					]
+					[func.expr, macro this.next = sinker.Maybe.none()]
 				}
 			default:
 		}

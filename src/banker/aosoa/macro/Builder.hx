@@ -180,7 +180,9 @@ class Builder {
 	static function prepareFrom(
 		sourceTypeExpression: Expr,
 		checkStructureInterface: Bool
-	): Maybe<{localClassRef: Ref<ClassType>, sourceTypeString: String }> {
+	): Maybe<{
+			localClassRef: Ref<ClassType>,
+			sourceTypeString: String }> {
 		final localClassResult = ContextTools.getLocalClassRef();
 		if (localClassResult.isFailedWarn()) return null;
 		final localClassRef = localClassResult.unwrap();
@@ -193,8 +195,12 @@ class Builder {
 
 		if (notVerified) debug('Resolving: $sourceTypeString');
 
-		final interfaceModule = if (checkStructureInterface) "banker.aosoa.Structure" else null;
-		final resolved = ContextTools.resolveClassType(sourceTypeExpression, interfaceModule);
+		final interfaceModule = if (checkStructureInterface) "banker.aosoa.Structure" else
+			null;
+		final resolved = ContextTools.resolveClassType(
+			sourceTypeExpression,
+			interfaceModule
+		);
 		if (resolved.isFailedWarn()) return null;
 		final sourceType = resolved.unwrap().type;
 

@@ -44,9 +44,7 @@ class Write {
 		Reverses the order of elements in `this`.
 	**/
 	@:access(sinker.UInt)
-	public static inline function reverse<T>(
-		_this: WritableVector<T>
-	): Void {
+	public static inline function reverse<T>(_this: WritableVector<T>): Void {
 		final len = _this.length;
 
 		if (!len.isZero()) {

@@ -4,7 +4,10 @@ class IntVectorTools {
 	/**
 		@return New vector with sequence `Int` values.
 	**/
-	public static inline function createSequenceNumbers(start: Int, end: Int): Vector<Int> {
+	public static inline function createSequenceNumbers(
+		start: Int,
+		end: Int
+	): Vector<Int> {
 		return createSequenceNumbersWritable(start, end).nonWritable();
 	}
 

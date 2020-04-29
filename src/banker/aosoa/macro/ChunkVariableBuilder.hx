@@ -96,16 +96,16 @@ class ChunkVariableBuilder {
 		buildField: Field,
 		variableType: ComplexType,
 		metaMap: MetadataMap
-	): { field: Field, data: ChunkVariable } {
-		final documentation = if (buildField.doc != null)
-			buildField.doc;
-		else
+	): { field: Field, data: ChunkVariable} {
+		final documentation = if (buildField.doc != null) buildField.doc; else
 			'Vector generated from variable `${buildField.name}` in the original Structure class.';
 
 		final vectorType = macro:banker.vector.WritableVector<$variableType>;
 
 		final field = buildField.clone()
-			.setDoc(documentation).setVariableType(vectorType).setAccess([APublic, AFinal], false);
+			.setDoc(documentation)
+			.setVariableType(vectorType)
+			.setAccess([APublic, AFinal], false);
 
 		return {
 			field: field,
@@ -123,17 +123,20 @@ class ChunkVariableBuilder {
 		final bufferName = originalName + "ChunkBuffer";
 		final chunkBufferDocumentation = 'Vector for providing buffered WRITE access to `$originalName`.';
 
-		return chunkField.clone().setName(bufferName).setDoc(chunkBufferDocumentation).setAccess([AFinal], false);
+		return chunkField.clone()
+			.setName(bufferName)
+			.setDoc(chunkBufferDocumentation)
+			.setAccess([AFinal], false);
 	}
 
 	static function createDisuseExpression(
 		chunkBufferFieldName: String,
 		swap: Bool
 	): Expr {
-		return if (swap)
-			macro $i{chunkBufferFieldName}.swap(i, nextWriteIndex);
-		else
-			macro $i{chunkBufferFieldName}[i] = $i{chunkBufferFieldName}[nextWriteIndex];
+		return if (swap) macro $i{chunkBufferFieldName}.swap(
+			i,
+			nextWriteIndex
+		); else macro $i{chunkBufferFieldName}[i] = $i{chunkBufferFieldName}[nextWriteIndex];
 	}
 
 	static function createSynchronizeExpression(fieldName: String, bufferName: String) {
@@ -173,7 +176,7 @@ class ChunkVariableBuilder {
 		} else if (metaMap.factory.isSome()) {
 			if (notVerified) debug('  Found metadata: @${MetadataNames.factory}');
 			final factoryExpression = metaMap.factory.unwrap();
-			if (factoryExpression.unify((macro: () -> $variableType).toType()))
+			if (factoryExpression.unify((macro:() -> $variableType).toType()))
 				expressions.push(macro $vector.populate($factoryExpression));
 			else {
 				var message = 'Factory function should be ';
@@ -183,7 +186,9 @@ class ChunkVariableBuilder {
 		} else if (metaMap.factoryWithId.isSome()) {
 			if (notVerified) debug('  Found metadata: @${MetadataNames.factoryWithId}');
 			final factoryExpression = metaMap.factoryWithId.unwrap();
-			if (factoryExpression.unify((macro: (id: banker.aosoa.ChunkEntityId) -> $variableType).toType())) {
+			if (factoryExpression.unify((macro:(
+				id: banker.aosoa.ChunkEntityId
+			) -> $variableType).toType())) {
 				final populateExpression = macro {
 					var i = sinker.UInt.zero;
 					$vector.populate(() -> {

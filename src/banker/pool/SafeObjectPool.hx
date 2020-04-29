@@ -28,9 +28,7 @@ class SafeObjectPool<T> extends ObjectPoolBase<T> {
 		outputs DEBUG log if enabled (see `sneaker` library about logging).
 	**/
 	override public function get(): T
-		return if (!this.size.isZero())
-			super.get()
-		else {
+		return if (!this.size.isZero()) super.get() else {
 			this.debug("Empty. Create new instance.");
 			factory();
 		}

@@ -4,7 +4,10 @@ class UIntVectorTools {
 	/**
 		@return New vector with sequence `UInt` values.
 	**/
-	public static inline function createSequenceNumbers(start: UInt, end: UInt): Vector<UInt> {
+	public static inline function createSequenceNumbers(
+		start: UInt,
+		end: UInt
+	): Vector<UInt> {
 		return createSequenceNumbersWritable(start, end).nonWritable();
 	}
 

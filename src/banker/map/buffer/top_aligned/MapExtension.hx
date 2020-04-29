@@ -89,7 +89,11 @@ class MapExtension {
 		final values = _this.valueVector;
 		final index = keys.ref.findIndexIn(key, UInt.zero, size);
 		return if (index.isSome()) {
-			if (predicate(key, values[index.unwrap()], newValue)) values[index.unwrap()] = newValue;
+			if (predicate(
+				key,
+				values[index.unwrap()],
+				newValue
+			)) values[index.unwrap()] = newValue;
 			true;
 		} else {
 			assert(size < _this.capacity, _this.tag, "The map is full.");

@@ -153,7 +153,13 @@ class Search {
 		element: T,
 		equalityPredicate: T->T->Bool
 	): Bool {
-		return hasEqualIn(_this, element, equalityPredicate, UInt.zero, _this.length);
+		return hasEqualIn(
+			_this,
+			element,
+			equalityPredicate,
+			UInt.zero,
+			_this.length
+		);
 	}
 
 	/**

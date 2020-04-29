@@ -52,7 +52,7 @@ class FieldExtension {
 					if (!hasOneParameter(parameters, metadata.pos)) break;
 					final expression = macro @:privateAccess ${parameters[0]};
 					map.factory = Maybe.from(expression);
-					// Validate in ChunkVariableBuilder.createConstructorPiece() instead of here
+				// Validate in ChunkVariableBuilder.createConstructorPiece() instead of here
 
 				case MetadataNames.factoryWithId | MetadataNames.factoryWithId_:
 					if (duplicateMetadata(map.chunkLevelFactory, metadata.pos)) break;
@@ -66,7 +66,10 @@ class FieldExtension {
 					final parameters = metadata.params;
 					if (!hasOneParameter(parameters, metadata.pos)) break;
 					final expression = parameters[0].privateAccess();
-					if (!validateChunkLevelFactoryType(expression, chunkLevelFactoryType)) break;
+					if (!validateChunkLevelFactoryType(
+						expression,
+						chunkLevelFactoryType
+					)) break;
 					map.chunkLevelFactory = Maybe.from(expression);
 			}
 		}
@@ -102,7 +105,10 @@ class FieldExtension {
 		} else true;
 	}
 
-	static function validateChunkLevelFactoryType(expression: Expr, requiredType: Type): Bool {
+	static function validateChunkLevelFactoryType(
+		expression: Expr,
+		requiredType: Type
+	): Bool {
 		final type = Context.typeof(expression);
 		return if (type.unify(requiredType)) {
 			true;

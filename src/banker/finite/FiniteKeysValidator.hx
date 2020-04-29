@@ -48,10 +48,10 @@ class FiniteKeysValidator {
 		switch (initialValueField.kind) {
 			case FVar(type, expression):
 				if (notVerified) debug('  Found a variable.');
-				return if (type == null)
-					Failed('Explicit type is required', position);
-				else
-					Ok({ kind: Value(expression), type: type });
+				return if (type == null) Failed(
+					'Explicit type is required',
+					position
+				); else Ok({ kind: Value(expression), type: type });
 
 			case FFun(func):
 				if (notVerified) debug('  Found a factory function.');

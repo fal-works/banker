@@ -13,7 +13,10 @@ class SinglyLinkedQueueMacro {
 		final localClassComplexType = Context.getType(localClassPathStringFull)
 			.toComplexType();
 
-		final resolved = ContextTools.resolveClassType(linkableTypeExpression, "banker.link.SinglyLinkable");
+		final resolved = ContextTools.resolveClassType(
+			linkableTypeExpression,
+			"banker.link.SinglyLinkable"
+		);
 		if (resolved.isFailedWarn()) return null;
 		final linkableType = resolved.unwrap().type.toComplexType();
 

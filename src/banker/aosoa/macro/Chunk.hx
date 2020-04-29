@@ -121,16 +121,20 @@ class Chunk {
 		expressions: Array<Expr>,
 		position: Position
 	): Field {
-		final constructorArguments: Array<FunctionArg> = [{
-			name: "chunkId",
-			type: (macro:sinker.UInt)
-		}, {
-			name: "chunkCapacity",
-			type: (macro:sinker.UInt)
-		}, {
-			name: "defaultReadWriteIndexMap",
-			type: (macro:banker.vector.Vector<sinker.UInt>)
-		}];
+		final constructorArguments: Array<FunctionArg> = [
+			{
+				name: "chunkId",
+				type: (macro:sinker.UInt)
+			},
+			{
+				name: "chunkCapacity",
+				type: (macro:sinker.UInt)
+			},
+			{
+				name: "defaultReadWriteIndexMap",
+				type: (macro:banker.vector.Vector<sinker.UInt>)
+			}
+		];
 		constructorArguments.pushFromArray(externalArguments);
 
 		final expression = macro {
@@ -152,8 +156,14 @@ class Chunk {
 			}
 			banker.vector.VectorTools.blitZero(id, this.idChunkBuffer, chunkCapacity);
 
-			banker.vector.UIntVectorTools.assignSequenceNumbers(this.entityId, sinker.UInt.zero);
-			banker.vector.UIntVectorTools.assignSequenceNumbers(this.entityIdChunkBuffer, sinker.UInt.zero);
+			banker.vector.UIntVectorTools.assignSequenceNumbers(
+				this.entityId,
+				sinker.UInt.zero
+			);
+			banker.vector.UIntVectorTools.assignSequenceNumbers(
+				this.entityIdChunkBuffer,
+				sinker.UInt.zero
+			);
 		};
 
 		return {
@@ -426,7 +436,10 @@ class Chunk {
 	static function createIdField(): Field {
 		return {
 			name: "id",
-			kind: FVar(macro: banker.aosoa.ChunkEntityId, macro banker.aosoa.ChunkEntityId.dummy),
+			kind: FVar(
+				macro:banker.aosoa.ChunkEntityId,
+				macro banker.aosoa.ChunkEntityId.dummy
+			),
 			pos: localPosition,
 			doc: "The identifier of the entity that is unique in an AoSoA.",
 			meta: [{
@@ -439,7 +452,7 @@ class Chunk {
 	static function createEntityIdField(): Field {
 		return {
 			name: "entityId",
-			kind: FVar((macro: sinker.UInt), macro sinker.UInt.zero),
+			kind: FVar((macro:sinker.UInt), macro sinker.UInt.zero),
 			pos: localPosition,
 			doc: "The identifier number of the entity that is unique in a Chunk.",
 			meta: [{

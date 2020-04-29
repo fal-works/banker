@@ -127,8 +127,13 @@ class Aosoa {
 		];
 		constructorArguments.pushFromArray(externalArguments);
 
-		final chunkConstructorArguments: Array<Expr> = [macro chunkId++, macro chunkCapacity, macro defaultReadWriteIndexMap];
-		chunkConstructorArguments.pushFromArray(externalArguments.map(arg -> macro $i{arg.name}));
+		final chunkConstructorArguments: Array<Expr> = [
+			macro chunkId++,
+			macro chunkCapacity,
+			macro defaultReadWriteIndexMap
+		];
+		chunkConstructorArguments.pushFromArray(externalArguments.map(arg ->
+			macro $i{arg.name}));
 
 		final constructor: Field = {
 			name: "new",
@@ -136,7 +141,7 @@ class Aosoa {
 				args: constructorArguments,
 				ret: null,
 				expr: macro {
-					final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkCapacity) (i: sinker.UInt)]);
+					final defaultReadWriteIndexMap = banker.vector.Vector.fromArrayCopy([for (i in 0...chunkCapacity) (i : sinker.UInt)]);
 
 					var chunkId = sinker.UInt.zero;
 					this.chunks = banker.vector.Vector.createPopulated(
@@ -188,7 +193,8 @@ class Aosoa {
 		final methodName = chunkField.name;
 
 		final externalArguments = chunkIterator.externalArguments;
-		final argumentExpressions = externalArguments.map(argument -> macro $i{argument.name});
+		final argumentExpressions = externalArguments.map(argument ->
+			macro $i{argument.name});
 
 		final functionBody = macro {
 			final chunks = this.chunks;
@@ -218,7 +224,8 @@ class Aosoa {
 		final methodName = chunkField.name;
 
 		final externalArguments = chunkUseMethod.externalArguments;
-		final argumentExpressions = externalArguments.map(argument -> macro $i{argument.name});
+		final argumentExpressions = externalArguments.map(argument ->
+			macro $i{argument.name});
 
 		final functionBody = macro {
 			final chunks = this.chunks;

@@ -66,9 +66,12 @@ class RingBuffer<T> extends Tagged implements LimitedCapacityBuffer {
 		final vector = this.vector;
 		final length = vector.length;
 
-		return if (headIndex + size <= length)
-			vector.ref.joinIn(headIndex, headIndex + size, ", ");
-		else {
+		return if (headIndex
+			+ size <= length) vector.ref.joinIn(
+				headIndex,
+				headIndex + size,
+				", "
+			); else {
 			final former = vector.ref.joinIn(headIndex, length, ", ");
 			final latter = vector.ref.joinIn(UInt.zero, tailIndex, ", ");
 			former + ", " + latter;

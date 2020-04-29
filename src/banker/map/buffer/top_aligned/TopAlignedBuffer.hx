@@ -62,7 +62,9 @@ class TopAlignedBuffer<K, V> extends Tagged implements LimitedCapacityBuffer {
 		return ConvertExtension.cloneAsMap(this, newCapacity);
 
 	/** @see banker.map.buffer.top_aligned.ConvertExtension **/
-	public inline function cloneAsOrderedMap(newCapacity = MaybeUInt.none): ArrayOrderedMap<K, V>
+	public inline function cloneAsOrderedMap(
+		newCapacity = MaybeUInt.none
+	): ArrayOrderedMap<K, V>
 		return ConvertExtension.cloneAsOrderedMap(this, newCapacity);
 
 	/** @inheritdoc **/

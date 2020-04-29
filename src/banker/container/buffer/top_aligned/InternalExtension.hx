@@ -115,11 +115,7 @@ class InternalExtension {
 	): T {
 		final removed = vector[index];
 		final nextSize = currentSize - 1;
-		vector.blitInternal(
-			index.plusOne(),
-			index,
-			nextSize - index
-		);
+		vector.blitInternal(index.plusOne(), index, nextSize - index);
 		_this.setSize(nextSize);
 
 		return removed;

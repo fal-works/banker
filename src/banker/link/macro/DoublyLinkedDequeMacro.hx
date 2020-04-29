@@ -13,7 +13,10 @@ class DoublyLinkedDequeMacro {
 		final localClassComplexType = Context.getType(localClassPathStringFull)
 			.toComplexType();
 
-		final resolved = ContextTools.resolveClassType(linkableTypeExpression, "banker.link.DoublyLinkable");
+		final resolved = ContextTools.resolveClassType(
+			linkableTypeExpression,
+			"banker.link.DoublyLinkable"
+		);
 		if (resolved.isFailedWarn()) return null;
 		final linkableType = resolved.unwrap().type.toComplexType();
 
