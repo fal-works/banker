@@ -163,14 +163,14 @@ class Chunk {
 				id[i] = new banker.aosoa.ChunkEntityId(chunkId, i);
 				++i;
 			}
-			banker.vector.VectorTools.blitZero(id, this.idChunkBuffer, chunkCapacity);
+			banker.vector.VectorTools.blitZero(id, this.idBuffer, chunkCapacity);
 
 			banker.vector.UIntVectorTools.assignSequenceNumbers(
 				this.entityId,
 				sinker.UInt.zero
 			);
 			banker.vector.UIntVectorTools.assignSequenceNumbers(
-				this.entityIdChunkBuffer,
+				this.entityIdBuffer,
 				sinker.UInt.zero
 			);
 		};

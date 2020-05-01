@@ -321,13 +321,13 @@ class ChunkMethodBuilder {
 
 				case Read:
 					// provide READ access to the buffer via $argumentName
-					final writeVectorName = argumentName + "ChunkBuffer";
+					final writeVectorName = argumentName + "Buffer";
 					declareLocalBeforeLoop.push(macro final $writeVectorName = this.$writeVectorName);
 					declareLocalInsideLoop.push(macro final $argumentName = $i{writeVectorName}[i]);
 
 				case Write:
 					// provide WRITE access to the buffer via $argumentName
-					final writeVectorName = argumentName + "ChunkBuffer";
+					final writeVectorName = argumentName + "Buffer";
 					declareLocalBeforeLoop.push(macro final $argumentName = this.$writeVectorName);
 					needsWriteAccess = true;
 

@@ -17,7 +17,7 @@ class ChunkVariableBuilder {
 			metaMap
 		);
 		final chunkField = chunkVariable.field;
-		final chunkBufferField = createChunkBufferField(chunkField);
+		final chunkBufferField = createBufferField(chunkField);
 
 		final constructorPiece = createConstructorPiece(
 			buildField,
@@ -118,9 +118,9 @@ class ChunkVariableBuilder {
 		}
 	}
 
-	static function createChunkBufferField(chunkField: Field): Field {
+	static function createBufferField(chunkField: Field): Field {
 		final originalName = chunkField.name;
-		final bufferName = originalName + "ChunkBuffer";
+		final bufferName = originalName + "Buffer";
 		final chunkBufferDocumentation = 'Vector for providing buffered WRITE access to `$originalName`.';
 
 		return chunkField.clone()
@@ -230,7 +230,7 @@ class ChunkVariableBuilder {
 			}
 		}
 
-		final vectorBuffer = macro $p{["this", buildFieldName + "ChunkBuffer"]};
+		final vectorBuffer = macro $p{["this", buildFieldName + "Buffer"]};
 		expressions.push(macro $vectorBuffer = $vector.ref.copyWritable());
 
 		final expression = macro $a{expressions};
