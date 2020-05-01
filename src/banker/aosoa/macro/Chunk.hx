@@ -84,10 +84,19 @@ class Chunk {
 			/**
 				@return The physical index in variable vectors at which the entity data is stored.
 			**/
-			public inline function getReadIndex(
+			public extern inline function getReadIndex(
 				chunkEntityId: banker.aosoa.ChunkEntityId
 			): sinker.UInt {
 				return this.entityIdReadIndexMap[chunkEntityId.entity];
+			}
+
+			/**
+				@return The physical index in variable buffer vectors at which the entity data is stored.
+			**/
+			public extern inline function getWriteIndex(
+				chunkEntityId: banker.aosoa.ChunkEntityId
+			): sinker.UInt {
+				return this.readWriteIndexMap[this.getReadIndex(chunkEntityId)];
 			}
 		};
 

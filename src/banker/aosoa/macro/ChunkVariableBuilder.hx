@@ -126,7 +126,7 @@ class ChunkVariableBuilder {
 		return chunkField.clone()
 			.setName(bufferName)
 			.setDoc(chunkBufferDocumentation)
-			.setAccess([AFinal], false);
+			.setAccess([AFinal, APublic], false);
 	}
 
 	static function createDisuseExpression(
