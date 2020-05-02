@@ -67,7 +67,6 @@ class Aosoa {
 					);
 
 					if (!endReadEntityIndex.isZero()) usedChunkMaxIndex = chunkIndex;
-					else break; // TODO: do not break?
 
 					++chunkIndex;
 				}
