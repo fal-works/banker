@@ -21,4 +21,9 @@ interface Stack<T> {
 		Adds all elements in `otherVector` to `this`.
 	**/
 	function pushFromVector(otherVector: VectorReference<T>): Void;
+
+	/**
+		Swaps two elements that were most recently added.
+	**/
+	function swap(): Void;
 }

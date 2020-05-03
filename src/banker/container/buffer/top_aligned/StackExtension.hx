@@ -43,4 +43,13 @@ class StackExtension {
 
 		_this.pushFromVectorInternal(index, otherVector, otherVectorLength);
 	}
+
+	/** @see `banker.container.interfaces.Stack` **/
+	@:access(sinker.UInt)
+	public static inline function swap<T>(_this: TopAlignedBuffer<T>): Void {
+		final lastIndex = _this.nextFreeSlotIndex.minusOne().int();
+		assert(lastIndex >= 1, _this.tag, "The list must have at least 2 elements.");
+
+		_this.vector.swap(new UInt(lastIndex - 1), new UInt(lastIndex));
+	}
 }

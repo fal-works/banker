@@ -23,4 +23,8 @@ class Stack<T>
 	/** @see `banker.container.interfaces.Stack` **/
 	public inline function pushFromVector(otherVector: VectorReference<T>): Void
 		StackExtension.pushFromVector(this, otherVector);
+
+	/** @see `banker.container.interfaces.Stack` **/
+	public inline function swap(): Void
+		return StackExtension.swap(this);
 }
