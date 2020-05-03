@@ -29,7 +29,7 @@ class ArrayMap<K, V>
 	/**
 		@param capacity Max number of key-value pairs `this` can contain.
 	**/
-	public function new(capacity: Int) {
+	public function new(capacity: UInt) {
 		super(capacity);
 	}
 

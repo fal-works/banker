@@ -16,7 +16,7 @@ class ArrayDeque<T>
 	implements Sequence<T>
 	implements ripper.Body {
 	/** @inheritdoc **/
-	public function new(capacity: Int)
+	public function new(capacity: UInt)
 		super(capacity);
 
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
