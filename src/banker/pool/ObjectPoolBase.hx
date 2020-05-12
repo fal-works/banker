@@ -1,5 +1,6 @@
 package banker.pool;
 
+import sneaker.tag.Tag;
 import sneaker.tag.TaggedExtension;
 import banker.container.buffer.top_aligned.StackExtension;
 
@@ -32,10 +33,10 @@ class ObjectPoolBase<T> extends ObjectPoolBuffer<T> {
 		return StackExtension.push(this, element);
 
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
-	public function setTag(tag): ObjectPoolBase<T>
+	public function setTag(tag: Tag): ObjectPoolBase<T>
 		return TaggedExtension.setTag(this, tag);
 
 	/** @see `sneaker.tag.TaggedExtension.newTag()` **/
-	public function newTag(name, bits): ObjectPoolBase<T>
+	public function newTag(name: String, ?bits: Int): ObjectPoolBase<T>
 		return TaggedExtension.newTag(this, name, bits);
 }

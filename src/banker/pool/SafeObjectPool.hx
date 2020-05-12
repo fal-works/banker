@@ -1,5 +1,6 @@
 package banker.pool;
 
+import sneaker.tag.Tag;
 import sneaker.tag.TaggedExtension;
 
 /**
@@ -46,10 +47,10 @@ class SafeObjectPool<T> extends ObjectPoolBase<T> {
 			this.debug("Already full.");
 
 	/** @see `sneaker.tag.TaggedExtension.setTag()` **/
-	override public function setTag(tag): SafeObjectPool<T>
+	override public function setTag(tag: Tag): SafeObjectPool<T>
 		return TaggedExtension.setTag(this, tag);
 
 	/** @see `sneaker.tag.TaggedExtension.newTag()` **/
-	override public function newTag(name, bits): SafeObjectPool<T>
+	override public function newTag(name: String, ?bits: Int): SafeObjectPool<T>
 		return TaggedExtension.newTag(this, name, bits);
 }
