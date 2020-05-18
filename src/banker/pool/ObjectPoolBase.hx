@@ -13,6 +13,17 @@ import banker.container.buffer.top_aligned.StackExtension;
 @:ripper_verified
 class ObjectPoolBase<T> extends ObjectPoolBuffer<T> {
 	/**
+		Callback function for `this.put()`.
+	**/
+	public final putCallback: (element: T) -> Void;
+
+	/** @inheritdoc **/
+	public function new(capacity: UInt, factory: () -> T) {
+		super(capacity, factory);
+		this.putCallback = (element: T) -> this.put(element);
+	}
+
+	/**
 		Gets an element that is currently not in use.
 		Raises an exception if `this` is empty.
 
