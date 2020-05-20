@@ -11,7 +11,9 @@ import banker.container.buffer.top_aligned.StackExtension;
 @:generic
 #end
 @:ripper_verified
-class ObjectPoolBase<T> extends ObjectPoolBuffer<T> {
+class ObjectPoolBase<T>
+	extends ObjectPoolBuffer<T>
+	implements banker.pool.interfaces.ObjectPool<T> {
 	/**
 		Callback function for `this.put()`.
 	**/

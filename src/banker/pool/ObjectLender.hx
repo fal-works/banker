@@ -12,7 +12,9 @@ import banker.container.buffer.top_aligned.StackExtension;
 @:generic
 #end
 @:ripper_verified
-class ObjectLender<T> extends ObjectPoolBuffer<T> {
+class ObjectLender<T>
+	extends ObjectPoolBuffer<T>
+	implements banker.pool.interfaces.ObjectLender<T> {
 	/**
 		Gets an element that is currently not in use.
 		Raises an exception if `this` is empty.
