@@ -55,7 +55,7 @@ abstract Bits(Int) {
 		Unsets the bit at `index`.
 		@return New `Bits` value.
 	**/
-	public static extern inline function unsetBit(bits: Bits, index: Int): Bits {
+	public static extern inline function unset(bits: Bits, index: Int): Bits {
 		return bits & ~(one << index);
 	}
 
