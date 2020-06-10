@@ -508,6 +508,15 @@ Similar to the `aosoa` package,
 - You can suppress debug logs without changing the whole log level by adding `@:banker.verified` metadata to your class.
 
 
+## package: types
+
+Some other small types are avaliable in this package:
+
+- `Bits`
+- `NaiveSet`
+- `Reference`
+
+
 ## Doesn't work?
 
 Regarding packages `container`, `map`, `pool` and `aosoa`:
