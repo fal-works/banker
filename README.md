@@ -537,10 +537,10 @@ In that case you may have to reboot it manually (if VSCode, `>Haxe: Restart Lang
 
 ## Dependencies
 
-- [sinker](https://github.com/fal-works/sinker) v0.2.0
-- [prayer](https://github.com/fal-works/prayer) v0.1.2
-- [sneaker](https://github.com/fal-works/sneaker) v0.9.1
-- [ripper](https://github.com/fal-works/ripper) v0.3.2
+- [sinker](https://github.com/fal-works/sinker) v0.3.0 or compatible
+- [prayer](https://github.com/fal-works/prayer) v0.1.3 or compatible
+- [sneaker](https://github.com/fal-works/sneaker) v0.10.0 or compatible
+- [ripper](https://github.com/fal-works/ripper) v0.3.3 or compatible
 
 See also:
 [FAL Haxe libraries](https://github.com/fal-works/fal-haxe-libraries)
