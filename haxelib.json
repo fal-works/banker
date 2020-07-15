@@ -4,9 +4,9 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Suite of GC-free data structures. What we need is efficiency!",
-	"version": "0.6.1",
+	"version": "0.7.0-alpha",
 	"classPath": "src/",
-	"releasenote": "Update library dependencies.",
+	"releasenote": "",
 	"contributors": [
 		"fal-works"
 	],
