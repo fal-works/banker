@@ -24,9 +24,11 @@ class Main {
 
 	static final aosoaTestCases = pkg.AosoaTest.all;
 
-	static final otherCases = finite.FiniteKeysTest.all;
+	static final finiteTestCases = finite.FiniteKeysTest.all;
 
 	static final linkTestCases = link.LinkedListTest.all;
+
+	static final bytesTestCases = BytesTest.all;
 
 	static function main() {
 		println("\n");
@@ -38,8 +40,9 @@ class Main {
 		// test(testCases);
 		// test(watermarkTestCases);
 		// test(poolTestCases);
-		test(aosoaTestCases);
-		// test(otherCases);
+		// test(aosoaTestCases);
+		// test(finiteTestCases);
 		// test(linkTestCases);
+		test(bytesTestCases);
 	}
 }
