@@ -27,6 +27,17 @@ abstract Bytes(haxe.io.Bytes) from haxe.io.Bytes to haxe.io.Bytes {
 	}
 
 	/**
+		Blits bytes data from `src` to `dest` starting from position zero.
+	**/
+	public static extern inline function blitZero(
+		src: Bytes,
+		dest: Bytes,
+		length: UInt
+	): Void {
+		blit(src, UInt.zero, dest, UInt.zero, length);
+	}
+
+	/**
 		The length of `this` bytes.
 	**/
 	public var length(get, never): UInt;
@@ -63,6 +74,22 @@ abstract Bytes(haxe.io.Bytes) from haxe.io.Bytes to haxe.io.Bytes {
 	**/
 	public extern inline function sub(startPos: UInt, length: UInt): Bytes
 		return this.sub(startPos, length);
+
+	/**
+		@return New `Bytes` instance with all values copied from `this`.
+	**/
+	public extern inline function copy(): Bytes
+		return sub(UInt.zero, this.length);
+
+	/**
+		@return New `Bytes` instance with `length` and values copied from `this`.
+	**/
+	public extern inline function copyResized(length: UInt): Bytes {
+		final currentLength = this.length;
+		final newBytes = Bytes.alloc(length);
+		blitZero(this, newBytes, Ints.min(length, currentLength));
+		return newBytes;
+	}
 
 	extern inline function get_length(): UInt
 		return this.length;
