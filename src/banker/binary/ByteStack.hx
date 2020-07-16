@@ -153,6 +153,30 @@ class ByteStack {
 	public extern inline function over64(topWordSize: WordSize): Void
 		this.size = this.data.over64(this.size, topWordSize);
 
+	/**
+		Peeks the top 32-bit word as an integer and replaces it with an incremented value.
+	**/
+	public extern inline function increment32(): Void
+		this.data.increment32(this.size);
+
+	/**
+		Peeks the top 64-bit word as an integer and replaces it with an incremented value.
+	**/
+	public extern inline function increment64(): Void
+		this.data.increment64(this.size);
+
+	/**
+		Peeks the top 32-bit word as an integer and replaces it with an decremented value.
+	**/
+	public extern inline function decrement32(): Void
+		this.data.decrement32(this.size);
+
+	/**
+		Peeks the top 64-bit word as an integer and replaces it with an decremented value.
+	**/
+	public extern inline function decrement64(): Void
+		this.data.decrement64(this.size);
+
 	function new(capacity: UInt) {
 		this.capacity = capacity;
 		this.size = UInt.zero;

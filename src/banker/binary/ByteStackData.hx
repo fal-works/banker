@@ -173,4 +173,36 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 			this.getF64(stackSize - topWordSize.bytes() - LEN64)
 		);
 	}
+
+	/**
+		Peeks the top 32-bit word as an integer and replaces it with an incremented value.
+	**/
+	public extern inline function increment32(stackSize: UInt): Void {
+		final pos = stackSize - LEN32;
+		this.setI32(pos, this.getI32(pos) + 1);
+	}
+
+	/**
+		Peeks the top 64-bit word as an integer and replaces it with an incremented value.
+	**/
+	public extern inline function increment64(stackSize: UInt): Void {
+		final pos = stackSize - LEN64;
+		this.setI64(pos, this.getI64(pos) + 1);
+	}
+
+	/**
+		Peeks the top 32-bit word as an integer and replaces it with an decremented value.
+	**/
+	public extern inline function decrement32(stackSize: UInt): Void {
+		final pos = stackSize - LEN32;
+		this.setI32(pos, this.getI32(pos) - 1);
+	}
+
+	/**
+		Peeks the top 64-bit word as an integer and replaces it with an decremented value.
+	**/
+	public extern inline function decrement64(stackSize: UInt): Void {
+		final pos = stackSize - LEN64;
+		this.setI64(pos, this.getI64(pos) - 1);
+	}
 }
