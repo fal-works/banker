@@ -14,6 +14,9 @@ abstract BytesData(InternalData) from InternalData {
 	**/
 	public var internal(get, never): InternalData;
 
+	public extern inline function new(bytes: UInt)
+		this = InternalData.alloc(bytes);
+
 	public extern inline function setI32(pos: UInt, v: Int32): Void
 		this.setInt32(pos, v);
 
