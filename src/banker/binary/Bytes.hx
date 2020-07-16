@@ -1,17 +1,18 @@
 package banker.binary;
 
+import haxe.io.Bytes as StdBytes;
 import banker.binary.internal.BytesData;
 
 /**
 	Bytes with fast (but unsafe) data access.
 **/
 @:notNull @:forward(toHex, toString)
-abstract Bytes(haxe.io.Bytes) from haxe.io.Bytes to haxe.io.Bytes {
+abstract Bytes(StdBytes) from StdBytes to StdBytes {
 	/**
 		Creates a `Bytes` instance.
 	**/
 	public static extern inline function alloc(length: UInt): Bytes
-		return haxe.io.Bytes.alloc(length);
+		return StdBytes.alloc(length);
 
 	/**
 		Blits bytes data from `src` to `dest`.
@@ -46,6 +47,12 @@ abstract Bytes(haxe.io.Bytes) from haxe.io.Bytes to haxe.io.Bytes {
 		The data of `this` that provides read/write access.
 	**/
 	public var data(get, never): BytesData;
+
+	/**
+		@return `this` as the underlying type (`haxe.io.Bytes`).
+	**/
+	public extern inline function std(): StdBytes
+		return this;
 
 	/**
 		Sets `length` bytes from `startPos` of `this` instance to `value`.
