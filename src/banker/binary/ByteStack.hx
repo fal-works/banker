@@ -1,9 +1,8 @@
 package banker.binary;
 
-import haxe.Int32;
-import haxe.Int64;
-import banker.binary.internal.ByteStackData;
-
+/**
+	Stack of bytes that can store values of several numeric types.
+**/
 class ByteStack {
 	/**
 		@param capacity The capacity of `this` stack in bytes.

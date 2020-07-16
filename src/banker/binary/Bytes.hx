@@ -1,7 +1,6 @@
 package banker.binary;
 
 import haxe.io.Bytes as StdBytes;
-import banker.binary.internal.BytesData;
 
 /**
 	Bytes with fast (but unsafe) data access.

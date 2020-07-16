@@ -1,8 +1,7 @@
-package banker.binary.internal;
+package banker.binary;
 
-import haxe.Int32;
-import haxe.Int64;
-import haxe.io.Bytes as InternalData;
+import hl.Bytes as InternalData;
+import banker.binary.Constants.LEN32;
 
 /**
 	The data of `Bytes`.
@@ -15,34 +14,33 @@ abstract BytesData(InternalData) from InternalData {
 	public var internal(get, never): InternalData;
 
 	public extern inline function new(bytes: UInt)
-		this = InternalData.alloc(bytes);
+		this = new InternalData(bytes);
 
 	public extern inline function setI32(pos: UInt, v: Int32): Void
-		this.setInt32(pos, v);
+		this.setI32(pos, v);
 
-	public extern inline function setI64(pos: UInt, v: Int64): Void
-		this.setInt64(pos, v);
+	public extern inline function setI64(pos: UInt, v: Int64): Void {
+		setI32(pos + LEN32, v.high);
+		setI32(pos, v.low);
+	}
 
 	public extern inline function setF32(pos: UInt, v: Float32): Void
-		this.setFloat(pos, v);
+		this.setF32(pos, v);
 
 	public extern inline function setF64(pos: UInt, v: Float): Void
-		this.setDouble(pos, v);
+		this.setF64(pos, v);
 
 	public extern inline function getI32(pos: UInt): Int32
-		return this.getInt32(pos);
+		return this.getI32(pos);
 
 	public extern inline function getI64(pos: UInt): Int64
-		return this.getInt64(pos);
+		return Int64.make(getI32(pos + LEN32), getI32(pos));
 
 	public extern inline function getF32(pos: UInt): Float32
-		return this.getFloat(pos);
+		return this.getF32(pos);
 
 	public extern inline function getF64(pos: UInt): Float
-		return this.getDouble(pos);
-
-	extern inline function new(internal: InternalData)
-		this = internal;
+		return this.getF64(pos);
 
 	extern inline function get_internal()
 		return this;

@@ -1,10 +1,10 @@
-package banker.binary.internal;
+package banker.binary;
 
-import haxe.Int32;
-import haxe.Int64;
 import banker.binary.Constants.*;
-import banker.binary.internal.BytesData;
 
+/**
+	The data of `ByteStack`.
+**/
 abstract ByteStackData(BytesData) from BytesData to BytesData {
 	public extern inline function new(byteLength: UInt)
 		this = new BytesData(byteLength);
