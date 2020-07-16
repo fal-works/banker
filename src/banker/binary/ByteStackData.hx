@@ -6,8 +6,12 @@ import banker.binary.internal.Constants.*;
 	The data of `ByteStack`.
 **/
 abstract ByteStackData(BytesData) from BytesData to BytesData {
-	public extern inline function new(byteLength: UInt)
-		this = new BytesData(byteLength);
+	/**
+		Creates a `ByteStackData` instance.
+		@param capacity The capacity of `this` stack in bytes.
+	**/
+	public static extern inline function alloc(capacity: UInt): ByteStackData
+		return BytesData.alloc(capacity);
 
 	/**
 		Drops the top word.

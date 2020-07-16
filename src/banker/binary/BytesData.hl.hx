@@ -9,12 +9,16 @@ import banker.binary.internal.Constants.LEN32;
 @:notNull
 abstract BytesData(InternalData) from InternalData {
 	/**
+		Creates a `BytesData` instance.
+		@param length Length in bytes to be allocated.
+	**/
+	public static extern inline function alloc(length: UInt)
+		return new InternalData(length);
+
+	/**
 		The internal representation of `this`.
 	**/
 	public var internal(get, never): InternalData;
-
-	public extern inline function new(bytes: UInt)
-		this = new InternalData(bytes);
 
 	public extern inline function setI32(pos: UInt, v: Int32): Void
 		this.setI32(pos, v);

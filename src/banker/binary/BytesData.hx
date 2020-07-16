@@ -8,12 +8,16 @@ import haxe.io.Bytes as InternalData;
 @:notNull
 abstract BytesData(InternalData) from InternalData {
 	/**
+		Creates a `BytesData` instance.
+		@param length Length in bytes to be allocated.
+	**/
+	public static extern inline function alloc(length: UInt)
+		return InternalData.alloc(length);
+
+	/**
 		The internal representation of `this`.
 	**/
 	public var internal(get, never): InternalData;
-
-	public extern inline function new(bytes: UInt)
-		this = InternalData.alloc(bytes);
 
 	public extern inline function setI32(pos: UInt, v: Int32): Void
 		this.setInt32(pos, v);
@@ -38,9 +42,6 @@ abstract BytesData(InternalData) from InternalData {
 
 	public extern inline function getF64(pos: UInt): Float
 		return this.getDouble(pos);
-
-	extern inline function new(internal: InternalData)
-		this = internal;
 
 	extern inline function get_internal()
 		return this;

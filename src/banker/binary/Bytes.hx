@@ -9,6 +9,7 @@ import haxe.io.Bytes as StdBytes;
 abstract Bytes(StdBytes) from StdBytes to StdBytes {
 	/**
 		Creates a `Bytes` instance.
+		@param length Length in bytes to be allocated.
 	**/
 	public static extern inline function alloc(length: UInt): Bytes
 		return StdBytes.alloc(length);

@@ -5,8 +5,8 @@ package banker.binary;
 **/
 class ByteStack {
 	/**
+		Creates a `ByteStack` instance.
 		@param capacity The capacity of `this` stack in bytes.
-		@return New `ByteStack` instance.
 	**/
 	public static inline function alloc(capacity: UInt): ByteStack {
 		return new ByteStack(capacity);
@@ -180,6 +180,6 @@ class ByteStack {
 	function new(capacity: UInt) {
 		this.capacity = capacity;
 		this.size = UInt.zero;
-		this.data = new ByteStackData(capacity);
+		this.data = ByteStackData.alloc(capacity);
 	}
 }
