@@ -78,7 +78,6 @@ class AosoaTest {
 
 	static final _aosoaFrom = testCase(aosoaFrom, Ok);
 
-
 	static function printId() {
 		describe("This prints chunk/entity IDs.");
 		final actorAosoa = new ActorAosoa(3, 2);
@@ -86,6 +85,7 @@ class AosoaTest {
 		actorAosoa.synchronize();
 		actorAosoa.printId();
 	}
+
 	static final _printId = testCase(printId, Visual);
 
 	static function randomAccess() {
@@ -105,6 +105,7 @@ class AosoaTest {
 
 		assert(x == 4);
 	}
+
 	static final _randomAccess = testCase(randomAccess, Ok);
 
 	public static final all = testCaseGroup([

@@ -16,36 +16,36 @@ abstract NaiveSet<K>(Map<K, Bool>) {
 	/**
 		Adds `element` to `this` Set.
 	**/
-	public extern inline function add(element:K): Void
+	public extern inline function add(element: K): Void
 		this.set(element, true);
 
 	/**
 		@return `Iterator` over the keys of `this` Set. The order is undefined.
 	**/
-	public extern inline function iterator():Iterator<K>
+	public extern inline function iterator(): Iterator<K>
 		return this.keys();
 
 	/**
 		@return Shallow copy of `this`.
 	**/
-	public extern inline function copy():NaiveSet<K>
+	public extern inline function copy(): NaiveSet<K>
 		return cast this.copy();
 
 	/**
 		@return A `String` representation of `this`.
 	**/
-	public inline function toString():String
+	public inline function toString(): String
 		return toArray().toString();
 
 	/**
 		Alias for `exists()`.
 	**/
-	public extern inline function has(element:K):Bool
+	public extern inline function has(element: K): Bool
 		return this.exists(element);
 
 	/**
 		@return An `Array` of the keys of `this` Set.
 	**/
-	public inline function toArray():Array<K>
+	public inline function toArray(): Array<K>
 		return [for (element in this.keys()) element];
 }
