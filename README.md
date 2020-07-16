@@ -508,12 +508,18 @@ Similar to the `aosoa` package,
 - You can suppress debug logs without changing the whole log level by adding `@:banker.verified` metadata to your class.
 
 
+## package: binary
+
+Types for bit/byte sequences.
+
+- `Bits` (based on `Int`)
+- `Bytes` (fast, limited and unsafe version of `haxe.io.Bytes`)
+
+
 ## package: types
 
 Some other small types are avaliable in this package:
 
-- `Bytes`
-- `Bits`
 - `NaiveSet`
 - `Reference`
 

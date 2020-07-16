@@ -1,6 +1,6 @@
-package banker.types;
+package banker.binary;
 
-import banker.types.internal.BytesData;
+import banker.binary.internal.BytesData;
 
 /**
 	Bytes with fast (but unsafe) data access.

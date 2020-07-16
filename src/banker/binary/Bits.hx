@@ -1,4 +1,4 @@
-package banker.types;
+package banker.binary;
 
 import sneaker.string_buffer.StringBuffer;
 

@@ -1,6 +1,6 @@
 package;
 
-import banker.types.Bytes;
+import banker.binary.Bytes;
 
 class BytesTest {
 	static function basic() {
