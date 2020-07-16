@@ -1,4 +1,4 @@
-package banker.binary;
+package banker.binary.internal;
 
 class Constants {
 	/**

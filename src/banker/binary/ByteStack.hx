@@ -13,12 +13,12 @@ class ByteStack {
 	}
 
 	/**
-		The capacity of `this` stack in bytes.
+		The capacity (in bytes) of `this` stack.
 	**/
 	public final capacity: UInt;
 
 	/**
-		The actual size of values in `this` stack.
+		The actual size (in bytes) of values in `this` stack.
 	**/
 	public var size(default, null): UInt;
 
@@ -38,7 +38,7 @@ class ByteStack {
 	**/
 	public extern inline function popI32(): Int32 {
 		final ret = this.data.popI32(this.size);
-		this.size = ret.pos;
+		this.size = ret.size;
 		return ret.value;
 	}
 
@@ -47,7 +47,7 @@ class ByteStack {
 	**/
 	public extern inline function popI64(): Int64 {
 		final ret = this.data.popI64(this.size);
-		this.size = ret.pos;
+		this.size = ret.size;
 		return ret.value;
 	}
 
@@ -56,7 +56,7 @@ class ByteStack {
 	**/
 	public extern inline function popF32(): Float32 {
 		final ret = this.data.popF32(this.size);
-		this.size = ret.pos;
+		this.size = ret.size;
 		return ret.value;
 	}
 
@@ -65,7 +65,7 @@ class ByteStack {
 	**/
 	public extern inline function popF64(): Float {
 		final ret = this.data.popF64(this.size);
-		this.size = ret.pos;
+		this.size = ret.size;
 		return ret.value;
 	}
 

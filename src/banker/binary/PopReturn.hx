@@ -17,12 +17,12 @@ class PopReturn<T> {
 	public final value: T;
 
 	/**
-		Byte position in the stack after the pop operation.
+		Stack size after the pop operation.
 	**/
-	public final pos: UInt;
+	public final size: UInt;
 
-	public extern inline function new(value: T, pos: UInt) {
+	public extern inline function new(value: T, size: UInt) {
 		this.value = value;
-		this.pos = pos;
+		this.size = size;
 	}
 }

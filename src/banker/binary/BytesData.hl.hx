@@ -1,7 +1,7 @@
 package banker.binary;
 
 import hl.Bytes as InternalData;
-import banker.binary.Constants.LEN32;
+import banker.binary.internal.Constants.LEN32;
 
 /**
 	The data of `Bytes`.
