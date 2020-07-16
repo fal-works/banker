@@ -12,16 +12,16 @@ abstract BytesData(InternalData) from InternalData {
 	**/
 	public var internal(get, never): InternalData;
 
-	public extern inline function setInt32(pos: UInt, v: Int): Void
+	public extern inline function setI32(pos: UInt, v: Int): Void
 		this.setInt32(pos, v);
 
-	public extern inline function setFloat64(pos: UInt, v: Float): Void
+	public extern inline function setF64(pos: UInt, v: Float): Void
 		this.setDouble(pos, v);
 
-	public extern inline function getInt32(pos: UInt): Int
+	public extern inline function getI32(pos: UInt): Int
 		return this.getInt32(pos);
 
-	public extern inline function getFloat64(pos: UInt): Float
+	public extern inline function getF64(pos: UInt): Float
 		return this.getDouble(pos);
 
 	extern inline function new(internal: InternalData)

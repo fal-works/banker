@@ -9,13 +9,13 @@ class BytesTest {
 		final bytes = Bytes.alloc(12);
 		final data = bytes.data;
 
-		data.setInt32(0, 777);
-		data.setFloat64(4, 3.14);
+		data.setI32(0, 777);
+		data.setF64(4, 3.14);
 
-		final intValue = data.getInt32(0);
+		final intValue = data.getI32(0);
 		assert(intValue == 777);
 
-		final floatValue = data.getFloat64(4);
+		final floatValue = data.getF64(4);
 		assert(floatValue == 3.14);
 	}
 
