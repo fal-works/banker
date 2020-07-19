@@ -1,6 +1,8 @@
 package banker.binary;
 
 import hl.Bytes as InternalData;
+import sneaker.string_buffer.StringBuffer;
+import banker.vector.Vector;
 import banker.binary.internal.Constants.LEN32;
 
 /**
@@ -8,6 +10,10 @@ import banker.binary.internal.Constants.LEN32;
 **/
 @:notNull
 abstract BytesData(InternalData) from InternalData {
+	static var hexChars = {
+		Vector.fromArrayCopy("0123456789abcdef".split("").map(s -> s.firstCharCode()));
+	};
+
 	/**
 		Creates a `BytesData` instance.
 		@param length Length in bytes to be allocated.
@@ -19,6 +25,9 @@ abstract BytesData(InternalData) from InternalData {
 		The internal representation of `this`.
 	**/
 	public var internal(get, never): InternalData;
+
+	public extern inline function setUI8(pos: UInt, v: UInt8): Void
+		this.setUI8(pos, v);
 
 	public extern inline function setI32(pos: UInt, v: Int32): Void
 		this.setI32(pos, v);
@@ -34,6 +43,9 @@ abstract BytesData(InternalData) from InternalData {
 	public extern inline function setF64(pos: UInt, v: Float): Void
 		this.setF64(pos, v);
 
+	public extern inline function getUI8(pos: UInt): UInt8
+		return UInt8.fromIntUnsafe(this.getUI8(pos));
+
 	public extern inline function getI32(pos: UInt): Int32
 		return this.getI32(pos);
 
@@ -45,6 +57,27 @@ abstract BytesData(InternalData) from InternalData {
 
 	public extern inline function getF64(pos: UInt): Float
 		return this.getF64(pos);
+
+	public function toHex(length: UInt, separate: Bool): String {
+		final s = new StringBuffer();
+
+		inline function addHex(pos: UInt): Void {
+			final byte = getUI8(pos);
+			s.addChar(hexChars[byte >> 4]);
+			s.addChar(hexChars[byte & 15]);
+		}
+
+		if (separate && UInt.one < length) {
+			final lastPos = length.minusOne().unwrap();
+			for (pos in 0...lastPos) {
+				addHex(pos);
+				s.addChar(' '.code);
+			}
+			addHex(lastPos);
+		} else for (pos in 0...length) addHex(pos);
+
+		return s.toString();
+	}
 
 	extern inline function get_internal()
 		return this;

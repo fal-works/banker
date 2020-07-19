@@ -209,4 +209,11 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 		final pos = stackSize - LEN64;
 		this.setI64(pos, this.getI64(pos) - 1);
 	}
+
+	/**
+		@param separate `true` to separate each byte with a space.
+		@return `this` in hexadecimal representation.
+	**/
+	public inline function toHex(length: UInt, separate: Bool)
+		return this.toHex(length, separate);
 }

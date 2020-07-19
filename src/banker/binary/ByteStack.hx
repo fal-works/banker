@@ -1,7 +1,7 @@
 package banker.binary;
 
 /**
-	Stack of bytes that can store values of several numeric types.
+	Stack of bytes that can store values of 32-bit or 64-bit numeric types.
 **/
 class ByteStack {
 	/**
@@ -176,6 +176,13 @@ class ByteStack {
 	**/
 	public extern inline function decrement64(): Void
 		this.data.decrement64(this.size);
+
+	/**
+		@param separate `true` (default) to separate each byte with a space.
+		@return `this` in hexadecimal representation.
+	**/
+	public extern inline function toHex(separate = true): String
+		return this.data.toHex(this.size, separate);
 
 	function new(capacity: UInt) {
 		this.capacity = capacity;

@@ -98,6 +98,9 @@ abstract Bytes(StdBytes) from StdBytes to StdBytes {
 		return newBytes;
 	}
 
+	public extern inline function toHex(separate = true): String
+		return data.toHex(length, separate);
+
 	extern inline function get_length(): UInt
 		return this.length;
 
