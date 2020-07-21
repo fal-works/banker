@@ -21,6 +21,13 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 		return stackSize - wordSize.bytes();
 
 	/**
+		Drops the top two words.
+		@return The stack size after operation.
+	**/
+	public extern inline function drop2D(stackSize: UInt, wordSize: WordSize): UInt
+		return stackSize - wordSize.bytes() - wordSize.bytes();
+
+	/**
 		Pops the top 32-bit word.
 		@return The popped `value` as integer and the stack `size` after operation.
 		@see `PopReturn` (which should be directly assigned to a local variable)
@@ -61,6 +68,34 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 	}
 
 	/**
+		Pops two 32-bit words from the top.
+		@return The popped `x`/`y` as float and the stack `size` after operation.
+		@see `PopReturn2D` (which should be directly assigned to a local variable)
+	**/
+	public extern inline function popVec2D32(stackSize: UInt): PopReturn2D<Float32> {
+		stackSize -= LEN32 + LEN32;
+		return new PopReturn2D(
+			this.getF32(stackSize),
+			this.getF32(stackSize + LEN32),
+			stackSize
+		);
+	}
+
+	/**
+		Pops two 64-bit words from the top.
+		@return The popped `x`/`y` as float and the stack `size` after operation.
+		@see `PopReturn2D` (which should be directly assigned to a local variable)
+	**/
+	public extern inline function popVec2D64(stackSize: UInt): PopReturn2D<Float> {
+		stackSize -= LEN64 + LEN64;
+		return new PopReturn2D(
+			this.getF64(stackSize),
+			this.getF64(stackSize + LEN64),
+			stackSize
+		);
+	}
+
+	/**
 		Pushes a 32-bit integer.
 		@return The stack size after operation.
 	**/
@@ -97,6 +132,38 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 	}
 
 	/**
+		Pushes two 64-bit float values.
+		@return The stack size after operation.
+	**/
+	public extern inline function pushVec2D32(
+		stackSize: UInt,
+		x: Float32,
+		y: Float32
+	): UInt {
+		this.setF32(stackSize, x);
+		stackSize += LEN32;
+		this.setF32(stackSize, y);
+		stackSize += LEN32;
+		return stackSize;
+	}
+
+	/**
+		Pushes two 64-bit float values.
+		@return The stack size after operation.
+	**/
+	public extern inline function pushVec2D64(
+		stackSize: UInt,
+		x: Float,
+		y: Float
+	): UInt {
+		this.setF64(stackSize, x);
+		stackSize += LEN64;
+		this.setF64(stackSize, y);
+		stackSize += LEN64;
+		return stackSize;
+	}
+
+	/**
 		Returns the top 32-bit word as an integer without dropping it.
 	**/
 	public extern inline function peekI32(stackSize: UInt): Int32
@@ -119,6 +186,26 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 	**/
 	public extern inline function peekF64(stackSize: UInt): Float
 		return this.getF64(stackSize - LEN64);
+
+	/**
+		Returns two 32-bit words from the top as float without dropping them.
+	**/
+	public extern inline function peekVec2D32(stackSize: UInt): TmpVec2D32 {
+		return new TmpVec2D32(
+			this.getF32(stackSize - LEN32 - LEN32),
+			this.getF32(stackSize - LEN32)
+		);
+	}
+
+	/**
+		Returns two 64-bit words from the top as float without dropping them.
+	**/
+	public extern inline function peekVec2D64(stackSize: UInt): TmpVec2D64 {
+		return new TmpVec2D64(
+			this.getF64(stackSize - LEN64 - LEN64),
+			this.getF64(stackSize - LEN64)
+		);
+	}
 
 	/**
 		Copies the top 32-bit word and pushes it to `this` stack.
