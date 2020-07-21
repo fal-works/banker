@@ -1,4 +1,4 @@
-package banker.binary;
+package banker.binary.value_types;
 
 /**
 	Size of word (a "word" is a data unit that can be stored in `ByteStack`).

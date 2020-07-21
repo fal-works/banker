@@ -1,4 +1,4 @@
-package banker.binary;
+package banker.binary.value_types;
 
 /**
 	Return value from pop operations of `ByteStackData`.

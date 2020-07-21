@@ -1,4 +1,4 @@
-package banker.binary;
+package banker.binary.value_types;
 
 /**
 	2D vector of 32-bit float values.

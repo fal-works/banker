@@ -1,4 +1,4 @@
-package banker.binary;
+package banker.binary.value_types;
 
 @:notNull @:forward(std, int, toFloat, toString)
 @:allow(banker.binary)

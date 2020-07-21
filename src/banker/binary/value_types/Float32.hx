@@ -1,4 +1,4 @@
-package banker.binary;
+package banker.binary.value_types;
 
 /**
 	32-bit float if available on platform. Otherwise 64-bit `Float`.
