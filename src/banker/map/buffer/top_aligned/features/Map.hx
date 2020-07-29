@@ -21,7 +21,7 @@ class Map<K, V>
 		return MapExtension.getOrElse(this, key, valueFactory);
 
 	/** @see `banker.map.interfaces.Map` **/
-	public inline function tryGet(key: K): Null<V>
+	public inline function tryGet(key: K): Maybe<V>
 		return MapExtension.tryGet(this, key);
 
 	/** @see `banker.map.interfaces.Map` **/

@@ -32,9 +32,9 @@ class MapExtension {
 	public static inline function tryGet<K, V>(
 		_this: TopAlignedBuffer<K, V>,
 		key: K
-	): Null<V> {
+	): Maybe<V> {
 		final index = _this.keyVector.ref.findIndexIn(key, UInt.zero, _this.size);
-		return if (index.isSome()) _this.valueVector[index.unwrap()] else null;
+		return if (index.isSome()) Maybe.from(_this.valueVector[index.unwrap()]) else Maybe.none();
 	}
 
 	/** @see `banker.map.interfaces.Map` **/

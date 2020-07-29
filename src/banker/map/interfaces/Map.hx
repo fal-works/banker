@@ -22,9 +22,9 @@ interface Map<K, V> {
 
 	/**
 		Gets value for `key`.
-		@return The value that is mapped to `key`. `null` if `key` does not exist.
+		@return The value that is mapped to `key`. `Maybe.none()` if `key` does not exist.
 	**/
-	function tryGet(key: K): Null<V>;
+	function tryGet(key: K): Maybe<V>;
 
 	/**
 		Maps `key` to `value`.
