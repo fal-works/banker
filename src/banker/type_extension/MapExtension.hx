@@ -8,6 +8,13 @@ class MapExtension {
 		return _this.exists(key);
 
 	/**
+		@return The value mapped from `key`. `Maybe.none()` if not found.
+	**/
+	public static extern inline function tryGet<K, V>(_this: Map<K, V>, key: K): Maybe<V> {
+		return Maybe.from(_this.get(key));
+	}
+
+	/**
 		@return
 			The value mapped from `key`.
 			If not found, `value` (without setting to `this`).
