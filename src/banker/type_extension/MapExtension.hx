@@ -4,7 +4,7 @@ class MapExtension {
 	/**
 		Alias for `exists()`.
 	**/
-	public static inline function hasKey<K, V>(_this: Map<K, V>, key: K)
+	public static extern inline function hasKey<K, V>(_this: Map<K, V>, key: K): Bool
 		return _this.exists(key);
 
 	/**
@@ -12,11 +12,11 @@ class MapExtension {
 			The value mapped from `key`.
 			If not found, `value` (without setting to `this`).
 	**/
-	public static inline function getOr<K, V>(
+	public static extern inline function getOr<K, V>(
 		_this: Map<K, V>,
 		key: K,
 		defaultValue: V
-	) {
+	): V {
 		return Nulls.coalesce(_this.get(key), defaultValue);
 	}
 
@@ -29,7 +29,7 @@ class MapExtension {
 		_this: Map<K, V>,
 		key: K,
 		value: V
-	) {
+	): V {
 		final currentValue = _this.get(key);
 
 		return if (currentValue != null) {
