@@ -34,7 +34,7 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 	**/
 	public extern inline function popI32(stackSize: UInt): PopReturn<Int32> {
 		stackSize -= LEN32;
-		return new PopReturn(this.getI32(stackSize), stackSize);
+		return new PopReturn<Int32>(this.getI32(stackSize), stackSize);
 	}
 
 	/**
@@ -44,7 +44,7 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 	**/
 	public extern inline function popI64(stackSize: UInt): PopReturn<Int64> {
 		stackSize -= LEN64;
-		return new PopReturn(this.getI64(stackSize), stackSize);
+		return new PopReturn<Int64>(this.getI64(stackSize), stackSize);
 	}
 
 	/**
@@ -54,7 +54,7 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 	**/
 	public extern inline function popF32(stackSize: UInt): PopReturn<Float32> {
 		stackSize -= LEN32;
-		return new PopReturn(this.getF32(stackSize), stackSize);
+		return new PopReturn<Float32>(this.getF32(stackSize), stackSize);
 	}
 
 	/**
@@ -64,7 +64,7 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 	**/
 	public extern inline function popF64(stackSize: UInt): PopReturn<Float> {
 		stackSize -= LEN64;
-		return new PopReturn(this.getF64(stackSize), stackSize);
+		return new PopReturn<Float>(this.getF64(stackSize), stackSize);
 	}
 
 	/**
@@ -74,7 +74,7 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 	**/
 	public extern inline function popVec2D32(stackSize: UInt): PopReturn2D<Float32> {
 		stackSize -= LEN32 + LEN32;
-		return new PopReturn2D(
+		return new PopReturn2D<Float32>(
 			this.getF32(stackSize),
 			this.getF32(stackSize + LEN32),
 			stackSize
@@ -88,7 +88,7 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 	**/
 	public extern inline function popVec2D64(stackSize: UInt): PopReturn2D<Float> {
 		stackSize -= LEN64 + LEN64;
-		return new PopReturn2D(
+		return new PopReturn2D<Float>(
 			this.getF64(stackSize),
 			this.getF64(stackSize + LEN64),
 			stackSize

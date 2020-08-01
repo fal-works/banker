@@ -2,6 +2,7 @@ package banker.binary;
 
 import haxe.io.Bytes as InternalData;
 import sneaker.string_buffer.StringBuffer;
+import banker.vector.Vector;
 
 /**
 	The data of `Bytes`.
