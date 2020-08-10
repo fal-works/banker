@@ -10,6 +10,11 @@ class Actor implements banker.aosoa.Structure {
 	@:banker_chunkLevelFactory((chunkCapacity: UInt) -> chunkCapacity)
 	var chunkLevelFloat: Float;
 
+	@:banker_chunkLevel
+	function printChunkFloat() {
+		println(this.chunkLevelFloat);
+	}
+
 	@:banker_onSynchronize
 	@:banker_chunkLevel
 	function onSynchronizeChunk() {

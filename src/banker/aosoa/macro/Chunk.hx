@@ -225,9 +225,10 @@ class Chunk {
 			switch buildField.kind {
 				case FFun(func):
 					if (hasChunkLevelMetadata) {
-						chunkFields.push(buildField);
 
 						if (metaMap.onSynchronize || metaMap.onCompleteSynchronize) {
+							chunkFields.push(buildField);
+
 							if (notVerified)
 								debug('  Found metadata: @${metaMap.onSynchronize ? MetadataNames.onSynchronize : MetadataNames.onCompleteSynchronize}');
 
@@ -242,12 +243,10 @@ class Chunk {
 								onSynchronizeExpressions.push(expression.unwrap());
 							else
 								onCompleteSynchronizeExpressions.push(expression.unwrap());
+
+							continue;
 						}
-
-						continue;
-					}
-
-					if (!isStatic) {
+					} else if (!isStatic) {
 						// TODO: Check if non-static functions can be accepted as well
 						if (notVerified) debug('  Function that is not static. Skipping.');
 						continue;

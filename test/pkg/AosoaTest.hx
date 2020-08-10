@@ -65,7 +65,10 @@ class AosoaTest {
 		final actorAosoa = new ActorAosoa(3, 2);
 		for (i in 0...6) actorAosoa.useEmpty();
 		actorAosoa.synchronize();
+		println("sequenceNumbers():");
 		actorAosoa.sequenceNumbers();
+		println("printChunkFloat():");
+		actorAosoa.printChunkFloat();
 	}
 
 	static final _chunkLevel = testCase(chunkLevel, Visual);
