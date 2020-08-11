@@ -14,6 +14,11 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 		return BytesData.alloc(capacity);
 
 	/**
+		`this` as the underlying `BytesData` type.
+	**/
+	public var bytesData(get, never): BytesData;
+
+	/**
 		Drops the top word.
 		@return The stack size after operation.
 	**/
@@ -303,4 +308,7 @@ abstract ByteStackData(BytesData) from BytesData to BytesData {
 	**/
 	public inline function toHex(length: UInt, separate: Bool)
 		return this.toHex(length, separate);
+
+	extern inline function get_bytesData()
+		return this;
 }
