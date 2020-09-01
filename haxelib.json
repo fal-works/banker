@@ -3,10 +3,10 @@
 	"url": "https://github.com/fal-works/banker/",
 	"license": "MIT",
 	"tags": [],
-	"description": "Suite of GC-free data structures. What we need is efficiency!",
-	"version": "0.7.0-alpha",
+	"description": "Suite of GC-free data structures.",
+	"version": "0.7.0",
 	"classPath": "src/",
-	"releasenote": "",
+	"releasenote": "Added package: binary. Other minor fixes/enhancements.",
 	"contributors": [
 		"fal-works"
 	],
