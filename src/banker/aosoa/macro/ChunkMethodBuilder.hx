@@ -63,7 +63,6 @@ class ChunkMethodBuilder {
 		initializeBeforeLoops.push(macro final readWriteIndexMap = this.readWriteIndexMap);
 		initializeBeforeLoops.push(macro final endReadIndex = this.endReadIndex);
 		initializeBeforeLoops.push(macro var readIndex = sinker.UInt.zero);
-		initializeBeforeLoops.push(macro var nextWriteIndex = this.nextWriteIndex);
 		initializeBeforeLoops.push(macro var disuse = false);
 
 		final initializeLoop: Array<Expr> = [];
@@ -72,15 +71,14 @@ class ChunkMethodBuilder {
 
 		final finalizeLoop: Array<Expr> = [];
 		finalizeLoop.push(macro if (disuse) {
-			--nextWriteIndex;
+			--this.nextWriteIndex;
 			$b{disuseExpressions};
-			readWriteIndexMap.swap(i, nextWriteIndex);
+			readWriteIndexMap.swap(i, this.nextWriteIndex);
 			disuse = false;
 		});
 		finalizeLoop.push(macro ++readIndex);
 
 		final finalizeAfterLoops: Array<Expr> = [];
-		finalizeAfterLoops.push(macro this.nextWriteIndex = nextWriteIndex);
 		finalizeAfterLoops.pushFromArray(pieces.saveLocalAfterLoop);
 
 		final loopBodyExpressions: Array<Expr> = [];
@@ -110,7 +108,6 @@ class ChunkMethodBuilder {
 				final readWriteIndexMap = this.readWriteIndexMap;
 				final endReadIndex = this.endReadIndex;
 				var readIndex = 0;
-				var nextWriteIndex = this.nextWriteIndex
 				var disuse = false;
 
 				while (readIndex < endReadIndex) {
@@ -120,19 +117,18 @@ class ChunkMethodBuilder {
 					originalFunction();
 
 					if (disuse) {
-						--nextWriteIndex;
+						--this.nextWriteIndex;
 						disuseExpr();
-						readWriteIndexMap.swap(i, nextWriteIndex);
+						readWriteIndexMap.swap(i, this.nextWriteIndex);
 						disuse = false;
 					}
 
 					++readIndex;
 				}
 
-				this.nextWriteIndex = nextWriteIndex
 				saveLocalAfterLoop();
 
-				return nextWriteIndex;
+				return this.nextWriteIndex;
 			}
 		**/
 

@@ -4,9 +4,9 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Suite of GC-free data structures.",
-	"version": "0.7.0",
+	"version": "0.7.1-alpha",
 	"classPath": "src/",
-	"releasenote": "Added package: binary. Other minor fixes/enhancements.",
+	"releasenote": "Bug fix in AoSoA.",
 	"contributors": [
 		"fal-works"
 	],
